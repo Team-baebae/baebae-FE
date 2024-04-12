@@ -1,35 +1,28 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
-import './App.css'
+import Router from './Router'
+import { useEffect } from 'react'
 
 function App() {
-  const [count, setCount] = useState(0)
+  useEffect(() => {
+    const baseWidth = 390 // 기준 너비
+    const baseFontSize = 16 // 기준 폰트 크기
 
-  return (
-    <>
-      <div>
-        <a href="https://vitejs.dev" target="_blank">
-          <img src={viteLogo} className="logo" alt="Vite logo" />
-        </a>
-        <a href="https://react.dev" target="_blank">
-          <img src={reactLogo} className="logo react" alt="React logo" />
-        </a>
-      </div>
-      <h1>Vite + React</h1>
-      <div className="card">
-        <button onClick={() => setCount((count) => count + 1)}>
-          count is {count}
-        </button>
-        <p>
-          Edit <code>src/App.tsx</code> and save to test HMR
-        </p>
-      </div>
-      <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
-      </p>
-    </>
-  )
+    function handleResize() {
+      const scaleFactor = window.innerWidth / baseWidth
+      const newFontSize = baseFontSize * scaleFactor
+      document.documentElement.style.fontSize = `${newFontSize}px`
+    }
+
+    window.addEventListener('resize', handleResize)
+
+    // 컴포넌트 마운트 시 초기 폰트 크기 설정
+    handleResize()
+
+    return () => {
+      window.removeEventListener('resize', handleResize)
+    }
+  }, [])
+
+  return <Router />
 }
 
 export default App
