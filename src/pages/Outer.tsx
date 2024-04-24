@@ -21,8 +21,8 @@ const TotalBrowserComponent = styled.div`
 `
 
 const PhoneBrowserComponent = styled.div`
-  width: 390px;
+  width: 375px;
   min-height: 100%;
   /* 경계 지을려고 일단 이렇게 설정함 추후 수정 예정 */
-  background-color: #f1f1f1;
+  border: 1px solid black;
 `
