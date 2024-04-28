@@ -1,7 +1,7 @@
 import styled from 'styled-components'
 
 const Landing = () => {
-  return <LandingOuterComponent>랜딩페이지</LandingOuterComponent>
+  return <LandingOuterComponent>랜딩</LandingOuterComponent>
 }
 
 export default Landing
