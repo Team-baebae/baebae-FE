@@ -3,6 +3,7 @@ import Outer from './pages/Outer'
 import Landing from './pages/Landing'
 import Login from './pages/Login'
 import KakaoRedirection from './pages/KakaoRedirection'
+import Spotify from './pages/Spotify'
 
 const Router = () => {
   return (
@@ -12,6 +13,7 @@ const Router = () => {
           <Route path="" element={<Landing />} />
           <Route path="login" element={<Login />} />
           <Route path="auth" element={<KakaoRedirection />} />
+          <Route path="spotify" element={<Spotify />} />
         </Route>
       </Routes>
     </BrowserRouter>
