@@ -6,6 +6,7 @@ import KakaoRedirection from './pages/KakaoRedirection'
 import Spotify from './pages/Spotify'
 import Setting from './pages/Setting'
 import SignUp from './pages/SignUp'
+import Setting from './pages/Setting'
 
 const Router = () => {
   return (
