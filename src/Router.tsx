@@ -4,9 +4,9 @@ import Landing from './pages/Landing'
 import Login from './pages/Login'
 import KakaoRedirection from './pages/KakaoRedirection'
 import Spotify from './pages/Spotify'
-import Setting from './pages/Setting'
 import SignUp from './pages/SignUp'
 import Setting from './pages/Setting'
+import EditProfile from './pages/EditProfile'
 
 const Router = () => {
   return (
@@ -19,6 +19,7 @@ const Router = () => {
           <Route path="signup" element={<SignUp />} />
           <Route path="spotify" element={<Spotify />} />
           <Route path="setting" element={<Setting />} />
+          <Route path="editProfile" element={<EditProfile />} />
         </Route>
       </Routes>
     </BrowserRouter>
