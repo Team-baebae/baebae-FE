@@ -1,5 +1,6 @@
 import styled from 'styled-components'
-import leftArrow from '../../assets/signup/LeftArrow.svg'
+import backArrow from '../../assets/back_arrow.svg'
+import { colors } from '../../styles/colors'
 
 interface HeaderProps {
   text: string
@@ -8,7 +9,7 @@ interface HeaderProps {
 const Header = ({ text }: HeaderProps) => {
   return (
     <HeaderTotalComponent>
-      <HeaderLeftIcon src={leftArrow} alt="<" />
+      <HeaderLeftIcon src={backArrow} alt="<" />
       <HeaderText>{text}</HeaderText>
     </HeaderTotalComponent>
   )
@@ -34,7 +35,11 @@ const HeaderLeftIcon = styled.img`
 `
 
 const HeaderText = styled.div`
-  font-family: 'Pretendard';
-  color: #373737;
+  color: ${colors.grey1};
+  font-family: Pretendard;
+  font-size: 16px;
+  font-style: normal;
   font-weight: 700;
+  line-height: 24px;
+  letter-spacing: -0.32px;
 `
