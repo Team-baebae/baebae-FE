@@ -6,4 +6,6 @@ const Landing = () => {
 
 export default Landing
 
-const LandingOuterComponent = styled.div``
+const LandingOuterComponent = styled.div`
+  font-family: 'Pretendard';
+`
