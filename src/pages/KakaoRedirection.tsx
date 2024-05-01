@@ -80,6 +80,7 @@ const KakaoRedirection = () => {
 export default KakaoRedirection
 
 const RedirectionOuterComponent = styled.div`
+  width: 100%;
   display: flex;
   flex-direction: column;
   align-items: center;
