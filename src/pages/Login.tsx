@@ -11,6 +11,7 @@ const Login = () => {
 
   return (
     <LoginOuterComponent>
+      <FlipItIcon>로고</FlipItIcon>
       <KakaoLoginBtn onClick={loginHandler}>카카오 로그인</KakaoLoginBtn>
     </LoginOuterComponent>
   )
@@ -19,16 +20,29 @@ const Login = () => {
 export default Login
 
 const LoginOuterComponent = styled.div`
+  width: 100%;
   display: flex;
   flex-direction: column;
   align-items: center;
 `
 
+const FlipItIcon = styled.div`
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 264px;
+  height: 264px;
+  border-radius: 30px;
+  background-color: #d9d9d9;
+  margin: 202.5px 0px 0px 0px;
+`
+
 const KakaoLoginBtn = styled.button`
-  background-color: yellow;
-  color: #000;
-  width: 200px;
-  height: 30px;
+  width: 335px;
+  height: 56px;
+  border-radius: 12px;
+  background-color: #fee500;
   border: none;
+  margin: 40px 0px 0px 0px;
   cursor: pointer;
 `
