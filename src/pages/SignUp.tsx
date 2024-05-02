@@ -1,6 +1,8 @@
 import styled from 'styled-components'
 import Header from '../components/common/Header'
 import { useEffect, useRef } from 'react'
+import { colors } from '../styles/colors'
+
 
 const SignUp = () => {
   //   const divRef = useRef<HTMLDivElement>(null)
@@ -20,7 +22,7 @@ const SignUp = () => {
 
   return (
     <SignUpTotalComponent>
-      <Header text="텍스트" />
+      <Header text="텍스트" backColor={colors.grey7} />
       <SignUpHeaderText>
         플리빗을 사용하기 위해 <br />
         닉네임이 필요해요!

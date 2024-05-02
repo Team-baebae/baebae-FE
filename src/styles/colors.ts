@@ -1,0 +1,27 @@
+export const colors = {
+  white: '#FFFFFF',
+  black: '#070707',
+  grey1: '#1D1D1D',
+  grey2: '#3B3B3B',
+  grey3: '#767676',
+  grey4: '#939393',
+  grey5: '#C1C1C1',
+  grey6: '#EFEFEF',
+  grey7: '#F5F5F5',
+
+  primary: '#55EAB0',
+  primary80: '#77EEC0',
+  primary60: '#99F2D0',
+  primary40: '#BBF7DF',
+  primary20: '#DDFBEF',
+  primary10: '#EEFDF7',
+  primary5: '#F6FEFB',
+
+  green: '#D9F128',
+  green80: '#E1F453',
+  green60: '#E8F77E',
+  green40: '#F0F9A9',
+  green20: '#F7FCD4',
+  green10: '#FBFEE9',
+  green5: '#FDFEF4',
+} as const
