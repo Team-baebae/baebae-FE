@@ -3,17 +3,17 @@ import { Outlet } from 'react-router-dom'
 
 const Outer = () => {
   return (
-    <TotalBrowserComponent>
-      <PhoneBrowserComponent>
+    <TotalBrowserContainer>
+      <PhoneBrowserContainer>
         <Outlet />
-      </PhoneBrowserComponent>
-    </TotalBrowserComponent>
+      </PhoneBrowserContainer>
+    </TotalBrowserContainer>
   )
 }
 
 export default Outer
 
-const TotalBrowserComponent = styled.div`
+const TotalBrowserContainer = styled.div`
   display: flex;
   justify-content: center;
   background-color: #fff;
@@ -21,7 +21,7 @@ const TotalBrowserComponent = styled.div`
   min-height: 100vh;
 `
 
-const PhoneBrowserComponent = styled.div`
+const PhoneBrowserContainer = styled.div`
   width: 375px;
   background-color: #f5f5f5;
   min-height: 100%;

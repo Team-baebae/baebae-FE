@@ -10,16 +10,16 @@ const Login = () => {
   }
 
   return (
-    <LoginOuterComponent>
+    <Container>
       <FlipItIcon>로고</FlipItIcon>
       <KakaoLoginBtn onClick={loginHandler}>카카오 로그인</KakaoLoginBtn>
-    </LoginOuterComponent>
+    </Container>
   )
 }
 
 export default Login
 
-const LoginOuterComponent = styled.div`
+const Container = styled.div`
   width: 100%;
   display: flex;
   flex-direction: column;
