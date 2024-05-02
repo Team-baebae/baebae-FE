@@ -19,6 +19,7 @@ const SignUp = () => {
   const navigate = useNavigate()
   const location = useLocation()
   const kakaoAccessToken = location.state?.kakaoAccessToken
+
   const [nickname, setNickname] = useState<string>('')
 
   const onChangeNickname = (e: ChangeEvent<HTMLInputElement>) => {
