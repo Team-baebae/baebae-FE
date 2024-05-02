@@ -1,99 +1,144 @@
 import styled from 'styled-components'
 import Header from '../components/common/Header'
-import { useEffect, useRef } from 'react'
+import { useNavigate } from 'react-router-dom'
+import { useLocation } from 'react-router-dom'
+import { loginApi } from '../apis/UserApi'
 import { colors } from '../styles/colors'
+import { ChangeEvent, useState } from 'react'
 
+// Login함수의 response 인터페이스
+interface LoginProps {
+  data: any
+  status: number
+  statusText: string
+  headers: any
+  config: any
+}
 
 const SignUp = () => {
-  //   const divRef = useRef<HTMLDivElement>(null)
+  const navigate = useNavigate()
+  const location = useLocation()
+  const kakaoAccessToken = location.state?.kakaoAccessToken
 
-  //   useEffect(() => {
-  //     const handleVisualViewPortResize = () => {
-  //       const currentVisualViewport = Number(window.visualViewport?.height)
-  //       if (divRef) {
-  //         divRef.current!.style.height = `${currentVisualViewport - 30}px`
-  //         window.scrollTo(0, 40)
-  //       }
-  //       if (window.visualViewport) {
-  //         window.visualViewport.onresize = handleVisualViewPortResize
-  //       }
-  //     }
-  //   }, [])
+  const [nickname, setNickname] = useState<string>('')
+
+  const onChangeNickname = (e: ChangeEvent<HTMLInputElement>) => {
+    const value = e.target.value
+    setNickname(value)
+  }
+
+  const login = async (kakaoAccessToken: string, nickname: string) => {
+    try {
+      await loginApi(kakaoAccessToken, nickname).then((res: LoginProps) => {
+        if (res.status === 200) {
+          localStorage.setItem('accessToken', res.data.accessToken)
+          localStorage.setItem('nickname', res.data.nickname)
+          localStorage.setItem('email', res.data.email)
+          localStorage.setItem('refreshToken', res.data.refreshToken)
+
+          navigate('/')
+        } else {
+          alert('로그인 실패')
+          navigate('/login')
+        }
+      })
+    } catch (err) {
+      console.log(err)
+    }
+  }
 
   return (
-    <SignUpTotalComponent>
-      <Header text="텍스트" backColor={colors.grey7} />
+    <Container>
+      <Header text="텍스트" backColor={colors.white} />
       <SignUpHeaderText>
         플리빗을 사용하기 위해 <br />
         닉네임이 필요해요!
       </SignUpHeaderText>
       <SignUpNicknameLabel>닉네임</SignUpNicknameLabel>
-      <SingUpNicknameInput placeholder="닉네임 입력" />
-      <NextBtn>다음</NextBtn>
-    </SignUpTotalComponent>
+      <SingUpNicknameInput value={nickname} onChange={onChangeNickname} placeholder="닉네임 입력" />
+      {nickname !== '' ? (
+        <NextBtn
+          onClick={() => {
+            login(kakaoAccessToken, nickname)
+          }}
+          positive={true}
+        >
+          다음
+        </NextBtn>
+      ) : (
+        <NextBtn positive={false}>다음</NextBtn>
+      )}
+    </Container>
   )
 }
 
 export default SignUp
 
-const SignUpTotalComponent = styled.div`
+const Container = styled.div`
   width: 100%;
   display: flex;
   flex-direction: column;
-  align-items: center;
-  height: calc(100vh - 48px);
 `
 
 const SignUpHeaderText = styled.div`
-  font-family: 'Pretendard';
-  width: 335px;
+  font-family: Pretendard;
   height: 54px;
-  color: #1d1d1d;
+  color: ${colors.grey1};
   font-size: 18px;
   font-weight: 600;
-  margin: 20px 0px 0px 0px;
+  margin: 20px 20px 0px 20px;
 `
 
 const SignUpNicknameLabel = styled.div`
-  font-family: 'Pretendard';
-  color: #767676;
-  align-self: flex-start;
+  font-family: Pretendard;
+  color: ${colors.grey3};
   font-size: 12px;
   font-weight: 400;
   margin: 40px 0px 0px 20px;
 `
 
 const SingUpNicknameInput = styled.input`
-  font-family: 'Pretendard';
-  width: 335px;
-  height: 61px;
   padding: 20px;
+  margin: 4px 20px;
   border-radius: 12px;
-  background-color: #fff;
-  color: #1d1d1d;
+  background: ${colors.white};
+  align-self: stretch;
+  color: ${colors.grey1};
+  font-family: Pretendard;
   font-size: 14px;
-  margin: 4px 0px 0px 0px;
+  font-style: normal;
+  font-weight: 400;
+  line-height: 150%;
+  letter-spacing: -0.56px;
   border: none;
-  outline: none;
-  &:hover {
-    border: 1px solid #1d1d1d;
+  &:focus {
+    outline: none;
+    border: 1px solid ${colors.grey1};
   }
   &::placeholder {
-    color: #c1c1c1;
+    color: ${colors.grey5};
   }
 `
 
-const NextBtn = styled.button`
-  font-family: 'Pretendard';
+const NextBtn = styled.button<{ positive: boolean }>`
   position: absolute;
   bottom: 30px;
-  border: none;
-  width: 335px;
+  left: 20px;
+  right: 20px;
+  width: calc(100%-40px);
+  display: flex;
   height: 56px;
+  padding: 16px 20px;
+  justify-content: center;
+  align-items: center;
   border-radius: 12px;
-  background-color: #55eab0;
-  color: #1d1d1d;
+  background: ${(props) => (props.positive ? colors.primary : colors.primary40)};
+  color: ${(props) => (props.positive ? colors.grey1 : colors.grey3)};
+  font-family: Pretendard;
   font-size: 14px;
+  font-style: normal;
   font-weight: 600;
-  /* margin: 300px 0px 0px 0px; */
+  line-height: 150%;
+  letter-spacing: -0.28px;
+  border: none;
 `

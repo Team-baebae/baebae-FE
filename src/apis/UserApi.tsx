@@ -8,6 +8,15 @@ export const getKakaoUserInfoApi = (code: string) => {
   return axios.get(`http://${serverUrl}/oauth/kakao/callback?code=${code}&redirectUri=${redirectUri}`)
 }
 
+// 카카오 어세스토큰을 통하여 회원가입 여부 확인
+export const isExistingAccountApi = (accessToken: string) => {
+  return axios.get(`http://${serverUrl}/api/oauth/isExisting`, {
+    headers: {
+      Authorization: `Bearer ${accessToken}`,
+    },
+  })
+}
+
 // 카카오 어세스토큰을 통하여 jwt토큰 받기
 export const loginApi = (accessToken: string, nickname: string) => {
   return axios.post(

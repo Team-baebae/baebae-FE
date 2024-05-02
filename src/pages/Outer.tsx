@@ -1,29 +1,29 @@
 import styled from 'styled-components'
 import { Outlet } from 'react-router-dom'
-
+import { colors } from '../styles/colors'
 const Outer = () => {
   return (
-    <TotalBrowserComponent>
-      <PhoneBrowserComponent>
+    <TotalBrowserContainer>
+      <PhoneBrowserContainer>
         <Outlet />
-      </PhoneBrowserComponent>
-    </TotalBrowserComponent>
+      </PhoneBrowserContainer>
+    </TotalBrowserContainer>
   )
 }
 
 export default Outer
 
-const TotalBrowserComponent = styled.div`
+const TotalBrowserContainer = styled.div`
   display: flex;
   justify-content: center;
-  background-color: #fff;
+  background-color: ${colors.white};
   width: 100vw;
   min-height: 100vh;
 `
 
-const PhoneBrowserComponent = styled.div`
+const PhoneBrowserContainer = styled.div`
   width: 375px;
-  background-color: #f5f5f5;
+  background-color: ${colors.grey7};
   min-height: 100%;
   @media screen and (max-width: 768px) {
     width: 100%;
