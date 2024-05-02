@@ -3,6 +3,7 @@ import Header from '../components/common/Header'
 import { useEffect, useRef } from 'react'
 import { colors } from '../styles/colors'
 
+
 const SignUp = () => {
   //   const divRef = useRef<HTMLDivElement>(null)
 

@@ -20,6 +20,7 @@ const Header = ({ text, backColor }: HeaderProps) => {
           navigate(-1)
         }}
       />
+
       <HeaderText>{text}</HeaderText>
     </HeaderTotalComponent>
   )
@@ -27,7 +28,9 @@ const Header = ({ text, backColor }: HeaderProps) => {
 
 export default Header
 
+
 const HeaderTotalComponent = styled.div<{ backColor: string }>`
+
   position: relative;
   display: flex;
   justify-content: center;
@@ -35,6 +38,7 @@ const HeaderTotalComponent = styled.div<{ backColor: string }>`
   width: 100%;
   height: 48px;
   background-color: ${(props) => props.backColor};
+
 `
 
 const HeaderLeftIcon = styled.img`

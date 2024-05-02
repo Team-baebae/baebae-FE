@@ -8,6 +8,7 @@ import SignUp from './pages/SignUp'
 import Setting from './pages/Setting'
 import EditProfile from './pages/EditProfile'
 
+
 const Router = () => {
   return (
     <BrowserRouter>
