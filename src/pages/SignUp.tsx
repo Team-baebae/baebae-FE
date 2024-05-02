@@ -47,7 +47,7 @@ const SignUp = () => {
   }
 
   return (
-    <SignUpTotalComponent>
+    <Container>
       <Header text="텍스트" backColor={colors.white} />
       <SignUpHeaderText>
         플리빗을 사용하기 위해 <br />
@@ -55,34 +55,42 @@ const SignUp = () => {
       </SignUpHeaderText>
       <SignUpNicknameLabel>닉네임</SignUpNicknameLabel>
       <SingUpNicknameInput value={nickname} onChange={onChangeNickname} placeholder="닉네임 입력" />
-      <NextBtn>다음</NextBtn>
-    </SignUpTotalComponent>
+      {nickname !== '' ? (
+        <NextBtn
+          onClick={() => {
+            login(kakaoAccessToken, nickname)
+          }}
+          positive={true}
+        >
+          다음
+        </NextBtn>
+      ) : (
+        <NextBtn positive={false}>다음</NextBtn>
+      )}
+    </Container>
   )
 }
 
 export default SignUp
 
-const SignUpTotalComponent = styled.div`
+const Container = styled.div`
   width: 100%;
   display: flex;
   flex-direction: column;
-  align-items: center;
 `
 
 const SignUpHeaderText = styled.div`
   font-family: Pretendard;
-  width: 335px;
   height: 54px;
   color: #1d1d1d;
   font-size: 18px;
   font-weight: 600;
-  margin: 20px 0px 0px 0px;
+  margin: 20px 20px 0px 20px;
 `
 
 const SignUpNicknameLabel = styled.div`
   font-family: Pretendard;
-  color: #767676;
-  align-self: flex-start;
+  color: ${colors.grey3};
   font-size: 12px;
   font-weight: 400;
   margin: 40px 0px 0px 20px;
@@ -111,23 +119,25 @@ const SingUpNicknameInput = styled.input`
   }
 `
 
-const NextBtn = styled.button`
-  font-family: Pretendard;
+const NextBtn = styled.button<{ positive: boolean }>`
   position: absolute;
   bottom: 30px;
-  border: none;
-  width: 335px;
+  left: 20px;
+  right: 20px;
+  width: calc(100%-40px);
+  display: flex;
   height: 56px;
+  padding: 16px 20px;
+  justify-content: center;
+  align-items: center;
   border-radius: 12px;
-  background-color: #55eab0;
-  color: #1d1d1d;
-  font-size: 14px;
-  font-weight: 600;
-  color: var(--Grayscale-Gray-03, #767676);
+  background: ${(props) => (props.positive ? colors.primary : colors.primary40)};
+  color: ${(props) => (props.positive ? colors.grey1 : colors.grey3)};
   font-family: Pretendard;
   font-size: 14px;
   font-style: normal;
   font-weight: 600;
-  line-height: 150%; /* 21px */
+  line-height: 150%;
   letter-spacing: -0.28px;
+  border: none;
 `
