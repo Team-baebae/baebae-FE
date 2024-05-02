@@ -18,41 +18,16 @@ const KakaoRedirection = () => {
     config: any
   }
 
-  // Login함수의 response 인터페이스
-  interface LoginProps {
-    data: any
-    status: number
-    statusText: string
-    headers: any
-    config: any
-  }
-
   // 카카오에서 유저정보 받아오기
   const getKakaoUserInfo = async (code: string) => {
     try {
       await getKakaoUserInfoApi(code).then((res: KakaoUserInfoResponseProps) => {
         if (res.status === 200) {
-          login(res.data.access_token, res.data.nickname)
-        } else {
-          alert('로그인 실패')
-          navigate('/login')
-        }
-      })
-    } catch (err) {
-      console.log(err)
-    }
-  }
-
-  const login = async (accessToken: string, nickname: string) => {
-    try {
-      await loginApi(accessToken, nickname).then((res: LoginProps) => {
-        if (res.status === 200) {
-          localStorage.setItem('accessToken', res.data.accessToken)
-          localStorage.setItem('nickname', res.data.nickname)
-          localStorage.setItem('email', res.data.email)
-          localStorage.setItem('refreshToken', res.data.refreshToken)
-
-          navigate('/')
+          navigate('/signup', {
+            state: {
+              kakaoAccessToken: res.data.access_token,
+            },
+          })
         } else {
           alert('로그인 실패')
           navigate('/login')
