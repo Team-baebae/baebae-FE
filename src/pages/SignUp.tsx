@@ -83,7 +83,7 @@ const Container = styled.div`
 const SignUpHeaderText = styled.div`
   font-family: Pretendard;
   height: 54px;
-  color: #1d1d1d;
+  color: ${colors.grey1};
   font-size: 18px;
   font-weight: 600;
   margin: 20px 20px 0px 20px;
