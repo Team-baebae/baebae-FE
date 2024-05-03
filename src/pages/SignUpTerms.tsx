@@ -3,6 +3,7 @@ import Header from '../components/common/Header'
 import { colors } from '../styles/colors'
 import Terms from '../components/signup/Terms'
 import { useState } from 'react'
+import Button from '../components/common/Button'
 
 const SignUpTerms = () => {
   // 약관 체크여부 확인
@@ -18,6 +19,15 @@ const SignUpTerms = () => {
       <Header text="회원가입" backColor={colors.grey7} />
       <TermsHeader>플리빗 이용약관에 동의해주세요</TermsHeader>
       <Terms isChecked={isChecked} setIsChecked={setIsChecked} />
+      <Button
+        positive={true}
+        func1={() => {
+          console.log('func1')
+        }}
+        func2={() => {
+          console.log('func2')
+        }}
+      />
     </Container>
   )
 }
