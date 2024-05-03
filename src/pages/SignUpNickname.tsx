@@ -5,6 +5,7 @@ import { useLocation } from 'react-router-dom'
 import { loginApi } from '../apis/UserApi'
 import { colors } from '../styles/colors'
 import { ChangeEvent, useState } from 'react'
+import Button from '../components/common/Button'
 
 // Login함수의 response 인터페이스
 interface LoginProps {
@@ -116,6 +117,15 @@ const SignUp = () => {
           <UnderInputNicknameLengthText color={colors.grey4}>25</UnderInputNicknameLengthText>
         </UnderInputNicknameLengthWrapper>
       </UnderInputWrapper>
+      <Button
+        positive={isValid && isClickDuplicate && !isDuplicate ? true : false}
+        func1={() => {
+          console.log('다음 화면')
+        }}
+        func2={() => {
+          console.log('잘못된 닉네임')
+        }}
+      />
     </Container>
   )
 }
