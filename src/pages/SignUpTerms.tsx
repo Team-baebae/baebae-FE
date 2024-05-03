@@ -4,8 +4,11 @@ import { colors } from '../styles/colors'
 import Terms from '../components/signup/Terms'
 import { useState } from 'react'
 import Button from '../components/common/Button'
+import { useNavigate } from 'react-router-dom'
 
 const SignUpTerms = () => {
+  const navigate = useNavigate()
+
   // 약관 체크여부 확인
   const [isChecked, setIsChecked] = useState({
     isCheckedTotal: false,
@@ -14,18 +17,22 @@ const SignUpTerms = () => {
     isCheckedThird: false,
   })
 
+  const onClickNextBtn = () => {
+    if (isChecked.isCheckedFirst && isChecked.isCheckedSecond) {
+      navigate('/signup/nickname')
+    }
+  }
+
   return (
     <Container>
       <Header text="회원가입" backColor={colors.grey7} />
       <TermsHeader>플리빗 이용약관에 동의해주세요</TermsHeader>
       <Terms isChecked={isChecked} setIsChecked={setIsChecked} />
       <Button
-        positive={true}
-        func1={() => {
-          console.log('func1')
-        }}
+        positive={isChecked.isCheckedFirst && isChecked.isCheckedSecond ? true : false}
+        func1={onClickNextBtn}
         func2={() => {
-          console.log('func2')
+          console.log('약관 체크 안함')
         }}
       />
     </Container>
