@@ -1,12 +1,14 @@
 import styled from 'styled-components'
 import Header from '../components/common/Header'
 import { colors } from '../styles/colors'
+import Terms from '../components/signupTerms/Terms'
 
 const SignUpTerms = () => {
   return (
     <Container>
       <Header text="회원가입" backColor={colors.grey7} />
       <TermsHeader>플리빗 이용약관에 동의해주세요</TermsHeader>
+      <Terms />
     </Container>
   )
 }
