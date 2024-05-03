@@ -59,7 +59,7 @@ const SignUp = () => {
           localStorage.setItem('nickname', res.data.nickname)
           localStorage.setItem('email', res.data.email)
           localStorage.setItem('refreshToken', res.data.refreshToken)
-          navigate('/')
+          navigate('/signup/onboarding')
         } else {
           alert('로그인 실패')
           navigate('/login')
