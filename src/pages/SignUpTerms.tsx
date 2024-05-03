@@ -1,7 +1,7 @@
 import styled from 'styled-components'
 import Header from '../components/common/Header'
 import { colors } from '../styles/colors'
-import Terms from '../components/signupTerms/Terms'
+import Terms from '../components/signup/Terms'
 import { useState } from 'react'
 
 const SignUpTerms = () => {
