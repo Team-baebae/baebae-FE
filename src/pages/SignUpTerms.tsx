@@ -36,13 +36,7 @@ const SignUpTerms = () => {
       <Header text="회원가입" backColor={colors.grey7} />
       <TermsHeader>플리빗 이용약관에 동의해주세요</TermsHeader>
       <Terms isChecked={isChecked} setIsChecked={setIsChecked} />
-      <Button
-        positive={isChecked.isCheckedFirst && isChecked.isCheckedSecond ? true : false}
-        func1={onClickNextBtn}
-        func2={() => {
-          console.log('약관 체크 안함')
-        }}
-      />
+      <Button positive={isChecked.isCheckedFirst && isChecked.isCheckedSecond ? true : false} func={onClickNextBtn} />
     </Container>
   )
 }

@@ -119,11 +119,8 @@ const SignUp = () => {
       </UnderInputWrapper>
       <Button
         positive={isValid && isClickDuplicate && !isDuplicate ? true : false}
-        func1={() => {
+        func={() => {
           console.log('다음 화면')
-        }}
-        func2={() => {
-          console.log('잘못된 닉네임')
         }}
       />
     </Container>

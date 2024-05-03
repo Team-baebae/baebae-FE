@@ -3,18 +3,22 @@ import { colors } from '../../styles/colors'
 
 interface ButtonProps {
   positive: boolean
-  func1: any
-  func2: any
+  func: any
 }
 
 // 공통 초록색 버튼 구현 (positive가 true일경우 진한초록, false일경우 연한초록)
-const Button = ({ positive, func1, func2 }: ButtonProps) => {
+const Button = ({ positive, func }: ButtonProps) => {
   return positive ? (
-    <GreenCommonBtn onClick={func1} positive={true}>
+    <GreenCommonBtn onClick={func} positive={true}>
       다음
     </GreenCommonBtn>
   ) : (
-    <GreenCommonBtn onClick={func2} positive={false}>
+    <GreenCommonBtn
+      onClick={() => {
+        console.log('비활성화 상태')
+      }}
+      positive={false}
+    >
       다음
     </GreenCommonBtn>
   )
