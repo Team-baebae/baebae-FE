@@ -39,7 +39,7 @@ const BackgroundImg = styled.img`
   width: 527.03px;
   height: 431.605px;
   position: absolute;
-  z-index: 2;
+  z-index: 1;
   left: -86px;
   top: 21.04px;
 `
@@ -64,6 +64,7 @@ const KakaoLoginBtn = styled.button`
   border: none;
   background: #fee500;
   cursor: pointer;
+  z-index: 2;
 `
 const KakaoLoginBtnIcon = styled.img`
   width: 24px;

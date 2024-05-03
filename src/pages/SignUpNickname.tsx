@@ -55,6 +55,7 @@ const SignUp = () => {
     try {
       await loginApi(kakaoAccessToken, nickname).then((res: LoginProps) => {
         if (res.status === 200) {
+          localStorage.setItem('memberId', res.data.memberId)
           localStorage.setItem('accessToken', res.data.accessToken)
           localStorage.setItem('nickname', res.data.nickname)
           localStorage.setItem('email', res.data.email)
@@ -72,12 +73,12 @@ const SignUp = () => {
 
   return (
     <Container>
-      <Header text="텍스트" backColor={colors.grey7} />
+      <Header text="회원가입" backColor={colors.grey7} />
       <SignUpHeaderText>
         플리빗을 사용하기 위한 <br />
         아이디가 필요해요!
       </SignUpHeaderText>
-      <SignUpNicknameLabel>닉네임</SignUpNicknameLabel>
+      <SignUpNicknameLabel>아이디</SignUpNicknameLabel>
 
       <SignUpInputWrapper>
         <SingUpNicknameInput
@@ -117,7 +118,10 @@ const SignUp = () => {
           <UnderInputNicknameLengthText color={colors.grey4}>25</UnderInputNicknameLengthText>
         </UnderInputNicknameLengthWrapper>
       </UnderInputWrapper>
-      <Button positive={isValid && isClickDuplicate && !isDuplicate ? true : false} func={login} />
+      <Button
+        positive={isValid && isClickDuplicate && !isDuplicate ? true : false}
+        func={login(kakaoAccessToken, nickname)}
+      />
     </Container>
   )
 }
