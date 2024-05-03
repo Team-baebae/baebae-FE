@@ -7,7 +7,7 @@ import Spotify from './pages/Spotify'
 import SignUp from './pages/SignUp'
 import Setting from './pages/Setting'
 import EditProfile from './pages/EditProfile'
-
+import SignUpTerms from './pages/SignUpTerms'
 
 const Router = () => {
   return (
@@ -16,6 +16,7 @@ const Router = () => {
         <Route path="/" element={<Outer />}>
           <Route path="" element={<Landing />} />
           <Route path="login" element={<Login />} />
+          <Route path="signup/terms" element={<SignUpTerms />} />
           <Route path="auth" element={<KakaoRedirection />} />
           <Route path="signup" element={<SignUp />} />
           <Route path="spotify" element={<Spotify />} />
