@@ -4,10 +4,14 @@ import { colors } from '../styles/colors'
 import Terms from '../components/signup/Terms'
 import { useState } from 'react'
 import Button from '../components/common/Button'
-import { useNavigate } from 'react-router-dom'
+import { useLocation, useNavigate } from 'react-router-dom'
 
 const SignUpTerms = () => {
   const navigate = useNavigate()
+
+  //   넘겨받은 카카오 어세스 토큰 저장
+  const location = useLocation()
+  const kakaoAccessToken = location.state?.kakaoAccessToken
 
   // 약관 체크여부 확인
   const [isChecked, setIsChecked] = useState({
@@ -19,7 +23,11 @@ const SignUpTerms = () => {
 
   const onClickNextBtn = () => {
     if (isChecked.isCheckedFirst && isChecked.isCheckedSecond) {
-      navigate('/signup/nickname')
+      navigate('/signup/nickname', {
+        state: {
+          kakaoAccessToken: kakaoAccessToken,
+        },
+      })
     }
   }
 

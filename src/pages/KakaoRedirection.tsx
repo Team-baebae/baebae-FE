@@ -50,7 +50,7 @@ const KakaoRedirection = () => {
         if (res.data.isExisting) {
           login(accessToken, 'null')
         } else {
-          navigate('/signup', {
+          navigate('/signup/terms', {
             state: {
               kakaoAccessToken: accessToken,
             },
