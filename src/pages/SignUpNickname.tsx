@@ -117,12 +117,7 @@ const SignUp = () => {
           <UnderInputNicknameLengthText color={colors.grey4}>25</UnderInputNicknameLengthText>
         </UnderInputNicknameLengthWrapper>
       </UnderInputWrapper>
-      <Button
-        positive={isValid && isClickDuplicate && !isDuplicate ? true : false}
-        func={() => {
-          console.log('다음 화면')
-        }}
-      />
+      <Button positive={isValid && isClickDuplicate && !isDuplicate ? true : false} func={login} />
     </Container>
   )
 }
