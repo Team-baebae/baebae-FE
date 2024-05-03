@@ -50,7 +50,7 @@ const KakaoRedirection = () => {
         if (res.data.isExisting) {
           login(accessToken, 'null')
         } else {
-          navigate('/signup', {
+          navigate('/signup/terms', {
             state: {
               kakaoAccessToken: accessToken,
             },
@@ -76,6 +76,8 @@ const KakaoRedirection = () => {
     try {
       await loginApi(kakaoAccessToken, nickname).then((res: LoginProps) => {
         if (res.status === 200) {
+          console.log(res.data.accessToken)
+          localStorage.setItem('memberId', res.data.id)
           localStorage.setItem('accessToken', res.data.accessToken)
           localStorage.setItem('nickname', res.data.nickname)
           localStorage.setItem('email', res.data.email)
