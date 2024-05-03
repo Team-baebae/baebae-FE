@@ -191,12 +191,12 @@ const TermText = styled.div<{ color: string; fontWeight: string }>`
 const UnderlinedTermText = styled(TermText)`
   text-decoration-line: underline;
   position: absolute;
-  right: 15px;
+  right: 0px;
 `
 
 const Line = styled.div`
   height: 1px;
   align-self: stretch;
-  margin: 16px 15px 16px 0px;
+  margin: 16px 0px;
   background: ${colors.grey5};
 `
