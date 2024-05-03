@@ -2,19 +2,81 @@ import styled from 'styled-components'
 import unchecked from '../../assets/UnChecked.svg'
 import checked from '../../assets/Checked.svg'
 import { colors } from '../../styles/colors'
+import { useState } from 'react'
 
-const Terms = () => {
+interface TermsProps {
+  isChecked: {
+    isCheckedTotal: boolean
+    isCheckedFirst: boolean
+    isCheckedSecond: boolean
+    isCheckedThird: boolean
+  }
+  setIsChecked: any
+}
+
+const Terms = ({ isChecked, setIsChecked }: TermsProps) => {
   return (
     <Container>
       <TermWrapper>
-        <TermCheckIcon src={unchecked} alt="v" />
+        {isChecked.isCheckedTotal ? (
+          <TermCheckIcon
+            onClick={() => {
+              setIsChecked({
+                ...isChecked,
+                isCheckedTotal: false,
+                isCheckedFirst: false,
+                isCheckedSecond: false,
+                isCheckedThird: false,
+              })
+            }}
+            src={checked}
+            alt="v"
+          />
+        ) : (
+          <TermCheckIcon
+            onClick={() => {
+              setIsChecked({
+                ...isChecked,
+                isCheckedTotal: true,
+                isCheckedFirst: true,
+                isCheckedSecond: true,
+                isCheckedThird: true,
+              })
+            }}
+            src={unchecked}
+            alt="v"
+          />
+        )}
         <TermText fontWeight="600" color={colors.grey1}>
           모두 동의
         </TermText>
       </TermWrapper>
       <Line />
       <TermWrapper>
-        <TermCheckIcon src={unchecked} alt="v" />
+        {isChecked.isCheckedFirst ? (
+          <TermCheckIcon
+            onClick={() => {
+              setIsChecked({
+                ...isChecked,
+                isCheckedTotal: false,
+                isCheckedFirst: false,
+              })
+            }}
+            src={checked}
+            alt="v"
+          />
+        ) : (
+          <TermCheckIcon
+            onClick={() => {
+              setIsChecked({
+                ...isChecked,
+                isCheckedFirst: true,
+              })
+            }}
+            src={unchecked}
+            alt="v"
+          />
+        )}
         <TermText fontWeight="500" color={colors.grey3}>
           [필수] 이용약관 동의
         </TermText>
@@ -23,7 +85,30 @@ const Terms = () => {
         </UnderlinedTermText>
       </TermWrapper>
       <TermWrapper margin="24px 0px 0px 0px">
-        <TermCheckIcon src={unchecked} alt="v" />
+        {isChecked.isCheckedSecond ? (
+          <TermCheckIcon
+            onClick={() => {
+              setIsChecked({
+                ...isChecked,
+                isCheckedTotal: false,
+                isCheckedSecond: false,
+              })
+            }}
+            src={checked}
+            alt="v"
+          />
+        ) : (
+          <TermCheckIcon
+            onClick={() => {
+              setIsChecked({
+                ...isChecked,
+                isCheckedSecond: true,
+              })
+            }}
+            src={unchecked}
+            alt="v"
+          />
+        )}
         <TermText fontWeight="500" color={colors.grey3}>
           [필수] 개인정보 수집 및 이용 동의
         </TermText>
@@ -32,7 +117,30 @@ const Terms = () => {
         </UnderlinedTermText>
       </TermWrapper>
       <TermWrapper margin="24px 0px 0px 0px">
-        <TermCheckIcon src={unchecked} alt="v" />
+        {isChecked.isCheckedThird ? (
+          <TermCheckIcon
+            onClick={() => {
+              setIsChecked({
+                ...isChecked,
+                isCheckedTotal: false,
+                isCheckedThird: false,
+              })
+            }}
+            src={checked}
+            alt="v"
+          />
+        ) : (
+          <TermCheckIcon
+            onClick={() => {
+              setIsChecked({
+                ...isChecked,
+                isCheckedThird: true,
+              })
+            }}
+            src={unchecked}
+            alt="v"
+          />
+        )}
         <TermText fontWeight="500" color={colors.grey3}>
           [선택] 광고성 정보 수신 동의
         </TermText>
