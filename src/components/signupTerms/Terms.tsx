@@ -47,12 +47,11 @@ const Terms = () => {
 export default Terms
 
 const Container = styled.div`
-  width: 100%;
+  width: calc(100% - 40px);
   height: 100%;
   display: flex;
   flex-direction: column;
   margin: 0px 20px 0px 20px;
-  border: 1px solid black;
 `
 
 const TermWrapper = styled.div<{ margin?: string }>`
@@ -84,13 +83,12 @@ const TermText = styled.div<{ color: string; fontWeight: string }>`
 const UnderlinedTermText = styled(TermText)`
   text-decoration-line: underline;
   position: absolute;
-  right: 32px;
+  right: 15px;
 `
 
 const Line = styled.div`
-  /* width: 320px; */
   height: 1px;
   align-self: stretch;
-  margin: 16px 0px;
-  background: var(--Grayscale-Gray-05, #c1c1c1);
+  margin: 16px 15px 16px 0px;
+  background: ${colors.grey5};
 `
