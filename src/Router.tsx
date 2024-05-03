@@ -9,6 +9,7 @@ import SignUpNickname from './pages/SignUpNickname'
 import Setting from './pages/Setting'
 import EditProfile from './pages/EditProfile'
 import SignUpOnBoarding from './pages/SignUpOnBoarding'
+import Answer from './pages/Answer'
 
 const Router = () => {
   return (
@@ -24,6 +25,7 @@ const Router = () => {
           <Route path="spotify" element={<Spotify />} />
           <Route path="setting" element={<Setting />} />
           <Route path="editProfile" element={<EditProfile />} />
+          <Route path="questions/answer" element={<Answer />} />
         </Route>
       </Routes>
     </BrowserRouter>
