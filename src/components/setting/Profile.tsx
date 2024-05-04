@@ -10,7 +10,7 @@ const Profile = () => {
       <ProfileImage />
       <ProfileContents>
         <Nickname>{nickname}</Nickname>
-        <EditButton onClick={() => navigate('/editProfile')}>내 프로필 수정하기</EditButton>
+        <EditButton onClick={() => navigate('setting/editProfile')}>내 프로필 수정하기</EditButton>
       </ProfileContents>
     </Container>
   )
