@@ -10,7 +10,7 @@ import Setting from './pages/Setting'
 import EditProfile from './pages/EditProfile'
 import SignUpOnBoarding from './pages/SignUpOnBoarding'
 import Main from './pages/Main'
-import QuestionList from './components/main/QuestionList'
+import QuestionList from './pages/QuestionList'
 
 const Router = () => {
   return (
@@ -24,7 +24,7 @@ const Router = () => {
           <Route path="signup/nickname" element={<SignUpNickname />} />
           <Route path="signup/onboarding" element={<SignUpOnBoarding />} />
           <Route path=":username" element={<Main />} />
-          <Route path=":username/questionList" Component={QuestionList} />
+          <Route path=":username/questionList" element={<QuestionList />} />
           <Route path="spotify" element={<Spotify />} />
           <Route path="setting" element={<Setting />} />
           <Route path="setting/editProfile" element={<EditProfile />} />
