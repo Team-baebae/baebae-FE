@@ -59,7 +59,7 @@ const Answer = () => {
 
       <UnFixedButton
         margin="83px 20px 0px 20px"
-        positive={true}
+        positive={image !== '' && text !== '' ? true : false}
         func={() => {
           console.log('다음')
         }}
@@ -169,14 +169,3 @@ const BtnText = styled.div`
   line-height: normal;
   letter-spacing: -0.28px;
 `
-
-// const BlurWrapper = styled.div`
-//   width: 100%;
-//   height: 64px;
-//   position: absolute;
-//   /* border: 1px solid black; */
-//   top: 545px;
-//   /* z-index: -1; */
-
-//   background: linear-gradient(180deg, rgba(245, 245, 245, 0) 0%, #f5f5f5 100%);
-// `
