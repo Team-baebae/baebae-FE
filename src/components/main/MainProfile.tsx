@@ -1,36 +1,38 @@
 import styled from 'styled-components'
 import { colors } from '../../styles/colors'
-import { useNavigate } from 'react-router-dom'
+import DefaultImage from '../../assets/main/DefaultImage.svg'
 
-const Profile = () => {
-  const navigate = useNavigate()
-  const nickname = '닉네임'
+interface MainProfileProps {
+  nickname: string | undefined
+  image: string
+}
+
+const MainProfile = ({ nickname, image }: MainProfileProps) => {
   return (
     <Container>
-      <ProfileImage />
       <ProfileContents>
         <Nickname>{nickname}</Nickname>
-        <EditButton onClick={() => navigate('setting/editProfile')}>내 프로필 수정하기</EditButton>
+        <ShareButton onClick={() => console.log('초대기능')}>내 플리빗 초대</ShareButton>
       </ProfileContents>
+      <ProfileImage src={DefaultImage} />
     </Container>
   )
 }
 
-export default Profile
+export default MainProfile
 
 const Container = styled.div`
   display: flex;
   flex-direction: row;
   align-items: center;
+  justify-content: space-between;
   padding: 20px;
-  gap: 20px;
   background-color: ${colors.white};
 `
 const ProfileImage = styled.img`
   width: 80px;
   height: 80px;
   border-radius: 80px;
-  background-color: ${colors.grey4};
 `
 const ProfileContents = styled.div`
   display: flex;
@@ -40,27 +42,26 @@ const ProfileContents = styled.div`
 const Nickname = styled.div`
   color: ${colors.grey1};
   font-family: Pretendard;
-  font-size: 18px;
+  font-size: 16px;
   font-style: normal;
-  font-weight: 600;
-  line-height: 27px;
-  letter-spacing: -0.72px;
+  font-weight: 700;
+  line-height: 24px;
+  letter-spacing: -0.32px;
 `
-const EditButton = styled.button`
+const ShareButton = styled.button`
   display: flex;
-  padding: 4px 12px;
+  padding: 8px 24px;
   justify-content: center;
-  align-items: flex-start;
-  gap: 10px;
-  border-radius: 100px;
-  border: 1px solid ${colors.grey1};
-  background: #fff;
-  color: ${colors.grey1};
+  align-items: center;
+  border-radius: 8px;
+  border: 0;
+  background: ${colors.grey7};
+  color: ${colors.grey3};
   font-family: Pretendard;
   font-size: 12px;
   font-style: normal;
-  font-weight: 500;
+  font-weight: 600;
   line-height: 18px;
-  letter-spacing: -0.48px;
+  letter-spacing: -0.24px;
   cursor: pointer;
 `

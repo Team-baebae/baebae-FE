@@ -19,6 +19,7 @@ const SignUpOnBoarding = () => {
         func={() => {
           navigate('/')
         }}
+        text="다음"
       />
     </Container>
   )
