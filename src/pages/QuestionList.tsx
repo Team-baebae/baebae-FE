@@ -27,12 +27,12 @@ const QuestionList = () => {
           <Flips />
         ) : (
           <GridContainer>
-            {data.map((v, i) => (
+            {data.map((value) => (
               <FlipWrapper>
                 <Icon src={QuotationMark} />
-                <FlipContent>{v.content}</FlipContent>
+                <FlipContent>{value.content}</FlipContent>
                 <WriterBlock>
-                  FROM <WriterRegion>{v.writer}님</WriterRegion>
+                  FROM <WriterRegion>{value.writer}님</WriterRegion>
                 </WriterBlock>
               </FlipWrapper>
             ))}

@@ -2,7 +2,6 @@ import styled from 'styled-components'
 import unchecked from '../../assets/UnChecked.svg'
 import checked from '../../assets/Checked.svg'
 import { colors } from '../../styles/colors'
-import { useState } from 'react'
 
 interface TermsProps {
   isChecked: {
