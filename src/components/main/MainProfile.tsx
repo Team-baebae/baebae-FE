@@ -4,10 +4,10 @@ import DefaultImage from '../../assets/main/DefaultImage.svg'
 
 interface MainProfileProps {
   nickname: string | undefined
-  image: string
+  // image: string 프로필 이미지도 받아오기
 }
 
-const MainProfile = ({ nickname, image }: MainProfileProps) => {
+const MainProfile = ({ nickname }: MainProfileProps) => {
   return (
     <Container>
       <ProfileContents>

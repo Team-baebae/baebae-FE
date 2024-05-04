@@ -6,15 +6,10 @@ const AlramSetting = () => {
   return (
     <Container>
       <ContentsWrapper>
-        <Contents>공감 알림</Contents>
-        <Toggle />
-      </ContentsWrapper>
-      <ContentsWrapper>
-        <Contents>새 질문 알림</Contents>
-        <Toggle />
-      </ContentsWrapper>
-      <ContentsWrapper>
-        <Contents>이벤트 정보 알림</Contents>
+        <TextWrapper>
+          <Contents>플리빗 알림</Contents>
+          <MiniContents>공감, 새 질문, 이벤트 정보 알림</MiniContents>
+        </TextWrapper>
         <Toggle />
       </ContentsWrapper>
     </Container>
@@ -40,6 +35,11 @@ const ContentsWrapper = styled.div`
   justify-content: space-between;
   align-items: center;
 `
+const TextWrapper = styled.div`
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+`
 const Contents = styled.div`
   color: ${colors.black};
   font-family: Pretendard;
@@ -48,7 +48,11 @@ const Contents = styled.div`
   font-weight: 500;
   line-height: normal;
 `
-const RightIcon = styled.img`
-  width: 24px;
-  height: 24px;
+const MiniContents = styled.div`
+  color: ${colors.grey4};
+  font-family: Pretendard;
+  font-size: 12px;
+  font-style: normal;
+  font-weight: 500;
+  line-height: normal;
 `

@@ -2,21 +2,29 @@ import styled from 'styled-components'
 import NewIcon from '../../assets/main/NewIcon.svg'
 import ForwardArrow from '../../assets/ForwardArrow.svg'
 import Info from '../../assets/main/Info.svg'
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { colors } from '../../styles/colors'
 import { useNavigate } from 'react-router-dom'
 import MiniToggle from '../common/MiniToggle'
 import Button from '../common/Button'
 
 interface AskProps {
-  params: string | undefined
+  params: ParamsProps
 }
-const Ask = (params: AskProps) => {
-  const [askCount, setAskCount] = useState<number>(9)
+interface ParamsProps {
+  username: string | undefined
+}
+const Ask = (props: AskProps) => {
+  const { params } = props
+  const [askCount, setAskCount] = useState<number>(0)
   const navigate = useNavigate()
   const questionClick = () => {
     navigate(`/${params?.username}/questionList`)
   }
+  useEffect(() => {
+    // api 연동
+    setAskCount(3)
+  })
   return (
     <Container>
       <AskNotification onClick={questionClick}>
@@ -154,39 +162,4 @@ const OpenProfile = styled.div`
   font-weight: 500;
   line-height: 18px;
   letter-spacing: -0.24px;
-`
-const AskBtn = styled.button`
-  @media screen and (width <= 768px) {
-    display: flex;
-    justify-content: center;
-    position: absolute;
-    left: 20px;
-    right: 20px;
-    bottom: 30px;
-    border: none;
-    border-radius: 12px;
-    padding: 16px 20px;
-    background-color: ${colors.primary};
-    color: ${colors.grey1};
-    font-family: Pretendard;
-    font-size: 14px;
-    font-weight: 600;
-    cursor: pointer;
-  }
-  @media screen and (width > 768px) {
-    position: absolute;
-    bottom: 30px;
-    display: flex;
-    justify-content: center;
-    width: 335px;
-    border: none;
-    border-radius: 12px;
-    padding: 16px 20px;
-    background-color: ${colors.primary};
-    color: ${colors.grey1};
-    font-family: Pretendard;
-    font-size: 14px;
-    font-weight: 600;
-    cursor: pointer;
-  }
 `

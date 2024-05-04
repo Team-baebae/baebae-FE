@@ -7,10 +7,6 @@ import MainProfile from '../components/main/MainProfile'
 import Feed from '../components/main/Feed'
 import Ask from '../components/main/Ask'
 
-// interface UserData {
-//   username: string
-// }
-
 const Main = () => {
   const { username } = useParams<{ username: string }>()
   const [userData, setUserData] = useState<string | undefined>(undefined)
@@ -26,7 +22,7 @@ const Main = () => {
     <>
       <Container>
         <MainHeader backColor={colors.white} />
-        <MainProfile nickname={username} image="image" />
+        <MainProfile nickname={username} />
         <CategoryBox>
           <Category category={category} num={0} onClick={() => setCategory(0)}>
             질문
@@ -35,7 +31,7 @@ const Main = () => {
             피드
           </Category>
         </CategoryBox>
-        {category ? <Feed /> : <Ask username={userData} />}
+        {category ? <Feed /> : <Ask params={{ username: userData }} />}
       </Container>
     </>
   )
