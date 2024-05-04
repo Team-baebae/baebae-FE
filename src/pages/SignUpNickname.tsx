@@ -121,6 +121,7 @@ const SignUp = () => {
       <Button
         positive={isValid && isClickDuplicate && !isDuplicate ? true : false}
         func={login(kakaoAccessToken, nickname)}
+        text="다음"
       />
     </Container>
   )
@@ -132,9 +133,12 @@ const Container = styled.div`
   width: 100%;
   display: flex;
   flex-direction: column;
+  align-items: center;
 `
 
 const SignUpHeaderText = styled.div`
+  width: 100%;
+  padding-left: 20px;
   color: ${colors.grey1};
   font-family: Pretendard;
   font-size: 18px;
