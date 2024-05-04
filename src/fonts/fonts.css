@@ -52,3 +52,58 @@
   font-weight: 900;
   src: url('./Pretendard-Black.otf') format('opentype');
 }
+
+@font-face {
+  font-family: 'MuseoModerno';
+  font-style: normal;
+  font-weight: 100;
+  src: url('./museoModerno/MuseoModerno-Thin.ttf') format('opentype');
+}
+@font-face {
+  font-family: 'MuseoModerno';
+  font-style: normal;
+  font-weight: 200;
+  src: url('./museoModerno/MuseoModerno-ExtraLight.ttf') format('opentype');
+}
+@font-face {
+  font-family: 'MuseoModerno';
+  font-style: normal;
+  font-weight: 300;
+  src: url('./museoModerno/MuseoModerno-Light.ttf') format('opentype');
+}
+@font-face {
+  font-family: 'MuseoModerno';
+  font-style: normal;
+  font-weight: normal;
+  src: url('./museoModerno/MuseoModerno-Regular.ttf') format('opentype');
+}
+@font-face {
+  font-family: 'MuseoModerno';
+  font-style: normal;
+  font-weight: 500;
+  src: url('./museoModerno/MuseoModerno-Medium.ttf') format('opentype');
+}
+@font-face {
+  font-family: 'MuseoModerno';
+  font-style: normal;
+  font-weight: 600;
+  src: url('./museoModerno/MuseoModerno-SemiBold.ttf') format('opentype');
+}
+@font-face {
+  font-family: 'MuseoModerno';
+  font-style: normal;
+  font-weight: 700;
+  src: url('./museoModerno/MuseoModerno-Bold.ttf') format('opentype');
+}
+@font-face {
+  font-family: 'MuseoModerno';
+  font-style: normal;
+  font-weight: 800;
+  src: url('./museoModerno/MuseoModerno-ExtraBold.ttf') format('opentype');
+}
+@font-face {
+  font-family: 'MuseoModerno';
+  font-style: normal;
+  font-weight: 900;
+  src: url('./museoModerno/MuseoModerno-Black.ttf') format('opentype');
+}

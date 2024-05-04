@@ -5,7 +5,8 @@ const Question = () => {
   return (
     <>
       <SenderWrapper>
-        <SenderText color={colors.primary}>FROM</SenderText>'<SenderText color={colors.grey4}>유자인님</SenderText>
+        <SenderText color={colors.primary}>FROM</SenderText>
+        <SenderText color={colors.grey4}>유자인님</SenderText>
       </SenderWrapper>
       <QuestionWrapper>
         <QuestionQuotes>"</QuestionQuotes>
