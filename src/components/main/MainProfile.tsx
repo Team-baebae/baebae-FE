@@ -55,8 +55,8 @@ const ShareButton = styled.button`
   align-items: center;
   border-radius: 8px;
   border: 0;
-  background: ${colors.grey1};
-  color: ${colors.white};
+  background: ${colors.grey7};
+  color: ${colors.grey3};
   font-family: Pretendard;
   font-size: 12px;
   font-style: normal;
