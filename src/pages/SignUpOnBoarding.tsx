@@ -1,7 +1,7 @@
 import styled from 'styled-components'
 import onBoardingIcon from '../assets/OnboardingIcon.svg'
 import { colors } from '../styles/colors'
-import Button from '../components/common/Button'
+import { FixedButton } from '../components/common/Button'
 import { useNavigate } from 'react-router-dom'
 
 const SignUpOnBoarding = () => {
@@ -14,7 +14,7 @@ const SignUpOnBoarding = () => {
         <br />
         답변을 통해 자신의 취향을 표현해보세요.
       </UnderIconText>
-      <Button
+      <FixedButton
         positive={true}
         func={() => {
           navigate('/')
