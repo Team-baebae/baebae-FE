@@ -58,11 +58,12 @@ const Answer = () => {
       </PlusBtn> */}
 
       <UnFixedButton
-        margin="83px 20px 0px 20px"
         positive={image !== '' && text !== '' ? true : false}
         func={() => {
           console.log('다음')
         }}
+        text="다음"
+        margin="83px 20px 0px 20px"
       />
     </Container>
   )

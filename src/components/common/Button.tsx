@@ -15,7 +15,7 @@ interface UnFixedButtonprops {
 }
 
 // 공통 초록색 버튼 구현 (positive가 true일경우 진한초록, false일경우 연한초록)
-const Button = ({ positive, func, text }: ButtonProps) => {
+export const Button = ({ positive, func, text }: ButtonProps) => {
   return positive ? (
     <GreenCommonBtn onClick={func} positive={true}>
       {text}
@@ -32,7 +32,24 @@ const Button = ({ positive, func, text }: ButtonProps) => {
   )
 }
 
-export default Button
+// 공통 초록색 버튼 구현 (하단 고정되지 않은 버전)
+export const UnFixedButton = ({ positive, func, text, margin }: UnFixedButtonprops) => {
+  return positive ? (
+    <UnFixedGreenCommonBtn margin={margin} onClick={func} positive={true}>
+      {text}
+    </UnFixedGreenCommonBtn>
+  ) : (
+    <UnFixedGreenCommonBtn
+      margin={margin}
+      onClick={() => {
+        console.log('비활성화 상태')
+      }}
+      positive={false}
+    >
+      {text}
+    </UnFixedGreenCommonBtn>
+  )
+}
 
 const GreenCommonBtn = styled.button<{ positive: boolean }>`
   @media screen and (width <= 768px) {
@@ -69,25 +86,6 @@ const GreenCommonBtn = styled.button<{ positive: boolean }>`
     cursor: pointer;
   }
 `
-
-// 공통 초록색 버튼 구현 (하단 고정되지 않은 버전)
-export const UnFixedButton = ({ positive, func, text, margin }: UnFixedButtonprops) => {
-  return positive ? (
-    <UnFixedGreenCommonBtn margin={margin} onClick={func} positive={true}>
-      {text}
-    </UnFixedGreenCommonBtn>
-  ) : (
-    <UnFixedGreenCommonBtn
-      margin={margin}
-      onClick={() => {
-        console.log('비활성화 상태')
-      }}
-      positive={false}
-    >
-      {text}
-    </UnFixedGreenCommonBtn>
-  )
-}
 
 const UnFixedGreenCommonBtn = styled.button<{ margin: string; positive: boolean }>`
   @media screen and (width <= 768px) {
