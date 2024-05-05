@@ -13,6 +13,7 @@ const Answer = () => {
   const [text, setText] = useState<string>('')
   const [musicTitle, setMusicTitle] = useState<string>('')
   const [musicUrl, setMusicUrl] = useState<string>('')
+  const [musicSinger, setMusicSinger] = useState<string>('')
   const [linkUrl, setLinkUrl] = useState<string>('')
 
   // 이미지 파일 선택 핸들러
@@ -44,7 +45,14 @@ const Answer = () => {
         <input type="file" name="file" id="file" style={{ display: 'none' }} onChange={handleImageChange} />
         <AnswerText onChange={onChangeText} value={text} placeholder="답변을 입력해보세요." />
       </PolaroidContainer>
-      <Music musicTitle={musicTitle} setMusicTitle={setMusicTitle} musicUrl={musicUrl} setMusicUrl={setMusicUrl} />
+      <Music
+        musicTitle={musicTitle}
+        setMusicTitle={setMusicTitle}
+        musicUrl={musicUrl}
+        setMusicUrl={setMusicUrl}
+        musicSinger={musicSinger}
+        setMusicSinger={setMusicSinger}
+      />
 
       {/* <PlusBtn margin="10px 0px 0px 0px">
         <BtnIcon src={link} alt="link" />

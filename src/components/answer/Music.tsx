@@ -9,15 +9,30 @@ import musicGray from '../../assets/MusicGray.svg'
 import { UnFixedButton } from '../common/Button'
 import pause from '../../assets/Pause.svg'
 import play from '../../assets/Play.svg'
+import axios from 'axios'
 
 interface MusicProps {
   musicTitle: string
   setMusicTitle: any
   musicUrl: string
   setMusicUrl: any
+  musicSinger: string
+  setMusicSinger: any
 }
 
-const Music = ({ musicTitle, musicUrl }: MusicProps) => {
+interface Track {
+  id: string
+  name: string
+  preview_url: string
+  album: {
+    artists: { name: string }[]
+  }
+}
+
+const Music = ({ musicTitle, setMusicTitle, musicUrl, setMusicUrl, musicSinger, setMusicSinger }: MusicProps) => {
+  const clientId = import.meta.env.VITE_SPOTIFY_CLIENT_ID
+  const clientSecret = import.meta.env.VITE_SPOTIFY_CLIENT_SECRET
+
   const [open, setOpen] = useState<boolean>(false)
   const [step, setStep] = useState<number>(1)
 
@@ -33,9 +48,93 @@ const Music = ({ musicTitle, musicUrl }: MusicProps) => {
     setStep(2) // 음악 상세 선택 BottomSheet로 전환
   }
 
-  const selectOption = (name: string): void => {
-    console.log('Selected Option:', name)
+  const selectTrack = (result: Track) => {
+    setMusicTitle(result.name)
+    setMusicUrl(result.preview_url)
+    setMusicSinger(result.album.artists[0].name)
     setStep(1) // 선택 후 기본 BottomSheet로 돌아갑니다.
+  }
+
+  //검색어 저장
+  const [searchTerm, setSearchTerm] = useState<string>('')
+  //받은 response중 트랙리스트를 저장함
+  const [searchResults, setSearchResults] = useState<Track[]>([])
+  //스포티파이 api 어세스토큰 저장
+  const [spotifyAccessToken, setSpotifyAccessToken] = useState<string>('')
+  //현재 실행하고 있는 트랙 저장
+  const [currentAudio, setCurrentAudio] = useState<HTMLAudioElement | null>(null)
+  //현재 실행중인지 여부 확인
+  const [isPlaying, setIsPlaying] = useState<boolean>(false)
+
+  //   검색어 입력부분
+  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const newSearchTerm = e.target.value
+    setSearchTerm(newSearchTerm)
+    handleSearch(newSearchTerm)
+  }
+
+  //   스포티파이 accessToken 받기 함수
+  const getSpotifyAccessToken = async () => {
+    try {
+      await axios
+        .post('https://accounts.spotify.com/api/token', 'grant_type=client_credentials', {
+          headers: {
+            'Content-Type': 'application/x-www-form-urlencoded',
+            Authorization: 'Basic ' + btoa(`${clientId}:${clientSecret}`),
+          },
+        })
+        .then((res) => {
+          console.log(res)
+          setSpotifyAccessToken(res.data.access_token)
+        })
+    } catch (err) {
+      console.log(err)
+    }
+  }
+
+  //   스포티파이 api를 통해 검색어에 해당하는 트랙, 앨범, 가수 리스트 받기
+  const handleSearch = async (searchTerm: any) => {
+    if (!spotifyAccessToken) {
+      await getSpotifyAccessToken()
+    }
+    try {
+      await axios
+        .get(`https://api.spotify.com/v1/search?q=${searchTerm}&type=track,artist,album`, {
+          headers: {
+            Authorization: `Bearer ${spotifyAccessToken}`,
+          },
+        })
+        .then((res) => {
+          console.log(res.data.tracks.items[0].album.artists[0].name)
+          //   일단 화면에 보여주기 위해 트랙들만 저장
+          // 실제론 트랙, 앨범, 가수 다 받음
+          setSearchResults(res.data.tracks.items)
+        })
+    } catch (err) {
+      console.error('API 호출 오류:', err)
+    }
+  }
+
+  //   트랙 미리듣기
+  const handlePreview = (previewUrl: string) => {
+    if (currentAudio && currentAudio.src === previewUrl) {
+      // 이미 실행 중인 노래의 버튼을 다시 누르면 일시 중지/재생 토글
+      if (isPlaying) {
+        currentAudio.pause()
+      } else {
+        currentAudio.play()
+      }
+      setIsPlaying(!isPlaying)
+    } else {
+      // 다른 노래의 버튼을 누르면 기존 노래 중지 후 새로운 노래 재생
+      if (currentAudio) {
+        currentAudio.pause()
+      }
+      const audio = new Audio(previewUrl)
+      setCurrentAudio(audio)
+      audio.play()
+      setIsPlaying(true)
+    }
   }
 
   return (
@@ -49,10 +148,23 @@ const Music = ({ musicTitle, musicUrl }: MusicProps) => {
           <PlusMusicText>음악 추가</PlusMusicText>
           <SearchMusicWrapper>
             <MusicIcon src={musicGray} alt="musicGray" />
-            <SearchedMusicText onClick={openDetailSheet}>
-              {musicTitle === '' ? '음악을 검색해주세요' : musicTitle}
-            </SearchedMusicText>
-            {musicUrl !== '' && <MusicPlayIcon src={play} alt="play" />}
+            {musicTitle === '' ? (
+              <SearchedMusicText color={colors.grey5} onClick={openDetailSheet}>
+                음악을 검색해주세요
+              </SearchedMusicText>
+            ) : (
+              <SearchedMusicText color={colors.grey1} onClick={openDetailSheet}>
+                {musicTitle} - {musicSinger}
+              </SearchedMusicText>
+            )}
+
+            {musicUrl !== '' && isPlaying ? (
+              <MusicPlayIcon src={pause} alt="pause" />
+            ) : musicUrl !== '' && !isPlaying ? (
+              <MusicPlayIcon src={play} alt="play" />
+            ) : (
+              <></>
+            )}
           </SearchMusicWrapper>
           <UnFixedButton
             positive={musicTitle === '' ? false : true}
@@ -68,14 +180,44 @@ const Music = ({ musicTitle, musicUrl }: MusicProps) => {
           <PlusMusicText>음악 추가</PlusMusicText>
           <SearchMusicWrapper>
             <GlassesIcon src={glasses} alt="glasses" />
-            <SearchMusicInput placeholder="노래, 아티스트, 앨범 검색" />
+            <SearchMusicInput value={searchTerm} onChange={handleInputChange} placeholder="노래, 아티스트, 앨범 검색" />
           </SearchMusicWrapper>
 
-          <div>
-            <PlusMusicText onClick={() => selectOption('Option 1')}>옵션 1</PlusMusicText>
-            <PlusMusicText onClick={() => selectOption('Option 2')}>옵션 2</PlusMusicText>
-            <PlusMusicText onClick={() => selectOption('Option 3')}>옵션 3</PlusMusicText>
-          </div>
+          <TotalTrackListWrapper>
+            {searchResults.map((result: Track) => {
+              const resultNameLower = result.name.toLowerCase()
+              const searchTermLower = searchTerm.toLowerCase()
+
+              return (
+                <div key={result.id} onClick={() => selectTrack(result)}>
+                  <EachTrackWrapper>
+                    {/* 트랙 제목 */}
+                    {resultNameLower.startsWith(searchTermLower) ? (
+                      <>
+                        <EachTrackText color={colors.grey1}>
+                          {result.name.substring(0, searchTerm.length)}
+                          <EachTrackText color={colors.grey3}>{result.name.substring(searchTerm.length)}</EachTrackText>
+                        </EachTrackText>
+                      </>
+                    ) : (
+                      <EachTrackText color={colors.grey3}>{result.name}</EachTrackText>
+                    )}
+                    <EachTrackText color={colors.grey3}>-</EachTrackText>
+                    <EachTrackText color={colors.grey3}>{result.album.artists[0].name}</EachTrackText>
+                    {/* 트랙 오디오 */}
+                    {/* {result.preview_url && (
+    <SpotifyPreviewBtn onClick={() => handlePreview(result.preview_url)}>
+      {currentAudio && currentAudio.src === result.preview_url && isPlaying
+        ? '일시 중지'
+        : '30초 미리듣기'}
+    </SpotifyPreviewBtn>
+  )} */}
+                    {/* <EachTrackText>{result.album.artists[0].name}</EachTrackText> */}
+                  </EachTrackWrapper>
+                </div>
+              )
+            })}
+          </TotalTrackListWrapper>
         </BottomSheet>
       )}
     </>
@@ -153,13 +295,13 @@ const MusicPlayIcon = styled.img`
   height: 20px;
 `
 
-const SearchedMusicText = styled.div`
+const SearchedMusicText = styled.div<{ color: string }>`
   display: -webkit-box;
   -webkit-box-orient: vertical;
   -webkit-line-clamp: 1;
   flex: 1 0 0;
   overflow: hidden;
-  color: ${colors.grey5};
+  color: ${(props) => props.color};
   text-overflow: ellipsis;
   font-family: Pretendard;
   font-size: 14px;
@@ -196,4 +338,35 @@ const SearchMusicInput = styled.input`
   border: none;
   cursor: pointer;
   outline: none;
+`
+
+const SpotifyPreviewBtn = styled.button`
+  background-color: #f1f1f1;
+  color: ${colors.black};
+  height: 30px;
+  margin: 10px 5px;
+  cursor: pointer;
+`
+const TotalTrackListWrapper = styled.div`
+  display: flex;
+  flex-direction: column;
+  margin: 12px 0px 0px 0px;
+`
+
+const EachTrackWrapper = styled.div`
+  display: flex;
+  width: 100%;
+  padding: 20px;
+  align-items: center;
+  gap: 10px;
+  background: ${colors.white};
+`
+const EachTrackText = styled.span<{ color: string }>`
+  color: ${(props) => props.color};
+  font-family: Pretendard;
+  font-size: 14px;
+  font-style: normal;
+  font-weight: 500;
+  line-height: 150%;
+  letter-spacing: -0.56px;
 `
