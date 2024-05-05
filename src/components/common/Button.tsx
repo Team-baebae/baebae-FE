@@ -72,6 +72,8 @@ const GreenCommonBtn = styled.button<{ positive: boolean }>`
   @media screen and (width > 768px) {
     position: absolute;
     bottom: 30px;
+    left: 20px;
+    right: 20px;
     display: flex;
     justify-content: center;
     width: 335px;
@@ -90,31 +92,42 @@ const GreenCommonBtn = styled.button<{ positive: boolean }>`
 const UnFixedGreenCommonBtn = styled.button<{ margin: string; positive: boolean }>`
   @media screen and (width <= 768px) {
     display: flex;
-    justify-content: center;
-    margin: ${(props) => props.margin};
-    border: none;
-    border-radius: 12px;
+    width: calc(100% - 40px);
+    height: 56px;
     padding: 16px 20px;
-    background: ${(props) => (props.positive ? colors.primary : colors.primary40)};
-    color: ${(props) => (props.positive ? colors.grey1 : colors.grey3)};
+    justify-content: center;
+    align-items: center;
+    border-radius: 12px;
     font-family: Pretendard;
     font-size: 14px;
+    font-style: normal;
     font-weight: 600;
+    line-height: 150%;
+    letter-spacing: -0.28px;
+    margin: ${(props) => props.margin};
+    background: ${(props) => (props.positive ? colors.primary : colors.primary40)};
+    color: ${(props) => (props.positive ? colors.grey1 : colors.grey3)};
+    border: none;
     cursor: pointer;
   }
   @media screen and (width > 768px) {
-    margin: ${(props) => props.margin};
     display: flex;
-    justify-content: center;
     width: 335px;
-    border: none;
-    border-radius: 12px;
+    height: 56px;
     padding: 16px 20px;
-    background: ${(props) => (props.positive ? colors.primary : colors.primary40)};
-    color: ${(props) => (props.positive ? colors.grey1 : colors.grey3)};
+    justify-content: center;
+    align-items: center;
+    border-radius: 12px;
     font-family: Pretendard;
     font-size: 14px;
+    font-style: normal;
     font-weight: 600;
+    line-height: 150%;
+    letter-spacing: -0.28px;
+    margin: ${(props) => props.margin};
+    background: ${(props) => (props.positive ? colors.primary : colors.primary40)};
+    color: ${(props) => (props.positive ? colors.grey1 : colors.grey3)};
+    border: none;
     cursor: pointer;
   }
 `
