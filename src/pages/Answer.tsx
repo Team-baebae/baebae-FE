@@ -3,25 +3,28 @@ import Header from '../components/common/Header'
 import { colors } from '../styles/colors'
 import Question from '../components/answer/Question'
 // import Polaroid from '../components/answer/Polaroid'
-import music from '../assets/Music.svg'
 import link from '../assets/Link.svg'
 import { UnFixedButton } from '../components/common/Button'
 import { useState } from 'react'
+import Music from '../components/answer/Music'
 
 const Answer = () => {
   const [image, setImage] = useState<string>('')
   const [text, setText] = useState<string>('')
   const [musicTitle, setMusicTitle] = useState<string>('')
   const [musicUrl, setMusicUrl] = useState<string>('')
+  const [linkUrl, setLinkUrl] = useState<string>('')
 
   // 이미지 파일 선택 핸들러
   const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files && e.target.files[0]
+    // 이미지 파일을 보낼 시엔 formData로 file을 추가해야함(추후 추가)
     if (file) {
       setImage(URL.createObjectURL(file)) // 미리보기를 위해 파일 URL 생성
     }
   }
 
+  // 텍스트 저장
   const onChangeText = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
     const value = e.target.value
     setText(value)
@@ -39,14 +42,11 @@ const Answer = () => {
           </ProfileWrapper>
         </label>
         <input type="file" name="file" id="file" style={{ display: 'none' }} onChange={handleImageChange} />
-
         <AnswerText onChange={onChangeText} value={text} placeholder="답변을 입력해보세요." />
       </PolaroidContainer>
-      <PlusBtn margin="20px 0px 0px 0px">
-        <BtnIcon src={music} alt="music" />
-        <BtnText>음악 추가(선택)</BtnText>
-      </PlusBtn>
-      <PlusBtn margin="10px 0px 0px 0px">
+      <Music musicTitle={musicTitle} setMusicTitle={setMusicTitle} musicUrl={musicUrl} setMusicUrl={setMusicUrl} />
+
+      {/* <PlusBtn margin="10px 0px 0px 0px">
         <BtnIcon src={link} alt="link" />
         <BtnText
           onClick={() => {
@@ -55,7 +55,7 @@ const Answer = () => {
         >
           링크 추가(선택)
         </BtnText>
-      </PlusBtn>
+      </PlusBtn> */}
 
       <UnFixedButton
         margin="83px 20px 0px 20px"
@@ -139,33 +139,4 @@ const AnswerText = styled.textarea`
   &::placeholder {
     color: ${colors.grey5};
   }
-`
-
-const PlusBtn = styled.button<{ margin: string }>`
-  display: flex;
-  padding: 10px 12px;
-  width: 315px;
-  justify-content: center;
-  align-items: center;
-  gap: 10px;
-  border-radius: 8px;
-  background: ${colors.grey1};
-  margin: ${(props) => props.margin};
-  cursor: pointer;
-`
-
-const BtnIcon = styled.img`
-  width: 15px;
-  height: 15px;
-  flex-shrink: 0;
-`
-
-const BtnText = styled.div`
-  color: ${colors.white};
-  font-family: Pretendard;
-  font-size: 14px;
-  font-style: normal;
-  font-weight: 400;
-  line-height: normal;
-  letter-spacing: -0.28px;
 `
