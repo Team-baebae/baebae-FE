@@ -10,6 +10,7 @@ import { UnFixedButton } from '../common/Button'
 import pause from '../../assets/Pause.svg'
 import play from '../../assets/Play.svg'
 import axios from 'axios'
+import { getSpotifyAccessTokenApi, searchTermSpotifyApi } from '../../apis/SpotifyApi'
 
 interface MusicProps {
   musicTitle: string
@@ -30,9 +31,6 @@ interface Track {
 }
 
 const Music = ({ musicTitle, setMusicTitle, musicUrl, setMusicUrl, musicSinger, setMusicSinger }: MusicProps) => {
-  const clientId = import.meta.env.VITE_SPOTIFY_CLIENT_ID
-  const clientSecret = import.meta.env.VITE_SPOTIFY_CLIENT_SECRET
-
   const [open, setOpen] = useState<boolean>(false)
   const [step, setStep] = useState<number>(1)
 
@@ -81,17 +79,10 @@ const Music = ({ musicTitle, setMusicTitle, musicUrl, setMusicUrl, musicSinger, 
   //   스포티파이 accessToken 받기 함수
   const getSpotifyAccessToken = async () => {
     try {
-      await axios
-        .post('https://accounts.spotify.com/api/token', 'grant_type=client_credentials', {
-          headers: {
-            'Content-Type': 'application/x-www-form-urlencoded',
-            Authorization: 'Basic ' + btoa(`${clientId}:${clientSecret}`),
-          },
-        })
-        .then((res) => {
-          console.log(res)
-          setSpotifyAccessToken(res.data.access_token)
-        })
+      await getSpotifyAccessTokenApi().then((res) => {
+        console.log(res)
+        setSpotifyAccessToken(res.data.access_token)
+      })
     } catch (err) {
       console.log(err)
     }
@@ -103,18 +94,10 @@ const Music = ({ musicTitle, setMusicTitle, musicUrl, setMusicUrl, musicSinger, 
       await getSpotifyAccessToken()
     }
     try {
-      await axios
-        .get(`https://api.spotify.com/v1/search?q=${searchTerm}&type=track,artist,album`, {
-          headers: {
-            Authorization: `Bearer ${spotifyAccessToken}`,
-          },
-        })
-        .then((res) => {
-          console.log(res.data.tracks.items[0].album.artists[0].name)
-          //   일단 화면에 보여주기 위해 트랙들만 저장
-          // 실제론 트랙, 앨범, 가수 다 받음
-          setSearchResults(res.data.tracks.items)
-        })
+      await searchTermSpotifyApi(searchTerm, spotifyAccessToken).then((res) => {
+        // 실제론 트랙, 앨범, 가수 다 받음
+        setSearchResults(res.data.tracks.items)
+      })
     } catch (err) {
       console.error('API 호출 오류:', err)
     }
