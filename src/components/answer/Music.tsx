@@ -139,7 +139,7 @@ const Music = ({ musicTitle, setMusicTitle, musicUrl, setMusicUrl, musicSinger, 
           <BtnText>음악 추가(선택)</BtnText>
         </PlusBtn>
       ) : (
-        <ExistPlusBtn onClick={() => setOpen(!open)} margin="20px 0px 0px 12px">
+        <ExistPlusBtn onClick={() => setOpen(!open)} margin="20px 0px 0px 0px">
           <BtnIcon src={music} alt="music" />
           <BtnText>
             {musicTitle} - {musicSinger}
