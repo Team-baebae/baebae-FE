@@ -67,6 +67,7 @@ const GreenCommonBtn = styled.button<{ positive: boolean }>`
     font-family: Pretendard;
     font-size: 14px;
     font-weight: 600;
+    outline: none;
     cursor: pointer;
   }
   @media screen and (width > 768px) {
@@ -85,6 +86,7 @@ const GreenCommonBtn = styled.button<{ positive: boolean }>`
     font-family: Pretendard;
     font-size: 14px;
     font-weight: 600;
+    outline: none;
     cursor: pointer;
   }
 `
@@ -108,6 +110,7 @@ const UnFixedGreenCommonBtn = styled.button<{ margin: string; positive: boolean 
     background: ${(props) => (props.positive ? colors.primary : colors.primary40)};
     color: ${(props) => (props.positive ? colors.grey1 : colors.grey3)};
     border: none;
+    outline: none;
     cursor: pointer;
   }
   @media screen and (width > 768px) {
@@ -128,6 +131,7 @@ const UnFixedGreenCommonBtn = styled.button<{ margin: string; positive: boolean 
     background: ${(props) => (props.positive ? colors.primary : colors.primary40)};
     color: ${(props) => (props.positive ? colors.grey1 : colors.grey3)};
     border: none;
+    outline: none;
     cursor: pointer;
   }
 `

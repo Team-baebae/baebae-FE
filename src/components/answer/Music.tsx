@@ -41,6 +41,11 @@ const Music = ({ musicTitle, setMusicTitle, musicUrl, setMusicUrl, musicSinger, 
       setStep(1) // 단계 2에서는 이전 단계로 돌아갑니다.
     } else {
       setOpen(false)
+      currentAudio?.pause()
+      setCurrentAudio(null)
+      setIsPlaying(false)
+      setSearchTerm('')
+      setSearchResults([])
     }
   }
 
@@ -249,6 +254,7 @@ const PlusBtn = styled.button<{ margin: string }>`
   background: ${colors.grey1};
   margin: ${(props) => props.margin};
   cursor: pointer;
+  outline: none;
 `
 
 const ExistPlusBtn = styled(PlusBtn)`
