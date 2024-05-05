@@ -139,10 +139,20 @@ const Music = ({ musicTitle, setMusicTitle, musicUrl, setMusicUrl, musicSinger, 
 
   return (
     <>
-      <PlusBtn onClick={() => setOpen(!open)} margin="20px 0px 0px 0px">
-        <BtnIcon src={music} alt="music" />
-        <BtnText>음악 추가(선택)</BtnText>
-      </PlusBtn>
+      {musicTitle === '' ? (
+        <PlusBtn onClick={() => setOpen(!open)} margin="20px 0px 0px 0px">
+          <BtnIcon src={music} alt="music" />
+          <BtnText>음악 추가(선택)</BtnText>
+        </PlusBtn>
+      ) : (
+        <ExistPlusBtn onClick={() => setOpen(!open)} margin="20px 0px 0px 12px">
+          <BtnIcon src={music} alt="music" />
+          <BtnText>
+            {musicTitle} - {musicSinger}
+          </BtnText>
+        </ExistPlusBtn>
+      )}
+
       {step === 1 ? (
         <BottomSheet open={open} snapPoints={() => [254]} onDismiss={handleDismissPlusMusicModal} blocking={true}>
           <PlusMusicText>음악 추가</PlusMusicText>
@@ -158,18 +168,20 @@ const Music = ({ musicTitle, setMusicTitle, musicUrl, setMusicUrl, musicSinger, 
               </SearchedMusicText>
             )}
 
-            {musicUrl !== '' && isPlaying ? (
-              <MusicPlayIcon src={pause} alt="pause" />
-            ) : musicUrl !== '' && !isPlaying ? (
-              <MusicPlayIcon src={play} alt="play" />
-            ) : (
-              <></>
+            {musicUrl !== '' && (
+              <MusicPlayIconWrapper onClick={() => handlePreview(musicUrl)}>
+                {currentAudio && currentAudio.src === musicUrl && isPlaying ? (
+                  <MusicPlayIcon onClick={() => handlePreview} src={pause} alt="pause" />
+                ) : (
+                  <MusicPlayIcon onClick={() => handlePreview} src={play} alt="pause" />
+                )}
+              </MusicPlayIconWrapper>
             )}
           </SearchMusicWrapper>
           <UnFixedButton
             positive={musicTitle === '' ? false : true}
             func={() => {
-              console.log('음악 추가하기')
+              handleDismissPlusMusicModal()
             }}
             text="추가하기"
             margin="20px 20px 0px 20px"
@@ -239,6 +251,10 @@ const PlusBtn = styled.button<{ margin: string }>`
   cursor: pointer;
 `
 
+const ExistPlusBtn = styled(PlusBtn)`
+  justify-content: flex-start;
+`
+
 const BtnIcon = styled.img`
   width: 15px;
   height: 15px;
@@ -286,6 +302,12 @@ const GlassesIcon = styled.img`
   left: 12px;
   width: 24px;
   height: 24px;
+`
+
+const MusicPlayIconWrapper = styled.div`
+  display: flex;
+  align-items: center;
+  justify-content: center;
 `
 
 const MusicPlayIcon = styled.img`
