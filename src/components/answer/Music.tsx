@@ -6,6 +6,9 @@ import styled from 'styled-components'
 import { colors } from '../../styles/colors'
 import glasses from '../../assets/Glasses.svg'
 import musicGray from '../../assets/MusicGray.svg'
+import { UnFixedButton } from '../common/Button'
+import pause from '../../assets/Pause.svg'
+import play from '../../assets/Play.svg'
 
 interface MusicProps {
   musicTitle: string
@@ -14,7 +17,7 @@ interface MusicProps {
   setMusicUrl: any
 }
 
-const Music = ({}: MusicProps) => {
+const Music = ({ musicTitle, musicUrl }: MusicProps) => {
   const [open, setOpen] = useState<boolean>(false)
   const [step, setStep] = useState<number>(1)
 
@@ -46,8 +49,19 @@ const Music = ({}: MusicProps) => {
           <PlusMusicText>음악 추가</PlusMusicText>
           <SearchMusicWrapper>
             <MusicIcon src={musicGray} alt="musicGray" />
-            <SearchedMusicText onClick={openDetailSheet}>음악을 검색해주세요.</SearchedMusicText>
+            <SearchedMusicText onClick={openDetailSheet}>
+              {musicTitle === '' ? '음악을 검색해주세요' : musicTitle}
+            </SearchedMusicText>
+            {musicUrl !== '' && <MusicPlayIcon src={play} alt="play" />}
           </SearchMusicWrapper>
+          <UnFixedButton
+            positive={musicTitle === '' ? false : true}
+            func={() => {
+              console.log('음악 추가하기')
+            }}
+            text="추가하기"
+            margin="20px 20px 0px 20px"
+          />
         </BottomSheet>
       ) : (
         <BottomSheet open={open} snapPoints={() => [748]} onDismiss={handleDismissPlusMusicModal} blocking={true}>
@@ -130,6 +144,13 @@ const GlassesIcon = styled.img`
   left: 12px;
   width: 24px;
   height: 24px;
+`
+
+const MusicPlayIcon = styled.img`
+  position: absolute;
+  right: 12px;
+  width: 20px;
+  height: 20px;
 `
 
 const SearchedMusicText = styled.div`
