@@ -1,14 +1,15 @@
 import styled from 'styled-components'
-import Header from '../components/common/Header'
+import { useState } from 'react'
 import { colors } from '../styles/colors'
+import Header from '../components/common/Header'
 import Question from '../components/answer/Question'
-// import Polaroid from '../components/answer/Polaroid'
 import link from '../assets/Link.svg'
 import { UnFixedButton } from '../components/common/Button'
-import { useState } from 'react'
 import Music from '../components/answer/Music'
+import Link from '../components/answer/Link'
 
 const Answer = () => {
+  // 입력 받은 값들 저장
   const [image, setImage] = useState<string>('')
   const [text, setText] = useState<string>('')
   const [musicTitle, setMusicTitle] = useState<string>('')
@@ -54,16 +55,7 @@ const Answer = () => {
         setMusicSinger={setMusicSinger}
       />
 
-      {/* <PlusBtn margin="10px 0px 0px 0px">
-        <BtnIcon src={link} alt="link" />
-        <BtnText
-          onClick={() => {
-            console.log('하이')
-          }}
-        >
-          링크 추가(선택)
-        </BtnText>
-      </PlusBtn> */}
+      <Link linkUrl={linkUrl} setLinkUrl={setLinkUrl} />
 
       <UnFixedButton
         positive={image !== '' && text !== '' ? true : false}

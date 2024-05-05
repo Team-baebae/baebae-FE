@@ -1,17 +1,17 @@
 import React, { useState } from 'react'
 import { BottomSheet } from 'react-spring-bottom-sheet'
 import 'react-spring-bottom-sheet/dist/style.css'
-import music from '../../assets/Music.svg'
 import styled from 'styled-components'
 import { colors } from '../../styles/colors'
+import { UnFixedButton } from '../common/Button'
+import { getSpotifyAccessTokenApi, searchTermSpotifyApi } from '../../apis/SpotifyApi'
+import music from '../../assets/Music.svg'
 import glasses from '../../assets/Glasses.svg'
 import musicGray from '../../assets/MusicGray.svg'
-import { UnFixedButton } from '../common/Button'
 import pause from '../../assets/Pause.svg'
 import play from '../../assets/Play.svg'
-import axios from 'axios'
-import { getSpotifyAccessTokenApi, searchTermSpotifyApi } from '../../apis/SpotifyApi'
 
+// 전달받은 Props
 interface MusicProps {
   musicTitle: string
   setMusicTitle: any
@@ -21,6 +21,7 @@ interface MusicProps {
   setMusicSinger: any
 }
 
+// 스포티파이를 통해 받은 트랙
 interface Track {
   id: string
   name: string
@@ -31,9 +32,12 @@ interface Track {
 }
 
 const Music = ({ musicTitle, setMusicTitle, musicUrl, setMusicUrl, musicSinger, setMusicSinger }: MusicProps) => {
+  // open은 모달 열고 닫는 상태
   const [open, setOpen] = useState<boolean>(false)
+  // step은 1단계 2단계 모달 구분짓기 위한 상태
   const [step, setStep] = useState<number>(1)
 
+  // 모달 이전상태로 변화
   const handleDismissPlusMusicModal = () => {
     if (step === 2) {
       setStep(1) // 단계 2에서는 이전 단계로 돌아갑니다.
@@ -46,11 +50,12 @@ const Music = ({ musicTitle, setMusicTitle, musicUrl, setMusicUrl, musicSinger, 
       setSearchResults([])
     }
   }
-
+  // 2단계 모달 열기
   const openDetailSheet = () => {
     setStep(2) // 음악 상세 선택 BottomSheet로 전환
   }
 
+  //트랙 선택 시
   const selectTrack = (result: Track) => {
     setMusicTitle(result.name)
     setMusicUrl(result.preview_url)
@@ -127,6 +132,7 @@ const Music = ({ musicTitle, setMusicTitle, musicUrl, setMusicUrl, musicSinger, 
 
   return (
     <>
+      {/* 버튼 전체 */}
       {musicTitle === '' ? (
         <PlusBtn onClick={() => setOpen(!open)} margin="20px 0px 0px 0px">
           <BtnIcon src={music} alt="music" />
@@ -142,6 +148,7 @@ const Music = ({ musicTitle, setMusicTitle, musicUrl, setMusicUrl, musicSinger, 
       )}
 
       {step === 1 ? (
+        // 1단계 모달
         <BottomSheet open={open} snapPoints={() => [254]} onDismiss={handleDismissPlusMusicModal} blocking={true}>
           <PlusMusicText>음악 추가</PlusMusicText>
           <SearchMusicWrapper>
@@ -156,6 +163,7 @@ const Music = ({ musicTitle, setMusicTitle, musicUrl, setMusicUrl, musicSinger, 
               </SearchedMusicText>
             )}
 
+            {/* 음악 선택 이후엔 미리듣기 가능하도록 아래와 같이 구현 */}
             {musicUrl !== '' && (
               <MusicPlayIconWrapper onClick={() => handlePreview(musicUrl)}>
                 {currentAudio && currentAudio.src === musicUrl && isPlaying ? (
@@ -166,6 +174,7 @@ const Music = ({ musicTitle, setMusicTitle, musicUrl, setMusicUrl, musicSinger, 
               </MusicPlayIconWrapper>
             )}
           </SearchMusicWrapper>
+          {/* 버튼 누를 시 해당 음악으로 결정 */}
           <UnFixedButton
             positive={musicTitle === '' ? false : true}
             func={() => {
@@ -176,6 +185,7 @@ const Music = ({ musicTitle, setMusicTitle, musicUrl, setMusicUrl, musicSinger, 
           />
         </BottomSheet>
       ) : (
+        //2단계 모달
         <BottomSheet open={open} snapPoints={() => [748]} onDismiss={handleDismissPlusMusicModal} blocking={true}>
           <PlusMusicText>음악 추가</PlusMusicText>
           <SearchMusicWrapper>
@@ -184,7 +194,9 @@ const Music = ({ musicTitle, setMusicTitle, musicUrl, setMusicUrl, musicSinger, 
           </SearchMusicWrapper>
 
           <TotalTrackListWrapper>
+            {/* 받은 트랙리스트리스트 */}
             {searchResults.map((result: Track) => {
+              // 검색어와 같은 부분 확인
               const resultNameLower = result.name.toLowerCase()
               const searchTermLower = searchTerm.toLowerCase()
 
@@ -203,16 +215,8 @@ const Music = ({ musicTitle, setMusicTitle, musicUrl, setMusicUrl, musicSinger, 
                       <EachTrackText color={colors.grey3}>{result.name}</EachTrackText>
                     )}
                     <EachTrackText color={colors.grey3}>-</EachTrackText>
+                    {/* 트랙 가수 이름 */}
                     <EachTrackText color={colors.grey3}>{result.album.artists[0].name}</EachTrackText>
-                    {/* 트랙 오디오 */}
-                    {/* {result.preview_url && (
-    <SpotifyPreviewBtn onClick={() => handlePreview(result.preview_url)}>
-      {currentAudio && currentAudio.src === result.preview_url && isPlaying
-        ? '일시 중지'
-        : '30초 미리듣기'}
-    </SpotifyPreviewBtn>
-  )} */}
-                    {/* <EachTrackText>{result.album.artists[0].name}</EachTrackText> */}
                   </EachTrackWrapper>
                 </div>
               )
@@ -226,6 +230,7 @@ const Music = ({ musicTitle, setMusicTitle, musicUrl, setMusicUrl, musicSinger, 
 
 export default Music
 
+// 전체 버튼
 const PlusBtn = styled.button<{ margin: string }>`
   display: flex;
   padding: 10px 12px;
@@ -259,7 +264,7 @@ const BtnText = styled.div`
   line-height: normal;
   letter-spacing: -0.28px;
 `
-
+// 모달창 내부
 const PlusMusicText = styled.div`
   align-self: stretch;
   color: ${colors.grey1};
@@ -306,6 +311,8 @@ const MusicPlayIcon = styled.img`
   height: 20px;
 `
 
+// 2단계 모달
+
 const SearchedMusicText = styled.div<{ color: string }>`
   display: -webkit-box;
   -webkit-box-orient: vertical;
@@ -351,13 +358,8 @@ const SearchMusicInput = styled.input`
   outline: none;
 `
 
-const SpotifyPreviewBtn = styled.button`
-  background-color: #f1f1f1;
-  color: ${colors.black};
-  height: 30px;
-  margin: 10px 5px;
-  cursor: pointer;
-`
+//2단계 모달 각 트랙
+
 const TotalTrackListWrapper = styled.div`
   display: flex;
   flex-direction: column;
