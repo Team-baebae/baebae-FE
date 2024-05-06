@@ -10,6 +10,7 @@ import EditProfile from './pages/EditProfile'
 import SignUpOnBoarding from './pages/SignUpOnBoarding'
 import Answer from './pages/Answer'
 import Folder from './pages/Folder'
+import AnswerComplete from './pages/AnswerComplete'
 
 const Router = () => {
   return (
@@ -26,6 +27,7 @@ const Router = () => {
           <Route path="editProfile" element={<EditProfile />} />
           <Route path="questions/:questionId/answer" element={<Answer />} />
           <Route path="questions/:questionId/folder" element={<Folder />} />
+          <Route path="questions/:questionId/complete" element={<AnswerComplete />} />
         </Route>
       </Routes>
     </BrowserRouter>
