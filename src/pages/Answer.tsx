@@ -7,6 +7,7 @@ import link from '../assets/Link.svg'
 import { UnFixedButton } from '../components/common/Button'
 import Music from '../components/answer/Music'
 import Link from '../components/answer/Link'
+import DelayModal from '../components/common/DelayModal'
 
 const Answer = () => {
   // 입력 받은 값들 저장
@@ -32,6 +33,8 @@ const Answer = () => {
     setText(value)
   }
 
+  const [isOpenDelayModal, setIsOpenDelayModal] = useState(false)
+
   return (
     <Container>
       <Header text="답변하기" backColor={colors.grey7} />
@@ -56,15 +59,26 @@ const Answer = () => {
       />
 
       <Link linkUrl={linkUrl} setLinkUrl={setLinkUrl} />
-
       <UnFixedButton
         positive={image !== '' && text !== '' ? true : false}
         func={() => {
-          console.log('다음')
+          console.log('폴더 이동')
+        }}
+        func2={() => {
+          {
+            image === '' || text === '' ? setIsOpenDelayModal(true) : console.log('비활성화')
+          }
         }}
         text="다음"
         margin="83px 20px 0px 20px"
       />
+      {isOpenDelayModal && image === '' ? (
+        <DelayModal setIsOpenDelayModal={setIsOpenDelayModal} text="사진을 추가해주세요!" />
+      ) : isOpenDelayModal && text === '' ? (
+        <DelayModal setIsOpenDelayModal={setIsOpenDelayModal} text="텍스트를 입력해주세요!" />
+      ) : (
+        <></>
+      )}
     </Container>
   )
 }

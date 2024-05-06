@@ -10,6 +10,7 @@ interface ButtonProps {
 interface UnFixedButtonprops {
   positive: boolean
   func: any
+  func2: any
   text: string
   margin: string
 }
@@ -33,19 +34,13 @@ export const Button = ({ positive, func, text }: ButtonProps) => {
 }
 
 // 공통 초록색 버튼 구현 (하단 고정되지 않은 버전)
-export const UnFixedButton = ({ positive, func, text, margin }: UnFixedButtonprops) => {
+export const UnFixedButton = ({ positive, func, func2, text, margin }: UnFixedButtonprops) => {
   return positive ? (
     <UnFixedGreenCommonBtn margin={margin} onClick={func} positive={true}>
       {text}
     </UnFixedGreenCommonBtn>
   ) : (
-    <UnFixedGreenCommonBtn
-      margin={margin}
-      onClick={() => {
-        console.log('비활성화 상태')
-      }}
-      positive={false}
-    >
+    <UnFixedGreenCommonBtn margin={margin} onClick={func2} positive={false}>
       {text}
     </UnFixedGreenCommonBtn>
   )

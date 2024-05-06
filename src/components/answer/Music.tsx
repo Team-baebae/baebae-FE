@@ -149,7 +149,13 @@ const Music = ({ musicTitle, setMusicTitle, musicUrl, setMusicUrl, musicSinger, 
 
       {step === 1 ? (
         // 1단계 모달
-        <BottomSheet open={open} snapPoints={() => [254]} onDismiss={handleDismissPlusMusicModal} blocking={true}>
+        <BottomSheet
+          style={{ zIndex: 100 }}
+          open={open}
+          snapPoints={() => [254]}
+          onDismiss={handleDismissPlusMusicModal}
+          blocking={true}
+        >
           <PlusMusicText>음악 추가</PlusMusicText>
           <SearchMusicWrapper>
             <MusicIcon src={musicGray} alt="musicGray" />
@@ -179,6 +185,9 @@ const Music = ({ musicTitle, setMusicTitle, musicUrl, setMusicUrl, musicSinger, 
             positive={musicTitle === '' ? false : true}
             func={() => {
               handleDismissPlusMusicModal()
+            }}
+            func2={() => {
+              console.log('추가해주세요')
             }}
             text="추가하기"
             margin="20px 20px 0px 20px"
@@ -373,6 +382,9 @@ const EachTrackWrapper = styled.div`
   align-items: center;
   gap: 10px;
   background: ${colors.white};
+  &:hover {
+    background: ${colors.grey7};
+  }
 `
 const EachTrackText = styled.span<{ color: string }>`
   color: ${(props) => props.color};
