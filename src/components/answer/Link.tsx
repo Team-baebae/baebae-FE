@@ -9,11 +9,11 @@ import linkGray from '../../assets/LinkGray.svg'
 
 // 전달받은 Props
 interface LinkProps {
-  linkUrl: string
-  setLinkUrl: any
+  linkAttachments: string
+  setLinkAttachments: any
 }
 
-const Link = ({ linkUrl, setLinkUrl }: LinkProps) => {
+const Link = ({ linkAttachments, setLinkAttachments }: LinkProps) => {
   // open은 모달 열고 닫는 상태
   const [open, setOpen] = useState<boolean>(false)
   // step은 1단계 2단계 모달 구분짓기 위한 상태
@@ -34,7 +34,7 @@ const Link = ({ linkUrl, setLinkUrl }: LinkProps) => {
 
   //   검색어 입력부분
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setLinkUrl(e.target.value)
+    setLinkAttachments(e.target.value)
   }
 
   // 검색어 입력하고 엔터 누를 시 실행
@@ -47,7 +47,7 @@ const Link = ({ linkUrl, setLinkUrl }: LinkProps) => {
   return (
     <>
       {/* 버튼 전체 */}
-      {linkUrl === '' ? (
+      {linkAttachments === '' ? (
         <PlusBtn onClick={() => setOpen(!open)} margin="12px 0px 0px 0px">
           <BtnIcon src={link} alt="link" />
           <BtnText>링크 추가(선택)</BtnText>
@@ -55,7 +55,7 @@ const Link = ({ linkUrl, setLinkUrl }: LinkProps) => {
       ) : (
         <ExistPlusBtn onClick={() => setOpen(!open)} margin="12px 0px 0px 0px">
           <BtnIcon src={link} alt="link" />
-          <BtnText>{linkUrl}</BtnText>
+          <BtnText>{linkAttachments}</BtnText>
         </ExistPlusBtn>
       )}
 
@@ -65,19 +65,19 @@ const Link = ({ linkUrl, setLinkUrl }: LinkProps) => {
           <PlusLinkText>링크 추가</PlusLinkText>
           <SearchLinkWrapper>
             <LinkIcon src={linkGray} alt="linkGray" />
-            {linkUrl === '' ? (
+            {linkAttachments === '' ? (
               <SearchedLinkText color={colors.grey5} onClick={openDetailSheet}>
                 링크를 입력해주세요.
               </SearchedLinkText>
             ) : (
               <SearchedLinkText color={colors.grey1} onClick={openDetailSheet}>
-                {linkUrl}
+                {linkAttachments}
               </SearchedLinkText>
             )}
           </SearchLinkWrapper>
           {/* 버튼 누를 시 해당 음악으로 결정 */}
           <UnFixedButton
-            positive={linkUrl === '' ? false : true}
+            positive={linkAttachments === '' ? false : true}
             func={() => {
               handleDismissPlusMusicModal()
             }}
@@ -95,7 +95,7 @@ const Link = ({ linkUrl, setLinkUrl }: LinkProps) => {
           <SearchLinkWrapper>
             <LinkIcon src={linkGray} alt="linkGray" />
             <SearchLinkInput
-              value={linkUrl}
+              value={linkAttachments}
               onChange={handleInputChange}
               placeholder="링크를 입력해주세요."
               onKeyDown={handleKeyPress}

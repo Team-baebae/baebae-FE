@@ -2,7 +2,6 @@ import styled from 'styled-components'
 import { useState } from 'react'
 import { colors } from '../styles/colors'
 import Question from '../components/answer/Question'
-import link from '../assets/Link.svg'
 import { UnFixedButton } from '../components/common/Button'
 import Music from '../components/answer/Music'
 import Link from '../components/answer/Link'
@@ -15,26 +14,26 @@ const Answer = () => {
   const navigate = useNavigate()
 
   // 입력 받은 값들 저장
-  const [image, setImage] = useState<string>('')
-  const [text, setText] = useState<string>('')
-  const [musicTitle, setMusicTitle] = useState<string>('')
-  const [musicUrl, setMusicUrl] = useState<string>('')
+  const [imageUrl, setImageUrl] = useState<string>('')
+  const [content, setContent] = useState<string>('')
+  const [musicName, setMusicName] = useState<string>('')
+  const [musicAudio, setMusicAudio] = useState<string>('')
   const [musicSinger, setMusicSinger] = useState<string>('')
-  const [linkUrl, setLinkUrl] = useState<string>('')
+  const [linkAttachments, setLinkAttachments] = useState<string>('')
 
   // 이미지 파일 선택 핸들러
   const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files && e.target.files[0]
     // 이미지 파일을 보낼 시엔 formData로 file을 추가해야함(추후 추가)
     if (file) {
-      setImage(URL.createObjectURL(file)) // 미리보기를 위해 파일 URL 생성
+      setImageUrl(URL.createObjectURL(file)) // 미리보기를 위해 파일 URL 생성
     }
   }
 
   // 텍스트 저장
-  const onChangeText = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
+  const onChangeContent = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
     const value = e.target.value
-    setText(value)
+    setContent(value)
   }
 
   const [isOpenDelayModal, setIsOpenDelayModal] = useState(false)
@@ -47,39 +46,39 @@ const Answer = () => {
       <PolaroidContainer>
         <label htmlFor="file">
           <ProfileWrapper>
-            {image === '' ? <ProfileImg /> : <ProfileImg src={image} alt="image" />}
-            {image === '' ? <PlusImgText>사진 추가</PlusImgText> : <PlusImgText></PlusImgText>}
+            {imageUrl === '' ? <ProfileImg /> : <ProfileImg src={imageUrl} alt="image" />}
+            {imageUrl === '' ? <PlusImgText>사진 추가</PlusImgText> : <PlusImgText></PlusImgText>}
           </ProfileWrapper>
         </label>
         <input type="file" name="file" id="file" style={{ display: 'none' }} onChange={handleImageChange} />
-        <AnswerText onChange={onChangeText} value={text} placeholder="답변을 입력해보세요." />
+        <AnswerText onChange={onChangeContent} value={content} placeholder="답변을 입력해보세요." />
       </PolaroidContainer>
       <Music
-        musicTitle={musicTitle}
-        setMusicTitle={setMusicTitle}
-        musicUrl={musicUrl}
-        setMusicUrl={setMusicUrl}
+        musicName={musicName}
+        setMusicName={setMusicName}
+        musicAudio={musicAudio}
+        setMusicAudio={setMusicAudio}
         musicSinger={musicSinger}
         setMusicSinger={setMusicSinger}
       />
 
-      <Link linkUrl={linkUrl} setLinkUrl={setLinkUrl} />
+      <Link linkAttachments={linkAttachments} setLinkAttachments={setLinkAttachments} />
       <UnFixedButton
-        positive={image !== '' && text !== '' ? true : false}
+        positive={imageUrl !== '' && content !== '' ? true : false}
         func={() => {
           console.log('폴더 이동')
         }}
         func2={() => {
           {
-            image === '' || text === '' ? setIsOpenDelayModal(true) : console.log('비활성화')
+            imageUrl === '' || content === '' ? setIsOpenDelayModal(true) : console.log('비활성화')
           }
         }}
         text="다음"
         margin="83px 20px 0px 20px"
       />
-      {isOpenDelayModal && image === '' ? (
+      {isOpenDelayModal && imageUrl === '' ? (
         <DelayModal setIsOpenDelayModal={setIsOpenDelayModal} text="사진을 추가해주세요!" />
-      ) : isOpenDelayModal && text === '' ? (
+      ) : isOpenDelayModal && content === '' ? (
         <DelayModal setIsOpenDelayModal={setIsOpenDelayModal} text="텍스트를 입력해주세요!" />
       ) : (
         <></>

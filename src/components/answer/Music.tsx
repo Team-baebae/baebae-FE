@@ -13,10 +13,10 @@ import play from '../../assets/Play.svg'
 
 // 전달받은 Props
 interface MusicProps {
-  musicTitle: string
-  setMusicTitle: any
-  musicUrl: string
-  setMusicUrl: any
+  musicName: string
+  setMusicName: any
+  musicAudio: string
+  setMusicAudio: any
   musicSinger: string
   setMusicSinger: any
 }
@@ -31,7 +31,7 @@ interface Track {
   }
 }
 
-const Music = ({ musicTitle, setMusicTitle, musicUrl, setMusicUrl, musicSinger, setMusicSinger }: MusicProps) => {
+const Music = ({ musicName, setMusicName, musicAudio, setMusicAudio, musicSinger, setMusicSinger }: MusicProps) => {
   // open은 모달 열고 닫는 상태
   const [open, setOpen] = useState<boolean>(false)
   // step은 1단계 2단계 모달 구분짓기 위한 상태
@@ -57,8 +57,8 @@ const Music = ({ musicTitle, setMusicTitle, musicUrl, setMusicUrl, musicSinger, 
 
   //트랙 선택 시
   const selectTrack = (result: Track) => {
-    setMusicTitle(result.name)
-    setMusicUrl(result.preview_url)
+    setMusicName(result.name)
+    setMusicAudio(result.preview_url)
     setMusicSinger(result.album.artists[0].name)
     setStep(1) // 선택 후 기본 BottomSheet로 돌아갑니다.
   }
@@ -133,7 +133,7 @@ const Music = ({ musicTitle, setMusicTitle, musicUrl, setMusicUrl, musicSinger, 
   return (
     <>
       {/* 버튼 전체 */}
-      {musicTitle === '' ? (
+      {musicName === '' ? (
         <PlusBtn onClick={() => setOpen(!open)} margin="20px 0px 0px 0px">
           <BtnIcon src={music} alt="music" />
           <BtnText>음악 추가(선택)</BtnText>
@@ -142,7 +142,7 @@ const Music = ({ musicTitle, setMusicTitle, musicUrl, setMusicUrl, musicSinger, 
         <ExistPlusBtn onClick={() => setOpen(!open)} margin="20px 0px 0px 0px">
           <BtnIcon src={music} alt="music" />
           <BtnText>
-            {musicTitle} - {musicSinger}
+            {musicName} - {musicSinger}
           </BtnText>
         </ExistPlusBtn>
       )}
@@ -159,20 +159,20 @@ const Music = ({ musicTitle, setMusicTitle, musicUrl, setMusicUrl, musicSinger, 
           <PlusMusicText>음악 추가</PlusMusicText>
           <SearchMusicWrapper>
             <MusicIcon src={musicGray} alt="musicGray" />
-            {musicTitle === '' ? (
+            {musicName === '' ? (
               <SearchedMusicText color={colors.grey5} onClick={openDetailSheet}>
                 음악을 검색해주세요
               </SearchedMusicText>
             ) : (
               <SearchedMusicText color={colors.grey1} onClick={openDetailSheet}>
-                {musicTitle} - {musicSinger}
+                {musicName} - {musicSinger}
               </SearchedMusicText>
             )}
 
             {/* 음악 선택 이후엔 미리듣기 가능하도록 아래와 같이 구현 */}
-            {musicUrl !== '' && (
-              <MusicPlayIconWrapper onClick={() => handlePreview(musicUrl)}>
-                {currentAudio && currentAudio.src === musicUrl && isPlaying ? (
+            {musicAudio !== '' && (
+              <MusicPlayIconWrapper onClick={() => handlePreview(musicAudio)}>
+                {currentAudio && currentAudio.src === musicAudio && isPlaying ? (
                   <MusicPlayIcon onClick={() => handlePreview} src={pause} alt="pause" />
                 ) : (
                   <MusicPlayIcon onClick={() => handlePreview} src={play} alt="pause" />
@@ -182,7 +182,7 @@ const Music = ({ musicTitle, setMusicTitle, musicUrl, setMusicUrl, musicSinger, 
           </SearchMusicWrapper>
           {/* 버튼 누를 시 해당 음악으로 결정 */}
           <UnFixedButton
-            positive={musicTitle === '' ? false : true}
+            positive={musicName === '' ? false : true}
             func={() => {
               handleDismissPlusMusicModal()
             }}
