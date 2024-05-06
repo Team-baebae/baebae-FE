@@ -1,15 +1,19 @@
 import styled from 'styled-components'
 import { useState } from 'react'
 import { colors } from '../styles/colors'
-import Header from '../components/common/Header'
 import Question from '../components/answer/Question'
 import link from '../assets/Link.svg'
 import { UnFixedButton } from '../components/common/Button'
 import Music from '../components/answer/Music'
 import Link from '../components/answer/Link'
 import DelayModal from '../components/common/DelayModal'
+import Modal from '../components/common/Modal'
+import PersonalHeader from '../components/answer/PersonalHeader'
+import { useNavigate } from 'react-router-dom'
 
 const Answer = () => {
+  const navigate = useNavigate()
+
   // 입력 받은 값들 저장
   const [image, setImage] = useState<string>('')
   const [text, setText] = useState<string>('')
@@ -34,10 +38,11 @@ const Answer = () => {
   }
 
   const [isOpenDelayModal, setIsOpenDelayModal] = useState(false)
+  const [isOpenBackWarningModal, setIsOpenBackWarningModal] = useState(false)
 
   return (
     <Container>
-      <Header text="답변하기" backColor={colors.grey7} />
+      <PersonalHeader func={() => setIsOpenBackWarningModal(true)} text="답변하기" backColor={colors.grey7} />
       <Question />
       <PolaroidContainer>
         <label htmlFor="file">
@@ -78,6 +83,22 @@ const Answer = () => {
         <DelayModal setIsOpenDelayModal={setIsOpenDelayModal} text="텍스트를 입력해주세요!" />
       ) : (
         <></>
+      )}
+      {isOpenBackWarningModal && (
+        <Modal
+          content="지금 나가면 작성된 내용은 사라져요. 나가시겠어요?"
+          buttonText1="아니요"
+          buttonText2="예"
+          func1={() => {
+            setIsOpenBackWarningModal(false)
+          }}
+          func2={() => {
+            navigate(-1)
+          }}
+          clickModal={() => {
+            setIsOpenBackWarningModal(false)
+          }}
+        />
       )}
     </Container>
   )

@@ -63,7 +63,7 @@ const Content = styled.div`
   font-weight: 600;
   line-height: normal;
   letter-spacing: -0.32px;
-  margin: 40px 0px 52px 0px;
+  margin: 40px 22px 52px 22px;
 `
 const Button = styled.button<{ positive: boolean }>`
   display: flex;
