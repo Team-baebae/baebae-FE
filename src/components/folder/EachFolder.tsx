@@ -2,6 +2,7 @@ import styled from 'styled-components'
 import { colors } from '../../styles/colors'
 import testImg from '../../assets/Glasses.svg'
 import plus from '../../assets/Plus.svg'
+import { useState } from 'react'
 
 interface EachFolderProps {
   positive: boolean
@@ -10,19 +11,21 @@ interface EachFolderProps {
 
 const EachFolder = ({ positive, func }: EachFolderProps) => {
   return (
-    <FolderWrapper>
-      {positive ? (
-        <FolderImgWrapper onClick={func}>
-          <FolderImg src={testImg} alt="img" />
-        </FolderImgWrapper>
-      ) : (
-        <NewFolderImgWrapper onClick={func}>
-          <PlusImg src={plus} alt="+" />
-        </NewFolderImgWrapper>
-      )}
+    <>
+      <FolderWrapper>
+        {positive ? (
+          <FolderImgWrapper onClick={func}>
+            <FolderImg src={testImg} alt="img" />
+          </FolderImgWrapper>
+        ) : (
+          <NewFolderImgWrapper onClick={func}>
+            <PlusImg src={plus} alt="+" />
+          </NewFolderImgWrapper>
+        )}
 
-      {positive ? <FolderName>음식</FolderName> : <FolderName>추가</FolderName>}
-    </FolderWrapper>
+        {positive ? <FolderName>음식</FolderName> : <FolderName>추가</FolderName>}
+      </FolderWrapper>
+    </>
   )
 }
 
