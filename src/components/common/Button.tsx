@@ -54,7 +54,7 @@ const GreenCommonBtn = styled.button<{ positive: boolean }>`
     position: absolute;
     left: 20px;
     right: 20px;
-    bottom: 100px;
+    bottom: 30px;
     border: none;
     border-radius: 12px;
     padding: 16px 20px;
@@ -68,7 +68,7 @@ const GreenCommonBtn = styled.button<{ positive: boolean }>`
   }
   @media screen and (width > 768px) {
     position: absolute;
-    bottom: 100px;
+    bottom: 30px;
     left: 20px;
     right: 20px;
     display: flex;
