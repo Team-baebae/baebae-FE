@@ -46,6 +46,7 @@ export const UnFixedButton = ({ positive, func, func2, text, margin }: UnFixedBu
   )
 }
 
+// 시연에서는 bottom 30px, 휴대폰 사용시에는 100px정도로 수정
 const GreenCommonBtn = styled.button<{ positive: boolean }>`
   @media screen and (width <= 768px) {
     display: flex;
@@ -53,7 +54,7 @@ const GreenCommonBtn = styled.button<{ positive: boolean }>`
     position: absolute;
     left: 20px;
     right: 20px;
-    bottom: 30px;
+    bottom: 100px;
     border: none;
     border-radius: 12px;
     padding: 16px 20px;
@@ -67,7 +68,7 @@ const GreenCommonBtn = styled.button<{ positive: boolean }>`
   }
   @media screen and (width > 768px) {
     position: absolute;
-    bottom: 30px;
+    bottom: 100px;
     left: 20px;
     right: 20px;
     display: flex;
