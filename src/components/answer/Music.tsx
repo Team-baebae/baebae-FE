@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useCallback, useEffect, useState } from 'react'
 import { BottomSheet } from 'react-spring-bottom-sheet'
 import 'react-spring-bottom-sheet/dist/style.css'
 import styled from 'styled-components'
@@ -82,16 +82,15 @@ const Music = ({ musicName, setMusicName, musicAudio, setMusicAudio, musicSinger
   }
 
   //   스포티파이 accessToken 받기 함수
-  const getSpotifyAccessToken = async () => {
+  const getSpotifyAccessToken = useCallback(async () => {
     try {
       await getSpotifyAccessTokenApi().then((res) => {
-        console.log(res)
         setSpotifyAccessToken(res.data.access_token)
       })
     } catch (err) {
       console.log(err)
     }
-  }
+  }, [])
 
   //   스포티파이 api를 통해 검색어에 해당하는 트랙, 앨범, 가수 리스트 받기
   const handleSearch = async (searchTerm: any) => {
@@ -129,6 +128,10 @@ const Music = ({ musicName, setMusicName, musicAudio, setMusicAudio, musicSinger
       setIsPlaying(true)
     }
   }
+
+  useEffect(() => {
+    getSpotifyAccessToken()
+  }, [getSpotifyAccessToken])
 
   return (
     <>

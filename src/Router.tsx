@@ -9,6 +9,7 @@ import Setting from './pages/Setting'
 import EditProfile from './pages/EditProfile'
 import SignUpOnBoarding from './pages/SignUpOnBoarding'
 import Answer from './pages/Answer'
+import Folder from './pages/Folder'
 
 const Router = () => {
   return (
@@ -23,7 +24,8 @@ const Router = () => {
           <Route path="signup/onboarding" element={<SignUpOnBoarding />} />
           <Route path="setting" element={<Setting />} />
           <Route path="editProfile" element={<EditProfile />} />
-          <Route path="questions/answer" element={<Answer />} />
+          <Route path="questions/:questionId/answer" element={<Answer />} />
+          <Route path="questions/:questionId/folder" element={<Folder />} />
         </Route>
       </Routes>
     </BrowserRouter>
