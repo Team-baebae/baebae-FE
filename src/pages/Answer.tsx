@@ -107,9 +107,11 @@ export default Answer
 
 const Container = styled.div`
   width: 100%;
+  height: 100%;
   display: flex;
   flex-direction: column;
   align-items: center;
+  padding: 0px 0px 30px 0px;
 `
 const PolaroidContainer = styled.div`
   position: relative;
