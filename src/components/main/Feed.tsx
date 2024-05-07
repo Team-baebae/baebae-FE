@@ -1,26 +1,45 @@
 import styled from 'styled-components'
-import FeedArrow from '../../assets/main/FeedArrow.svg'
-import Add from '../../assets/main/Add.svg'
+import logo from '../../assets/Logo.svg'
+import plus from '../../assets/Plus.svg'
 import { colors } from '../../styles/colors'
 import Flips from './Flips'
 
 const Feed = () => {
-  const group = ['전체', '노래', '음식']
+  const groups = [
+    {
+      directoryName: '영화',
+      directoryImg: logo,
+    },
+    {
+      directoryName: '음식',
+      directoryImg: logo,
+    },
+    {
+      directoryName: '노래',
+      directoryImg: logo,
+    },
+    {
+      directoryName: '폴더',
+      directoryImg: logo,
+    },
+  ]
   return (
     <Container>
       <TopComponent>
+        {groups.map((item) => {
+          return (
+            <GroupWrapper>
+              <GroupImgWrapper>
+                <GroupImg src={item.directoryImg} />
+              </GroupImgWrapper>
+              <GroupName>{item.directoryName}</GroupName>
+            </GroupWrapper>
+          )
+        })}
         <GroupWrapper>
-          {group.map((v) => (
-            <Group>{v}</Group>
-          ))}
-          <GroupPlus>
-            <Icon src={Add} width={18} height={18} />
-          </GroupPlus>
+          <GroupPlusImg src={plus} />
+          <GroupName>추가</GroupName>
         </GroupWrapper>
-        <RightComponent>
-          전체보기
-          <Icon width={14} height={14} src={FeedArrow} />
-        </RightComponent>
       </TopComponent>
       <Flips />
     </Container>
@@ -35,54 +54,52 @@ const Container = styled.div`
   margin: 20px;
   gap: 14px;
 `
-const GroupWrapper = styled.div`
+const TopComponent = styled.div`
   display: flex;
-  flex-direction: row;
+  align-items: center;
   gap: 12px;
 `
-const Group = styled.div`
+
+const GroupWrapper = styled.div`
   display: flex;
-  height: 44px;
-  padding: 8px 12px;
-  justify-content: center;
+  flex-direction: column;
   align-items: center;
-  border-radius: 8px;
-  border: none;
-  background: ${colors.grey2};
-  color: ${colors.white};
-  font-family: Pretendard;
-  font-size: 12px;
-  font-style: normal;
-  font-weight: 600;
-  line-height: 150%; /* 18px */
-  letter-spacing: -0.24px;
+  gap: 4px;
+  width: 44px;
+  height: 63px;
 `
-const GroupPlus = styled.div`
+const GroupImgWrapper = styled.div`
   display: flex;
   width: 44px;
   height: 44px;
+  padding: 3px;
   justify-content: center;
   align-items: center;
+  border-radius: 12px;
+  border: 1px solid ${colors.grey5};
+  background: ${colors.white};
+`
+
+const GroupImg = styled.img`
+  width: 38px;
+  height: 38px;
+  flex-shrink: 0;
   border-radius: 8px;
-  border: none;
-  background: ${colors.primary60};
+  border: 0.8px solid ${colors.grey6};
+  background: lightgray 50% / cover no-repeat;
 `
-const TopComponent = styled.div`
-  display: flex;
-  flex-direction: row;
-  justify-content: space-between;
-  align-items: center;
-`
-const RightComponent = styled.div`
-  display: flex;
-  align-items: center;
-  gap: 2px;
+
+const GroupName = styled.div`
   color: ${colors.grey3};
   font-family: Pretendard;
-  font-size: 12px;
+  font-size: 10px;
   font-style: normal;
   font-weight: 500;
-  line-height: 150%; /* 18px */
-  letter-spacing: -0.48px;
+  line-height: 150%;
+  letter-spacing: -0.4px;
 `
-const Icon = styled.img``
+
+const GroupPlusImg = styled.img`
+  width: 44px;
+  height: 44px;
+`

@@ -1,6 +1,8 @@
 import styled from 'styled-components'
 import { colors } from '../../styles/colors'
 import DefaultImage from '../../assets/main/DefaultImage.svg'
+import { useRecoilState } from 'recoil'
+import { UserInfoStateProps, userInfoState } from '../../context/Atoms'
 
 interface MainProfileProps {
   nickname: string | undefined
@@ -8,13 +10,19 @@ interface MainProfileProps {
 }
 
 const MainProfile = ({ nickname }: MainProfileProps) => {
+  const [userInfo, setUserInfo] = useRecoilState<UserInfoStateProps>(userInfoState)
+
   return (
     <Container>
       <ProfileContents>
         <Nickname>{nickname}</Nickname>
         <ShareButton onClick={() => console.log('초대기능')}>내 플리빗 초대</ShareButton>
       </ProfileContents>
-      <ProfileImage src={DefaultImage} />
+      {userInfo.profileImage === null ? (
+        <ProfileImage src={DefaultImage} />
+      ) : (
+        <ProfileImage src={userInfo.profileImage} />
+      )}
     </Container>
   )
 }
