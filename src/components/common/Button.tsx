@@ -17,7 +17,6 @@ interface UnFixedButtonprops {
 
 // 공통 초록색 버튼 구현 (positive가 true일경우 진한초록, false일경우 연한초록)
 export const Button = ({ positive, func, text }: ButtonProps) => {
-
   return positive ? (
     <GreenCommonBtn onClick={func} positive={true}>
       {text}

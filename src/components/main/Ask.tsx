@@ -6,7 +6,7 @@ import { useEffect, useState } from 'react'
 import { colors } from '../../styles/colors'
 import { useNavigate } from 'react-router-dom'
 import MiniToggle from '../common/MiniToggle'
-import Button from '../common/Button'
+import { Button } from '../common/Button'
 
 interface AskProps {
   params: ParamsProps

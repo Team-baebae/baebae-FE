@@ -20,7 +20,6 @@ const SignUpOnBoarding = () => {
           navigate('/')
         }}
         text="시작하기"
-
       />
     </Container>
   )
