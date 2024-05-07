@@ -3,7 +3,7 @@ import Header from '../components/common/Header'
 import { colors } from '../styles/colors'
 import Terms from '../components/signup/Terms'
 import { useState } from 'react'
-import { Button } from '../components/common/Button'
+import { BottomButton } from '../components/common/Button'
 import { useLocation, useNavigate } from 'react-router-dom'
 
 const SignUpTerms = () => {
@@ -36,7 +36,7 @@ const SignUpTerms = () => {
       <Header text="회원가입" backColor={colors.grey7} />
       <TermsHeader>플리빗 이용약관에 동의해주세요</TermsHeader>
       <Terms isChecked={isChecked} setIsChecked={setIsChecked} />
-      <Button
+      <BottomButton
         positive={isChecked.isCheckedFirst && isChecked.isCheckedSecond ? true : false}
         func={onClickNextBtn}
         text="다음"

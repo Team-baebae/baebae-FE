@@ -6,7 +6,7 @@ import { useEffect, useState } from 'react'
 import { colors } from '../../styles/colors'
 import { useNavigate } from 'react-router-dom'
 import MiniToggle from '../common/MiniToggle'
-import Button from '../common/Button'
+import { Button } from '../common/Button'
 
 interface AskProps {
   params: ParamsProps
@@ -50,7 +50,7 @@ const Ask = (props: AskProps) => {
           <Icon width={18} height={18} src={Info} />
         </OpenProfile>
       </OpenProfileWrapper>
-      <Button positive={true} func={() => console.log('질문')} text="질문하기" />
+      <Button positive={true} func={() => console.log('질문')} func2={() => console.log('비활성화')} text="질문하기" />
     </Container>
   )
 }
@@ -62,6 +62,7 @@ const Container = styled.div`
   flex-direction: column;
   margin: 20px;
   gap: 14px;
+  padding-bottom: 20px;
 `
 const AskNotification = styled.div`
   display: flex;
@@ -149,6 +150,7 @@ const OpenProfileWrapper = styled.div`
   flex-direction: row;
   align-items: center;
   gap: 10px;
+  margin-bottom: 30px;
 `
 const OpenProfile = styled.div`
   display: flex;
