@@ -32,3 +32,12 @@ export const loginApi = (accessToken: string, nickname: string) => {
     },
   )
 }
+
+// 유저 정보 받기
+export const getUserInfoApi = (accessToken: string, memberId: number) => {
+  return axios.get(`http://${serverUrl}/api/member/${memberId}`, {
+    headers: {
+      Authorization: `Bearer ${accessToken}`,
+    },
+  })
+}
