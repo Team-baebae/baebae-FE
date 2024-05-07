@@ -5,7 +5,7 @@ import { useLocation } from 'react-router-dom'
 import { loginApi } from '../apis/UserApi'
 import { colors } from '../styles/colors'
 import { ChangeEvent, useState } from 'react'
-import Button from '../components/common/Button'
+import { Button } from '../components/common/Button'
 
 // Login함수의 response 인터페이스
 interface LoginProps {
@@ -130,7 +130,9 @@ const SignUp = () => {
 export default SignUp
 
 const Container = styled.div`
+  position: relative;
   width: 100%;
+  height: 100%;
   display: flex;
   flex-direction: column;
   align-items: center;

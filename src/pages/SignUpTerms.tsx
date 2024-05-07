@@ -3,7 +3,7 @@ import Header from '../components/common/Header'
 import { colors } from '../styles/colors'
 import Terms from '../components/signup/Terms'
 import { useState } from 'react'
-import Button from '../components/common/Button'
+import { Button } from '../components/common/Button'
 import { useLocation, useNavigate } from 'react-router-dom'
 
 const SignUpTerms = () => {
@@ -48,6 +48,7 @@ const SignUpTerms = () => {
 export default SignUpTerms
 
 const Container = styled.div`
+  position: relative;
   width: 100%;
   height: 100%;
   display: flex;

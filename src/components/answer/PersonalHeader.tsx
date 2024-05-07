@@ -1,32 +1,24 @@
 import styled from 'styled-components'
 import BackArrow from '../../assets/BackArrow.svg'
 import { colors } from '../../styles/colors'
-import { useNavigate } from 'react-router-dom'
 
 interface HeaderProps {
   text: string
   backColor: string
+  func: any
 }
 
-const Header = ({ text, backColor }: HeaderProps) => {
-  const navigate = useNavigate()
-
+const PersonalHeader = ({ text, backColor, func }: HeaderProps) => {
   return (
     <HeaderTotalComponent backColor={backColor}>
-      <HeaderLeftIcon
-        src={BackArrow}
-        alt="<"
-        onClick={() => {
-          navigate(-1)
-        }}
-      />
+      <HeaderLeftIcon src={BackArrow} alt="<" onClick={func} />
 
       <HeaderText>{text}</HeaderText>
     </HeaderTotalComponent>
   )
 }
 
-export default Header
+export default PersonalHeader
 
 const HeaderTotalComponent = styled.div<{ backColor: string }>`
   position: relative;

@@ -1,7 +1,7 @@
 import styled from 'styled-components'
 import onBoardingIcon from '../assets/OnboardingIcon.svg'
 import { colors } from '../styles/colors'
-import Button from '../components/common/Button'
+import { Button } from '../components/common/Button'
 import { useNavigate } from 'react-router-dom'
 
 const SignUpOnBoarding = () => {
@@ -19,7 +19,8 @@ const SignUpOnBoarding = () => {
         func={() => {
           navigate('/')
         }}
-        text="다음"
+        text="시작하기"
+
       />
     </Container>
   )
@@ -28,7 +29,9 @@ const SignUpOnBoarding = () => {
 export default SignUpOnBoarding
 
 const Container = styled.div`
+  position: relative;
   width: 100%;
+  height: 100%;
   display: flex;
   flex-direction: column;
   align-items: center;

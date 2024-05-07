@@ -5,4 +5,14 @@
 body {
   margin: 0;
   padding: 0;
+  background: var(--Grayscale-Gray-07, #f5f5f5);
+}
+
+:root {
+  --rsbs-max-w: 375px;
+  --rsbs-ml: calc((100vw - 375px) / 2);
+  @media screen and (max-width: 768px) {
+    --rsbs-max-w: auto;
+    --rsbs-ml: 0%;
+  }
 }

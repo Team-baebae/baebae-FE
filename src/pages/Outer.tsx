@@ -18,7 +18,10 @@ const TotalBrowserContainer = styled.div`
   justify-content: center;
   background-color: ${colors.white};
   width: 100vw;
+  /* 시연 시 */
   min-height: 100vh;
+  /* 앱 출시 시 */
+  /* min-height: calc(100vh - 80px); */
 `
 
 const PhoneBrowserContainer = styled.div`
