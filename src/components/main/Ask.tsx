@@ -62,7 +62,6 @@ const Container = styled.div`
   flex-direction: column;
   margin: 20px;
   gap: 14px;
-  padding-bottom: 20px;
 `
 const AskNotification = styled.div`
   display: flex;
