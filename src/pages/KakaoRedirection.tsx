@@ -83,7 +83,7 @@ const KakaoRedirection = () => {
           localStorage.setItem('email', res.data.email)
           localStorage.setItem('refreshToken', res.data.refreshToken)
 
-          navigate('/')
+          navigate(`/${res.data.id}`)
         } else {
           alert('로그인 실패')
           navigate('/login')

@@ -6,6 +6,9 @@ import { useNavigate } from 'react-router-dom'
 
 const SignUpOnBoarding = () => {
   const navigate = useNavigate()
+
+  const memberId = localStorage.getItem('memberId')
+
   return (
     <Container>
       <Icon src={onBoardingIcon} alt="icon" />
@@ -17,7 +20,7 @@ const SignUpOnBoarding = () => {
       <Button
         positive={true}
         func={() => {
-          navigate('/')
+          navigate(`/${memberId}`)
         }}
         text="시작하기"
       />
