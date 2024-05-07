@@ -33,16 +33,16 @@ const Main = () => {
   // 리코일에서 받은 userInfo
   const [userInfo, setUserInfo] = useRecoilState<UserInfoStateProps>(userInfoState)
 
+  // 회원정보 받기 (프로필 이미지 저장)
   const getUserInfo = useCallback(async (userInfo: UserInfoStateProps) => {
     try {
-      userInfo.memberId !== 0 &&
-        (await getUserInfoApi(userInfo.accessToken, userInfo.memberId).then((res) => {
-          console.log(res)
-          setUserInfo({
-            ...userInfo,
-            profileImage: res.data.profileImage,
-          })
-        }))
+      await getUserInfoApi(userInfo.accessToken, userInfo.memberId).then((res) => {
+        console.log(res)
+        setUserInfo({
+          ...userInfo,
+          profileImage: res.data.profileImage,
+        })
+      })
     } catch (err) {
       console.log(err)
     }
