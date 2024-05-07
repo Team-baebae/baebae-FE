@@ -2,7 +2,7 @@ import styled from 'styled-components'
 import Header from '../components/common/Header'
 import { useNavigate } from 'react-router-dom'
 import { useLocation } from 'react-router-dom'
-import { loginApi } from '../apis/UserApi'
+import { isExistingNicknameApi, loginApi } from '../apis/UserApi'
 import { colors } from '../styles/colors'
 import { ChangeEvent, useState } from 'react'
 import { BottomButton } from '../components/common/Button'
@@ -43,10 +43,21 @@ const SignUp = () => {
   //중복 확인 버튼 누른 직후 상태
   const [isClickDuplicate, setIsClickDuplicate] = useState<boolean>(false)
 
-  const checkDuplicateNickname = () => {
-    setIsClickDuplicate(true)
-    if (isValid) {
-      setIsDuplicate(false)
+  const checkDuplicateNickname = async () => {
+    try {
+      setIsClickDuplicate(true)
+      if (isValid) {
+        await isExistingNicknameApi(nickname).then((res) => {
+          console.log(res)
+          if (res.data.isExisting) {
+            setIsDuplicate(true)
+          } else {
+            setIsDuplicate(false)
+          }
+        })
+      }
+    } catch (err) {
+      console.log(err)
     }
   }
 
@@ -55,6 +66,7 @@ const SignUp = () => {
     try {
       await loginApi(kakaoAccessToken, nickname).then((res: LoginProps) => {
         if (res.status === 200) {
+          console.log(res.data.accessToken)
           localStorage.setItem('memberId', res.data.memberId)
           localStorage.setItem('accessToken', res.data.accessToken)
           localStorage.setItem('nickname', res.data.nickname)

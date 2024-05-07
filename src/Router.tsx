@@ -14,7 +14,6 @@ import AnswerComplete from './pages/AnswerComplete'
 import Main from './pages/Main'
 import QuestionList from './pages/QuestionList'
 
-
 const Router = () => {
   return (
     <BrowserRouter>
@@ -33,7 +32,6 @@ const Router = () => {
           <Route path="questions/:questionId/complete" element={<AnswerComplete />} />
           <Route path=":username" element={<Main />} />
           <Route path=":username/questionList" element={<QuestionList />} />
-
         </Route>
       </Routes>
     </BrowserRouter>

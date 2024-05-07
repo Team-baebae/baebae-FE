@@ -18,6 +18,7 @@
     "react-dom": "^18.2.0",
     "react-router-dom": "^6.22.3",
     "react-spring-bottom-sheet": "^3.4.1",
+    "recoil": "^0.7.7",
     "styled-components": "^6.1.8"
   },
   "devDependencies": {
