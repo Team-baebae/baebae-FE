@@ -38,7 +38,7 @@ const SignUpTerms = () => {
       <Terms isChecked={isChecked} setIsChecked={setIsChecked} />
       <Button
         positive={isChecked.isCheckedFirst && isChecked.isCheckedSecond ? true : false}
-        func={() => onClickNextBtn}
+        func={onClickNextBtn}
         text="다음"
       />
     </Container>
