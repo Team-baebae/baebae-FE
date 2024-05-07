@@ -6,6 +6,8 @@ import { isExistingNicknameApi, loginApi } from '../apis/UserApi'
 import { colors } from '../styles/colors'
 import { ChangeEvent, useState } from 'react'
 import { Button } from '../components/common/Button'
+import { useRecoilState } from 'recoil'
+import { UserInfoStateProps, userInfoState } from '../context/Atoms'
 
 // Login함수의 response 인터페이스
 interface LoginProps {
@@ -22,6 +24,9 @@ const SignUp = () => {
   // 넘겨 받은 카카오 어세스토큰 저장
   const location = useLocation()
   const kakaoAccessToken = location.state?.kakaoAccessToken
+
+  // 리코일로 받은 유저 정보
+  const [userInfo, setUserInfo] = useRecoilState<UserInfoStateProps>(userInfoState)
 
   // 닉네임 입력 및 유효성 확인 (형식에 맞는지만 체크)
   const [nickname, setNickname] = useState<string>('')
@@ -67,9 +72,14 @@ const SignUp = () => {
       await loginApi(kakaoAccessToken, nickname).then((res: LoginProps) => {
         if (res.status === 200) {
           console.log(res.data.accessToken)
-          localStorage.setItem('memberId', res.data.id)
-          localStorage.setItem('accessToken', res.data.accessToken)
-          localStorage.setItem('refreshToken', res.data.refreshToken)
+          setUserInfo({
+            ...userInfo,
+            memberId: res.data.id,
+            nickname: res.data.nickname,
+            email: res.data.email,
+            accessToken: res.data.accessToken,
+            refreshToken: res.data.refreshToken,
+          })
           navigate('/signup/onboarding', {
             state: {
               nickname: res.data.nickname,

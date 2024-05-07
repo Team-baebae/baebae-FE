@@ -1,20 +1,42 @@
 import styled from 'styled-components'
 import { colors } from '../styles/colors'
 import { useParams } from 'react-router-dom'
-import { useEffect, useState } from 'react'
+import { useCallback, useEffect, useState } from 'react'
 import MainHeader from '../components/common/MainHeader'
 import MainProfile from '../components/main/MainProfile'
 import Feed from '../components/main/Feed'
 import Ask from '../components/main/Ask'
+import { getUserInfoApi } from '../apis/UserApi'
+import { useRecoilState } from 'recoil'
+import { UserInfoStateProps, userInfoState } from '../context/Atoms'
 
 const Main = () => {
   const { username } = useParams<{ username: string }>()
   const [userData, setUserData] = useState<string | undefined>(undefined)
+
+  // 리코일에서 받은 userInfo
+  const [userInfo, setUserInfo] = useRecoilState<UserInfoStateProps>(userInfoState)
+
+  const getUserInfo = useCallback(async (userInfo: UserInfoStateProps) => {
+    try {
+      userInfo.memberId !== 0 &&
+        (await getUserInfoApi(userInfo.accessToken, userInfo.memberId).then((res) => {
+          console.log(res)
+          setUserInfo({
+            ...userInfo,
+            profileImage: res.data.profileImage,
+          })
+        }))
+    } catch (err) {
+      console.log(err)
+    }
+  }, [])
+
   useEffect(() => {
-    //api 추가 필요
+    getUserInfo(userInfo)
     setUserData(username)
     console.log(username)
-  }, [username])
+  }, [username, getUserInfo])
 
   const [category, setCategory] = useState<number>(0)
 
@@ -31,6 +53,7 @@ const Main = () => {
             피드
           </Category>
         </CategoryBox>
+
         {category ? <Feed /> : <Ask params={{ username: userData }} />}
       </Container>
     </>
