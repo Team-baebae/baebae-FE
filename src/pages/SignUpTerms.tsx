@@ -53,9 +53,12 @@ const Container = styled.div`
   height: 100%;
   display: flex;
   flex-direction: column;
+  align-items: center;
 `
 
 const TermsHeader = styled.div`
+  width: 100%;
+  padding-left: 20px;
   color: ${colors.grey1};
   font-family: Pretendard;
   font-size: 18px;
@@ -63,5 +66,5 @@ const TermsHeader = styled.div`
   font-weight: 600;
   line-height: 150%;
   letter-spacing: -0.36px;
-  margin: 20px 0px 40px 20px;
+  margin: 20px 0px 40px 0px;
 `

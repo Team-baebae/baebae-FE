@@ -17,6 +17,7 @@ interface UnFixedButtonprops {
 
 // 공통 초록색 버튼 구현 (positive가 true일경우 진한초록, false일경우 연한초록)
 export const Button = ({ positive, func, text }: ButtonProps) => {
+
   return positive ? (
     <GreenCommonBtn onClick={func} positive={true}>
       {text}
@@ -63,14 +64,11 @@ const GreenCommonBtn = styled.button<{ positive: boolean }>`
     font-family: Pretendard;
     font-size: 14px;
     font-weight: 600;
-    outline: none;
     cursor: pointer;
   }
   @media screen and (width > 768px) {
     position: absolute;
     bottom: 30px;
-    left: 20px;
-    right: 20px;
     display: flex;
     justify-content: center;
     width: 335px;
@@ -82,7 +80,6 @@ const GreenCommonBtn = styled.button<{ positive: boolean }>`
     font-family: Pretendard;
     font-size: 14px;
     font-weight: 600;
-    outline: none;
     cursor: pointer;
   }
 `
