@@ -2,12 +2,15 @@ import styled from 'styled-components'
 import onBoardingIcon from '../assets/OnboardingIcon.svg'
 import { colors } from '../styles/colors'
 import { BottomButton } from '../components/common/Button'
-import { useNavigate } from 'react-router-dom'
+import { useLocation, useNavigate } from 'react-router-dom'
 
 const SignUpOnBoarding = () => {
   const navigate = useNavigate()
 
   const memberId = localStorage.getItem('memberId')
+  // 넘겨 받은 카카오 어세스토큰 저장
+  const location = useLocation()
+  const nickname = location.state?.nickname
 
   return (
     <Container>
@@ -20,7 +23,7 @@ const SignUpOnBoarding = () => {
       <BottomButton
         $positive={true}
         func={() => {
-          navigate(`/${memberId}`)
+          navigate(`/${nickname}`)
         }}
         text="시작하기"
       />

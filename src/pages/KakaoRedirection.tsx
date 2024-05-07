@@ -76,14 +76,12 @@ const KakaoRedirection = () => {
     try {
       await loginApi(kakaoAccessToken, nickname).then((res: LoginProps) => {
         if (res.status === 200) {
+          console.log(res)
           console.log(res.data.accessToken)
           localStorage.setItem('memberId', res.data.id)
           localStorage.setItem('accessToken', res.data.accessToken)
-          localStorage.setItem('nickname', res.data.nickname)
-          localStorage.setItem('email', res.data.email)
           localStorage.setItem('refreshToken', res.data.refreshToken)
-
-          navigate(`/${res.data.id}`)
+          navigate(`/${res.data.nickname}`)
         } else {
           alert('로그인 실패')
           navigate('/login')
