@@ -3,6 +3,10 @@ import logo from '../../assets/Logo.svg'
 import plus from '../../assets/Plus.svg'
 import { colors } from '../../styles/colors'
 import Flips from './Flips'
+import { Swiper, SwiperSlide } from 'swiper/react'
+import 'swiper/swiper-bundle.css'
+import 'swiper/css'
+import Feeds from '../feed/Feeds'
 
 const Feed = () => {
   const groups = [
@@ -22,26 +26,87 @@ const Feed = () => {
       directoryName: '폴더',
       directoryImg: logo,
     },
+    {
+      directoryName: '폴더',
+      directoryImg: logo,
+    },
+    {
+      directoryName: '폴더',
+      directoryImg: logo,
+    },
+    {
+      directoryName: '폴더',
+      directoryImg: logo,
+    },
+    {
+      directoryName: '폴더',
+      directoryImg: logo,
+    },
   ]
+
+  const feedList = [
+    {
+      questionId: 1,
+      questionContent: '가은아 넌 양식이 좋아, 한식이 좋아?',
+      writer: '하이',
+    },
+    {
+      questionId: 2,
+      questionContent: '가은아 넌 양식이 좋아, 한식이 좋아?',
+      writer: '하염',
+    },
+    {
+      questionId: 3,
+      questionContent: '가은아 넌 양식이 좋아, 한식이 좋아?',
+      writer: '하익',
+    },
+    {
+      questionId: 4,
+      questionContent: '가은아 넌 양식이 좋아, 한식이 좋아?',
+      writer: '하웅',
+    },
+    {
+      questionId: 5,
+      questionContent: '가은아 넌 양식이 좋아, 한식이 좋아?',
+      writer: '하열',
+    },
+    {
+      questionId: 6,
+      questionContent: '가은아 넌 양식이 좋아, 한식이 좋아?',
+      writer: '하악',
+    },
+  ]
+
   return (
     <Container>
       <TopComponent>
-        {groups.map((item) => {
-          return (
+        <Swiper
+          style={{ width: '100%' }}
+          slidesPerView={6.1}
+          onSwiper={(swiper) => console.log(swiper)}
+          onSlideChange={() => console.log('slide change')}
+        >
+          {groups.map((item) => {
+            return (
+              <SwiperSlide>
+                <GroupWrapper>
+                  <GroupImgWrapper>
+                    <GroupImg src={item.directoryImg} />
+                  </GroupImgWrapper>
+                  <GroupName>{item.directoryName}</GroupName>
+                </GroupWrapper>
+              </SwiperSlide>
+            )
+          })}
+          <SwiperSlide>
             <GroupWrapper>
-              <GroupImgWrapper>
-                <GroupImg src={item.directoryImg} />
-              </GroupImgWrapper>
-              <GroupName>{item.directoryName}</GroupName>
+              <GroupPlusImg src={plus} />
+              <GroupName>추가</GroupName>
             </GroupWrapper>
-          )
-        })}
-        <GroupWrapper>
-          <GroupPlusImg src={plus} />
-          <GroupName>추가</GroupName>
-        </GroupWrapper>
+          </SwiperSlide>
+        </Swiper>
       </TopComponent>
-      <Flips />
+      {feedList.length > 0 ? <Feeds data={feedList} /> : <Flips />}
     </Container>
   )
 }
@@ -56,8 +121,8 @@ const Container = styled.div`
 `
 const TopComponent = styled.div`
   display: flex;
+  flex-direction: row;
   align-items: center;
-  gap: 12px;
 `
 
 const GroupWrapper = styled.div`
