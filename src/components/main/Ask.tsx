@@ -9,19 +9,32 @@ import MiniToggle from '../common/MiniToggle'
 import { Button } from '../common/Button'
 import { userDataProps } from './types'
 import { useRecoilValue } from 'recoil'
-import { isMineState } from '../../context/Atoms'
+import { isLoggedInState, isMineState } from '../../context/Atoms'
+import LoginModal from './LoginModal'
 
 const Ask = (userInfo: userDataProps) => {
   const isMyPage = useRecoilValue(isMineState)
+  const isLoggedIn = useRecoilValue(isLoggedInState)
   const [askCount, setAskCount] = useState<number>(0)
   const navigate = useNavigate()
   const questionClick = () => {
     navigate(`/${userInfo?.nickname}/questionList`)
   }
+
   useEffect(() => {
     // api 연동
     setAskCount(3)
   })
+
+  // 모달 버튼 클릭 유무를 저장할 state
+  const [showModal, setShowModal] = useState<boolean>(false)
+  // 버튼 클릭시 모달 버튼 클릭 유무를 설정하는 state 함수
+  const clickModal = () => setShowModal(!showModal)
+
+  const linkToLogin = () => {
+    !isLoggedIn && setShowModal(true)
+  }
+
   return (
     <Container>
       {isMyPage && (
@@ -51,7 +64,8 @@ const Ask = (userInfo: userDataProps) => {
           </OpenProfile>
         </OpenProfileWrapper>
       )}
-      <Button $positive={true} func={() => console.log('질문')} func2={() => console.log('비활성화')} text="질문하기" />
+      <Button $positive={true} func={linkToLogin} func2={() => console.log('비활성화')} text="질문하기" />
+      {showModal && <LoginModal content={`앗!\n로그인을 해야 질문을 남길 수 있어요😥`} clickModal={clickModal} />}
     </Container>
   )
 }
