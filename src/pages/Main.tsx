@@ -10,6 +10,7 @@ import { isExistingNicknameApi } from '../apis/MainInfoApi'
 import { getUserInfoApi } from '../apis/UserApi'
 import { useRecoilState } from 'recoil'
 import { UserInfoStateProps, isLoggedInState, userInfoState } from '../context/Atoms'
+import { isExistingNicknameApi } from '../apis/MainInfoApi'
 
 const Main = () => {
   const { username } = useParams<{ username: string }>()
@@ -56,6 +57,20 @@ const Main = () => {
     console.log(username)
     console.log(userInfo.accessToken)
   }, [username, getUserInfo])
+
+  // 유저의 존재 여부 확인
+  const userCheck = (nickname: string) => {
+    isExistingNicknameApi(nickname).then((result) => {
+      result.isExisting == 'true' && setIsExisting(true)
+    })
+  }
+
+  useEffect(() => {
+    setUserData(username || '')
+    if (username) {
+      userCheck(username)
+    }
+  }, [username])
 
   const [category, setCategory] = useState<number>(0)
 
