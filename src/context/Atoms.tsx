@@ -1,5 +1,9 @@
 import { atom } from 'recoil'
+import { recoilPersist } from 'recoil-persist'
 
+const { persistAtom } = recoilPersist()
+
+//유저 정보 저장
 export interface UserInfoStateProps {
   accessToken: string
   refreshToken: string
@@ -19,4 +23,12 @@ export const userInfoState = atom<UserInfoStateProps>({
     nickname: '',
     profileImage: '',
   },
+  effects: [persistAtom],
+})
+
+// 로그인 상태 관리
+export const isLoggedInState = atom({
+  key: 'isLoggedIn',
+  default: false,
+  effects: [persistAtom],
 })
