@@ -14,17 +14,20 @@ interface FeedsProps {
 
 const Feeds = ({ data }: FeedsProps) => {
   return (
-    <GridContainer>
-      {data.map((feed) => (
-        <FlipWrapper>
-          <Icon src={QuotationMark} />
-          <FlipContent>{feed.questionContent}</FlipContent>
-          <WriterBlock>
-            FROM <WriterRegion>{feed.writer}님</WriterRegion>
-          </WriterBlock>
-        </FlipWrapper>
-      ))}
-    </GridContainer>
+    <>
+      <GridContainer>
+        {data.map((feed) => (
+          <FlipWrapper>
+            <Icon src={QuotationMark} />
+            <FlipContent>{feed.questionContent}</FlipContent>
+            <WriterBlock>
+              FROM <WriterRegion>{feed.writer}님</WriterRegion>
+            </WriterBlock>
+          </FlipWrapper>
+        ))}
+      </GridContainer>
+      <TotalFeedsBtn>전체 보기</TotalFeedsBtn>
+    </>
   )
 }
 
@@ -79,7 +82,7 @@ const WriterBlock = styled.div`
 `
 
 const WriterRegion = styled.button`
-  color: ${colors.grey1};
+  color: ${colors.grey4};
   font-family: Pretendard;
   font-size: 10px;
   font-style: normal;
@@ -89,4 +92,24 @@ const WriterRegion = styled.button`
   border: none;
   outline: none;
   background-color: transparent;
+`
+
+const TotalFeedsBtn = styled.div`
+  display: flex;
+
+  height: 40px;
+  padding: 10px 12px;
+  justify-content: center;
+  align-items: center;
+  gap: 10px;
+  border-radius: 8px;
+  background: ${colors.grey1};
+  color: var(--White, #fff);
+  font-family: Pretendard;
+  font-size: 14px;
+  font-style: normal;
+  font-weight: 500;
+  line-height: normal;
+  letter-spacing: -0.28px;
+  margin: 14px 0px 20px 0px;
 `
