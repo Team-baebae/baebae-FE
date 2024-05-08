@@ -8,11 +8,28 @@ interface MainProfileProps {
 }
 
 const MainProfile = ({ nickname }: MainProfileProps) => {
+  const sharing = async () => {
+    if (navigator?.share) {
+      try {
+        await navigator.share({
+          title: `${nickname}의 Flip에 초대합니다`,
+          text: 'flip 들어오세요 멘트~~',
+          url: `flipit.co.kr/${nickname}`,
+        })
+      } catch (err) {
+        console.log('에러')
+      }
+    } else {
+      //카카오톡 공유하기 넣거나 다른 방법
+      console.log('web share api를 지원하지 않는 환경')
+    }
+  }
+
   return (
     <Container>
       <ProfileContents>
         <Nickname>{nickname}</Nickname>
-        <ShareButton onClick={() => console.log('초대기능')}>내 플리빗 초대</ShareButton>
+        <ShareButton onClick={sharing}>내 플리빗 초대</ShareButton>
       </ProfileContents>
       <ProfileImage src={DefaultImage} />
     </Container>
