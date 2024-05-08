@@ -9,16 +9,10 @@ import 'swiper/css'
 import Feeds from '../feed/Feeds'
 import { useEffect, useRef, useState } from 'react'
 import { useGesture } from '@use-gesture/react'
-interface ModalProps {
-  onClose: () => void
-}
-
-const Modal: React.FC<ModalProps> = ({ onClose }) => (
-  <StyledModal>
-    <p>모달창입니다!</p>
-    <button onClick={onClose}>닫기</button>
-  </StyledModal>
-)
+import { BottomSheet } from 'react-spring-bottom-sheet'
+import 'react-spring-bottom-sheet/dist/style.css'
+import pencil from '../../assets/Pencil.svg'
+import trash from '../../assets/Trash.svg'
 
 const Feed = () => {
   const groups = [
@@ -101,14 +95,21 @@ const Feed = () => {
   ]
 
   const [selectedDirectoryId, setSelectedDirectoryId] = useState<number | null>(null) // 선택된 디렉토리 ID 상태
-  const [isModalOpen, setModalOpen] = useState(false)
   const holdTimer = useRef<number | null>(null) // useRef에 타입 명시
+
+  // open은 모달 열고 닫는 상태
+  const [open, setOpen] = useState<boolean>(false)
 
   const openModal = (directoryId: number) => {
     setSelectedDirectoryId(directoryId) // 선택된 디렉토리 ID 설정
-    setModalOpen(true)
+    setOpen(true)
+  }
+  // 모달 이전상태로 변화
+  const handleDismissPlusMusicModal = () => {
+    setOpen(false)
   }
 
+  // 꾹 누르기 기능
   const bind = useGesture({
     onPointerDown: ({ event, args }) => {
       const directoryId = args[0] as number // args를 통해 directoryId 받기
@@ -129,8 +130,6 @@ const Feed = () => {
     },
   })
 
-  const closeModal = () => setModalOpen(false)
-
   return (
     <Container>
       <TopComponent>
@@ -144,7 +143,13 @@ const Feed = () => {
             return (
               <SwiperSlide key={item.directoryId}>
                 <GroupWrapper>
-                  <GroupImgWrapper {...bind(item.directoryId)} onContextMenu={(e) => e.preventDefault()}>
+                  <GroupImgWrapper
+                    {...bind(item.directoryId)}
+                    onContextMenu={(e) => {
+                      e.preventDefault()
+                      e.stopPropagation()
+                    }}
+                  >
                     <GroupImg src={item.directoryImg} />
                   </GroupImgWrapper>
                   <GroupName>{item.directoryName}</GroupName>
@@ -162,7 +167,18 @@ const Feed = () => {
         </Swiper>
       </TopComponent>
       {feedList.length > 0 ? <Feeds data={feedList} /> : <Flips />}
-      {isModalOpen && <Modal onClose={closeModal} />}
+      {open && (
+        <BottomSheet open={open} snapPoints={() => [170]} onDismiss={handleDismissPlusMusicModal} blocking={true}>
+          <BottomSheetEachWrapper>
+            <BottomSheetEachIcon src={pencil} />
+            <BottomSheetEachText color={colors.grey1}>그룹 수정하기</BottomSheetEachText>
+          </BottomSheetEachWrapper>
+          <BottomSheetEachWrapper>
+            <BottomSheetEachIcon src={trash} />
+            <BottomSheetEachText color="#f00">그룹 삭제하기</BottomSheetEachText>
+          </BottomSheetEachWrapper>
+        </BottomSheet>
+      )}
     </Container>
   )
 }
@@ -199,6 +215,7 @@ const GroupImgWrapper = styled.div`
   border-radius: 12px;
   border: 1px solid ${colors.grey5};
   background: ${colors.white};
+  user-select: none;
 `
 
 const GroupImg = styled.img`
@@ -208,7 +225,7 @@ const GroupImg = styled.img`
   border-radius: 8px;
   border: 0.8px solid ${colors.grey6};
   background: lightgray 50% / cover no-repeat;
-  /* user-select: none; */
+  user-select: none;
   pointer-events: none;
 `
 
@@ -227,12 +244,27 @@ const GroupPlusImg = styled.img`
   height: 44px;
 `
 
-const StyledModal = styled.div`
-  position: fixed;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  background-color: white;
+const BottomSheetEachWrapper = styled.div`
+  display: flex;
+  width: 100%;
   padding: 20px;
-  z-index: 100;
+  align-items: center;
+  gap: 12px;
+  background: ${colors.white};
+`
+
+const BottomSheetEachIcon = styled.img`
+  width: 20px;
+  height: 20px;
+  flex-shrink: 0;
+`
+
+const BottomSheetEachText = styled.div<{ color: string }>`
+  color: ${(props) => props.color};
+  font-family: Pretendard;
+  font-size: 14px;
+  font-style: normal;
+  font-weight: 500;
+  line-height: 150%;
+  letter-spacing: -0.56px;
 `
