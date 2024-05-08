@@ -6,33 +6,48 @@ import MainHeader from '../components/common/MainHeader'
 import MainProfile from '../components/main/MainProfile'
 import Feed from '../components/main/Feed'
 import Ask from '../components/main/Ask'
+import { isExistingNicknameApi } from '../apis/MainInfoApi'
 
 const Main = () => {
   const { username } = useParams<{ username: string }>()
+  const [isExisting, setIsExisting] = useState<boolean>(true)
   const [userData, setUserData] = useState<string | undefined>(undefined)
+
+  // 유저의 존재 여부 확인
+  const userCheck = (nickname: string) => {
+    isExistingNicknameApi(nickname).then((result) => {
+      result.isExisting == 'true' && setIsExisting(true)
+    })
+  }
+
   useEffect(() => {
-    //api 추가 필요
-    setUserData(username)
-    console.log(username)
+    setUserData(username || '')
+    if (username) {
+      userCheck(username)
+    }
   }, [username])
 
   const [category, setCategory] = useState<number>(0)
 
   return (
     <>
-      <Container>
-        <MainHeader backColor={colors.white} />
-        <MainProfile nickname={username} />
-        <CategoryBox>
-          <Category category={category} num={0} onClick={() => setCategory(0)}>
-            질문
-          </Category>
-          <Category category={category} num={1} onClick={() => setCategory(1)}>
-            피드
-          </Category>
-        </CategoryBox>
-        {category ? <Feed /> : <Ask params={{ username: userData }} />}
-      </Container>
+      {isExisting ? (
+        <Container>
+          <MainHeader background={colors.white} />
+          <MainProfile nickname={username} />
+          <CategoryBox>
+            <Category category={category} num={0} onClick={() => setCategory(0)}>
+              질문
+            </Category>
+            <Category category={category} num={1} onClick={() => setCategory(1)}>
+              피드
+            </Category>
+          </CategoryBox>
+          {category ? <Feed /> : <Ask params={{ username: userData }} />}
+        </Container>
+      ) : (
+        <Container>존재하지 않는 사용자입니다.</Container>
+      )}
     </>
   )
 }
