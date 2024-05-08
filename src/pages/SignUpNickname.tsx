@@ -73,7 +73,7 @@ const SignUp = () => {
 
   return (
     <Container>
-      <Header text="회원가입" backColor={colors.grey7} />
+      <Header text="회원가입" background={colors.grey7} />
       <SignUpHeaderText>
         플리빗을 사용하기 위한 <br />
         아이디가 필요해요!
