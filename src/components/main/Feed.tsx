@@ -7,30 +7,53 @@ import { Swiper, SwiperSlide } from 'swiper/react'
 import 'swiper/swiper-bundle.css'
 import 'swiper/css'
 import Feeds from '../feed/Feeds'
+import { useEffect, useRef, useState } from 'react'
+import { useGesture } from '@use-gesture/react'
+interface ModalProps {
+  onClose: () => void
+}
+
+const Modal: React.FC<ModalProps> = ({ onClose }) => (
+  <StyledModal>
+    <p>모달창입니다!</p>
+    <button onClick={onClose}>닫기</button>
+  </StyledModal>
+)
 
 const Feed = () => {
   const groups = [
     {
+      directoryId: 1,
       directoryName: '영화',
       directoryImg: logo,
     },
     {
+      directoryId: 2,
+
       directoryName: '음식',
       directoryImg: logo,
     },
     {
+      directoryId: 3,
+
       directoryName: '노래',
       directoryImg: logo,
     },
     {
+      directoryId: 4,
+
       directoryName: '폴더',
       directoryImg: logo,
     },
     {
+      directoryId: 5,
+
       directoryName: '폴더',
       directoryImg: logo,
     },
     {
+      directoryId: 6,
+
       directoryName: '폴더',
       directoryImg: logo,
     },
@@ -77,6 +100,37 @@ const Feed = () => {
     },
   ]
 
+  const [selectedDirectoryId, setSelectedDirectoryId] = useState<number | null>(null) // 선택된 디렉토리 ID 상태
+  const [isModalOpen, setModalOpen] = useState(false)
+  const holdTimer = useRef<number | null>(null) // useRef에 타입 명시
+
+  const openModal = (directoryId: number) => {
+    setSelectedDirectoryId(directoryId) // 선택된 디렉토리 ID 설정
+    setModalOpen(true)
+  }
+
+  const bind = useGesture({
+    onPointerDown: ({ event, args }) => {
+      const directoryId = args[0] as number // args를 통해 directoryId 받기
+      event.preventDefault()
+      holdTimer.current = window.setTimeout(() => openModal(directoryId), 500)
+    },
+    onPointerUp: () => {
+      if (holdTimer.current !== null) {
+        clearTimeout(holdTimer.current)
+        holdTimer.current = null
+      }
+    },
+    onPointerCancel: () => {
+      if (holdTimer.current !== null) {
+        clearTimeout(holdTimer.current)
+        holdTimer.current = null
+      }
+    },
+  })
+
+  const closeModal = () => setModalOpen(false)
+
   return (
     <Container>
       <TopComponent>
@@ -88,9 +142,9 @@ const Feed = () => {
         >
           {groups.map((item) => {
             return (
-              <SwiperSlide>
+              <SwiperSlide key={item.directoryId}>
                 <GroupWrapper>
-                  <GroupImgWrapper>
+                  <GroupImgWrapper {...bind(item.directoryId)} onContextMenu={(e) => e.preventDefault()}>
                     <GroupImg src={item.directoryImg} />
                   </GroupImgWrapper>
                   <GroupName>{item.directoryName}</GroupName>
@@ -98,6 +152,7 @@ const Feed = () => {
               </SwiperSlide>
             )
           })}
+
           <SwiperSlide>
             <GroupWrapper>
               <GroupPlusImg src={plus} />
@@ -107,6 +162,7 @@ const Feed = () => {
         </Swiper>
       </TopComponent>
       {feedList.length > 0 ? <Feeds data={feedList} /> : <Flips />}
+      {isModalOpen && <Modal onClose={closeModal} />}
     </Container>
   )
 }
@@ -152,6 +208,8 @@ const GroupImg = styled.img`
   border-radius: 8px;
   border: 0.8px solid ${colors.grey6};
   background: lightgray 50% / cover no-repeat;
+  /* user-select: none; */
+  pointer-events: none;
 `
 
 const GroupName = styled.div`
@@ -167,4 +225,14 @@ const GroupName = styled.div`
 const GroupPlusImg = styled.img`
   width: 44px;
   height: 44px;
+`
+
+const StyledModal = styled.div`
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background-color: white;
+  padding: 20px;
+  z-index: 100;
 `
