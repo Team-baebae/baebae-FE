@@ -7,7 +7,7 @@ import { colors } from '../styles/colors'
 import { ChangeEvent, useState } from 'react'
 import { BottomButton } from '../components/common/Button'
 import { useRecoilState } from 'recoil'
-import { UserInfoStateProps, userInfoState } from '../context/Atoms'
+import { UserInfoStateProps, isLoggedInState, userInfoState } from '../context/Atoms'
 
 // Login함수의 response 인터페이스
 interface LoginProps {
@@ -27,6 +27,8 @@ const SignUp = () => {
 
   // 리코일로 받은 유저 정보
   const [userInfo, setUserInfo] = useRecoilState<UserInfoStateProps>(userInfoState)
+  // 리코일 로그인 여부
+  const [isLoggedIn, setIsLoggedIn] = useRecoilState(isLoggedInState)
 
   // 닉네임 입력 및 유효성 확인 (형식에 맞는지만 체크)
   const [nickname, setNickname] = useState<string>('')
@@ -80,6 +82,7 @@ const SignUp = () => {
             accessToken: res.data.accessToken,
             refreshToken: res.data.refreshToken,
           })
+          setIsLoggedIn(true)
           navigate('/signup/onboarding', {
             state: {
               nickname: res.data.nickname,

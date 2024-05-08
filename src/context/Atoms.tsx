@@ -28,7 +28,7 @@ export const userInfoState = atom<UserInfoStateProps>({
 
 // 로그인 상태 관리
 export const isLoggedInState = atom({
-  key: 'isLoggedIn',
+  key: 'isLoggedInState',
   default: false,
   effects: [persistAtom],
 })

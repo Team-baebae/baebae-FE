@@ -4,7 +4,7 @@ import { useEffect } from 'react'
 import { getKakaoUserInfoApi, isExistingAccountApi, loginApi } from '../apis/UserApi'
 import loading from '../assets/kakaoRedirection/Loading.svg'
 import { useRecoilState } from 'recoil'
-import { UserInfoStateProps, userInfoState } from '../context/Atoms'
+import { UserInfoStateProps, isLoggedInState, userInfoState } from '../context/Atoms'
 
 const KakaoRedirection = () => {
   //카카오 인가코드
@@ -13,6 +13,8 @@ const KakaoRedirection = () => {
 
   // 리코일 userInfo
   const [userInfo, setUserInfo] = useRecoilState<UserInfoStateProps>(userInfoState)
+  // 리코일 로그인 여부
+  const [isLoggedIn, setIsLoggedIn] = useRecoilState(isLoggedInState)
 
   // GetKakaoUserInfo함수의 response 인터페이스
   interface KakaoUserInfoResponseProps {
@@ -90,9 +92,7 @@ const KakaoRedirection = () => {
             accessToken: res.data.accessToken,
             refreshToken: res.data.refreshToken,
           })
-          // localStorage.setItem('memberId', res.data.id)
-          // localStorage.setItem('accessToken', res.data.accessToken)
-          // localStorage.setItem('refreshToken', res.data.refreshToken)
+          setIsLoggedIn(true)
           navigate(`/${res.data.nickname}`)
         } else {
           alert('로그인 실패')
