@@ -33,11 +33,11 @@ const SignUpTerms = () => {
 
   return (
     <Container>
-      <Header text="회원가입" backColor={colors.grey7} />
+      <Header text="회원가입" background={colors.grey7} />
       <TermsHeader>플리빗 이용약관에 동의해주세요</TermsHeader>
       <Terms isChecked={isChecked} setIsChecked={setIsChecked} />
       <BottomButton
-        positive={isChecked.isCheckedFirst && isChecked.isCheckedSecond ? true : false}
+        $positive={isChecked.isCheckedFirst && isChecked.isCheckedSecond ? true : false}
         func={onClickNextBtn}
         text="다음"
       />

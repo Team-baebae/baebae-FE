@@ -5,14 +5,14 @@ import { useNavigate } from 'react-router-dom'
 
 interface HeaderProps {
   text: string
-  backColor: string
+  background: string
 }
 
-const Header = ({ text, backColor }: HeaderProps) => {
+const Header = ({ text, background }: HeaderProps) => {
   const navigate = useNavigate()
 
   return (
-    <HeaderTotalComponent backColor={backColor}>
+    <HeaderTotalComponent background={background}>
       <HeaderLeftIcon
         src={BackArrow}
         alt="<"
@@ -28,14 +28,14 @@ const Header = ({ text, backColor }: HeaderProps) => {
 
 export default Header
 
-const HeaderTotalComponent = styled.div<{ backColor: string }>`
+const HeaderTotalComponent = styled.div<{ background: string }>`
   position: relative;
   display: flex;
   justify-content: center;
   align-items: center;
   width: 100%;
   height: 48px;
-  background-color: ${(props) => props.backColor};
+  background-color: ${(props) => props.background};
 `
 
 const HeaderLeftIcon = styled.img`

@@ -77,7 +77,7 @@ const Link = ({ linkAttachments, setLinkAttachments }: LinkProps) => {
           </SearchLinkWrapper>
           {/* 버튼 누를 시 해당 음악으로 결정 */}
           <UnFixedButton
-            positive={linkAttachments === '' ? false : true}
+            $positive={linkAttachments === '' ? false : true}
             func={() => {
               handleDismissPlusMusicModal()
             }}

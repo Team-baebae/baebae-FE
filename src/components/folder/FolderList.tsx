@@ -25,13 +25,13 @@ const FolderList = () => {
 
   return (
     <Container>
-      <EachFolder positive={true} func={() => console.log('폴더 추가')} />
-      <EachFolder positive={true} func={() => console.log('폴더 추가')} />
-      <EachFolder positive={true} func={() => console.log('폴더 추가')} />
-      <EachFolder positive={true} func={() => console.log('폴더 추가')} />
-      <EachFolder positive={true} func={() => console.log('폴더 추가')} />
-      <EachFolder positive={true} func={() => console.log('폴더 추가')} />
-      <EachFolder positive={false} func={() => setOpen(!open)} />
+      <EachFolder $positive={true} func={() => console.log('폴더 추가')} />
+      <EachFolder $positive={true} func={() => console.log('폴더 추가')} />
+      <EachFolder $positive={true} func={() => console.log('폴더 추가')} />
+      <EachFolder $positive={true} func={() => console.log('폴더 추가')} />
+      <EachFolder $positive={true} func={() => console.log('폴더 추가')} />
+      <EachFolder $positive={true} func={() => console.log('폴더 추가')} />
+      <EachFolder $positive={false} func={() => setOpen(!open)} />
       <BottomSheet open={open} snapPoints={() => [433.09091]} onDismiss={handleDismissPlusMusicModal} blocking={true}>
         <PlusLinkText>새 그룹 추가</PlusLinkText>
         <FolderImgWrapper>
@@ -63,7 +63,7 @@ const FolderList = () => {
           </FolderNameLengthWrapper>
         </FolderNameConditionWrapper>
         <UnFixedButton
-          positive={true}
+          $positive={true}
           func={() => {
             console.log('수정')
           }}

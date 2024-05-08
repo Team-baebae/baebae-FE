@@ -4,13 +4,13 @@ import { colors } from '../../styles/colors'
 
 interface HeaderProps {
   text: string
-  backColor: string
+  background: string
   func: any
 }
 
-const PersonalHeader = ({ text, backColor, func }: HeaderProps) => {
+const PersonalHeader = ({ text, background, func }: HeaderProps) => {
   return (
-    <HeaderTotalComponent backColor={backColor}>
+    <HeaderTotalComponent background={background}>
       <HeaderLeftIcon src={BackArrow} alt="<" onClick={func} />
 
       <HeaderText>{text}</HeaderText>
@@ -20,14 +20,14 @@ const PersonalHeader = ({ text, backColor, func }: HeaderProps) => {
 
 export default PersonalHeader
 
-const HeaderTotalComponent = styled.div<{ backColor: string }>`
+const HeaderTotalComponent = styled.div<{ background: string }>`
   position: relative;
   display: flex;
   justify-content: center;
   align-items: center;
   width: 100%;
   height: 48px;
-  background-color: ${(props) => props.backColor};
+  background-color: ${(props) => props.background};
 `
 
 const HeaderLeftIcon = styled.img`

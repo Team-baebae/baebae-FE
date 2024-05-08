@@ -7,11 +7,11 @@ import FolderList from '../components/folder/FolderList'
 const Folder = () => {
   return (
     <Container>
-      <Header text="답변하기" backColor={colors.grey7} />
+      <Header text="답변하기" background={colors.grey7} />
       <FolderHeaderText>이 플립을 어떤 그룹에 추가할까요?</FolderHeaderText>
       <FolderList />
       <BottomButton
-        positive={false}
+        $positive={false}
         func={() => {
           console.log('완료')
         }}

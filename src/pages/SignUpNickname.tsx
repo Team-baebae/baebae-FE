@@ -119,7 +119,7 @@ const SignUp = () => {
         </UnderInputNicknameLengthWrapper>
       </UnderInputWrapper>
       <BottomButton
-        positive={isValid && isClickDuplicate && !isDuplicate ? true : false}
+        $positive={isValid && isClickDuplicate && !isDuplicate ? true : false}
         func={login(kakaoAccessToken, nickname)}
         text="다음"
       />

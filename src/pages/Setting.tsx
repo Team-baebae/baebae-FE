@@ -8,7 +8,7 @@ import AlramSetting from '../components/setting/AlramSetting'
 const Setting = () => {
   return (
     <>
-      <Header text="설정" backColor={colors.white} />
+      <Header text="설정" background={colors.white} />
       <Profile />
       <Settings />
       <Title>알림 설정</Title>

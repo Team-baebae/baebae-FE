@@ -6,7 +6,7 @@ const EditProfile = () => {
   const nickname = '기존닉네임'
   return (
     <Container>
-      <Header text="내 프로필 수정" backColor={colors.grey7} />
+      <Header text="내 프로필 수정" background={colors.grey7} />
       <ProfileImageWrapper>
         <ProfileImage />
         <EditButton>사진 수정하기</EditButton>
