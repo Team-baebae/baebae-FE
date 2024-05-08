@@ -5,7 +5,7 @@ import { useLocation } from 'react-router-dom'
 import { loginApi } from '../apis/UserApi'
 import { colors } from '../styles/colors'
 import { ChangeEvent, useState } from 'react'
-import { Button } from '../components/common/Button'
+import { BottomButton } from '../components/common/Button'
 
 // Login함수의 response 인터페이스
 interface LoginProps {
@@ -118,7 +118,7 @@ const SignUp = () => {
           <UnderInputNicknameLengthText color={colors.grey4}>25</UnderInputNicknameLengthText>
         </UnderInputNicknameLengthWrapper>
       </UnderInputWrapper>
-      <Button
+      <BottomButton
         positive={isValid && isClickDuplicate && !isDuplicate ? true : false}
         func={login(kakaoAccessToken, nickname)}
         text="다음"

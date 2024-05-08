@@ -1,7 +1,7 @@
 import styled from 'styled-components'
 import Header from '../components/common/Header'
 import { colors } from '../styles/colors'
-import { Button } from '../components/common/Button'
+import { BottomButton } from '../components/common/Button'
 import FolderList from '../components/folder/FolderList'
 
 const Folder = () => {
@@ -10,7 +10,7 @@ const Folder = () => {
       <Header text="답변하기" backColor={colors.grey7} />
       <FolderHeaderText>이 플립을 어떤 그룹에 추가할까요?</FolderHeaderText>
       <FolderList />
-      <Button
+      <BottomButton
         positive={false}
         func={() => {
           console.log('완료')
