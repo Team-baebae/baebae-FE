@@ -173,6 +173,7 @@ const AnswerText = styled.textarea`
   letter-spacing: -0.56px;
   border: none;
   outline: none;
+  resize: none;
   &::placeholder {
     color: ${colors.grey5};
   }
