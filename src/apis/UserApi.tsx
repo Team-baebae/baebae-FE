@@ -41,3 +41,53 @@ export const getUserInfoApi = (accessToken: string, memberId: number) => {
     },
   })
 }
+
+// 유저 프로필 사진 업데이트
+export const updateUserProfileApi = (accessToken: string, memberId: number, imageFile: File) => {
+  // FormData 객체 생성
+  const formData = new FormData()
+  // 이미지 파일을 'profileImage' 키로 추가
+  formData.append('image', imageFile)
+
+  // PATCH 요청
+  return axios.patch(`http://${serverUrl}/api/member/profile-image/${memberId}`, formData, {
+    headers: {
+      Authorization: `Bearer ${accessToken}`,
+      'Content-Type': 'multipart/form-data', // 컨텐츠 타입을 multipart/form-data로 지정
+    },
+  })
+}
+
+export const updateUserNicknameApi = (accessToken: string, memberId: number, nickname: string) => {
+  return axios.patch(
+    `http://${serverUrl}/api/member/nickname/${memberId}`,
+    {
+      nickname: nickname,
+    },
+    {
+      headers: {
+        Authorization: `Bearer ${accessToken}`,
+      },
+    },
+  )
+}
+
+export const logoutApi = (accessToken: string) => {
+  return axios.post(
+    `http://${serverUrl}/api/oauth/logout`,
+    {},
+    {
+      headers: {
+        Authorization: `Bearer ${accessToken}`,
+      },
+    },
+  )
+}
+
+export const resignApi = (accessToken: string, memberId: number) => {
+  return axios.delete(`http://${serverUrl}/api/member/${memberId}`, {
+    headers: {
+      Authorization: `Bearer ${accessToken}`,
+    },
+  })
+}

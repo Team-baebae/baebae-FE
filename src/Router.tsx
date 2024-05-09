@@ -35,7 +35,6 @@ const Router = () => {
           <Route path="setting/editProfile" element={<EditProfile />} />
           <Route path="setting/privacyPolicy" element={<PrivacyPolicy />} />
           <Route path="setting/ask" element={<Ask />} />
-
           <Route path="questions/:questionId/answer" element={<Answer />} />
           <Route path="questions/:questionId/folder" element={<Folder />} />
           <Route path="questions/:questionId/complete" element={<AnswerComplete />} />

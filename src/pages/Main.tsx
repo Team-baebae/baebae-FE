@@ -1,7 +1,7 @@
 import styled from 'styled-components'
 import { colors } from '../styles/colors'
 import { useParams } from 'react-router-dom'
-import { useEffect, useState } from 'react'
+import { useCallback, useEffect, useState } from 'react'
 import MainHeader from '../components/common/MainHeader'
 import MainProfile from '../components/main/MainProfile'
 import Feed from '../components/main/Feed'
@@ -46,7 +46,7 @@ const Main = () => {
   useEffect(() => {
     myMemberId == userData.memberId && setIsMyPage(true)
   }, [])
-
+  
   const [category, setCategory] = useState<number>(0)
 
   return (

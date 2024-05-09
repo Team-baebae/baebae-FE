@@ -1,8 +1,9 @@
 import styled from 'styled-components'
 import onBoardingIcon from '../assets/OnboardingIcon.svg'
 import { colors } from '../styles/colors'
-import { BottomButton } from '../components/common/Button'
+import { Button } from '../components/common/Button'
 import { useLocation, useNavigate } from 'react-router-dom'
+import { BottomButton } from '../components/common/Button'
 
 const SignUpOnBoarding = () => {
   const navigate = useNavigate()
