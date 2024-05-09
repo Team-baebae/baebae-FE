@@ -25,6 +25,7 @@ interface Buttonprops {
 // 하단 고정된 버전
 // 공통 초록색 버튼 구현 (positive가 true일경우 진한초록, false일경우 연한초록)
 export const BottomButton = ({ positive, func, text }: BottomButtonProps) => {
+
   return positive ? (
     <GreenCommonBtn onClick={func} positive={true}>
       {text}

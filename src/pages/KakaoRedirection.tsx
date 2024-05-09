@@ -3,11 +3,18 @@ import { useNavigate } from 'react-router-dom'
 import { useEffect } from 'react'
 import { getKakaoUserInfoApi, isExistingAccountApi, loginApi } from '../apis/UserApi'
 import loading from '../assets/kakaoRedirection/Loading.svg'
+import { useRecoilState } from 'recoil'
+import { UserInfoStateProps, isLoggedInState, userInfoState } from '../context/Atoms'
 
 const KakaoRedirection = () => {
   //카카오 인가코드
   const code = new URL(document.location.toString()).searchParams.get('code')
   const navigate = useNavigate()
+
+  // 리코일 userInfo
+  const [userInfo, setUserInfo] = useRecoilState<UserInfoStateProps>(userInfoState)
+  // 리코일 로그인 여부
+  const [isLoggedIn, setIsLoggedIn] = useRecoilState(isLoggedInState)
 
   // GetKakaoUserInfo함수의 response 인터페이스
   interface KakaoUserInfoResponseProps {
@@ -77,13 +84,16 @@ const KakaoRedirection = () => {
       await loginApi(kakaoAccessToken, nickname).then((res: LoginProps) => {
         if (res.status === 200) {
           console.log(res.data.accessToken)
-          localStorage.setItem('memberId', res.data.id)
-          localStorage.setItem('accessToken', res.data.accessToken)
-          localStorage.setItem('nickname', res.data.nickname)
-          localStorage.setItem('email', res.data.email)
-          localStorage.setItem('refreshToken', res.data.refreshToken)
-
-          navigate('/')
+          setUserInfo({
+            ...userInfo,
+            memberId: res.data.id,
+            nickname: res.data.nickname,
+            email: res.data.email,
+            accessToken: res.data.accessToken,
+            refreshToken: res.data.refreshToken,
+          })
+          setIsLoggedIn(true)
+          navigate(`/${res.data.nickname}`)
         } else {
           alert('로그인 실패')
           navigate('/login')

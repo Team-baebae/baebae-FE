@@ -2,9 +2,11 @@ import styled from 'styled-components'
 import Header from '../components/common/Header'
 import { useNavigate } from 'react-router-dom'
 import { useLocation } from 'react-router-dom'
-import { loginApi } from '../apis/UserApi'
+import { isExistingNicknameApi, loginApi } from '../apis/UserApi'
 import { colors } from '../styles/colors'
 import { ChangeEvent, useState } from 'react'
+import { useRecoilState } from 'recoil'
+import { UserInfoStateProps, isLoggedInState, userInfoState } from '../context/Atoms'
 import { BottomButton } from '../components/common/Button'
 
 // Login함수의 response 인터페이스
@@ -22,6 +24,11 @@ const SignUp = () => {
   // 넘겨 받은 카카오 어세스토큰 저장
   const location = useLocation()
   const kakaoAccessToken = location.state?.kakaoAccessToken
+
+  // 리코일로 받은 유저 정보
+  const [userInfo, setUserInfo] = useRecoilState<UserInfoStateProps>(userInfoState)
+  // 리코일 로그인 여부
+  const [isLoggedIn, setIsLoggedIn] = useRecoilState(isLoggedInState)
 
   // 닉네임 입력 및 유효성 확인 (형식에 맞는지만 체크)
   const [nickname, setNickname] = useState<string>('')
@@ -43,10 +50,21 @@ const SignUp = () => {
   //중복 확인 버튼 누른 직후 상태
   const [isClickDuplicate, setIsClickDuplicate] = useState<boolean>(false)
 
-  const checkDuplicateNickname = () => {
-    setIsClickDuplicate(true)
-    if (isValid) {
-      setIsDuplicate(false)
+  const checkDuplicateNickname = async () => {
+    try {
+      setIsClickDuplicate(true)
+      if (isValid) {
+        await isExistingNicknameApi(nickname).then((res) => {
+          console.log(res)
+          if (res.data.isExisting) {
+            setIsDuplicate(true)
+          } else {
+            setIsDuplicate(false)
+          }
+        })
+      }
+    } catch (err) {
+      console.log(err)
     }
   }
 
@@ -55,12 +73,21 @@ const SignUp = () => {
     try {
       await loginApi(kakaoAccessToken, nickname).then((res: LoginProps) => {
         if (res.status === 200) {
-          localStorage.setItem('memberId', res.data.memberId)
-          localStorage.setItem('accessToken', res.data.accessToken)
-          localStorage.setItem('nickname', res.data.nickname)
-          localStorage.setItem('email', res.data.email)
-          localStorage.setItem('refreshToken', res.data.refreshToken)
-          navigate('/signup/onboarding')
+          console.log(res.data.accessToken)
+          setUserInfo({
+            ...userInfo,
+            memberId: res.data.id,
+            nickname: res.data.nickname,
+            email: res.data.email,
+            accessToken: res.data.accessToken,
+            refreshToken: res.data.refreshToken,
+          })
+          setIsLoggedIn(true)
+          navigate('/signup/onboarding', {
+            state: {
+              nickname: res.data.nickname,
+            },
+          })
         } else {
           alert('로그인 실패')
           navigate('/login')
@@ -120,7 +147,7 @@ const SignUp = () => {
       </UnderInputWrapper>
       <BottomButton
         positive={isValid && isClickDuplicate && !isDuplicate ? true : false}
-        func={login(kakaoAccessToken, nickname)}
+        func={() => login(kakaoAccessToken, nickname)}
         text="다음"
       />
     </Container>

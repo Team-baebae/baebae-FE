@@ -10,6 +10,7 @@
     "preview": "vite preview"
   },
   "dependencies": {
+    "@use-gesture/react": "^10.3.1",
     "axios": "^1.6.8",
     "eslint-config-prettier": "^9.1.0",
     "framer-motion": "^11.1.7",
@@ -17,7 +18,10 @@
     "react-dom": "^18.2.0",
     "react-router-dom": "^6.22.3",
     "react-spring-bottom-sheet": "^3.4.1",
-    "styled-components": "^6.1.8"
+    "recoil": "^0.7.7",
+    "recoil-persist": "^5.1.0",
+    "styled-components": "^6.1.8",
+    "swiper": "^11.1.1"
   },
   "devDependencies": {
     "@types/node": "^20.12.7",

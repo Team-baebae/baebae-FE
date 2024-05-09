@@ -17,6 +17,11 @@ export const isExistingAccountApi = (accessToken: string) => {
   })
 }
 
+// 존재하는 닉네임인지 여부확인
+export const isExistingNicknameApi = (nickname: string) => {
+  return axios.get(`http://${serverUrl}/api/oauth/nickname/isExisting?nickname=${nickname}`)
+}
+
 // 카카오 어세스토큰을 통하여 jwt토큰 받기
 export const loginApi = (accessToken: string, nickname: string) => {
   return axios.post(
@@ -26,4 +31,13 @@ export const loginApi = (accessToken: string, nickname: string) => {
       headers: { Authorization: `Bearer ${accessToken}` },
     },
   )
+}
+
+// 유저 정보 받기
+export const getUserInfoApi = (accessToken: string, memberId: number) => {
+  return axios.get(`http://${serverUrl}/api/member/${memberId}`, {
+    headers: {
+      Authorization: `Bearer ${accessToken}`,
+    },
+  })
 }
