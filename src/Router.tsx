@@ -27,11 +27,11 @@ const Router = () => {
           <Route path="" element={<Landing />} />
           <Route path="login" element={<Login />} />
           <Route path="auth" element={<KakaoRedirection />} />
-          <Route path="term" element={<Term />} />
           <Route path="signup/terms" element={<SignUpTerms />} />
           <Route path="signup/nickname" element={<SignUpNickname />} />
           <Route path="signup/onboarding" element={<SignUpOnBoarding />} />
-          <Route path="setting" element={<Setting />}></Route>
+          <Route path="setting" element={<Setting />} />
+          <Route path="setting/term" element={<Term />} />
           <Route path="setting/editProfile" element={<EditProfile />} />
           <Route path="setting/privacyPolicy" element={<PrivacyPolicy />} />
           <Route path="setting/ask" element={<Ask />} />
