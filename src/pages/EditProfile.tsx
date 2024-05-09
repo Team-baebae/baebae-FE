@@ -3,7 +3,7 @@ import Header from '../components/common/Header'
 import { colors } from '../styles/colors'
 import { useRecoilState } from 'recoil'
 import { userInfoState } from '../context/Atoms'
-import { ChangeEvent, useState } from 'react
+import { ChangeEvent, useState } from 'react'
 import { isExistingNicknameApi, updateUserNicknameApi, updateUserProfileApi } from '../apis/UserApi'
 import { BottomButton } from '../components/common/Button'
 import { useNavigate } from 'react-router-dom'
@@ -148,7 +148,7 @@ const EditProfile = () => {
           <UnderInputNicknameLengthText color={colors.grey4}>25</UnderInputNicknameLengthText>
         </UnderInputNicknameLengthWrapper>
       </UnderInputWrapper>
-      <BottomButton positive={nickname === '' ? false : true} text="수정하기" func={onClickModifyBtn} />
+      <BottomButton $positive={nickname === '' ? false : true} text="수정하기" func={onClickModifyBtn} />
     </Container>
   )
 }
