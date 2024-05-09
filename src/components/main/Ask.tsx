@@ -64,7 +64,7 @@ const Ask = (userInfo: userDataProps) => {
           </OpenProfile>
         </OpenProfileWrapper>
       )}
-      <Button $positive={true} func={linkToLogin} func2={() => console.log('비활성화')} text="질문하기" />
+      <Button $positive={true} func={linkToLogin} text="질문하기" />
       {showModal && <LoginModal content={`앗!\n로그인을 해야 질문을 남길 수 있어요😥`} clickModal={clickModal} />}
     </Container>
   )
