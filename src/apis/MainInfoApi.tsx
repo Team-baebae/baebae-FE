@@ -19,6 +19,19 @@ export const isExistingNicknameApi = async (nickname: string) => {
   }
 }
 
+// // 회원 닉네임으로 id 조회하는 api
+export const getMemberIdApi = async (nickname: string) => {
+  try {
+    let API = `api/member/nickname/${nickname}`
+    const response = await flipitAxios.get(API, {
+      params: nickname,
+    })
+    return response.data
+  } catch (error) {
+    console.error(error)
+  }
+}
+
 // 질문 보내는 api
 export const postQuestionApi = async (memberId: number, question: QuestionProps, accessToken: string) => {
   try {
