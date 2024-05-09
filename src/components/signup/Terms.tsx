@@ -2,6 +2,7 @@ import styled from 'styled-components'
 import unchecked from '../../assets/UnChecked.svg'
 import checked from '../../assets/Checked.svg'
 import { colors } from '../../styles/colors'
+import { useNavigate } from 'react-router-dom'
 
 interface TermsProps {
   isChecked: {
@@ -14,6 +15,7 @@ interface TermsProps {
 }
 
 const Terms = ({ isChecked, setIsChecked }: TermsProps) => {
+  const navigate = useNavigate()
   return (
     <Container>
       <TermWrapper>
@@ -79,7 +81,13 @@ const Terms = ({ isChecked, setIsChecked }: TermsProps) => {
         <TermText fontWeight="500" color={colors.grey3}>
           [필수] 이용약관 동의
         </TermText>
-        <UnderlinedTermText fontWeight="500" color={colors.grey3}>
+        <UnderlinedTermText
+          onClick={() => {
+            navigate('/setting/term')
+          }}
+          fontWeight="500"
+          color={colors.grey3}
+        >
           보기
         </UnderlinedTermText>
       </TermWrapper>
@@ -109,7 +117,7 @@ const Terms = ({ isChecked, setIsChecked }: TermsProps) => {
           />
         )}
         <TermText fontWeight="500" color={colors.grey3}>
-          [필수] 개인정보 수집 및 이용 동의
+          [필수] 만 14세 이상입니다
         </TermText>
         <UnderlinedTermText fontWeight="500" color={colors.grey3}>
           보기
