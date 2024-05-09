@@ -22,7 +22,7 @@ const MainHeader = ({ backColor }: HeaderProps) => {
       />
       <HeaderRight>
         <HeaderRightIcon src={Alram} alt="alram" />
-        <HeaderRightIcon src={Setting} alt="setting" />
+        <HeaderRightIcon onClick={() => navigate('/setting')} src={Setting} alt="setting" />
       </HeaderRight>
     </HeaderTotalComponent>
   )

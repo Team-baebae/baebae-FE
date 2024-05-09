@@ -4,9 +4,14 @@ import ForwardArrow from '../../assets/ForwardArrow.svg'
 import { useState } from 'react'
 import Modal from '../common/Modal'
 import { useNavigate } from 'react-router-dom'
+import { logoutApi, resignApi } from '../../apis/UserApi'
+import { useRecoilState } from 'recoil'
+import { isLoggedInState, userInfoState } from '../../context/Atoms'
 
 const Settings = () => {
   const navigate = useNavigate()
+  const [userInfo, setUserInfo] = useRecoilState(userInfoState)
+  const [isLoggedIn, setIsLoggedIn] = useRecoilState(isLoggedInState)
 
   // 모달 버튼 클릭 유무를 저장할 state
   const [showModal, setShowModal] = useState(false)
@@ -18,25 +23,65 @@ const Settings = () => {
   // 버튼 클릭시 모달 버튼 클릭 유무를 설정하는 state 함수
   const clickModal2 = () => setShowModal2(!showModal2)
 
+  const logout = async () => {
+    try {
+      await logoutApi(userInfo.accessToken).then((res) => {
+        if (res.status === 200) {
+          setUserInfo({
+            accessToken: '',
+            refreshToken: '',
+            memberId: 0,
+            email: '',
+            nickname: '',
+            profileImage: '',
+          })
+          setIsLoggedIn(false)
+          navigate('/login')
+        }
+      })
+    } catch (err) {
+      console.log(err)
+    }
+  }
+
+  const resign = async () => {
+    try {
+      await resignApi(userInfo.accessToken, userInfo.memberId).then((res) => {
+        if (res.status === 200) {
+          setUserInfo({
+            accessToken: '',
+            refreshToken: '',
+            memberId: 0,
+            email: '',
+            nickname: '',
+            profileImage: '',
+          })
+          setIsLoggedIn(false)
+          navigate('/login')
+        }
+      })
+    } catch (err) {
+      console.log(err)
+    }
+  }
+
   return (
     <Container>
-      <ContentsWrapper>
+      <ContentsWrapper
+        onClick={() => {
+          navigate('/setting/privacyPolicy')
+        }}
+      >
         <Contents>개인정보처리방침</Contents>
-        <RightIcon
-          src={ForwardArrow}
-          onClick={() => {
-            navigate('/setting/privacyPolicy')
-          }}
-        />
+        <RightIcon src={ForwardArrow} />
       </ContentsWrapper>
-      <ContentsWrapper>
+      <ContentsWrapper
+        onClick={() => {
+          navigate('/setting/term')
+        }}
+      >
         <Contents>이용약관</Contents>
-        <RightIcon
-          src={ForwardArrow}
-          onClick={() => {
-            navigate('/setting/term')
-          }}
-        />
+        <RightIcon src={ForwardArrow} />
       </ContentsWrapper>
       <ContentsWrapper>
         <Contents>
@@ -54,7 +99,7 @@ const Settings = () => {
           content="로그아웃 하시겠습니까?"
           buttonText1="예"
           buttonText2="아니오"
-          func1={() => console.log('logout')}
+          func1={logout}
           func2={clickModal2}
           clickModal={clickModal2}
         />
@@ -72,7 +117,7 @@ const Settings = () => {
           buttonText1="아니오"
           buttonText2="예"
           func1={clickModal}
-          func2={() => console.log('delete account')}
+          func2={resign}
           clickModal={clickModal}
         />
       )}
