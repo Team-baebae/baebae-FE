@@ -60,9 +60,7 @@ const Main = () => {
 }
 
 export default Main
-const Container = styled.div`
-  height: 100vh;
-`
+const Container = styled.div``
 const CategoryBox = styled.div`
   display: flex;
   height: 44px;
