@@ -15,6 +15,7 @@ import Main from './pages/Main'
 import QuestionList from './pages/QuestionList'
 import GroupPlus from './pages/GroupPlus'
 import GroupModify from './pages/GroupModify'
+import PrivacyPolicy from './pages/PrivacyPolicy'
 
 const Router = () => {
   return (
@@ -29,6 +30,7 @@ const Router = () => {
           <Route path="signup/onboarding" element={<SignUpOnBoarding />} />
           <Route path="setting" element={<Setting />}></Route>
           <Route path="setting/editProfile" element={<EditProfile />} />
+          <Route path="setting/privacyPolicy" element={<PrivacyPolicy />} />
           <Route path="questions/:questionId/answer" element={<Answer />} />
           <Route path="questions/:questionId/folder" element={<Folder />} />
           <Route path="questions/:questionId/complete" element={<AnswerComplete />} />
