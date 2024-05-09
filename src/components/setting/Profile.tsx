@@ -1,16 +1,20 @@
 import styled from 'styled-components'
 import { colors } from '../../styles/colors'
 import { useNavigate } from 'react-router-dom'
+import { useRecoilState } from 'recoil'
+import { userInfoState } from '../../context/Atoms'
 
 const Profile = () => {
+  const [userInfo, setUserInfo] = useRecoilState(userInfoState)
+
   const navigate = useNavigate()
-  const nickname = '닉네임'
+  // const nickname = '닉네임'
   return (
     <Container>
-      <ProfileImage />
+      <ProfileImage src={userInfo.profileImage} />
       <ProfileContents>
-        <Nickname>{nickname}</Nickname>
-        <EditButton onClick={() => navigate('setting/editProfile')}>내 프로필 수정하기</EditButton>
+        <Nickname>{userInfo.nickname}</Nickname>
+        <EditButton onClick={() => navigate('/setting/editProfile')}>내 프로필 수정하기</EditButton>
       </ProfileContents>
     </Container>
   )

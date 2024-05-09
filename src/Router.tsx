@@ -27,7 +27,7 @@ const Router = () => {
           <Route path="signup/terms" element={<SignUpTerms />} />
           <Route path="signup/nickname" element={<SignUpNickname />} />
           <Route path="signup/onboarding" element={<SignUpOnBoarding />} />
-          <Route path="setting" element={<Setting />} />
+          <Route path="setting" element={<Setting />}></Route>
           <Route path="setting/editProfile" element={<EditProfile />} />
           <Route path="questions/:questionId/answer" element={<Answer />} />
           <Route path="questions/:questionId/folder" element={<Folder />} />
