@@ -71,3 +71,23 @@ export const updateUserNicknameApi = (accessToken: string, memberId: number, nic
     },
   )
 }
+
+export const logoutApi = (accessToken: string) => {
+  return axios.post(
+    `http://${serverUrl}/api/oauth/logout`,
+    {},
+    {
+      headers: {
+        Authorization: `Bearer ${accessToken}`,
+      },
+    },
+  )
+}
+
+export const resignApi = (accessToken: string, memberId: number) => {
+  return axios.delete(`http://${serverUrl}/api/member/${memberId}`, {
+    headers: {
+      Authorization: `Bearer ${accessToken}`,
+    },
+  })
+}
