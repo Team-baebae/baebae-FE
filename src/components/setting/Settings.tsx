@@ -67,23 +67,21 @@ const Settings = () => {
 
   return (
     <Container>
-      <ContentsWrapper>
+      <ContentsWrapper
+        onClick={() => {
+          navigate('/setting/privacyPolicy')
+        }}
+      >
         <Contents>개인정보처리방침</Contents>
-        <RightIcon
-          src={ForwardArrow}
-          onClick={() => {
-            navigate('/setting/privacyPolicy')
-          }}
-        />
+        <RightIcon src={ForwardArrow} />
       </ContentsWrapper>
-      <ContentsWrapper>
+      <ContentsWrapper
+        onClick={() => {
+          navigate('/setting/term')
+        }}
+      >
         <Contents>이용약관</Contents>
-        <RightIcon
-          src={ForwardArrow}
-          onClick={() => {
-            navigate('/setting/term')
-          }}
-        />
+        <RightIcon src={ForwardArrow} />
       </ContentsWrapper>
       <ContentsWrapper>
         <Contents>
