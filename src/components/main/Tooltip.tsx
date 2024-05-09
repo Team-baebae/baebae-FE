@@ -18,7 +18,7 @@ const fadeIn = keyframes`
 
 const Tooltip = ({ show, clickIcon }: ToolTipProps) => {
   return (
-    <Container show={show}>
+    <Container show={show ? 1 : 0}>
       <Triangle />
       <AlertBox>
         답변을 보는 누구나 나의 피드를 볼 수 있어요!
@@ -30,7 +30,7 @@ const Tooltip = ({ show, clickIcon }: ToolTipProps) => {
 
 export default Tooltip
 
-const Container = styled.div<{ show: boolean }>`
+const Container = styled.div<{ show: number }>`
   position: absolute;
   display: ${({ show }) => (show ? 'flex' : 'none')};
   flex-direction: column;
