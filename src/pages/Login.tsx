@@ -1,5 +1,5 @@
 import styled from 'styled-components'
-import loginBackground from '../assets/login/LoginBackround.svg'
+import loginBackground from '../assets/login/LoginBack.svg'
 import logo from '../assets/Logo.svg'
 import { colors } from '../styles/colors'
 import kakao from '../assets/KakaoIcon.svg'
@@ -39,12 +39,11 @@ const Container = styled.div`
 `
 
 const BackgroundImg = styled.img`
-  width: 527.03px;
-  height: 431.605px;
+  width: 569.454px;
+  height: 722.534px;
   position: absolute;
   z-index: 1;
   left: -86px;
-  top: 21.04px;
 `
 
 const FlipItLogo = styled.img`
@@ -52,7 +51,6 @@ const FlipItLogo = styled.img`
   height: 89.743px;
   margin: 290.63px 0px 0px 0px;
   align-self: center;
-  cursor: pointer;
 `
 
 const ContentTextTop = styled.div`

@@ -107,3 +107,9 @@
   font-weight: 900;
   src: url('./museoModerno/MuseoModerno-Black.ttf') format('opentype');
 }
+@font-face {
+  font-family: 'Abel';
+  font-style: normal;
+  font-weight: 500;
+  src: url('./abel/Abel-Regular.ttf') format('opentype');
+}
