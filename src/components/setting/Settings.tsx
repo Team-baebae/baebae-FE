@@ -3,8 +3,11 @@ import { colors } from '../../styles/colors'
 import ForwardArrow from '../../assets/ForwardArrow.svg'
 import { useState } from 'react'
 import Modal from '../common/Modal'
+import { useNavigate } from 'react-router-dom'
 
 const Settings = () => {
+  const navigate = useNavigate()
+
   // 모달 버튼 클릭 유무를 저장할 state
   const [showModal, setShowModal] = useState(false)
   // 버튼 클릭시 모달 버튼 클릭 유무를 설정하는 state 함수
@@ -19,11 +22,21 @@ const Settings = () => {
     <Container>
       <ContentsWrapper>
         <Contents>개인정보처리방침</Contents>
-        <RightIcon src={ForwardArrow} />
+        <RightIcon
+          src={ForwardArrow}
+          onClick={() => {
+            navigate('/setting/privacyPolicy')
+          }}
+        />
       </ContentsWrapper>
       <ContentsWrapper>
         <Contents>이용약관</Contents>
-        <RightIcon src={ForwardArrow} />
+        <RightIcon
+          src={ForwardArrow}
+          onClick={() => {
+            navigate('/setting/term')
+          }}
+        />
       </ContentsWrapper>
       <ContentsWrapper>
         <Contents>
