@@ -8,11 +8,13 @@ import Feed from '../components/main/Feed'
 import Ask from '../components/main/Ask'
 import { getUserInfoApi } from '../apis/UserApi'
 import { useRecoilState } from 'recoil'
-import { UserInfoStateProps, userInfoState } from '../context/Atoms'
+import { UserInfoStateProps, isLoggedInState, userInfoState } from '../context/Atoms'
 
 const Main = () => {
   const { username } = useParams<{ username: string }>()
   const [userData, setUserData] = useState<string | undefined>(undefined)
+
+  const [userLogIn, setUserLogIn] = useRecoilState(isLoggedInState)
 
   // 리코일에서 받은 userInfo
   const [userInfo, setUserInfo] = useRecoilState<UserInfoStateProps>(userInfoState)
@@ -22,6 +24,7 @@ const Main = () => {
     try {
       await getUserInfoApi(userInfo.accessToken, userInfo.memberId).then((res) => {
         console.log(res)
+
         setUserInfo({
           ...userInfo,
           profileImage: res.data.profileImage,
@@ -36,6 +39,7 @@ const Main = () => {
     getUserInfo(userInfo)
     setUserData(username)
     console.log(username)
+    console.log(userInfo.accessToken)
   }, [username, getUserInfo])
 
   const [category, setCategory] = useState<number>(0)
