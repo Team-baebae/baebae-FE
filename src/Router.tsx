@@ -17,6 +17,7 @@ import GroupPlus from './pages/GroupPlus'
 import GroupModify from './pages/GroupModify'
 import PrivacyPolicy from './pages/PrivacyPolicy'
 import Ask from './pages/Ask'
+import Term from './pages/Term'
 
 const Router = () => {
   return (
@@ -26,6 +27,7 @@ const Router = () => {
           <Route path="" element={<Landing />} />
           <Route path="login" element={<Login />} />
           <Route path="auth" element={<KakaoRedirection />} />
+          <Route path="term" element={<Term />} />
           <Route path="signup/terms" element={<SignUpTerms />} />
           <Route path="signup/nickname" element={<SignUpNickname />} />
           <Route path="signup/onboarding" element={<SignUpOnBoarding />} />

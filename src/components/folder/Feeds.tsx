@@ -105,7 +105,7 @@ const TotalFeedsBtn = styled.div`
   gap: 10px;
   border-radius: 8px;
   background: ${colors.grey1};
-  color: var(--White, #fff);
+  color: ${colors.white};
   font-family: Pretendard;
   font-size: 14px;
   font-style: normal;
