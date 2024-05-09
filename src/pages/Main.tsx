@@ -9,12 +9,13 @@ import Ask from '../components/main/Ask'
 import { isExistingNicknameApi } from '../apis/MainInfoApi'
 import { getUserInfoApi } from '../apis/UserApi'
 import { useRecoilState } from 'recoil'
-import { UserInfoStateProps, userInfoState } from '../context/Atoms'
+import { UserInfoStateProps, isLoggedInState, userInfoState } from '../context/Atoms'
 
 const Main = () => {
   const { username } = useParams<{ username: string }>()
   const [isExisting, setIsExisting] = useState<boolean>(true)
   const [userData, setUserData] = useState<string | undefined>(undefined)
+  const [userLogIn, setUserLogIn] = useRecoilState(isLoggedInState)
 
   // 유저의 존재 여부 확인
   const userCheck = (nickname: string) => {
@@ -38,6 +39,7 @@ const Main = () => {
     try {
       await getUserInfoApi(userInfo.accessToken, userInfo.memberId).then((res) => {
         console.log(res)
+
         setUserInfo({
           ...userInfo,
           profileImage: res.data.profileImage,
@@ -52,6 +54,7 @@ const Main = () => {
     getUserInfo(userInfo)
     setUserData(username)
     console.log(username)
+    console.log(userInfo.accessToken)
   }, [username, getUserInfo])
 
   const [category, setCategory] = useState<number>(0)
