@@ -11,6 +11,7 @@ import { userDataProps } from './types'
 import { useRecoilValue } from 'recoil'
 import { isLoggedInState, isMineState } from '../../context/Atoms'
 import LoginModal from './LoginModal'
+import Tooltip from './Tooltip'
 
 const Ask = (userInfo: userDataProps) => {
   const isMyPage = useRecoilValue(isMineState)
@@ -35,6 +36,9 @@ const Ask = (userInfo: userDataProps) => {
     !isLoggedIn && setShowModal(true)
   }
 
+  const [showTooltip, setShowTooltip] = useState<boolean>(false)
+  const clickIcon = () => setShowTooltip(!showTooltip)
+
   return (
     <Container>
       {isMyPage && (
@@ -56,12 +60,15 @@ const Ask = (userInfo: userDataProps) => {
         </WriterBlock>
       </AskContainer>
       {!isMyPage && (
-        <OpenProfileWrapper>
-          <MiniToggle />
+        <OpenProfileWrapper margin={isMyPage ? '49px' : '97px'}>
           <OpenProfile>
-            질문자 프로필 공개
-            <Icon width={18} height={18} src={Info} />
+            <MiniToggle />
+            <OpenProfileText>
+              질문자 프로필 공개
+              <Icon width={18} height={18} src={Info} onClick={clickIcon} />
+            </OpenProfileText>
           </OpenProfile>
+          <Tooltip show={showTooltip} clickIcon={clickIcon} />
         </OpenProfileWrapper>
       )}
       <Button $positive={true} func={linkToLogin} text="질문하기" />
@@ -159,14 +166,19 @@ const WriterRegion = styled.input`
     color: ${colors.grey5};
   }
 `
-const OpenProfileWrapper = styled.div`
+const OpenProfileWrapper = styled.div<{ margin: string }>`
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  margin-bottom: ${(props) => props.margin};
+`
+const OpenProfile = styled.div`
   display: flex;
   flex-direction: row;
   align-items: center;
   gap: 10px;
-  margin-bottom: 30px;
 `
-const OpenProfile = styled.div`
+const OpenProfileText = styled.div`
   display: flex;
   flex-direction: row;
   align-items: center;
