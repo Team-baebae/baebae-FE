@@ -13,6 +13,8 @@ import Folder from './pages/Folder'
 import AnswerComplete from './pages/AnswerComplete'
 import Main from './pages/Main'
 import QuestionList from './pages/QuestionList'
+import GroupPlus from './pages/GroupPlus'
+import GroupModify from './pages/GroupModify'
 
 const Router = () => {
   return (
@@ -32,6 +34,8 @@ const Router = () => {
           <Route path="questions/:questionId/complete" element={<AnswerComplete />} />
           <Route path=":username" element={<Main />} />
           <Route path=":username/questionList" element={<QuestionList />} />
+          <Route path="groupPlus" element={<GroupPlus />} />
+          <Route path="groupModify" element={<GroupModify />} />
         </Route>
       </Routes>
     </BrowserRouter>

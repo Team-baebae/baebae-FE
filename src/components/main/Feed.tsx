@@ -11,8 +11,8 @@ import { useEffect, useRef, useState } from 'react'
 import { useGesture } from '@use-gesture/react'
 import { BottomSheet } from 'react-spring-bottom-sheet'
 import 'react-spring-bottom-sheet/dist/style.css'
-import pencil from '../../assets/Pencil.svg'
-import trash from '../../assets/Trash.svg'
+import pencil from '../../assets/feed/Pencil.svg'
+import trash from '../../assets/feed/Trash.svg'
 
 const Feed = () => {
   const groups = [
