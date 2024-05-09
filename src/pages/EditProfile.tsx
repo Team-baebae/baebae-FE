@@ -4,10 +4,13 @@ import { colors } from '../styles/colors'
 import { useRecoilState } from 'recoil'
 import { userInfoState } from '../context/Atoms'
 import { ChangeEvent, useState } from 'react'
-import { isExistingNicknameApi } from '../apis/UserApi'
+import { isExistingNicknameApi, updateUserNicknameApi, updateUserProfileApi } from '../apis/UserApi'
 import { BottomButton } from '../components/common/Button'
+import { useNavigate } from 'react-router-dom'
 
 const EditProfile = () => {
+  const navigate = useNavigate()
+
   // const nickname = '기존닉네임'
   const [userInfo, setUserInfo] = useRecoilState(userInfoState)
 
@@ -16,7 +19,23 @@ const EditProfile = () => {
     const file = e.target.files && e.target.files[0]
     // 이미지 파일을 보낼 시엔 formData로 file을 추가해야함(추후 추가)
     if (file) {
+      updateUserProfile(file)
       setProfileImg(URL.createObjectURL(file)) // 미리보기를 위해 파일 URL 생성
+    }
+  }
+
+  const updateUserProfile = async (file: File) => {
+    try {
+      await updateUserProfileApi(userInfo.accessToken, userInfo.memberId, file).then((res) => {
+        console.log(res)
+        setUserInfo({
+          ...userInfo,
+          profileImage: res.data.imageUrl,
+        })
+        setProfileImg(URL.createObjectURL(file)) // 미리보기를 위해 파일 URL 생성
+      })
+    } catch (err) {
+      console.log(err)
     }
   }
 
@@ -57,6 +76,26 @@ const EditProfile = () => {
     } catch (err) {
       console.log(err)
     }
+  }
+
+  const updateUserNickname = async () => {
+    try {
+      await updateUserNicknameApi(userInfo.accessToken, userInfo.memberId, nickname).then((res) => {
+        if (res.status === 200) {
+          setUserInfo({
+            ...userInfo,
+            nickname: nickname,
+          })
+          navigate('/setting')
+        }
+      })
+    } catch (err) {
+      console.log(err)
+    }
+  }
+
+  const onClickModifyBtn = () => {
+    updateUserNickname()
   }
 
   return (
@@ -109,7 +148,7 @@ const EditProfile = () => {
           <UnderInputNicknameLengthText color={colors.grey4}>25</UnderInputNicknameLengthText>
         </UnderInputNicknameLengthWrapper>
       </UnderInputWrapper>
-      <BottomButton positive={true} text="수정하기" func={() => console.log('수정')} />
+      <BottomButton positive={nickname === '' ? false : true} text="수정하기" func={onClickModifyBtn} />
     </Container>
   )
 }
