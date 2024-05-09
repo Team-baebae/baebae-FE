@@ -2,20 +2,26 @@ import styled from 'styled-components'
 import NewIcon from '../../assets/main/NewIcon.svg'
 import ForwardArrow from '../../assets/ForwardArrow.svg'
 import Info from '../../assets/main/Info.svg'
-import { useEffect, useState } from 'react'
+import { ChangeEvent, MouseEvent, useEffect, useState } from 'react'
 import { colors } from '../../styles/colors'
 import { useNavigate } from 'react-router-dom'
 import MiniToggle from '../common/MiniToggle'
 import { Button } from '../common/Button'
 import { userDataProps } from './types'
 import { useRecoilValue } from 'recoil'
-import { isLoggedInState, isMineState } from '../../context/Atoms'
+import { isLoggedInState, isMineState, userInfoState } from '../../context/Atoms'
 import LoginModal from './LoginModal'
 import Tooltip from './Tooltip'
+import { postQuestionApi } from '../../apis/MainInfoApi'
+import { ToastContainer, toast, Flip } from 'react-toastify'
+import 'react-toastify/dist/ReactToastify.css'
+import { StyledToastContainer } from '../toast/toastStyle'
 
 const Ask = (userInfo: userDataProps) => {
   const isMyPage = useRecoilValue(isMineState)
   const isLoggedIn = useRecoilValue(isLoggedInState)
+  const writerToken = useRecoilValue(userInfoState).accessToken
+  const receiverId = userInfo.memberId
   const [askCount, setAskCount] = useState<number>(0)
   const navigate = useNavigate()
   const questionClick = () => {
@@ -32,12 +38,35 @@ const Ask = (userInfo: userDataProps) => {
   // 버튼 클릭시 모달 버튼 클릭 유무를 설정하는 state 함수
   const clickModal = () => setShowModal(!showModal)
 
-  const linkToLogin = () => {
-    !isLoggedIn && setShowModal(true)
-  }
-
+  // 툴팁 여부를 저장할 state
   const [showTooltip, setShowTooltip] = useState<boolean>(false)
   const clickIcon = () => setShowTooltip(!showTooltip)
+
+  // 질문 내용 state
+  const [text, setText] = useState<string>('')
+  const [writer, setWriter] = useState<string>('')
+  const [isProfileOn, setIsProfileOn] = useState<boolean>(false)
+
+  const onChangeText = (e: ChangeEvent<HTMLTextAreaElement>) => {
+    setText(e.target.value)
+  }
+  const onChangeWriter = (e: ChangeEvent<HTMLInputElement>) => {
+    setWriter(e.target.value)
+  }
+
+  // 질문 전송
+  const submitHandler = (e: MouseEvent<HTMLButtonElement>) => {
+    e.preventDefault()
+    const questionData = { content: text, nickname: writer, profileOnOff: isProfileOn }
+    console.log(questionData)
+    setText('')
+    setWriter('')
+    setIsProfileOn(false)
+    // 비로그인인 경우 모달창
+    !isLoggedIn && setShowModal(true)
+    // 로그인인 경우 질문 전송
+    isLoggedIn && postQuestionApi(receiverId, questionData, writerToken).then(() => toast('질문 완료!'))
+  }
 
   return (
     <Container>
@@ -54,15 +83,19 @@ const Ask = (userInfo: userDataProps) => {
         </AskNotification>
       )}
       <AskContainer>
-        <TextRegion placeholder={`이런 질문은 어떤가요?\n너의 패션 스타일이 궁금해!\n무슨 음식 좋아해?`} />
+        <TextRegion
+          placeholder={`이런 질문은 어떤가요?\n너의 패션 스타일이 궁금해!\n무슨 음식 좋아해?`}
+          value={text}
+          onChange={onChangeText}
+        />
         <WriterBlock>
-          FROM <WriterRegion placeholder="자유롭게 입력해주세요" />
+          FROM <WriterRegion placeholder="자유롭게 입력해주세요" type="text" value={writer} onChange={onChangeWriter} />
         </WriterBlock>
       </AskContainer>
       {!isMyPage && (
         <OpenProfileWrapper margin={isMyPage ? '49px' : '97px'}>
           <OpenProfile>
-            <MiniToggle />
+            <MiniToggle isActive={isProfileOn} setIsActive={setIsProfileOn} />
             <OpenProfileText>
               질문자 프로필 공개
               <Icon width={18} height={18} src={Info} onClick={clickIcon} />
@@ -71,7 +104,18 @@ const Ask = (userInfo: userDataProps) => {
           <Tooltip show={showTooltip} clickIcon={clickIcon} />
         </OpenProfileWrapper>
       )}
-      <Button $positive={true} func={linkToLogin} text="질문하기" />
+      <Button $positive={true} func={submitHandler} text="질문하기" />
+      <StyledToastContainer
+        position="bottom-center"
+        autoClose={1000}
+        hideProgressBar
+        pauseOnHover={false}
+        closeOnClick={false}
+        closeButton={false}
+        rtl={false}
+        theme="dark"
+        transition={Flip}
+      />
       {showModal && <LoginModal content={`앗!\n로그인을 해야 질문을 남길 수 있어요😥`} clickModal={clickModal} />}
     </Container>
   )
