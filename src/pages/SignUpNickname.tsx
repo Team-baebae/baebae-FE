@@ -8,6 +8,8 @@ import { ChangeEvent, useState } from 'react'
 import { useRecoilState } from 'recoil'
 import { UserInfoStateProps, isLoggedInState, userInfoState } from '../context/Atoms'
 import { BottomButton } from '../components/common/Button'
+import { useRecoilState } from 'recoil'
+import { UserInfoStateProps, isLoggedInState, userInfoState } from '../context/Atoms'
 
 // Login함수의 response 인터페이스
 interface LoginProps {
@@ -100,7 +102,7 @@ const SignUp = () => {
 
   return (
     <Container>
-      <Header text="회원가입" backColor={colors.grey7} />
+      <Header text="회원가입" background={colors.grey7} />
       <SignUpHeaderText>
         플리빗을 사용하기 위한 <br />
         아이디가 필요해요!
@@ -146,8 +148,8 @@ const SignUp = () => {
         </UnderInputNicknameLengthWrapper>
       </UnderInputWrapper>
       <BottomButton
-        positive={isValid && isClickDuplicate && !isDuplicate ? true : false}
-        func={() => login(kakaoAccessToken, nickname)}
+        $positive={isValid && isClickDuplicate && !isDuplicate ? true : false}
+        func={login(kakaoAccessToken, nickname)}
         text="다음"
       />
     </Container>

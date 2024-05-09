@@ -41,7 +41,7 @@ const Answer = () => {
 
   return (
     <Container>
-      <PersonalHeader func={() => setIsOpenBackWarningModal(true)} text="답변하기" backColor={colors.grey7} />
+      <PersonalHeader func={() => setIsOpenBackWarningModal(true)} text="답변하기" background={colors.grey7} />
       <Question />
       <PolaroidContainer>
         <label htmlFor="file">
@@ -64,7 +64,7 @@ const Answer = () => {
 
       <Link linkAttachments={linkAttachments} setLinkAttachments={setLinkAttachments} />
       <UnFixedButton
-        positive={imageUrl !== '' && content !== '' ? true : false}
+        $positive={imageUrl !== '' && content !== '' ? true : false}
         func={() => {
           console.log('폴더 이동')
         }}

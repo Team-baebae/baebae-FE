@@ -18,7 +18,7 @@ const QuestionList = () => {
 
   return (
     <Container>
-      <Header text="답변을 기다리는 질문" backColor={colors.grey7} />
+      <Header text="답변을 기다리는 질문" background={colors.grey7} />
       <Title color={colors.grey1}>
         총 <CountText color={askCount ? colors.grey1 : colors.grey4}>{askCount}개</CountText>
       </Title>

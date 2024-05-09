@@ -29,10 +29,10 @@ const Modal = (props: ModalProps) => {
         >
           <ModalContent>
             <Content>{content}</Content>
-            <Button positive={true} onClick={func1}>
+            <Button $positive={true} onClick={func1}>
               {buttonText1}
             </Button>
-            <Button positive={false} onClick={func2}>
+            <Button $positive={false} onClick={func2}>
               {buttonText2}
             </Button>
           </ModalContent>
@@ -65,7 +65,7 @@ const Content = styled.div`
   letter-spacing: -0.32px;
   margin: 40px 22px 52px 22px;
 `
-const Button = styled.button<{ positive: boolean }>`
+const Button = styled.button<{ $positive: boolean }>`
   display: flex;
   height: 56px;
   padding: 16px 0px;
@@ -73,9 +73,9 @@ const Button = styled.button<{ positive: boolean }>`
   align-items: center;
   align-self: stretch;
   border-radius: 12px;
-  background: ${(props) => (props.positive ? colors.primary : colors.white)};
-  border: 1px solid ${(props) => (props.positive ? colors.primary : colors.grey5)};
-  color: ${(props) => (props.positive ? colors.grey1 : colors.grey3)};
+  background: ${(props) => (props.$positive ? colors.primary : colors.white)};
+  border: 1px solid ${(props) => (props.$positive ? colors.primary : colors.grey5)};
+  color: ${(props) => (props.$positive ? colors.grey1 : colors.grey3)};
   font-family: Pretendard;
   font-size: 16px;
   font-style: normal;

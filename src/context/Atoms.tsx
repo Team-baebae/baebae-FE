@@ -32,3 +32,9 @@ export const isLoggedInState = atom({
   default: false,
   effects: [persistAtom],
 })
+
+export const isMineState = atom({
+  key: 'isMineState',
+  default: false,
+  effects: [persistAtom],
+})

@@ -3,7 +3,7 @@ import Header from '../components/common/Header'
 import { colors } from '../styles/colors'
 import { useRecoilState } from 'recoil'
 import { userInfoState } from '../context/Atoms'
-import { ChangeEvent, useState } from 'react'
+import { ChangeEvent, useState } from 'react
 import { isExistingNicknameApi, updateUserNicknameApi, updateUserProfileApi } from '../apis/UserApi'
 import { BottomButton } from '../components/common/Button'
 import { useNavigate } from 'react-router-dom'
@@ -100,7 +100,7 @@ const EditProfile = () => {
 
   return (
     <Container>
-      <Header text="내 프로필 수정" backColor={colors.grey7} />
+      <Header text="내 프로필 수정" background={colors.grey7} />
       <ProfileImageWrapper>
         <ProfileImage src={profileImg} />
         <label htmlFor="file">
@@ -188,7 +188,6 @@ const EditButton = styled.div`
   letter-spacing: -0.48px;
   cursor: pointer;
 `
-
 const SignUpNicknameLabel = styled.div`
   align-self: stretch;
   color: ${colors.grey3};
@@ -200,14 +199,12 @@ const SignUpNicknameLabel = styled.div`
   letter-spacing: -0.48px;
   margin: 40px 0px 0px 20px;
 `
-
 const SignUpInputWrapper = styled.div`
   position: relative;
   width: 100%;
   height: 61px;
   margin: 4px 0px 0px 0px;
 `
-
 const SingUpNicknameInput = styled.input<{ isValid: boolean; isClickDuplicate: boolean; isDuplicate: boolean }>`
   display: flex;
   height: 61px;
@@ -244,7 +241,6 @@ const SingUpNicknameInput = styled.input<{ isValid: boolean; isClickDuplicate: b
     color: ${colors.grey5};
   }
 `
-
 const DuplicationCheckBtn = styled.button`
   position: absolute;
   top: 50%;

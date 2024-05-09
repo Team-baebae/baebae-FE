@@ -14,6 +14,7 @@
     "axios": "^1.6.8",
     "eslint-config-prettier": "^9.1.0",
     "framer-motion": "^11.1.7",
+    "qs": "^6.12.1",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
     "react-router-dom": "^6.22.3",
@@ -25,6 +26,7 @@
   },
   "devDependencies": {
     "@types/node": "^20.12.7",
+    "@types/qs": "^6.9.15",
     "@types/react": "^18.2.66",
     "@types/react-dom": "^18.2.22",
     "@types/styled-components": "^5.1.34",

@@ -7,19 +7,16 @@ import { colors } from '../../styles/colors'
 import { useNavigate } from 'react-router-dom'
 import MiniToggle from '../common/MiniToggle'
 import { Button } from '../common/Button'
+import { userDataProps } from './types'
+import { useRecoilValue } from 'recoil'
+import { isMineState } from '../../context/Atoms'
 
-interface AskProps {
-  params: ParamsProps
-}
-interface ParamsProps {
-  username: string | undefined
-}
-const Ask = (props: AskProps) => {
-  const { params } = props
+const Ask = (userInfo: userDataProps) => {
+  const isMyPage = useRecoilValue(isMineState)
   const [askCount, setAskCount] = useState<number>(0)
   const navigate = useNavigate()
   const questionClick = () => {
-    navigate(`/${params?.username}/questionList`)
+    navigate(`/${userInfo?.nickname}/questionList`)
   }
   useEffect(() => {
     // api 연동
@@ -27,30 +24,34 @@ const Ask = (props: AskProps) => {
   })
   return (
     <Container>
-      <AskNotification onClick={questionClick}>
-        {askCount && <Icon width={34.25} height={16} src={NewIcon} />}
-        <TextWrapper ml={askCount ? '6px' : '0px'} color={colors.white}>
-          답변을 기다리는 질문
-          <TextWrapper ml="4px" color={askCount ? colors.primary : colors.grey4}>
-            {askCount}개
+      {isMyPage && (
+        <AskNotification onClick={questionClick}>
+          {askCount && <Icon width={34.25} height={16} src={NewIcon} />}
+          <TextWrapper ml={askCount ? '6px' : '0px'} color={colors.white}>
+            답변을 기다리는 질문
+            <TextWrapper ml="4px" color={askCount ? colors.primary : colors.grey4}>
+              {askCount}개
+            </TextWrapper>
           </TextWrapper>
-        </TextWrapper>
-        <Icon width={20} height={20} src={ForwardArrow} />
-      </AskNotification>
+          <Icon width={20} height={20} src={ForwardArrow} />
+        </AskNotification>
+      )}
       <AskContainer>
         <TextRegion placeholder={`이런 질문은 어떤가요?\n너의 패션 스타일이 궁금해!\n무슨 음식 좋아해?`} />
         <WriterBlock>
           FROM <WriterRegion placeholder="자유롭게 입력해주세요" />
         </WriterBlock>
       </AskContainer>
-      <OpenProfileWrapper>
-        <MiniToggle />
-        <OpenProfile>
-          질문자 프로필 공개
-          <Icon width={18} height={18} src={Info} />
-        </OpenProfile>
-      </OpenProfileWrapper>
-      <Button positive={true} func={() => console.log('질문')} func2={() => console.log('비활성화')} text="질문하기" />
+      {!isMyPage && (
+        <OpenProfileWrapper>
+          <MiniToggle />
+          <OpenProfile>
+            질문자 프로필 공개
+            <Icon width={18} height={18} src={Info} />
+          </OpenProfile>
+        </OpenProfileWrapper>
+      )}
+      <Button $positive={true} func={() => console.log('질문')} func2={() => console.log('비활성화')} text="질문하기" />
     </Container>
   )
 }

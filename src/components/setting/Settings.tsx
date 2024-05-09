@@ -73,7 +73,12 @@ const Settings = () => {
         }}
       >
         <Contents>개인정보처리방침</Contents>
-        <RightIcon src={ForwardArrow} />
+        <RightIcon
+          src={ForwardArrow}
+          onClick={() => {
+            navigate('/setting/privacyPolicy')
+          }}
+        />
       </ContentsWrapper>
       <ContentsWrapper
         onClick={() => {
@@ -81,7 +86,12 @@ const Settings = () => {
         }}
       >
         <Contents>이용약관</Contents>
-        <RightIcon src={ForwardArrow} />
+        <RightIcon
+          src={ForwardArrow}
+          onClick={() => {
+            navigate('/setting/term')
+          }}
+        />
       </ContentsWrapper>
       <ContentsWrapper>
         <Contents>

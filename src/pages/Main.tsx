@@ -6,59 +6,68 @@ import MainHeader from '../components/common/MainHeader'
 import MainProfile from '../components/main/MainProfile'
 import Feed from '../components/main/Feed'
 import Ask from '../components/main/Ask'
-import { getUserInfoApi } from '../apis/UserApi'
-import { useRecoilState } from 'recoil'
-import { UserInfoStateProps, isLoggedInState, userInfoState } from '../context/Atoms'
+import { getMemberIdApi, isExistingNicknameApi } from '../apis/MainInfoApi'
+import { useRecoilValue, useSetRecoilState } from 'recoil'
+import { UserInfoStateProps, isMineState, userInfoState } from '../context/Atoms'
+import { userDataProps } from '../components/main/types'
 
 const Main = () => {
+  // url의 username
   const { username } = useParams<{ username: string }>()
-  const [userData, setUserData] = useState<string | undefined>(undefined)
 
-  const [userLogIn, setUserLogIn] = useRecoilState(isLoggedInState)
+  // 유저 존재 여부
+  const [isExisting, setIsExisting] = useState<boolean>(true)
+  const [userData, setUserData] = useState<userDataProps>({ nickname: 'flipit', memberId: -1 })
 
-  // 리코일에서 받은 userInfo
-  const [userInfo, setUserInfo] = useRecoilState<UserInfoStateProps>(userInfoState)
+  const setIsMyPage = useSetRecoilState(isMineState)
 
-  // 회원정보 받기 (프로필 이미지 저장)
-  const getUserInfo = useCallback(async (userInfo: UserInfoStateProps) => {
-    try {
-      await getUserInfoApi(userInfo.accessToken, userInfo.memberId).then((res) => {
-        console.log(res)
-
-        setUserInfo({
-          ...userInfo,
-          profileImage: res.data.profileImage,
+  // 유저의 존재 여부 확인 및 memberId 조회
+  const userCheck = (nickname: string) => {
+    isExistingNicknameApi(nickname).then((result) => {
+      result.isExisting == 'true' && setIsExisting(true)
+      result.isExisting == 'true' &&
+        getMemberIdApi(nickname).then((result) => {
+          setUserData({ nickname: nickname, memberId: result })
         })
-      })
-    } catch (err) {
-      console.log(err)
+    })
+    myMemberId == userData.memberId ? setIsMyPage(true) : setIsMyPage(false)
+  }
+
+  // 리코일에서 받은 사용자의 userInfo
+  const myInfo = useRecoilValue<UserInfoStateProps>(userInfoState)
+  const myMemberId = myInfo.memberId
+
+  useEffect(() => {
+    if (username) {
+      userCheck(username)
     }
   }, [])
 
   useEffect(() => {
-    getUserInfo(userInfo)
-    setUserData(username)
-    console.log(username)
-    console.log(userInfo.accessToken)
-  }, [username, getUserInfo])
-
+    myMemberId == userData.memberId && setIsMyPage(true)
+  }, [])
+  
   const [category, setCategory] = useState<number>(0)
 
   return (
     <>
-      <Container>
-        <MainHeader backColor={colors.white} />
-        <MainProfile nickname={username} />
-        <CategoryBox>
-          <Category category={category} num={0} onClick={() => setCategory(0)}>
-            질문
-          </Category>
-          <Category category={category} num={1} onClick={() => setCategory(1)}>
-            피드
-          </Category>
-        </CategoryBox>
-        {category ? <Feed /> : <Ask params={{ username: userData }} />}
-      </Container>
+      {isExisting ? (
+        <Container>
+          <MainHeader background={colors.white} />
+          <MainProfile nickname={username} />
+          <CategoryBox>
+            <Category category={category} num={0} onClick={() => setCategory(0)}>
+              질문
+            </Category>
+            <Category category={category} num={1} onClick={() => setCategory(1)}>
+              피드
+            </Category>
+          </CategoryBox>
+          {category ? <Feed /> : <Ask {...userData} />}
+        </Container>
+      ) : (
+        <Container>존재하지 않는 사용자입니다.</Container>
+      )}
     </>
   )
 }

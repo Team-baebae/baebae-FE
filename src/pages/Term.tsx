@@ -5,7 +5,7 @@ import { colors } from '../styles/colors'
 const Term = () => {
   return (
     <Container>
-      <Header text="이용약관" backColor={colors.grey7} />
+      <Header text="이용약관" background={colors.grey7} />
       <ContentWrapper>
         <ContentHeader>서비스 이용약관 (상품, 서비스 등 이용 일반 회원용)</ContentHeader>
         <ContentBody>

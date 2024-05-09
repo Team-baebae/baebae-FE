@@ -6,7 +6,7 @@ import logo from '../assets/OnboardingIcon.svg'
 const AnswerComplete = () => {
   return (
     <Container>
-      <Header text="답변하기" backColor={colors.grey7} />
+      <Header text="답변하기" background={colors.grey7} />
       <Logo src={logo} alt="logo" />
       <UnderLogoText>답변이 완료되었어요!</UnderLogoText>
       <BtnWrapper>

@@ -22,7 +22,7 @@ const SignUpOnBoarding = () => {
         답변을 통해 자신의 취향을 표현해보세요.
       </UnderIconText>
       <BottomButton
-        positive={true}
+        $positive={true}
         func={() => {
           navigate(`/${nickname}`)
         }}

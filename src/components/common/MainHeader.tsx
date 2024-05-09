@@ -5,14 +5,14 @@ import Setting from '../../assets/nav/Setting.svg'
 import { useNavigate } from 'react-router-dom'
 
 interface HeaderProps {
-  backColor: string
+  background: string
 }
 
-const MainHeader = ({ backColor }: HeaderProps) => {
+const MainHeader = ({ background }: HeaderProps) => {
   const navigate = useNavigate()
 
   return (
-    <HeaderTotalComponent backColor={backColor}>
+    <HeaderTotalComponent background={background}>
       <HeaderLeftIcon
         src={NavLogo}
         alt="flipit"
@@ -22,7 +22,13 @@ const MainHeader = ({ backColor }: HeaderProps) => {
       />
       <HeaderRight>
         <HeaderRightIcon src={Alram} alt="alram" />
-        <HeaderRightIcon onClick={() => navigate('/setting')} src={Setting} alt="setting" />
+        <HeaderRightIcon
+          src={Setting}
+          alt="setting"
+          onClick={() => {
+            navigate('/setting')
+          }}
+        />
       </HeaderRight>
     </HeaderTotalComponent>
   )
@@ -30,14 +36,14 @@ const MainHeader = ({ backColor }: HeaderProps) => {
 
 export default MainHeader
 
-const HeaderTotalComponent = styled.div<{ backColor: string }>`
+const HeaderTotalComponent = styled.div<{ background: string }>`
   position: relative;
   display: flex;
   justify-content: center;
   align-items: center;
   width: 100%;
   height: 48px;
-  background-color: ${(props) => props.backColor};
+  background-color: ${(props) => props.background};
 `
 const HeaderLeftIcon = styled.img`
   position: absolute;

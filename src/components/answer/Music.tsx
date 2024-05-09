@@ -185,7 +185,7 @@ const Music = ({ musicName, setMusicName, musicAudio, setMusicAudio, musicSinger
           </SearchMusicWrapper>
           {/* 버튼 누를 시 해당 음악으로 결정 */}
           <UnFixedButton
-            positive={musicName === '' ? false : true}
+            $positive={musicName === '' ? false : true}
             func={() => {
               handleDismissPlusMusicModal()
             }}
