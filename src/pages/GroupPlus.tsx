@@ -49,7 +49,7 @@ const GroupPlus = () => {
 
   return (
     <Container>
-      <GroupHeader text="새 그룹 추가" backColor={colors.grey7} />
+      <GroupHeader text="새 그룹 추가" background={colors.grey7} />
       <FolderImgWrapper>
         <FolderImg />
       </FolderImgWrapper>

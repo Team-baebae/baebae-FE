@@ -5,7 +5,7 @@ import { colors } from '../styles/colors'
 const PrivacyPolicy = () => {
   return (
     <Container>
-      <Header text="개인정보처리방침" backColor={colors.grey7} />
+      <Header text="개인정보처리방침" background={colors.grey7} />
       <ContentWrapper>
         <ContentHeader>
           개인정보처리방침

@@ -54,7 +54,7 @@ const GroupModify = () => {
 
   return (
     <Container>
-      <GroupHeader text="그룹 수정" backColor={colors.grey7} />
+      <GroupHeader text="그룹 수정" background={colors.grey7} />
       <FolderImgWrapper>
         <FolderImg />
       </FolderImgWrapper>

@@ -2,7 +2,6 @@ import styled from 'styled-components'
 import Header from '../components/common/Header'
 import { colors } from '../styles/colors'
 import { BottomButton } from '../components/common/Button'
-import FolderList from '../components/folder/FolderList'
 import { useState } from 'react'
 
 const Ask = () => {
@@ -14,14 +13,14 @@ const Ask = () => {
   }
   return (
     <Container>
-      <Header text="문의 및 신고하기" backColor={colors.grey7} />
+      <Header text="문의 및 신고하기" background={colors.grey7} />
       <ContentLabel>내용</ContentLabel>
       <ContentTextArea
         onChange={handleChangeContent}
         value={content}
         placeholder="문의 혹은 신고하실 내용을 입력해주세요. "
       />
-      <BottomButton positive={content === '' ? false : true} text="문의하기" func={() => console.log('문의하기')} />
+      <BottomButton $positive={content === '' ? false : true} text="문의하기" func={() => console.log('문의하기')} />
     </Container>
   )
 }

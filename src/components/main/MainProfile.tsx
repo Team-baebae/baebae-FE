@@ -4,7 +4,6 @@ import DefaultImage from '../../assets/main/DefaultImage.svg'
 import { useEffect } from 'react'
 import { useRecoilState } from 'recoil'
 import { UserInfoStateProps, userInfoState } from '../../context/Atoms'
-import { useEffect } from 'react'
 
 declare global {
   interface Window {
