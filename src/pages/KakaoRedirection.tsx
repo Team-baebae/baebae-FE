@@ -84,6 +84,7 @@ const KakaoRedirection = () => {
       await loginApi(kakaoAccessToken, nickname).then((res: LoginProps) => {
         if (res.status === 200) {
           console.log(res.data.accessToken)
+          console.log(res.data.id)
           setUserInfo({
             ...userInfo,
             memberId: res.data.id,

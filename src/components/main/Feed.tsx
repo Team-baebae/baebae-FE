@@ -13,53 +13,34 @@ import { BottomSheet } from 'react-spring-bottom-sheet'
 import 'react-spring-bottom-sheet/dist/style.css'
 import pencil from '../../assets/feed/Pencil.svg'
 import trash from '../../assets/feed/Trash.svg'
+import { getDirectoriesApi } from '../../apis/DirectoryApi'
+import { useRecoilState } from 'recoil'
+import { userInfoState } from '../../context/Atoms'
+import { useNavigate } from 'react-router-dom'
 
 const Feed = () => {
-  const groups = [
-    {
-      directoryId: 1,
-      directoryName: '영화',
-      directoryImg: logo,
-    },
-    {
-      directoryId: 2,
+  const navigate = useNavigate()
 
-      directoryName: '음식',
-      directoryImg: logo,
-    },
-    {
-      directoryId: 3,
+  const [userInfo, setUserInfo] = useRecoilState(userInfoState)
 
-      directoryName: '노래',
-      directoryImg: logo,
-    },
-    {
-      directoryId: 4,
+  const getDirectories = async () => {
+    try {
+      await getDirectoriesApi(userInfo.accessToken, userInfo.memberId).then((res) => {
+        setDirectories(res.data.categories)
+      })
+    } catch (err) {
+      console.log(err)
+    }
+  }
 
-      directoryName: '폴더',
-      directoryImg: logo,
-    },
-    {
-      directoryId: 5,
+  interface directory {
+    categoryId: number
+    categoryName: string
+    answerAnswers: number[]
+    categoryImage: string
+  }
 
-      directoryName: '폴더',
-      directoryImg: logo,
-    },
-    {
-      directoryId: 6,
-
-      directoryName: '폴더',
-      directoryImg: logo,
-    },
-    {
-      directoryName: '폴더',
-      directoryImg: logo,
-    },
-    {
-      directoryName: '폴더',
-      directoryImg: logo,
-    },
-  ]
+  const [directories, setDirectories] = useState<directory[]>([])
 
   const feedList = [
     {
@@ -130,6 +111,10 @@ const Feed = () => {
     },
   })
 
+  useEffect(() => {
+    getDirectories()
+  }, [])
+
   return (
     <Container>
       <TopComponent>
@@ -139,20 +124,20 @@ const Feed = () => {
           onSwiper={(swiper) => console.log(swiper)}
           onSlideChange={() => console.log('slide change')}
         >
-          {groups.map((item) => {
+          {directories.map((item) => {
             return (
-              <SwiperSlide key={item.directoryId}>
+              <SwiperSlide key={item.categoryId}>
                 <GroupWrapper>
                   <GroupImgWrapper
-                    {...bind(item.directoryId)}
+                    {...bind(item.categoryId)}
                     onContextMenu={(e) => {
                       e.preventDefault()
                       e.stopPropagation()
                     }}
                   >
-                    <GroupImg src={item.directoryImg} />
+                    <GroupImg src={item.categoryImage} />
                   </GroupImgWrapper>
-                  <GroupName>{item.directoryName}</GroupName>
+                  <GroupName>{item.categoryName}</GroupName>
                 </GroupWrapper>
               </SwiperSlide>
             )
@@ -160,7 +145,12 @@ const Feed = () => {
 
           <SwiperSlide>
             <GroupWrapper>
-              <GroupPlusImg src={plus} />
+              <GroupPlusImg
+                onClick={() => {
+                  navigate('/groupPlus')
+                }}
+                src={plus}
+              />
               <GroupName>추가</GroupName>
             </GroupWrapper>
           </SwiperSlide>
