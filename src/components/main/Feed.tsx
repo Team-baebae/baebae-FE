@@ -122,6 +122,14 @@ const Feed = () => {
     }
   }
 
+  const moveModifyDirectory = () => {
+    navigate('/groupModify', {
+      state: {
+        categoryId: selectedDirectoryId,
+      },
+    })
+  }
+
   useEffect(() => {
     getDirectories()
   }, [])
@@ -170,15 +178,13 @@ const Feed = () => {
       {feedList.length > 0 ? <Feeds data={feedList} /> : <Flips />}
       {open && (
         <BottomSheet open={open} snapPoints={() => [170]} onDismiss={handleDismissPlusMusicModal} blocking={true}>
-          <BottomSheetEachWrapper>
+          <BottomSheetEachWrapper onClick={moveModifyDirectory}>
             <BottomSheetEachIcon src={pencil} />
             <BottomSheetEachText color={colors.grey1}>그룹 수정하기</BottomSheetEachText>
           </BottomSheetEachWrapper>
-          <BottomSheetEachWrapper>
+          <BottomSheetEachWrapper onClick={deleteDirectory}>
             <BottomSheetEachIcon src={trash} />
-            <BottomSheetEachText onClick={deleteDirectory} color="#f00">
-              그룹 삭제하기
-            </BottomSheetEachText>
+            <BottomSheetEachText color="#f00">그룹 삭제하기</BottomSheetEachText>
           </BottomSheetEachWrapper>
         </BottomSheet>
       )}

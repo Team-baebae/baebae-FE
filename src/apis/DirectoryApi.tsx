@@ -47,10 +47,14 @@ export const deleteDirectoryApi = (accessToken: string, categoryId: number) => {
   })
 }
 
-export const modifyDirectoryApi = (accessToken: string, categoryId: number) => {
+export const modifyDirectoryApi = (accessToken: string, categoryId: number, categoryName: string, answerIds: any) => {
   return axios.put(
     `http://${serverUrl}/api/category/${categoryId}`,
-    {},
+    {
+      categoryId: categoryId,
+      categoryName: categoryName,
+      answerIds: answerIds,
+    },
     {
       headers: {
         Authorization: `Bearer ${accessToken}`,
