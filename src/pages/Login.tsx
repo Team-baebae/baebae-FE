@@ -4,6 +4,7 @@ import logo from '../assets/Logo.svg'
 import { colors } from '../styles/colors'
 import kakao from '../assets/KakaoIcon.svg'
 // import kakao from '@/assets/KakaoIcon.svg'
+
 const Login = () => {
   const clientId = import.meta.env.VITE_KAKAO_CLIENT_ID
   const redirectUri = import.meta.env.VITE_KAKAO_REDIRECT_URI
