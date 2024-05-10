@@ -9,11 +9,11 @@ import MiniToggle from '../common/MiniToggle'
 import { Button } from '../common/Button'
 import { userDataProps } from './types'
 import { useRecoilValue } from 'recoil'
-import { isLoggedInState, isMineState, userInfoState } from '../../context/Atoms'
+import { isLoggedInState, userInfoState } from '../../context/Atoms'
 import LoginModal from './LoginModal'
 import Tooltip from './Tooltip'
 import { postQuestionApi } from '../../apis/MainInfoApi'
-import { ToastContainer, toast, Flip } from 'react-toastify'
+import { toast, Flip } from 'react-toastify'
 import 'react-toastify/dist/ReactToastify.css'
 import { StyledToastContainer } from '../toast/toastStyle'
 
@@ -98,7 +98,7 @@ const Ask = ({ userInfo, isMyPage }: AskProps) => {
         </WriterBlock>
       </AskContainer>
       {!isMyPage && (
-        <OpenProfileWrapper margin={isMyPage ? '0' : '97px'}>
+        <OpenProfileWrapper margin={isMyPage ? '0' : '78px'}>
           <OpenProfile>
             <MiniToggle isActive={isProfileOn} setIsActive={setIsProfileOn} />
             <OpenProfileText>
