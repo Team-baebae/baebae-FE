@@ -13,7 +13,7 @@ import { BottomSheet } from 'react-spring-bottom-sheet'
 import 'react-spring-bottom-sheet/dist/style.css'
 import pencil from '../../assets/feed/Pencil.svg'
 import trash from '../../assets/feed/Trash.svg'
-import { getDirectoriesApi } from '../../apis/DirectoryApi'
+import { deleteDirectoryApi, getDirectoriesApi } from '../../apis/DirectoryApi'
 import { useRecoilState } from 'recoil'
 import { userInfoState } from '../../context/Atoms'
 import { useNavigate } from 'react-router-dom'
@@ -75,7 +75,7 @@ const Feed = () => {
     },
   ]
 
-  const [selectedDirectoryId, setSelectedDirectoryId] = useState<number | null>(null) // 선택된 디렉토리 ID 상태
+  const [selectedDirectoryId, setSelectedDirectoryId] = useState<number>(0) // 선택된 디렉토리 ID 상태
   const holdTimer = useRef<number | null>(null) // useRef에 타입 명시
 
   // open은 모달 열고 닫는 상태
@@ -110,6 +110,17 @@ const Feed = () => {
       }
     },
   })
+
+  const deleteDirectory = async () => {
+    try {
+      await deleteDirectoryApi(userInfo.accessToken, selectedDirectoryId).then((res) => {
+        setOpen(false)
+        getDirectories()
+      })
+    } catch (err) {
+      console.log(err)
+    }
+  }
 
   useEffect(() => {
     getDirectories()
@@ -165,7 +176,9 @@ const Feed = () => {
           </BottomSheetEachWrapper>
           <BottomSheetEachWrapper>
             <BottomSheetEachIcon src={trash} />
-            <BottomSheetEachText color="#f00">그룹 삭제하기</BottomSheetEachText>
+            <BottomSheetEachText onClick={deleteDirectory} color="#f00">
+              그룹 삭제하기
+            </BottomSheetEachText>
           </BottomSheetEachWrapper>
         </BottomSheet>
       )}
