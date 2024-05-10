@@ -1,10 +1,11 @@
-import { useState } from 'react'
 import styled from 'styled-components'
 import { colors } from '../../styles/colors'
 
-const MiniToggle = () => {
-  const [isActive, setIsActive] = useState(false)
-
+interface MiniToggleProps {
+  isActive: boolean
+  setIsActive: React.Dispatch<React.SetStateAction<boolean>>
+}
+const MiniToggle = ({ isActive, setIsActive }: MiniToggleProps) => {
   return (
     <ToggleSwitch>
       <CheckBox type="checkbox" checked={isActive} onChange={() => setIsActive(!isActive)} />

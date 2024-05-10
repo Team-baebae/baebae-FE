@@ -18,7 +18,6 @@ interface UnFixedButtonprops {
 interface Buttonprops {
   $positive: boolean
   func: any
-  func2: any
   text: string
 }
 
@@ -56,13 +55,13 @@ export const UnFixedButton = ({ $positive, func, func2, text, margin }: UnFixedB
 
 // 부모 컴포넌트 margin 설정된 곳 button
 // 공통 초록색 버튼 구현 (하단 고정되지 않은 버전)
-export const Button = ({ $positive, func, func2, text }: Buttonprops) => {
+export const Button = ({ $positive, func, text }: Buttonprops) => {
   return $positive ? (
     <CommonBtn onClick={func} $positive={true}>
       {text}
     </CommonBtn>
   ) : (
-    <CommonBtn onClick={func2} $positive={false}>
+    <CommonBtn onClick={func} $positive={false}>
       {text}
     </CommonBtn>
   )

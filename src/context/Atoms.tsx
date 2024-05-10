@@ -33,6 +33,7 @@ export const isLoggedInState = atom({
   effects: [persistAtom],
 })
 
+// 자신의 홈인지 확인
 export const isMineState = atom({
   key: 'isMineState',
   default: false,
