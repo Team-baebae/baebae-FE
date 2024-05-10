@@ -8,8 +8,6 @@ import { ChangeEvent, useState } from 'react'
 import { useRecoilState } from 'recoil'
 import { UserInfoStateProps, isLoggedInState, userInfoState } from '../context/Atoms'
 import { BottomButton } from '../components/common/Button'
-import { useRecoilState } from 'recoil'
-import { UserInfoStateProps, isLoggedInState, userInfoState } from '../context/Atoms'
 
 // Login함수의 response 인터페이스
 interface LoginProps {
@@ -149,7 +147,7 @@ const SignUp = () => {
       </UnderInputWrapper>
       <BottomButton
         $positive={isValid && isClickDuplicate && !isDuplicate ? true : false}
-        func={login(kakaoAccessToken, nickname)}
+        func={() => login(kakaoAccessToken, nickname)}
         text="다음"
       />
     </Container>
