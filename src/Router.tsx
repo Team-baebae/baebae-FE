@@ -1,7 +1,7 @@
 import { BrowserRouter, Routes, Route } from 'react-router-dom'
 import Outer from './pages/Outer'
 import Landing from './pages/landing/Landing'
-import Login from './pages/Login'
+import Login from './pages/login/Login'
 import KakaoRedirection from './pages/KakaoRedirection'
 import SignUpTerms from './pages/SignUpTerms'
 import SignUpNickname from './pages/SignUpNickname'
