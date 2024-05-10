@@ -4,14 +4,35 @@ import { colors } from '../styles/colors'
 import { useState } from 'react'
 import Feeds from '../components/folder/Feeds'
 import Flips from '../components/main/Flips'
+import { makeDirectoryApi, updateDirectoryImgApi } from '../apis/DirectoryApi'
+import { useRecoilState } from 'recoil'
+import { userInfoState } from '../context/Atoms'
+import { UnFixedButton } from '../components/common/Button'
+import { useNavigate } from 'react-router-dom'
 
 const GroupPlus = () => {
-  const [folderImgUrl, setFolderImgUrl] = useState<string>('')
-  const [folderName, setFolderName] = useState<string>('')
+  const navigate = useNavigate()
+
+  const [userInfo, setUserInfo] = useRecoilState(userInfoState)
+
+  const [directoryImgUrl, setDirectoryImgUrl] = useState<string>('')
+  const [directoryImgFile, setDirectoryImgFile] = useState<File>()
+  const [answerIds, setAnswerIds] = useState<any>([])
+  // 이미지 파일 선택 핸들러
+  const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files && e.target.files[0]
+    // 이미지 파일을 보낼 시엔 formData로 file을 추가해야함(추후 추가)
+    if (file) {
+      setDirectoryImgFile(file)
+      setDirectoryImgUrl(URL.createObjectURL(file)) // 미리보기를 위해 파일 URL 생성
+    }
+  }
+
+  const [categoryName, setCategoryName] = useState<string>('')
 
   const onChangeFolderName = (e: React.ChangeEvent<HTMLInputElement>) => {
     const value = e.target.value
-    setFolderName(value)
+    setCategoryName(value)
   }
 
   const feedList = [
@@ -47,27 +68,43 @@ const GroupPlus = () => {
     },
   ]
 
+  const makeDirectory = async () => {
+    try {
+      await makeDirectoryApi(userInfo.accessToken, userInfo.memberId, directoryImgFile, categoryName, answerIds).then(
+        (res) => {
+          console.log(res)
+          navigate(`/${userInfo.nickname}`)
+        },
+      )
+    } catch (err) {
+      console.log(err)
+    }
+  }
+
   return (
     <Container>
       <GroupHeader text="새 그룹 추가" background={colors.grey7} />
       <FolderImgWrapper>
         <FolderImg />
       </FolderImgWrapper>
-      <EditFolderImgText>사진 수정하기</EditFolderImgText>
+      <label htmlFor="file">
+        <EditFolderImgText>사진 수정하기</EditFolderImgText>
+      </label>
+      <input type="file" name="file" id="file" style={{ display: 'none' }} onChange={handleImageChange} />
       <FolderNameLabel>그룹명</FolderNameLabel>
-      <FolderName value={folderName} onChange={onChangeFolderName} placeholder="그룹명을 입력해주세요" />
+      <FolderName value={categoryName} onChange={onChangeFolderName} placeholder="그룹명을 입력해주세요" />
       <FolderNameConditionWrapper>
         <FolderNameConditionText color={colors.grey1} fontSize="12px">
           2-8자로 입력해주세요.
         </FolderNameConditionText>
         <FolderNameLengthWrapper>
-          {folderName.length > 0 ? (
+          {categoryName.length > 0 ? (
             <FolderNameConditionText color={colors.grey2} fontSize="10px">
-              {folderName.length}
+              {categoryName.length}
             </FolderNameConditionText>
           ) : (
             <FolderNameConditionText color={colors.grey4} fontSize="10px">
-              {folderName.length}
+              {categoryName.length}
             </FolderNameConditionText>
           )}
 
@@ -83,6 +120,13 @@ const GroupPlus = () => {
         추가할 플립 선택
       </FolderNameConditionText>
       {feedList.length > 0 ? <Feeds data={feedList} /> : <Flips />}
+      <UnFixedButton
+        $positive={true}
+        func={makeDirectory}
+        func2={() => console.log('실패')}
+        text="그룹 추가하기"
+        margin="30px 20px 30px 20px"
+      />
     </Container>
   )
 }

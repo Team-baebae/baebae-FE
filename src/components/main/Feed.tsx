@@ -13,53 +13,34 @@ import { BottomSheet } from 'react-spring-bottom-sheet'
 import 'react-spring-bottom-sheet/dist/style.css'
 import pencil from '../../assets/feed/Pencil.svg'
 import trash from '../../assets/feed/Trash.svg'
+import { deleteDirectoryApi, getDirectoriesApi } from '../../apis/DirectoryApi'
+import { useRecoilState } from 'recoil'
+import { userInfoState } from '../../context/Atoms'
+import { useNavigate } from 'react-router-dom'
 
 const Feed = () => {
-  const groups = [
-    {
-      directoryId: 1,
-      directoryName: '영화',
-      directoryImg: logo,
-    },
-    {
-      directoryId: 2,
+  const navigate = useNavigate()
 
-      directoryName: '음식',
-      directoryImg: logo,
-    },
-    {
-      directoryId: 3,
+  const [userInfo, setUserInfo] = useRecoilState(userInfoState)
 
-      directoryName: '노래',
-      directoryImg: logo,
-    },
-    {
-      directoryId: 4,
+  const getDirectories = async () => {
+    try {
+      await getDirectoriesApi(userInfo.accessToken, userInfo.memberId).then((res) => {
+        setDirectories(res.data.categories)
+      })
+    } catch (err) {
+      console.log(err)
+    }
+  }
 
-      directoryName: '폴더',
-      directoryImg: logo,
-    },
-    {
-      directoryId: 5,
+  interface directory {
+    categoryId: number
+    categoryName: string
+    answerAnswers: number[]
+    categoryImage: string
+  }
 
-      directoryName: '폴더',
-      directoryImg: logo,
-    },
-    {
-      directoryId: 6,
-
-      directoryName: '폴더',
-      directoryImg: logo,
-    },
-    {
-      directoryName: '폴더',
-      directoryImg: logo,
-    },
-    {
-      directoryName: '폴더',
-      directoryImg: logo,
-    },
-  ]
+  const [directories, setDirectories] = useState<directory[]>([])
 
   const feedList = [
     {
@@ -94,7 +75,7 @@ const Feed = () => {
     },
   ]
 
-  const [selectedDirectoryId, setSelectedDirectoryId] = useState<number | null>(null) // 선택된 디렉토리 ID 상태
+  const [selectedDirectoryId, setSelectedDirectoryId] = useState<number>(0) // 선택된 디렉토리 ID 상태
   const holdTimer = useRef<number | null>(null) // useRef에 타입 명시
 
   // open은 모달 열고 닫는 상태
@@ -130,6 +111,29 @@ const Feed = () => {
     },
   })
 
+  const deleteDirectory = async () => {
+    try {
+      await deleteDirectoryApi(userInfo.accessToken, selectedDirectoryId).then((res) => {
+        setOpen(false)
+        getDirectories()
+      })
+    } catch (err) {
+      console.log(err)
+    }
+  }
+
+  const moveModifyDirectory = () => {
+    navigate('/groupModify', {
+      state: {
+        categoryId: selectedDirectoryId,
+      },
+    })
+  }
+
+  useEffect(() => {
+    getDirectories()
+  }, [])
+
   return (
     <Container>
       <TopComponent>
@@ -139,20 +143,20 @@ const Feed = () => {
           onSwiper={(swiper) => console.log(swiper)}
           onSlideChange={() => console.log('slide change')}
         >
-          {groups.map((item) => {
+          {directories.map((item) => {
             return (
-              <SwiperSlide key={item.directoryId}>
+              <SwiperSlide key={item.categoryId}>
                 <GroupWrapper>
                   <GroupImgWrapper
-                    {...bind(item.directoryId)}
+                    {...bind(item.categoryId)}
                     onContextMenu={(e) => {
                       e.preventDefault()
                       e.stopPropagation()
                     }}
                   >
-                    <GroupImg src={item.directoryImg} />
+                    <GroupImg src={item.categoryImage} />
                   </GroupImgWrapper>
-                  <GroupName>{item.directoryName}</GroupName>
+                  <GroupName>{item.categoryName}</GroupName>
                 </GroupWrapper>
               </SwiperSlide>
             )
@@ -160,7 +164,12 @@ const Feed = () => {
 
           <SwiperSlide>
             <GroupWrapper>
-              <GroupPlusImg src={plus} />
+              <GroupPlusImg
+                onClick={() => {
+                  navigate('/groupPlus')
+                }}
+                src={plus}
+              />
               <GroupName>추가</GroupName>
             </GroupWrapper>
           </SwiperSlide>
@@ -169,11 +178,11 @@ const Feed = () => {
       {feedList.length > 0 ? <Feeds data={feedList} /> : <Flips />}
       {open && (
         <BottomSheet open={open} snapPoints={() => [170]} onDismiss={handleDismissPlusMusicModal} blocking={true}>
-          <BottomSheetEachWrapper>
+          <BottomSheetEachWrapper onClick={moveModifyDirectory}>
             <BottomSheetEachIcon src={pencil} />
             <BottomSheetEachText color={colors.grey1}>그룹 수정하기</BottomSheetEachText>
           </BottomSheetEachWrapper>
-          <BottomSheetEachWrapper>
+          <BottomSheetEachWrapper onClick={deleteDirectory}>
             <BottomSheetEachIcon src={trash} />
             <BottomSheetEachText color="#f00">그룹 삭제하기</BottomSheetEachText>
           </BottomSheetEachWrapper>

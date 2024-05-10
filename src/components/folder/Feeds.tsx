@@ -26,7 +26,6 @@ const Feeds = ({ data }: FeedsProps) => {
           </FlipWrapper>
         ))}
       </GridContainer>
-      <TotalFeedsBtn>전체 보기</TotalFeedsBtn>
     </>
   )
 }
