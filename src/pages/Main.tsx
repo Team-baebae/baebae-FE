@@ -46,7 +46,7 @@ const Main = () => {
   useEffect(() => {
     myMemberId == userData.memberId && setIsMyPage(true)
   }, [])
-  
+
   const [category, setCategory] = useState<number>(0)
 
   return (
