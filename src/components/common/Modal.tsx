@@ -9,7 +9,7 @@ interface ModalProps {
   buttonText2: string
   func1: any
   func2: any
-  clickModal: any
+  clickModal: () => void
 }
 const Modal = (props: ModalProps) => {
   // 전달받은 state 함수

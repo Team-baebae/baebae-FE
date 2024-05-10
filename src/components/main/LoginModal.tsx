@@ -6,7 +6,7 @@ import { AnimatePresence } from 'framer-motion'
 
 interface ModalProps {
   content: string
-  clickModal: any
+  clickModal: () => void
 }
 const LoginModal = (props: ModalProps) => {
   // 전달받은 state 함수
