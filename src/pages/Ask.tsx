@@ -12,6 +12,7 @@ const Ask = () => {
     const value = event.target.value
     setContent(value)
   }
+
   return (
     <Container>
       <Header text="문의 및 신고하기" background={colors.grey7} />

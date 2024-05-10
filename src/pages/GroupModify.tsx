@@ -231,7 +231,6 @@ const FolderNameConditionText = styled.div<{ color: string; fontSize: string; ma
   color: ${(props) => props.color};
   font-family: Pretendard;
   font-size: ${(props) => props.fontSize};
-
   font-style: normal;
   font-weight: 400;
   margin: ${(props) => props.margin || '0px'};
