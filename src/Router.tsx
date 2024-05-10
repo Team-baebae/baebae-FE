@@ -1,6 +1,6 @@
 import { BrowserRouter, Routes, Route } from 'react-router-dom'
 import Outer from './pages/Outer'
-import Landing from './pages/Landing'
+import Landing from './pages/landing/Landing'
 import Login from './pages/Login'
 import KakaoRedirection from './pages/KakaoRedirection'
 import SignUpTerms from './pages/SignUpTerms'
