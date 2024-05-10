@@ -17,8 +17,12 @@ import { ToastContainer, toast, Flip } from 'react-toastify'
 import 'react-toastify/dist/ReactToastify.css'
 import { StyledToastContainer } from '../toast/toastStyle'
 
-const Ask = (userInfo: userDataProps) => {
-  const isMyPage = useRecoilValue(isMineState)
+interface AskProps {
+  userInfo: userDataProps
+  isMyPage: boolean
+}
+const Ask = ({ userInfo, isMyPage }: AskProps) => {
+  const isMine = JSON.stringify(isMyPage)
   const isLoggedIn = useRecoilValue(isLoggedInState)
   const writerToken = useRecoilValue(userInfoState).accessToken
   const receiverId = userInfo.memberId
@@ -31,7 +35,8 @@ const Ask = (userInfo: userDataProps) => {
   useEffect(() => {
     // api 연동
     setAskCount(3)
-  })
+    console.log(`나의 페이지인가? : ${isMine}`)
+  }, [])
 
   // 모달 버튼 클릭 유무를 저장할 state
   const [showModal, setShowModal] = useState<boolean>(false)
@@ -70,7 +75,7 @@ const Ask = (userInfo: userDataProps) => {
 
   return (
     <Container>
-      {isMyPage && (
+      {isMyPage == true && (
         <AskNotification onClick={questionClick}>
           {askCount && <Icon width={34.25} height={16} src={NewIcon} />}
           <TextWrapper ml={askCount ? '6px' : '0px'} color={colors.white}>
@@ -82,7 +87,7 @@ const Ask = (userInfo: userDataProps) => {
           <Icon width={20} height={20} src={ForwardArrow} />
         </AskNotification>
       )}
-      <AskContainer>
+      <AskContainer margin={isMyPage ? '53px' : '0'}>
         <TextRegion
           placeholder={`이런 질문은 어떤가요?\n너의 패션 스타일이 궁금해!\n무슨 음식 좋아해?`}
           value={text}
@@ -93,7 +98,7 @@ const Ask = (userInfo: userDataProps) => {
         </WriterBlock>
       </AskContainer>
       {!isMyPage && (
-        <OpenProfileWrapper margin={isMyPage ? '49px' : '97px'}>
+        <OpenProfileWrapper margin={isMyPage ? '0' : '97px'}>
           <OpenProfile>
             <MiniToggle isActive={isProfileOn} setIsActive={setIsProfileOn} />
             <OpenProfileText>
@@ -151,7 +156,7 @@ const TextWrapper = styled.div<{ ml: string; color: string }>`
   letter-spacing: -0.6px;
 `
 const Icon = styled.img``
-const AskContainer = styled.div`
+const AskContainer = styled.div<{ margin: string }>`
   display: flex;
   height: 346px;
   padding: 20px;
@@ -161,6 +166,7 @@ const AskContainer = styled.div`
   border-radius: 2.127px;
   background-color: ${colors.white};
   box-shadow: 0px 5.259px 9.204px 0px rgba(0, 0, 0, 0.04);
+  margin-bottom: ${(props) => props.margin};
 `
 const TextRegion = styled.textarea`
   display: flex;

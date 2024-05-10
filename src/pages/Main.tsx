@@ -1,13 +1,13 @@
 import styled from 'styled-components'
 import { colors } from '../styles/colors'
 import { useParams } from 'react-router-dom'
-import { useCallback, useEffect, useState } from 'react'
+import { useEffect, useState } from 'react'
 import MainHeader from '../components/common/MainHeader'
 import MainProfile from '../components/main/MainProfile'
 import Feed from '../components/main/Feed'
 import Ask from '../components/main/Ask'
 import { getMemberIdApi, isExistingNicknameApi } from '../apis/MainInfoApi'
-import { useRecoilValue, useSetRecoilState } from 'recoil'
+import { useRecoilState, useRecoilValue } from 'recoil'
 import { UserInfoStateProps, isMineState, userInfoState } from '../context/Atoms'
 import { userDataProps } from '../components/main/types'
 
@@ -16,21 +16,21 @@ const Main = () => {
   const { username } = useParams<{ username: string }>()
 
   // 유저 존재 여부
-  const [isExisting, setIsExisting] = useState<boolean>(true)
+  const [isExisting, setIsExisting] = useState<boolean>(false)
   const [userData, setUserData] = useState<userDataProps>({ nickname: 'flipit', memberId: -1 })
 
-  const setIsMyPage = useSetRecoilState(isMineState)
+  const [isMyPage, setIsMyPage] = useRecoilState(isMineState)
 
   // 유저의 존재 여부 확인 및 memberId 조회
   const userCheck = (nickname: string) => {
     isExistingNicknameApi(nickname).then((result) => {
-      result.isExisting == 'true' && setIsExisting(true)
-      result.isExisting == 'true' &&
+      result.isExisting == true && setIsExisting(true)
+      result.isExisting == true &&
         getMemberIdApi(nickname).then((result) => {
-          setUserData({ nickname: nickname, memberId: result })
+          setUserData({ nickname: nickname, memberId: result.memberId })
+          myMemberId == result.memberId ? setIsMyPage(true) : setIsMyPage(false)
         })
     })
-    myMemberId == userData.memberId ? setIsMyPage(true) : setIsMyPage(false)
   }
 
   // 리코일에서 받은 사용자의 userInfo
@@ -41,10 +41,6 @@ const Main = () => {
     if (username) {
       userCheck(username)
     }
-  }, [])
-
-  useEffect(() => {
-    myMemberId == userData.memberId && setIsMyPage(true)
   }, [])
 
   const [category, setCategory] = useState<number>(0)
@@ -63,7 +59,7 @@ const Main = () => {
               피드
             </Category>
           </CategoryBox>
-          {category ? <Feed /> : <Ask {...userData} />}
+          {category ? <Feed /> : <Ask userInfo={userData} isMyPage={isMyPage} />}
         </Container>
       ) : (
         <Container>존재하지 않는 사용자입니다.</Container>
