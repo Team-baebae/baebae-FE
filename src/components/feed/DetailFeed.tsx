@@ -71,7 +71,7 @@ const DetailFeed = (props: ModalProps) => {
     setGiveTelepathy(!giveTelepathy)
     setTimeout(() => {
       setPopLottie(false)
-    }, 2600)
+    }, 2350)
   }
 
   const [popLottie, setPopLottie] = useState<boolean>(false)
