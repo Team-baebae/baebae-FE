@@ -54,6 +54,7 @@ const FlipItLogo = styled.img`
   margin: 290.63px 0px 0px 0px;
 `
 
+// FlipIt 설명 내용
 const ContentTextTop = styled.div`
   margin: 20px 0px 0px 0px;
   font-family: Pretendard;
@@ -62,7 +63,6 @@ const ContentTextTop = styled.div`
   font-weight: 400;
   letter-spacing: -0.56px;
 `
-
 const ContentTextBottom = styled(ContentTextTop)`
   margin: 6px 0px 0px 0px;
   font-size: 18px;
@@ -70,6 +70,7 @@ const ContentTextBottom = styled(ContentTextTop)`
   letter-spacing: -0.72px;
 `
 
+// 카카오 로그인 버튼
 const KakaoLoginBtn = styled.button`
   display: flex;
   justify-content: center;
@@ -89,7 +90,6 @@ const KakaoLoginBtnIcon = styled.img`
   width: 24px;
   height: 24px;
 `
-
 const KakaoLoginBtnText = styled.div`
   color: #373737;
   font-feature-settings:
