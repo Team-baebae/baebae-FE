@@ -123,7 +123,7 @@ const Feed = () => {
   }
 
   const moveModifyDirectory = () => {
-    navigate('/groupModify', {
+    navigate(`/groups/${selectedDirectoryId}/edit`, {
       state: {
         categoryId: selectedDirectoryId,
       },
@@ -166,7 +166,7 @@ const Feed = () => {
             <GroupWrapper>
               <GroupPlusImg
                 onClick={() => {
-                  navigate('/groupPlus')
+                  navigate('/groups/new')
                 }}
                 src={plus}
               />

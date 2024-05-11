@@ -26,7 +26,7 @@ const MainHeader = ({ background }: HeaderProps) => {
           src={Setting}
           alt="setting"
           onClick={() => {
-            navigate('/setting')
+            navigate('/settings')
           }}
         />
       </HeaderRight>
