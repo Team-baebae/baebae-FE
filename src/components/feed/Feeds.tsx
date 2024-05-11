@@ -1,6 +1,6 @@
 import styled from 'styled-components'
 import { colors } from '../../styles/colors'
-import QuotationMark from '../../assets/main/QuotationMark.svg'
+import QuotationMark from '../../assets/question/QuotationMark.svg'
 
 interface FeedProps {
   questionId: number

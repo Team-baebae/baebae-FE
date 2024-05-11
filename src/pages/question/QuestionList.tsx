@@ -3,7 +3,7 @@ import { useEffect, useState } from 'react'
 import Header from '@/components/common/Header'
 import Flips from '@/components/main/Flips'
 import { colors } from '@/styles/colors'
-import QuotationMark from '@/assets/main/QuotationMark.svg'
+import QuotationMark from '@/assets/question/QuotationMark.svg'
 
 // 답변을 기다리는 질문 리스트 페이지
 const QuestionList = () => {

@@ -1,8 +1,9 @@
 import styled from 'styled-components'
-import { colors } from '../../styles/colors'
-import quotesOpen from '@/assets/answer/QuotesOpen.svg'
-import quotesClose from '@/assets/answer/QuotesClose.svg'
+import { colors } from '@/styles/colors'
+import QuotesOpen from '@/assets/answer/QuotesOpen.svg'
+import QuotesClose from '@/assets/answer/QuotesClose.svg'
 
+// 답변페이지의 질문 보여주는 컴포넌트
 const Question = () => {
   return (
     <>
@@ -11,9 +12,9 @@ const Question = () => {
         <SenderText color={colors.grey4}>유자인님</SenderText>
       </SenderWrapper>
       <QuestionWrapper>
-        <QuestionQuotes src={quotesOpen} />
+        <QuestionQuotes src={QuotesOpen} />
         <QuestionText>가은아 넌 양식이 좋아, 한식이 좋아?</QuestionText>
-        <QuestionQuotes src={quotesClose} />
+        <QuestionQuotes src={QuotesClose} />
       </QuestionWrapper>
     </>
   )
@@ -31,7 +32,6 @@ const SenderText = styled.div<{ color: string }>`
   color: ${(props) => props.color};
   font-family: Pretendard;
   font-size: 12px;
-  font-style: normal;
   font-weight: 500;
   line-height: 150%;
   letter-spacing: -0.24px;
@@ -54,7 +54,6 @@ const QuestionText = styled.div`
   text-align: center;
   font-family: Pretendard;
   font-size: 16px;
-  font-style: normal;
   font-weight: 600;
   line-height: 150%;
   letter-spacing: -0.64px;

@@ -2,35 +2,17 @@ import React, { useCallback, useEffect, useState } from 'react'
 import { BottomSheet } from 'react-spring-bottom-sheet'
 import 'react-spring-bottom-sheet/dist/style.css'
 import styled from 'styled-components'
-import { colors } from '../../styles/colors'
-import { UnFixedButton } from '../common/Button'
-import { getSpotifyAccessTokenApi, searchTermSpotifyApi } from '../../apis/SpotifyApi'
-import music from '../../assets/Music.svg'
-import glasses from '../../assets/Glasses.svg'
-import musicGray from '../../assets/MusicGray.svg'
-import pause from '../../assets/Pause.svg'
-import play from '../../assets/Play.svg'
+import { colors } from '@/styles/colors'
+import { UnFixedButton } from '@/components/common/Button'
+import { MusicProps, TrackProps } from './types'
+import { getSpotifyAccessTokenApi, searchTermSpotifyApi } from '@/apis/SpotifyApi'
+import MusicImg from '@/assets/Music.svg'
+import Glasses from '@/assets/Glasses.svg'
+import MusicGray from '@/assets/MusicGray.svg'
+import Pause from '@/assets/Pause.svg'
+import Play from '@/assets/Play.svg'
 
-// 전달받은 Props
-interface MusicProps {
-  musicName: string
-  setMusicName: any
-  musicAudio: string
-  setMusicAudio: any
-  musicSinger: string
-  setMusicSinger: any
-}
-
-// 스포티파이를 통해 받은 트랙
-interface Track {
-  id: string
-  name: string
-  preview_url: string
-  album: {
-    artists: { name: string }[]
-  }
-}
-
+// 음악 선택 컴포넌트
 const Music = ({ musicName, setMusicName, musicAudio, setMusicAudio, musicSinger, setMusicSinger }: MusicProps) => {
   // open은 모달 열고 닫는 상태
   const [open, setOpen] = useState<boolean>(false)
@@ -56,7 +38,7 @@ const Music = ({ musicName, setMusicName, musicAudio, setMusicAudio, musicSinger
   }
 
   //트랙 선택 시
-  const selectTrack = (result: Track) => {
+  const selectTrack = (result: TrackProps) => {
     setMusicName(result.name)
     setMusicAudio(result.preview_url)
     setMusicSinger(result.album.artists[0].name)
@@ -66,7 +48,7 @@ const Music = ({ musicName, setMusicName, musicAudio, setMusicAudio, musicSinger
   //검색어 저장
   const [searchTerm, setSearchTerm] = useState<string>('')
   //받은 response중 트랙리스트를 저장함
-  const [searchResults, setSearchResults] = useState<Track[]>([])
+  const [searchResults, setSearchResults] = useState<TrackProps[]>([])
   //스포티파이 api 어세스토큰 저장
   const [spotifyAccessToken, setSpotifyAccessToken] = useState<string>('')
   //현재 실행하고 있는 트랙 저장
@@ -138,12 +120,12 @@ const Music = ({ musicName, setMusicName, musicAudio, setMusicAudio, musicSinger
       {/* 버튼 전체 */}
       {musicName === '' ? (
         <PlusBtn onClick={() => setOpen(!open)} margin="20px 0px 0px 0px">
-          <BtnIcon src={music} alt="music" />
+          <BtnIcon src={MusicImg} alt="music" />
           <BtnText>음악 추가(선택)</BtnText>
         </PlusBtn>
       ) : (
         <ExistPlusBtn onClick={() => setOpen(!open)} margin="20px 0px 0px 0px">
-          <BtnIcon src={music} alt="music" />
+          <BtnIcon src={MusicImg} alt="music" />
           <BtnText>
             {musicName} - {musicSinger}
           </BtnText>
@@ -161,7 +143,7 @@ const Music = ({ musicName, setMusicName, musicAudio, setMusicAudio, musicSinger
         >
           <PlusMusicText>음악 추가</PlusMusicText>
           <SearchMusicWrapper>
-            <MusicIcon src={musicGray} alt="musicGray" />
+            <MusicIcon src={MusicGray} alt="musicGray" />
             {musicName === '' ? (
               <SearchedMusicText color={colors.grey5} onClick={openDetailSheet}>
                 음악을 검색해주세요
@@ -176,9 +158,9 @@ const Music = ({ musicName, setMusicName, musicAudio, setMusicAudio, musicSinger
             {musicAudio !== '' && (
               <MusicPlayIconWrapper onClick={() => handlePreview(musicAudio)}>
                 {currentAudio && currentAudio.src === musicAudio && isPlaying ? (
-                  <MusicPlayIcon onClick={() => handlePreview} src={pause} alt="pause" />
+                  <MusicPlayIcon onClick={() => handlePreview} src={Pause} alt="pause" />
                 ) : (
-                  <MusicPlayIcon onClick={() => handlePreview} src={play} alt="pause" />
+                  <MusicPlayIcon onClick={() => handlePreview} src={Play} alt="play" />
                 )}
               </MusicPlayIconWrapper>
             )}
@@ -201,13 +183,13 @@ const Music = ({ musicName, setMusicName, musicAudio, setMusicAudio, musicSinger
         <BottomSheet open={open} snapPoints={() => [748]} onDismiss={handleDismissPlusMusicModal} blocking={true}>
           <PlusMusicText>음악 추가</PlusMusicText>
           <SearchMusicWrapper>
-            <GlassesIcon src={glasses} alt="glasses" />
+            <GlassesIcon src={Glasses} alt="glasses" />
             <SearchMusicInput value={searchTerm} onChange={handleInputChange} placeholder="노래, 아티스트, 앨범 검색" />
           </SearchMusicWrapper>
 
           <TotalTrackListWrapper>
             {/* 받은 트랙리스트리스트 */}
-            {searchResults.map((result: Track) => {
+            {searchResults.map((result: TrackProps) => {
               // 검색어와 같은 부분 확인
               const resultNameLower = result.name.toLowerCase()
               const searchTermLower = searchTerm.toLowerCase()
@@ -245,16 +227,16 @@ export default Music
 // 전체 버튼
 const PlusBtn = styled.button<{ margin: string }>`
   display: flex;
-  padding: 10px 12px;
-  width: 315px;
   justify-content: center;
   align-items: center;
+  padding: 10px 12px;
+  width: 315px;
   gap: 10px;
   border-radius: 8px;
-  background: ${colors.grey1};
+  background-color: ${colors.grey1};
   margin: ${(props) => props.margin};
-  cursor: pointer;
   outline: none;
+  cursor: pointer;
 `
 
 const ExistPlusBtn = styled(PlusBtn)`
@@ -271,28 +253,25 @@ const BtnText = styled.div`
   color: ${colors.white};
   font-family: Pretendard;
   font-size: 14px;
-  font-style: normal;
   font-weight: 400;
-  line-height: normal;
   letter-spacing: -0.28px;
 `
 // 모달창 내부
 const PlusMusicText = styled.div`
   align-self: stretch;
+  margin: 20px 0px 0px 20px;
   color: ${colors.grey1};
   font-family: Pretendard;
   font-size: 18px;
-  font-style: normal;
   font-weight: 600;
   line-height: 150%;
   letter-spacing: -0.36px;
-  margin: 20px 0px 0px 20px;
 `
 
 const SearchMusicWrapper = styled.div`
-  position: relative;
   display: flex;
   align-items: center;
+  position: relative;
   margin: 20px 20px 0px 20px;
 `
 
@@ -330,44 +309,42 @@ const SearchedMusicText = styled.div<{ color: string }>`
   -webkit-box-orient: vertical;
   -webkit-line-clamp: 1;
   flex: 1 0 0;
+  align-items: flex-start;
+  display: flex;
+  align-self: stretch;
+  padding: 12px 12px 12px 41px;
+  gap: 9px;
+  border-radius: 12px;
+  background-color: ${colors.grey7};
   overflow: hidden;
-  color: ${(props) => props.color};
   text-overflow: ellipsis;
+  color: ${(props) => props.color};
   font-family: Pretendard;
   font-size: 14px;
-  font-style: normal;
   font-weight: 400;
   line-height: 150%;
   letter-spacing: -0.56px;
-  display: flex;
-  padding: 12px 12px 12px 41px;
-  align-items: flex-start;
-  gap: 9px;
-  align-self: stretch;
-  border-radius: 12px;
-  background: ${colors.grey7};
 `
 
 const SearchMusicInput = styled.input`
   display: flex;
+  align-items: flex-start;
+  align-self: stretch;
   padding: 12px 12px 12px 45px;
   height: 48px;
-  align-items: flex-start;
   gap: 9px;
-  align-self: stretch;
   border-radius: 12px;
-  background: ${colors.grey7};
+  background-color: ${colors.grey7};
   flex: 1 0 0;
   color: ${colors.grey5};
   font-family: Pretendard;
   font-size: 14px;
-  font-style: normal;
   font-weight: 400;
   line-height: 150%;
   letter-spacing: -0.56px;
   border: none;
-  cursor: pointer;
   outline: none;
+  cursor: pointer;
 `
 
 //2단계 모달 각 트랙
@@ -380,20 +357,19 @@ const TotalTrackListWrapper = styled.div`
 
 const EachTrackWrapper = styled.div`
   display: flex;
+  align-items: center;
   width: 100%;
   padding: 20px;
-  align-items: center;
   gap: 10px;
-  background: ${colors.white};
+  background-color: ${colors.white};
   &:hover {
-    background: ${colors.grey7};
+    background-color: ${colors.grey7};
   }
 `
 const EachTrackText = styled.span<{ color: string }>`
   color: ${(props) => props.color};
   font-family: Pretendard;
   font-size: 14px;
-  font-style: normal;
   font-weight: 500;
   line-height: 150%;
   letter-spacing: -0.56px;
