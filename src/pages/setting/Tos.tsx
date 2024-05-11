@@ -1,6 +1,6 @@
 import styled from 'styled-components'
-import Header from '../components/common/Header'
-import { colors } from '../styles/colors'
+import Header from '../../components/common/Header'
+import { colors } from '../../styles/colors'
 
 const Tos = () => {
   return (

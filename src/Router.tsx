@@ -17,7 +17,7 @@ import GroupPlus from './pages/GroupPlus'
 import GroupModify from './pages/GroupModify'
 import PrivacyPolicy from './pages/setting/PrivacyPolicy'
 import Ask from './pages/Ask'
-import Term from './pages/Tos'
+import Term from './pages/setting/Tos'
 
 const Router = () => {
   return (
