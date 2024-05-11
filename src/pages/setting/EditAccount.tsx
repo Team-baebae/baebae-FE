@@ -6,14 +6,14 @@ import { BottomButton } from '@/components/common/Button'
 import Header from '@/components/common/Header'
 import IsValidNicknameText from '@/components/common/IsValidNicknameText'
 import { colors } from '@/styles/colors'
-import { userInfoState } from '@/context/Atoms'
+import { UserInfoStateProps, userInfoState } from '@/context/Atoms'
 import { isExistingNicknameApi, updateUserNicknameApi, updateUserProfileApi } from '@/apis/UserApi'
 
 // 계정 정보 수정 페이지
 const EditAccount = () => {
   const navigate = useNavigate()
 
-  const [userInfo, setUserInfo] = useRecoilState(userInfoState)
+  const [userInfo, setUserInfo] = useRecoilState<UserInfoStateProps>(userInfoState)
 
   // 이미지 파일 선택 핸들러
   const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {

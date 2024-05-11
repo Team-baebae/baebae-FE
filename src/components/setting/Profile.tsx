@@ -2,14 +2,14 @@ import styled from 'styled-components'
 import { useNavigate } from 'react-router-dom'
 import { useRecoilValue } from 'recoil'
 import { colors } from '@/styles/colors'
-import { userInfoState } from '@/context/Atoms'
+import { UserInfoStateProps, userInfoState } from '@/context/Atoms'
 
 // 회원 프로필 컴포넌트
 const Profile = () => {
   const navigate = useNavigate()
 
   //리코일 유저정보
-  const userInfo = useRecoilValue(userInfoState)
+  const userInfo = useRecoilValue<UserInfoStateProps>(userInfoState)
 
   return (
     <Container>

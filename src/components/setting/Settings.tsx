@@ -5,7 +5,7 @@ import { useRecoilState, useSetRecoilState } from 'recoil'
 import Modal from '@/components/common/Modal'
 import { colors } from '@/styles/colors'
 import { logoutApi, signOutApi } from '@/apis/UserApi'
-import { isLoggedInState, userInfoState } from '@/context/Atoms'
+import { UserInfoStateProps, isLoggedInState, userInfoState } from '@/context/Atoms'
 import ForwardArrow from '@/assets/setting/ForwardArrow.svg'
 
 // 설정리스트 컴포넌트
@@ -13,19 +13,19 @@ const Settings = () => {
   const navigate = useNavigate()
 
   // 리코일 유저정보
-  const [userInfo, setUserInfo] = useRecoilState(userInfoState)
+  const [userInfo, setUserInfo] = useRecoilState<UserInfoStateProps>(userInfoState)
   // 리코일 로그인 여부
   const setIsLoggedIn = useSetRecoilState(isLoggedInState)
 
   // 회원탈퇴 모달 버튼 클릭 유무를 저장할 state
-  const [openSignOutModal, setOpenSignOutModal] = useState(false)
+  const [openSignOutModal, setOpenSignOutModal] = useState<boolean>(false)
   // 회원탈퇴 버튼 클릭시 탈퇴 모달 버튼 클릭 유무를 설정하는 state 함수
-  const clickModal = () => setOpenSignOutModal(!openSignOutModal)
+  const clickSignOutModal = () => setOpenSignOutModal(!openSignOutModal)
 
   // 로그아웃 모달 버튼 클릭 유무를 저장할 state
-  const [openlogoutModal, setOpenLogoutModal] = useState(false)
+  const [openlogoutModal, setOpenLogoutModal] = useState<boolean>(false)
   // 로그아웃 버튼 클릭시 로그아웃 모달 버튼 클릭 유무를 설정하는 state 함수
-  const clickModal2 = () => setOpenLogoutModal(!openlogoutModal)
+  const clickLogoutModal = () => setOpenLogoutModal(!openlogoutModal)
 
   // 로그아웃
   const logout = async () => {
@@ -104,7 +104,7 @@ const Settings = () => {
         <RightIcon src={ForwardArrow} />
       </ContentsWrapper>
       {/* 로그아웃 */}
-      <ContentsWrapper onClick={clickModal2}>
+      <ContentsWrapper onClick={clickLogoutModal}>
         <Contents>로그아웃</Contents>
         <RightIcon src={ForwardArrow} />
       </ContentsWrapper>
@@ -114,12 +114,12 @@ const Settings = () => {
           buttonText1="예"
           buttonText2="아니오"
           func1={logout}
-          func2={clickModal2}
-          clickModal={clickModal2}
+          func2={clickLogoutModal}
+          clickModal={clickLogoutModal}
         />
       )}
       {/* 회원탈퇴 */}
-      <ContentsWrapper onClick={clickModal}>
+      <ContentsWrapper onClick={clickSignOutModal}>
         <Contents>
           회원 탈퇴
           <SubContents>게시된 정보가 다 사라져요</SubContents>
@@ -131,9 +131,9 @@ const Settings = () => {
           content="정말 탈퇴하시겠습니까?"
           buttonText1="아니오"
           buttonText2="예"
-          func1={clickModal}
+          func1={clickSignOutModal}
           func2={signOut}
-          clickModal={clickModal}
+          clickModal={clickSignOutModal}
         />
       )}
     </Container>
