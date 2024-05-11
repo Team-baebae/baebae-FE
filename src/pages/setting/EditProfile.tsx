@@ -1,12 +1,12 @@
 import styled from 'styled-components'
-import Header from '../components/common/Header'
-import { colors } from '../styles/colors'
-import { useRecoilState } from 'recoil'
-import { userInfoState } from '../context/Atoms'
-import { ChangeEvent, useState } from 'react'
-import { isExistingNicknameApi, updateUserNicknameApi, updateUserProfileApi } from '../apis/UserApi'
-import { BottomButton } from '../components/common/Button'
 import { useNavigate } from 'react-router-dom'
+import { useRecoilState } from 'recoil'
+import { ChangeEvent, useState } from 'react'
+import { BottomButton } from '@/components/common/Button'
+import Header from '@/components/common/Header'
+import { colors } from '@/styles/colors'
+import { userInfoState } from '@/context/Atoms'
+import { isExistingNicknameApi, updateUserNicknameApi, updateUserProfileApi } from '@/apis/UserApi'
 
 const EditProfile = () => {
   const navigate = useNavigate()
@@ -175,14 +175,12 @@ const ProfileImage = styled.img`
 `
 const EditButton = styled.div`
   padding: 4px 12px;
-  justify-content: center;
-  color: ${colors.grey1};
   border-radius: 100px;
   border: 1px solid ${colors.grey1};
-  background: #fff;
+  background-color: #fff;
+  color: ${colors.grey1};
   font-family: Pretendard;
   font-size: 12px;
-  font-style: normal;
   font-weight: 500;
   line-height: 18px;
   letter-spacing: -0.48px;
@@ -190,14 +188,13 @@ const EditButton = styled.div`
 `
 const SignUpNicknameLabel = styled.div`
   align-self: stretch;
+  margin: 40px 0px 0px 20px;
   color: ${colors.grey3};
   font-family: Pretendard;
   font-size: 12px;
-  font-style: normal;
   font-weight: 400;
   line-height: 150%;
   letter-spacing: -0.48px;
-  margin: 40px 0px 0px 20px;
 `
 const SignUpInputWrapper = styled.div`
   position: relative;
@@ -207,24 +204,14 @@ const SignUpInputWrapper = styled.div`
 `
 const SingUpNicknameInput = styled.input<{ isValid: boolean; isClickDuplicate: boolean; isDuplicate: boolean }>`
   display: flex;
+  justify-content: center;
+  align-items: center;
+  align-self: stretch;
   height: 61px;
   width: calc(100% - 40px);
   margin: 0px 20px 0px 20px;
   padding: 20px;
-  justify-content: center;
-  align-items: center;
   gap: 12px;
-  align-self: stretch;
-  border-radius: 12px;
-  background: ${colors.white};
-  flex: 1 0 0;
-  color: ${colors.grey1};
-  font-family: Pretendard;
-  font-size: 14px;
-  font-style: normal;
-  font-weight: 400;
-  line-height: 150%;
-  letter-spacing: -0.56px;
   border: ${({ isValid, isClickDuplicate, isDuplicate }) =>
     isClickDuplicate && !isValid
       ? '1px solid #f00'
@@ -233,54 +220,60 @@ const SingUpNicknameInput = styled.input<{ isValid: boolean; isClickDuplicate: b
         : isClickDuplicate && !isDuplicate
           ? `1px solid ${colors.grey1}`
           : 'none'};
+  border-radius: 12px;
+  background-color: ${colors.white};
+  flex: 1 0 0;
+  color: ${colors.grey1};
+  font-family: Pretendard;
+  font-size: 14px;
+  font-weight: 400;
+  line-height: 150%;
+  letter-spacing: -0.56px;
   &:focus {
     outline: none;
-    /* border: 1px solid ${colors.grey1}; */
   }
   &::placeholder {
     color: ${colors.grey5};
   }
 `
 const DuplicationCheckBtn = styled.button`
-  position: absolute;
-  top: 50%;
-  transform: translateY(-50%);
-  right: 40px;
   display: flex;
-  padding: 4px 12px;
   justify-content: center;
   align-items: flex-start;
+  position: absolute;
+  padding: 4px 12px;
+  top: 50%;
+  right: 40px;
   gap: 10px;
   border-radius: 6px;
   border: 1px solid ${colors.grey1};
-  background: ${colors.grey1};
+  background-color: ${colors.grey1};
   color: ${colors.white};
   font-family: Pretendard;
   font-size: 12px;
-  font-style: normal;
   font-weight: 500;
   line-height: 150%;
   letter-spacing: -0.48px;
+  transform: translateY(-50%);
   cursor: pointer;
 `
 
 const UnderInputWrapper = styled.div`
+  display: flex;
+  justify-content: space-between;
   width: 100%;
   margin: 6px 0px 0px 0px;
   padding: 0px 20px;
-  display: flex;
-  justify-content: space-between;
 `
 
 const UnderInputText = styled.div`
+  margin: 0px 0px 0px 8px;
   color: ${colors.grey1};
   font-family: Pretendard;
   font-size: 12px;
-  font-style: normal;
   font-weight: 400;
   line-height: 130%;
   letter-spacing: -0.24px;
-  margin: 0px 0px 0px 8px;
 `
 
 const UnderInputTextRed = styled(UnderInputText)`
@@ -297,8 +290,6 @@ const UnderInputNicknameLengthText = styled.div<{ color: string }>`
   color: ${(props) => props.color};
   font-family: Pretendard;
   font-size: 10px;
-  font-style: normal;
   font-weight: 400;
-  line-height: normal;
   letter-spacing: -0.4px;
 `

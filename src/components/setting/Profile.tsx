@@ -14,7 +14,7 @@ const Profile = () => {
       <ProfileImage src={userInfo.profileImage} />
       <ProfileContents>
         <Nickname>{userInfo.nickname}</Nickname>
-        <EditButton onClick={() => navigate('/setting/editProfile')}>내 프로필 수정하기</EditButton>
+        <EditButton onClick={() => navigate('/settings/account/edit')}>내 프로필 수정하기</EditButton>
       </ProfileContents>
     </Container>
   )

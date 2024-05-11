@@ -1,6 +1,6 @@
 import styled from 'styled-components'
 import { Outlet } from 'react-router-dom'
-import { colors } from '../styles/colors'
+import { colors } from '@/styles/colors'
 const Outer = () => {
   return (
     <TotalBrowserContainer>

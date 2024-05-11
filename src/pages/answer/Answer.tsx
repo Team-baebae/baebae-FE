@@ -1,14 +1,14 @@
 import styled from 'styled-components'
 import { useState } from 'react'
-import { colors } from '../styles/colors'
-import Question from '../components/answer/Question'
-import { UnFixedButton } from '../components/common/Button'
-import Music from '../components/answer/Music'
-import Link from '../components/answer/Link'
-import DelayModal from '../components/common/DelayModal'
-import Modal from '../components/common/Modal'
-import PersonalHeader from '../components/answer/PersonalHeader'
 import { useNavigate } from 'react-router-dom'
+import Question from '@/components/answer/Question'
+import { UnFixedButton } from '@/components/common/Button'
+import Music from '@/components/answer/Music'
+import Link from '@/components/answer/Link'
+import DelayModal from '@/components/common/DelayModal'
+import Modal from '@/components/common/Modal'
+import PersonalHeader from '@/components/answer/PersonalHeader'
+import { colors } from '@/styles/colors'
 
 const Answer = () => {
   const navigate = useNavigate()
@@ -106,25 +106,25 @@ const Answer = () => {
 export default Answer
 
 const Container = styled.div`
-  width: 100%;
-  height: 100%;
   display: flex;
   flex-direction: column;
   align-items: center;
+  width: 100%;
+  height: 100%;
   padding: 0px 0px 30px 0px;
 `
 const PolaroidContainer = styled.div`
-  position: relative;
-  margin: 20px 0px 0px 0px;
   display: flex;
-  width: 315px;
-  height: 346px;
-  padding: 18px;
   flex-direction: column;
   align-items: flex-start;
+  position: relative;
+  width: 315px;
+  height: 346px;
+  margin: 20px 0px 0px 0px;
+  padding: 18px;
   gap: 18px;
   border-radius: 2px;
-  background: ${colors.white};
+  background-color: ${colors.white};
   box-shadow: 0px 4.945px 8.655px 0px rgba(0, 0, 0, 0.1);
 `
 
@@ -153,7 +153,6 @@ const PlusImgText = styled.div`
   color: ${colors.grey4};
   font-family: Pretendard;
   font-size: 14px;
-  font-style: normal;
   font-weight: 500;
   line-height: 150%;
   letter-spacing: -0.56px;
@@ -161,13 +160,12 @@ const PlusImgText = styled.div`
 `
 
 const AnswerText = styled.textarea`
+  align-self: stretch;
   height: 42px;
   flex-shrink: 0;
-  align-self: stretch;
   color: ${colors.grey1};
   font-family: Pretendard;
   font-size: 14px;
-  font-style: normal;
   font-weight: 400;
   line-height: 150%;
   letter-spacing: -0.56px;

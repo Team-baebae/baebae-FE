@@ -1,9 +1,9 @@
 import styled from 'styled-components'
-import Header from '../components/common/Header'
-import { colors } from '../styles/colors'
-import { BottomButton } from '../components/common/Button'
-import FolderList from '../components/folder/FolderList'
 import { useState } from 'react'
+import Header from '@/components/common/Header'
+import { BottomButton } from '@/components/common/Button'
+import FolderList from '@/components/folder/FolderList'
+import { colors } from '@/styles/colors'
 
 const Ask = () => {
   const [content, setContent] = useState<string>('')
@@ -30,43 +30,41 @@ const Ask = () => {
 export default Ask
 
 const Container = styled.div`
-  width: 100%;
-  height: 100%;
-  position: relative;
   display: flex;
   flex-direction: column;
   align-items: center;
+  position: relative;
+  width: 100%;
+  height: 100%;
 `
 
 const ContentLabel = styled.div`
   align-self: stretch;
+  margin: 40px 20px 0px 20px;
   color: ${colors.grey3};
   font-family: Pretendard;
   font-size: 12px;
-  font-style: normal;
   font-weight: 400;
   line-height: 150%;
   letter-spacing: -0.48px;
-  margin: 40px 20px 0px 20px;
 `
 
 const ContentTextArea = styled.textarea`
   display: flex;
-  padding: 20px;
   flex-direction: column;
   align-items: flex-start;
-  gap: 12px;
   align-self: stretch;
-  border-radius: 12px;
-  background: ${colors.white};
   height: 250px;
   margin: 4px 20px 0px 20px;
+  padding: 20px;
+  gap: 12px;
+  border-radius: 12px;
+  background-color: ${colors.white};
   border: none;
   resize: none;
   color: ${colors.grey1};
   font-family: Pretendard;
   font-size: 14px;
-  font-style: normal;
   font-weight: 400;
   line-height: 150%;
   letter-spacing: -0.56px;

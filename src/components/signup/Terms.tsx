@@ -83,7 +83,7 @@ const Terms = ({ isChecked, setIsChecked }: TermsProps) => {
         </TermText>
         <UnderlinedTermText
           onClick={() => {
-            navigate('/setting/term')
+            navigate('/settings/terms/serviceTerms')
           }}
           fontWeight="500"
           color={colors.grey3}

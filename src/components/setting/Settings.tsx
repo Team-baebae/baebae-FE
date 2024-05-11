@@ -69,31 +69,25 @@ const Settings = () => {
     <Container>
       <ContentsWrapper
         onClick={() => {
-          navigate('/setting/privacyPolicy')
+          navigate('/settings/terms/privacyPolicy')
         }}
       >
         <Contents>개인정보처리방침</Contents>
-        <RightIcon
-          src={ForwardArrow}
-          onClick={() => {
-            navigate('/setting/privacyPolicy')
-          }}
-        />
+        <RightIcon src={ForwardArrow} />
       </ContentsWrapper>
       <ContentsWrapper
         onClick={() => {
-          navigate('/setting/term')
+          navigate('/settings/terms/serviceTerms')
         }}
       >
         <Contents>이용약관</Contents>
-        <RightIcon
-          src={ForwardArrow}
-          onClick={() => {
-            navigate('/setting/term')
-          }}
-        />
+        <RightIcon src={ForwardArrow} />
       </ContentsWrapper>
-      <ContentsWrapper>
+      <ContentsWrapper
+        onClick={() => {
+          navigate('/settings/support')
+        }}
+      >
         <Contents>
           문의하기
           <SubContents>평일 오전 9시-오후 6시 운영</SubContents>
