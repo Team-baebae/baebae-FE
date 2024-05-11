@@ -1,4 +1,4 @@
-interface TermsProps {
+export interface TermsProps {
   isChecked: {
     isCheckedTotal: boolean
     isCheckedFirst: boolean

@@ -1,5 +1,6 @@
 import styled from 'styled-components'
 import { useNavigate } from 'react-router-dom'
+import { TermsProps } from '@/components/signup/types'
 import { colors } from '@/styles/colors'
 import Unchecked from '@/assets/signup/UnChecked.svg'
 import Checked from '@/assets/signup/Checked.svg'
