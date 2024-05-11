@@ -1,14 +1,13 @@
 import styled from 'styled-components'
-import onBoardingIcon from '../assets/OnboardingIcon.svg'
-import { colors } from '../styles/colors'
-import { Button } from '../components/common/Button'
 import { useLocation, useNavigate } from 'react-router-dom'
-import { BottomButton } from '../components/common/Button'
+import { BottomButton } from '@/components/common/Button'
+import { colors } from '@/styles/colors'
+import onBoardingIcon from '@/assets/OnboardingIcon.svg'
 
+// 회원가입 성공 후 온보딩 화면
 const SignUpOnBoarding = () => {
   const navigate = useNavigate()
 
-  const memberId = localStorage.getItem('memberId')
   // 넘겨 받은 카카오 어세스토큰 저장
   const location = useLocation()
   const nickname = location.state?.nickname
@@ -35,12 +34,12 @@ const SignUpOnBoarding = () => {
 export default SignUpOnBoarding
 
 const Container = styled.div`
-  position: relative;
-  width: 100%;
-  height: 100%;
   display: flex;
   flex-direction: column;
   align-items: center;
+  position: relative;
+  width: 100%;
+  height: 100%;
 `
 
 const Icon = styled.img`
@@ -50,13 +49,12 @@ const Icon = styled.img`
 `
 
 const UnderIconText = styled.div`
+  margin: 40px 0px 0px 0px;
   color: ${colors.grey1};
   text-align: center;
   font-family: Pretendard;
   font-size: 18px;
-  font-style: normal;
   font-weight: 600;
   line-height: 150%;
   letter-spacing: -0.36px;
-  margin: 40px 0px 0px 0px;
 `
