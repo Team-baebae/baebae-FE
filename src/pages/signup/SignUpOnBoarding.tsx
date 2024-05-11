@@ -4,7 +4,7 @@ import { BottomButton } from '@/components/common/Button'
 import { colors } from '@/styles/colors'
 import onBoardingIcon from '@/assets/OnboardingIcon.svg'
 
-// 회원가입 성공 후 온보딩 화면
+// 회원가입 성공 화면
 const SignUpOnBoarding = () => {
   const navigate = useNavigate()
 

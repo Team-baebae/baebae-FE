@@ -4,8 +4,9 @@ import { useEffect } from 'react'
 import { useRecoilState, useSetRecoilState } from 'recoil'
 import { getKakaoUserInfoApi, isExistingAccountApi, loginApi } from '@/apis/UserApi'
 import { UserInfoStateProps, isLoggedInState, userInfoState } from '@/context/Atoms'
-import loading from '@/assets/kakaoRedirection/Loading.svg'
+import Loading from '@/assets/kakaoRedirection/Loading.svg'
 
+// 카카오 로그인 후 리다이렉션 페이지
 const KakaoRedirection = () => {
   const navigate = useNavigate()
 
@@ -80,7 +81,7 @@ const KakaoRedirection = () => {
     }
   }
 
-  // url에 코드 받으면 getKakaoUserInfo 함수 실행
+  // url에 code 받으면 getKakaoUserInfo 함수 실행
   useEffect(() => {
     if (code) {
       getKakaoUserInfo(code)
@@ -89,7 +90,7 @@ const KakaoRedirection = () => {
 
   return (
     <Container>
-      <Loading src={loading} />
+      <LoadingIcon src={Loading} />
       <LoadingText>Loading..</LoadingText>
     </Container>
   )
@@ -104,7 +105,7 @@ const Container = styled.div`
   width: 100%;
 `
 
-const Loading = styled.img`
+const LoadingIcon = styled.img`
   width: 36px;
   height: 36px;
   margin: 300px 0px 0px 0px;

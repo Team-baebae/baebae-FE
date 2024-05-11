@@ -4,11 +4,13 @@ import styled from 'styled-components'
 import { useNavigate, useLocation } from 'react-router-dom'
 import Header from '@/components/common/Header'
 import { BottomButton } from '@/components/common/Button'
+import IsValidNicknameText from '@/components/common/IsValidNicknameText'
 import { isExistingNicknameApi, loginApi } from '@/apis/UserApi'
 import { colors } from '@/styles/colors'
 import { UserInfoStateProps, isLoggedInState, userInfoState } from '@/context/Atoms'
 
-const SignUp = () => {
+//회원가입 닉네임 입력 페이지
+const SignUpNickname = () => {
   const navigate = useNavigate()
 
   // 넘겨 받은 카카오 어세스토큰 저장
@@ -97,8 +99,8 @@ const SignUp = () => {
         플리빗을 사용하기 위한 <br />
         아이디가 필요해요!
       </SignUpHeaderText>
-      <SignUpNicknameLabel>아이디</SignUpNicknameLabel>
 
+      <SignUpNicknameLabel>아이디</SignUpNicknameLabel>
       <SignUpInputWrapper>
         <SingUpNicknameInput
           isValid={isValid}
@@ -110,33 +112,13 @@ const SignUp = () => {
         />
         <DuplicationCheckBtn onClick={checkDuplicateNickname}>중복 확인</DuplicationCheckBtn>
       </SignUpInputWrapper>
-      <UnderInputWrapper>
-        {!isClickDuplicate && nickname.length === 0 ? (
-          <UnderInputText>6-25자의 영문, 숫자, 기호(_)만 입력해주세요.</UnderInputText>
-        ) : !isClickDuplicate && nickname.length > 0 ? (
-          <UnderInputText></UnderInputText>
-        ) : isClickDuplicate && !isValid ? (
-          <UnderInputTextRed>
-            올바른 형식으로 입력해 주세요.
-            <br />
-            가능한 문자: 영어,숫자,특수기호(_)
-          </UnderInputTextRed>
-        ) : isClickDuplicate && isDuplicate ? (
-          <UnderInputTextRed>이미 존재하는 아이디에요.</UnderInputTextRed>
-        ) : (
-          <UnderInputText>사용가능한 아이디에요.</UnderInputText>
-        )}
-
-        <UnderInputNicknameLengthWrapper>
-          {nickname.length === 0 ? (
-            <UnderInputNicknameLengthText color={colors.grey4}>{nickname.length}</UnderInputNicknameLengthText>
-          ) : (
-            <UnderInputNicknameLengthText color={colors.grey3}>{nickname.length}</UnderInputNicknameLengthText>
-          )}
-          <UnderInputNicknameLengthText color={colors.grey4}>/</UnderInputNicknameLengthText>
-          <UnderInputNicknameLengthText color={colors.grey4}>25</UnderInputNicknameLengthText>
-        </UnderInputNicknameLengthWrapper>
-      </UnderInputWrapper>
+      {/* Input박스 아래 텍스트 컴포넌트 */}
+      <IsValidNicknameText
+        isValid={isValid}
+        isClickDuplicate={isClickDuplicate}
+        isDuplicate={isDuplicate}
+        nickname={nickname}
+      />
       <BottomButton
         $positive={isValid && isClickDuplicate && !isDuplicate ? true : false}
         func={() => login(kakaoAccessToken, nickname)}
@@ -146,7 +128,7 @@ const SignUp = () => {
   )
 }
 
-export default SignUp
+export default SignUpNickname
 
 const Container = styled.div`
   display: flex;
@@ -243,40 +225,4 @@ const DuplicationCheckBtn = styled.button`
   letter-spacing: -0.48px;
   transform: translateY(-50%);
   cursor: pointer;
-`
-
-const UnderInputWrapper = styled.div`
-  display: flex;
-  justify-content: space-between;
-  width: 100%;
-  margin: 6px 0px 0px 0px;
-  padding: 0px 20px;
-`
-
-const UnderInputText = styled.div`
-  margin: 0px 0px 0px 8px;
-  color: ${colors.grey1};
-  font-family: Pretendard;
-  font-size: 12px;
-  font-weight: 400;
-  line-height: 130%;
-  letter-spacing: -0.24px;
-`
-
-const UnderInputTextRed = styled(UnderInputText)`
-  color: #f00;
-`
-
-const UnderInputNicknameLengthWrapper = styled.div`
-  display: flex;
-  margin: 0px 8px 0px 0px;
-  gap: 2px;
-`
-
-const UnderInputNicknameLengthText = styled.div<{ color: string }>`
-  color: ${(props) => props.color};
-  font-family: Pretendard;
-  font-size: 10px;
-  font-weight: 400;
-  letter-spacing: -0.4px;
 `

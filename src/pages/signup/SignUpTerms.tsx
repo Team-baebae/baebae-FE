@@ -6,6 +6,7 @@ import Terms from '@/components/signup/Terms'
 import { BottomButton } from '@/components/common/Button'
 import { colors } from '@/styles/colors'
 
+// 회원가입 약관 페이지
 const SignUpTerms = () => {
   const navigate = useNavigate()
 
@@ -36,6 +37,7 @@ const SignUpTerms = () => {
     <Container>
       <Header text="회원가입" background={colors.grey7} />
       <TermsHeader>플리빗 이용약관에 동의해주세요</TermsHeader>
+      {/* 약관리스트 */}
       <Terms isChecked={isChecked} setIsChecked={setIsChecked} />
       <BottomButton
         $positive={isChecked.isCheckedFirst && isChecked.isCheckedSecond ? true : false}
