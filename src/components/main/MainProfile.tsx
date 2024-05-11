@@ -75,7 +75,7 @@ const MainProfile = ({ nickname }: MainProfileProps) => {
         <Nickname>{nickname}</Nickname>
         <ShareButton onClick={sharing}>내 플리빗 초대</ShareButton>
       </ProfileContents>
-      {userInfo.profileImage === '' ? (
+      {userInfo.profileImage === null ? (
         <ProfileImage src={DefaultImage} />
       ) : (
         <ProfileImage src={userInfo.profileImage} />

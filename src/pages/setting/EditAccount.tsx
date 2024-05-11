@@ -1,13 +1,14 @@
 import styled from 'styled-components'
 import { useNavigate } from 'react-router-dom'
 import { useRecoilState } from 'recoil'
-import { ChangeEvent, useState } from 'react'
+import { ChangeEvent, useEffect, useState } from 'react'
 import { BottomButton } from '@/components/common/Button'
 import Header from '@/components/common/Header'
 import IsValidNicknameText from '@/components/common/IsValidNicknameText'
 import { colors } from '@/styles/colors'
 import { UserInfoStateProps, userInfoState } from '@/context/Atoms'
 import { isExistingNicknameApi, updateUserNicknameApi, updateUserProfileApi } from '@/apis/UserApi'
+import DefaultImg from '@/assets/main/DefaultImage.svg'
 
 // 계정 정보 수정 페이지
 const EditAccount = () => {
@@ -27,10 +28,9 @@ const EditAccount = () => {
   const updateUserProfile = async (file: File) => {
     try {
       await updateUserProfileApi(userInfo.accessToken, userInfo.memberId, file).then((res) => {
-        console.log(res)
         setUserInfo({
           ...userInfo,
-          profileImage: res.data.imageUrl,
+          profileImage: URL.createObjectURL(file),
         })
         setProfileImg(URL.createObjectURL(file)) // 미리보기를 위해 파일 URL 저장
       })
@@ -90,7 +90,7 @@ const EditAccount = () => {
             ...userInfo,
             nickname: nickname,
           })
-          navigate('/setting')
+          navigate('/settings')
         }
       })
     } catch (err) {
@@ -109,7 +109,7 @@ const EditAccount = () => {
 
       {/* 유저 프로필 수정 부분*/}
       <ProfileImageWrapper>
-        <ProfileImage src={profileImg} />
+        {userInfo.profileImage === null ? <ProfileImage src={DefaultImg} /> : <ProfileImage src={profileImg} />}
         <label htmlFor="file">
           <EditButton>사진 수정하기</EditButton>
         </label>
@@ -138,7 +138,11 @@ const EditAccount = () => {
         nickname={nickname}
       />
 
-      <BottomButton $positive={nickname === '' ? false : true} text="수정하기" func={onClickModifyBtn} />
+      <BottomButton
+        $positive={isValid && isClickDuplicate && !isDuplicate ? true : false}
+        text="수정하기"
+        func={onClickModifyBtn}
+      />
     </Container>
   )
 }

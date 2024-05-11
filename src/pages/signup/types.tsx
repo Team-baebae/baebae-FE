@@ -33,3 +33,12 @@ export interface LoginProps {
   headers: any
   config: any
 }
+
+// getUserInfo Props
+export interface GetUserInfoProps {
+  accessToken: string
+  email: string
+  id: number
+  nickname: string
+  refreshToken: string
+}
