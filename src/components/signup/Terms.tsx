@@ -1,8 +1,8 @@
 import styled from 'styled-components'
 import { useNavigate } from 'react-router-dom'
-import { colors } from '../../styles/colors'
-import Unchecked from '../../assets/UnChecked.svg'
-import Checked from '../../assets/Checked.svg'
+import { colors } from '@/styles/colors'
+import Unchecked from '@/assets/signup/UnChecked.svg'
+import Checked from '@/assets/signup/Checked.svg'
 
 // 이용 약관 항목 3가지를 담은 컴포넌트
 const Terms = ({ isChecked, setIsChecked }: TermsProps) => {

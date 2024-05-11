@@ -2,7 +2,7 @@ import styled from 'styled-components'
 import { useLocation, useNavigate } from 'react-router-dom'
 import { BottomButton } from '@/components/common/Button'
 import { colors } from '@/styles/colors'
-import onBoardingIcon from '@/assets/OnboardingIcon.svg'
+import OnBoardingIcon from '@/assets/signup/OnboardingIcon.svg'
 
 // 회원가입 성공 화면
 const SignUpOnBoarding = () => {
@@ -14,7 +14,7 @@ const SignUpOnBoarding = () => {
 
   return (
     <Container>
-      <Icon src={onBoardingIcon} alt="icon" />
+      <Icon src={OnBoardingIcon} />
       <UnderIconText>
         플리빗에서 상대방의 취향에 대해 질문하고,
         <br />
