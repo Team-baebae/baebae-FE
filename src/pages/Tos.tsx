@@ -2,7 +2,7 @@ import styled from 'styled-components'
 import Header from '../components/common/Header'
 import { colors } from '../styles/colors'
 
-const Term = () => {
+const Tos = () => {
   return (
     <Container>
       <Header text="이용약관" background={colors.grey7} />
@@ -174,27 +174,27 @@ const Term = () => {
   )
 }
 
-export default Term
+export default Tos
 
 const Container = styled.div`
-  width: 100%;
-  height: 100%;
-  position: relative;
   display: flex;
   flex-direction: column;
   align-items: center;
+  position: relative;
+  width: 100%;
+  height: 100%;
 `
 
 const ContentWrapper = styled.div`
   display: flex;
-  padding: 20px;
   flex-direction: column;
   align-items: flex-start;
-  gap: 30px;
   align-self: stretch;
-  border-radius: 12px;
-  background: ${colors.white};
   margin: 20px;
+  padding: 20px;
+  gap: 30px;
+  border-radius: 12px;
+  background-color: ${colors.white};
 `
 
 const ContentHeader = styled.div`
@@ -202,7 +202,6 @@ const ContentHeader = styled.div`
   color: ${colors.grey1};
   font-family: Pretendard;
   font-size: 14px;
-  font-style: normal;
   font-weight: 600;
   line-height: 150%;
   letter-spacing: -0.56px;
