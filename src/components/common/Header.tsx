@@ -1,5 +1,5 @@
 import styled from 'styled-components'
-import BackArrow from '../../assets/BackArrow.svg'
+import BackArrow from '../../assets/answer/BackArrow.svg'
 import { colors } from '../../styles/colors'
 import { useNavigate } from 'react-router-dom'
 

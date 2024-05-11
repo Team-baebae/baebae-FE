@@ -1,5 +1,5 @@
 import styled from 'styled-components'
-import BackArrow from '../../assets/BackArrow.svg'
+import BackArrow from '../../assets/answer/BackArrow.svg'
 import xIcon from '../../assets/feed/XIcon.svg'
 
 import { colors } from '../../styles/colors'

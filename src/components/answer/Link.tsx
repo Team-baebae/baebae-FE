@@ -12,22 +12,11 @@ import LinkGray from '@/assets/answer/LinkGray.svg'
 const Link = ({ linkAttachments, setLinkAttachments }: LinkProps) => {
   // open은 모달 열고 닫는 상태
   const [open, setOpen] = useState<boolean>(false)
-  // step은 1단계 2단계 모달 구분짓기 위한 상태
-  const [step, setStep] = useState<number>(1)
 
   // 모달 이전상태로 변화
   const handleDismissPlusMusicModal = () => {
-    if (step === 2) {
-      setStep(1) // 단계 2에서는 이전 단계로 돌아갑니다.
-    } else {
-      setOpen(false)
-    }
+    setOpen(false)
   }
-  // 2단계 모달 열기
-  const openDetailSheet = () => {
-    setStep(2) // 음악 상세 선택 BottomSheet로 전환
-  }
-
   //   검색어 입력부분
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setLinkAttachments(e.target.value)
@@ -36,7 +25,7 @@ const Link = ({ linkAttachments, setLinkAttachments }: LinkProps) => {
   // 검색어 입력하고 엔터 누를 시 실행
   const handleKeyPress = (e: React.KeyboardEvent<HTMLInputElement>) => {
     if (e.key === 'Enter') {
-      setStep(1)
+      setOpen(false)
     }
   }
 
@@ -55,50 +44,29 @@ const Link = ({ linkAttachments, setLinkAttachments }: LinkProps) => {
         </ExistPlusBtn>
       )}
 
-      {step === 1 ? (
-        // 1단계 모달
-        <BottomSheet open={open} snapPoints={() => [254]} onDismiss={handleDismissPlusMusicModal} blocking={true}>
-          <PlusLinkText>링크 추가</PlusLinkText>
-          <SearchLinkWrapper>
-            <LinkIcon src={LinkGray} alt="linkGray" />
-            {linkAttachments === '' ? (
-              <SearchedLinkText color={colors.grey5} onClick={openDetailSheet}>
-                링크를 입력해주세요.
-              </SearchedLinkText>
-            ) : (
-              <SearchedLinkText color={colors.grey1} onClick={openDetailSheet}>
-                {linkAttachments}
-              </SearchedLinkText>
-            )}
-          </SearchLinkWrapper>
-          {/* 버튼 누를 시 해당 음악으로 결정 */}
-          <UnFixedButton
-            $positive={linkAttachments === '' ? false : true}
-            func={() => {
-              handleDismissPlusMusicModal()
-            }}
-            func2={() => {
-              console.log('링크 추가하기')
-            }}
-            text="추가하기"
-            margin="20px 20px 0px 20px"
+      <BottomSheet open={open} snapPoints={() => [254]} onDismiss={handleDismissPlusMusicModal} blocking={true}>
+        <PlusLinkText>링크 추가</PlusLinkText>
+        <SearchLinkWrapper>
+          <LinkIcon src={LinkGray} alt="linkGray" />
+          <SearchLinkInput
+            value={linkAttachments}
+            onChange={handleInputChange}
+            placeholder="링크를 입력해주세요."
+            onKeyDown={handleKeyPress}
           />
-        </BottomSheet>
-      ) : (
-        //2단계 모달
-        <BottomSheet open={open} snapPoints={() => [516]} onDismiss={handleDismissPlusMusicModal} blocking={true}>
-          <PlusLinkText>링크 추가</PlusLinkText>
-          <SearchLinkWrapper>
-            <LinkIcon src={LinkGray} alt="linkGray" />
-            <SearchLinkInput
-              value={linkAttachments}
-              onChange={handleInputChange}
-              placeholder="링크를 입력해주세요."
-              onKeyDown={handleKeyPress}
-            />
-          </SearchLinkWrapper>
-        </BottomSheet>
-      )}
+        </SearchLinkWrapper>
+        <UnFixedButton
+          $positive={linkAttachments === '' ? false : true}
+          func={() => {
+            handleDismissPlusMusicModal()
+          }}
+          func2={() => {
+            console.log('링크 추가하기')
+          }}
+          text="추가하기"
+          margin="20px 20px 0px 20px"
+        />
+      </BottomSheet>
     </>
   )
 }
