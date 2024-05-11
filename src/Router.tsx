@@ -19,6 +19,7 @@ import PrivacyPolicy from '@/pages/setting/PrivacyPolicy'
 import Ask from '@/pages/setting/Complaint'
 import Tos from '@/pages/setting/Tos'
 import DetailTestPage from '@/pages/DetailTestPage'
+import Groups from './pages/category/Groups'
 
 const Router = () => {
   return (
@@ -54,6 +55,7 @@ const Router = () => {
             </Route>
           </Route>
           <Route path="groups">
+            <Route index element={<Groups />} />
             <Route path="new" element={<GroupPlus />} />
             <Route path=":groupId">
               <Route path="edit" element={<GroupModify />} />
