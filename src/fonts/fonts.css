@@ -2,111 +2,57 @@
   font-family: 'Pretendard';
   font-style: normal;
   font-weight: 100;
-  src: url('./Pretendard-Thin.otf') format('opentype');
+  src: url('./pretendard/Pretendard-Thin.otf') format('opentype');
 }
 @font-face {
   font-family: 'Pretendard';
   font-style: normal;
   font-weight: 200;
-  src: url('./Pretendard-ExtraLight.otf') format('opentype');
+  src: url('./pretendard/Pretendard-ExtraLight.otf') format('opentype');
 }
 @font-face {
   font-family: 'Pretendard';
   font-style: normal;
   font-weight: 300;
-  src: url('./Pretendard-Light.otf') format('opentype');
+  src: url('./pretendard/Pretendard-Light.otf') format('opentype');
 }
 @font-face {
   font-family: 'Pretendard';
   font-style: normal;
   font-weight: normal;
-  src: url('./Pretendard-Regular.otf') format('opentype');
+  src: url('./pretendard/Pretendard-Regular.otf') format('opentype');
 }
 @font-face {
   font-family: 'Pretendard';
   font-style: normal;
   font-weight: 500;
-  src: url('./Pretendard-Medium.otf') format('opentype');
+  src: url('./pretendard/Pretendard-Medium.otf') format('opentype');
 }
 @font-face {
   font-family: 'Pretendard';
   font-style: normal;
   font-weight: 600;
-  src: url('./Pretendard-SemiBold.otf') format('opentype');
+  src: url('./pretendard/Pretendard-SemiBold.otf') format('opentype');
 }
 @font-face {
   font-family: 'Pretendard';
   font-style: normal;
   font-weight: 700;
-  src: url('./Pretendard-Bold.otf') format('opentype');
+  src: url('./pretendard/Pretendard-Bold.otf') format('opentype');
 }
 @font-face {
   font-family: 'Pretendard';
   font-style: normal;
   font-weight: 800;
-  src: url('./Pretendard-ExtraBold.otf') format('opentype');
+  src: url('./pretendard/Pretendard-ExtraBold.otf') format('opentype');
 }
 @font-face {
   font-family: 'Pretendard';
   font-style: normal;
   font-weight: 900;
-  src: url('./Pretendard-Black.otf') format('opentype');
+  src: url('./pretendard/Pretendard-Black.otf') format('opentype');
 }
 
-@font-face {
-  font-family: 'MuseoModerno';
-  font-style: normal;
-  font-weight: 100;
-  src: url('./museoModerno/MuseoModerno-Thin.ttf') format('opentype');
-}
-@font-face {
-  font-family: 'MuseoModerno';
-  font-style: normal;
-  font-weight: 200;
-  src: url('./museoModerno/MuseoModerno-ExtraLight.ttf') format('opentype');
-}
-@font-face {
-  font-family: 'MuseoModerno';
-  font-style: normal;
-  font-weight: 300;
-  src: url('./museoModerno/MuseoModerno-Light.ttf') format('opentype');
-}
-@font-face {
-  font-family: 'MuseoModerno';
-  font-style: normal;
-  font-weight: normal;
-  src: url('./museoModerno/MuseoModerno-Regular.ttf') format('opentype');
-}
-@font-face {
-  font-family: 'MuseoModerno';
-  font-style: normal;
-  font-weight: 500;
-  src: url('./museoModerno/MuseoModerno-Medium.ttf') format('opentype');
-}
-@font-face {
-  font-family: 'MuseoModerno';
-  font-style: normal;
-  font-weight: 600;
-  src: url('./museoModerno/MuseoModerno-SemiBold.ttf') format('opentype');
-}
-@font-face {
-  font-family: 'MuseoModerno';
-  font-style: normal;
-  font-weight: 700;
-  src: url('./museoModerno/MuseoModerno-Bold.ttf') format('opentype');
-}
-@font-face {
-  font-family: 'MuseoModerno';
-  font-style: normal;
-  font-weight: 800;
-  src: url('./museoModerno/MuseoModerno-ExtraBold.ttf') format('opentype');
-}
-@font-face {
-  font-family: 'MuseoModerno';
-  font-style: normal;
-  font-weight: 900;
-  src: url('./museoModerno/MuseoModerno-Black.ttf') format('opentype');
-}
 @font-face {
   font-family: 'Abel';
   font-style: normal;
