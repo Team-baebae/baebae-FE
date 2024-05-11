@@ -31,7 +31,7 @@ const Router = () => {
           <Route path="signup">
             <Route path="terms" element={<SignUpTerms />} />
             <Route path="nickname" element={<SignUpNickname />} />
-            <Route path="onboarding" element={<SignUpOnBoarding />} />
+            <Route path="complete" element={<SignUpOnBoarding />} />
           </Route>
           <Route path="settings">
             <Route index element={<Setting />} />
