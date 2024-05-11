@@ -1,7 +1,7 @@
 import styled from 'styled-components'
-import { colors } from '../../styles/colors'
-import testImg from '../../assets/Glasses.svg'
-import plus from '../../assets/main/Plus.svg'
+import { colors } from '@/styles/colors'
+import TestImg from '@/assets/Glasses.svg'
+import Plus from '@/assets/main/Plus.svg'
 
 interface EachFolderProps {
   $positive: boolean
@@ -14,11 +14,11 @@ const EachFolder = ({ $positive, func }: EachFolderProps) => {
       <FolderWrapper>
         {$positive ? (
           <FolderImgWrapper onClick={func}>
-            <FolderImg src={testImg} alt="img" />
+            <FolderImg src={TestImg} />
           </FolderImgWrapper>
         ) : (
           <NewFolderImgWrapper onClick={func}>
-            <PlusImg src={plus} alt="+" />
+            <PlusImg src={Plus} />
           </NewFolderImgWrapper>
         )}
 
@@ -36,14 +36,14 @@ const FolderWrapper = styled.div`
 `
 const FolderImgWrapper = styled.div`
   display: flex;
+  justify-content: center;
+  align-items: center;
   width: 66px;
   height: 66px;
   padding: 4.5px;
-  justify-content: center;
-  align-items: center;
   border-radius: 18px;
   border: 1.5px solid ${colors.grey5};
-  background: ${colors.white};
+  background-color: ${colors.white};
   cursor: pointer;
 `
 
@@ -69,7 +69,6 @@ const FolderName = styled.div`
   color: ${colors.grey3};
   font-family: Pretendard;
   font-size: 15px;
-  font-style: normal;
   font-weight: 500;
   line-height: 150%;
   letter-spacing: -0.6px;

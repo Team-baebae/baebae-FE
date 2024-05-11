@@ -10,29 +10,30 @@ import { makeDirectoryApi, updateDirectoryImgApi } from '@/apis/DirectoryApi'
 import { userInfoState } from '@/context/Atoms'
 import { colors } from '@/styles/colors'
 
+// 그룹 수정 페이지
 const GroupPlus = () => {
   const navigate = useNavigate()
 
   const [userInfo, setUserInfo] = useRecoilState(userInfoState)
 
-  const [directoryImgUrl, setDirectoryImgUrl] = useState<string>('')
-  const [directoryImgFile, setDirectoryImgFile] = useState<File>()
+  const [groupImgUrl, setGroupImgUrl] = useState<string>('')
+  const [groupImgFile, setGroupImgFile] = useState<File>()
   const [answerIds, setAnswerIds] = useState<any>([])
   // 이미지 파일 선택 핸들러
   const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files && e.target.files[0]
     // 이미지 파일을 보낼 시엔 formData로 file을 추가해야함(추후 추가)
     if (file) {
-      setDirectoryImgFile(file)
-      setDirectoryImgUrl(URL.createObjectURL(file)) // 미리보기를 위해 파일 URL 생성
+      setGroupImgFile(file)
+      setGroupImgUrl(URL.createObjectURL(file)) // 미리보기를 위해 파일 URL 생성
     }
   }
 
-  const [categoryName, setCategoryName] = useState<string>('')
+  const [groupName, setGroupName] = useState<string>('')
 
   const onChangeFolderName = (e: React.ChangeEvent<HTMLInputElement>) => {
     const value = e.target.value
-    setCategoryName(value)
+    setGroupName(value)
   }
 
   const feedList = [
@@ -68,9 +69,10 @@ const GroupPlus = () => {
     },
   ]
 
+  // 그룹 생성
   const makeDirectory = async () => {
     try {
-      await makeDirectoryApi(userInfo.accessToken, userInfo.memberId, directoryImgFile, categoryName, answerIds).then(
+      await makeDirectoryApi(userInfo.accessToken, userInfo.memberId, groupImgFile, groupName, answerIds).then(
         (res) => {
           console.log(res)
           navigate(`/${userInfo.nickname}`)
@@ -92,19 +94,19 @@ const GroupPlus = () => {
       </label>
       <input type="file" name="file" id="file" style={{ display: 'none' }} onChange={handleImageChange} />
       <FolderNameLabel>그룹명</FolderNameLabel>
-      <FolderName value={categoryName} onChange={onChangeFolderName} placeholder="그룹명을 입력해주세요" />
+      <FolderName value={groupName} onChange={onChangeFolderName} placeholder="그룹명을 입력해주세요" />
       <FolderNameConditionWrapper>
         <FolderNameConditionText color={colors.grey1} fontSize="12px">
           2-8자로 입력해주세요.
         </FolderNameConditionText>
         <FolderNameLengthWrapper>
-          {categoryName.length > 0 ? (
+          {groupName.length > 0 ? (
             <FolderNameConditionText color={colors.grey2} fontSize="10px">
-              {categoryName.length}
+              {groupName.length}
             </FolderNameConditionText>
           ) : (
             <FolderNameConditionText color={colors.grey4} fontSize="10px">
-              {categoryName.length}
+              {groupName.length}
             </FolderNameConditionText>
           )}
 

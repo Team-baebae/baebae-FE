@@ -6,35 +6,37 @@ import GroupHeader from '@/components/common/GroupHeader'
 import Feeds from '@/components/folder/Feeds'
 import Flips from '@/components/main/Flips'
 import { UnFixedButton } from '@/components/common/Button'
-import { userInfoState } from '@/context/Atoms'
+import { UserInfoStateProps, userInfoState } from '@/context/Atoms'
 import { colors } from '@/styles/colors'
 import { modifyDirectoryApi } from '@/apis/DirectoryApi'
 
+// 새 그룹 생성페이지
 const GroupModify = () => {
   const navigate = useNavigate()
+
   //   넘겨받은 카카오 어세스 토큰 저장
   const location = useLocation()
   const categoryId = location.state?.categoryId
 
-  const [userInfo, setUserInfo] = useRecoilState(userInfoState)
-  const [directoryImgUrl, setDirectoryImgUrl] = useState<string>('')
-  const [directoryImgFile, setDirectoryImgFile] = useState<File>()
+  const [userInfo, setUserInfo] = useRecoilState<UserInfoStateProps>(userInfoState)
+  const [groupImgUrl, setGroupImgUrl] = useState<string>('')
+  const [groupImgFile, setGroupImgFile] = useState<File>()
   const [answerIds, setAnswerIds] = useState<any>([])
   // 이미지 파일 선택 핸들러
   const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files && e.target.files[0]
     // 이미지 파일을 보낼 시엔 formData로 file을 추가해야함(추후 추가)
     if (file) {
-      setDirectoryImgFile(file)
-      setDirectoryImgUrl(URL.createObjectURL(file)) // 미리보기를 위해 파일 URL 생성
+      setGroupImgFile(file)
+      setGroupImgUrl(URL.createObjectURL(file)) // 미리보기를 위해 파일 URL 생성
     }
   }
 
-  const [categoryName, setCategoryName] = useState<string>('')
+  const [groupName, setGroupName] = useState<string>('')
 
   const onChangeFolderName = (e: React.ChangeEvent<HTMLInputElement>) => {
     const value = e.target.value
-    setCategoryName(value)
+    setGroupName(value)
   }
 
   const feedList = [
@@ -77,7 +79,7 @@ const GroupModify = () => {
 
   const modifyDirectory = async () => {
     try {
-      await modifyDirectoryApi(userInfo.accessToken, categoryId, categoryName, answerIds).then((res) => {
+      await modifyDirectoryApi(userInfo.accessToken, categoryId, groupName, answerIds).then((res) => {
         console.log(res)
         navigate(`/${userInfo.nickname}`)
       })
@@ -97,19 +99,19 @@ const GroupModify = () => {
       </label>
       <input type="file" name="file" id="file" style={{ display: 'none' }} onChange={handleImageChange} />
       <FolderNameLabel>그룹명</FolderNameLabel>
-      <FolderName value={categoryName} onChange={onChangeFolderName} placeholder="그룹명을 입력해주세요" />
+      <FolderName value={groupName} onChange={onChangeFolderName} placeholder="그룹명을 입력해주세요" />
       <FolderNameConditionWrapper>
         <FolderNameConditionText color={colors.grey1} fontSize="12px">
           2-8자로 입력해주세요.
         </FolderNameConditionText>
         <FolderNameLengthWrapper>
-          {categoryName.length > 0 ? (
+          {groupName.length > 0 ? (
             <FolderNameConditionText color={colors.grey2} fontSize="10px">
-              {categoryName.length}
+              {groupName.length}
             </FolderNameConditionText>
           ) : (
             <FolderNameConditionText color={colors.grey4} fontSize="10px">
-              {categoryName.length}
+              {groupName.length}
             </FolderNameConditionText>
           )}
 
