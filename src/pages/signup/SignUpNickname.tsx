@@ -103,9 +103,9 @@ const SignUpNickname = () => {
       <SignUpNicknameLabel>아이디</SignUpNicknameLabel>
       <SignUpInputWrapper>
         <SingUpNicknameInput
-          isValid={isValid}
-          isClickDuplicate={isClickDuplicate}
-          isDuplicate={isDuplicate}
+          $isValid={isValid}
+          $isClickDuplicate={isClickDuplicate}
+          $isDuplicate={isDuplicate}
           value={nickname}
           onChange={onChangeNickname}
           placeholder="사용자 아이디를 입력해주세요."
@@ -169,7 +169,7 @@ const SignUpInputWrapper = styled.div`
   margin: 4px 0px 0px 0px;
 `
 
-const SingUpNicknameInput = styled.input<{ isValid: boolean; isClickDuplicate: boolean; isDuplicate: boolean }>`
+const SingUpNicknameInput = styled.input<{ $isValid: boolean; $isClickDuplicate: boolean; $isDuplicate: boolean }>`
   display: flex;
   justify-content: center;
   align-items: center;
@@ -180,12 +180,12 @@ const SingUpNicknameInput = styled.input<{ isValid: boolean; isClickDuplicate: b
   margin: 0px 20px 0px 20px;
   padding: 20px;
   gap: 12px;
-  border: ${({ isValid, isClickDuplicate, isDuplicate }) =>
-    isClickDuplicate && !isValid
+  border: ${({ $isValid, $isClickDuplicate, $isDuplicate }) =>
+    $isClickDuplicate && !$isValid
       ? '1px solid #f00'
-      : isClickDuplicate && isDuplicate
+      : $isClickDuplicate && $isDuplicate
         ? '1px solid #f00'
-        : isClickDuplicate && !isDuplicate
+        : $isClickDuplicate && !$isDuplicate
           ? `1px solid ${colors.grey1}`
           : 'none'};
   border-radius: 12px;

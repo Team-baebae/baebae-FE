@@ -4,26 +4,26 @@ import { useRecoilState } from 'recoil'
 import { ChangeEvent, useState } from 'react'
 import { BottomButton } from '@/components/common/Button'
 import Header from '@/components/common/Header'
+import IsValidNicknameText from '@/components/common/IsValidNicknameText'
 import { colors } from '@/styles/colors'
 import { userInfoState } from '@/context/Atoms'
 import { isExistingNicknameApi, updateUserNicknameApi, updateUserProfileApi } from '@/apis/UserApi'
 
-const EditProfile = () => {
+// 계정 정보 수정 페이지
+const EditAccount = () => {
   const navigate = useNavigate()
 
-  // const nickname = '기존닉네임'
   const [userInfo, setUserInfo] = useRecoilState(userInfoState)
 
   // 이미지 파일 선택 핸들러
   const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files && e.target.files[0]
-    // 이미지 파일을 보낼 시엔 formData로 file을 추가해야함(추후 추가)
     if (file) {
       updateUserProfile(file)
-      setProfileImg(URL.createObjectURL(file)) // 미리보기를 위해 파일 URL 생성
     }
   }
 
+  // 유저 프로필 사진 업데이트
   const updateUserProfile = async (file: File) => {
     try {
       await updateUserProfileApi(userInfo.accessToken, userInfo.memberId, file).then((res) => {
@@ -32,7 +32,7 @@ const EditProfile = () => {
           ...userInfo,
           profileImage: res.data.imageUrl,
         })
-        setProfileImg(URL.createObjectURL(file)) // 미리보기를 위해 파일 URL 생성
+        setProfileImg(URL.createObjectURL(file)) // 미리보기를 위해 파일 URL 저장
       })
     } catch (err) {
       console.log(err)
@@ -48,6 +48,7 @@ const EditProfile = () => {
     return regex.test(nickname)
   }
 
+  // 닉네임 수정
   const onChangeNickname = (e: ChangeEvent<HTMLInputElement>) => {
     const value = e.target.value
     setNickname(value)
@@ -55,11 +56,13 @@ const EditProfile = () => {
     setIsClickDuplicate(false)
     setIsDuplicate(false)
   }
-  // 닉네임 중복인지 여부 확인
+
+  // 닉네임 중복인지 여부 저장
   const [isDuplicate, setIsDuplicate] = useState<boolean>(false)
-  //중복 확인 버튼 누른 직후 상태
+  //중복 확인 버튼 누른 직후 상태 저장
   const [isClickDuplicate, setIsClickDuplicate] = useState<boolean>(false)
 
+  // 닉네임 중복 확인
   const checkDuplicateNickname = async () => {
     try {
       setIsClickDuplicate(true)
@@ -78,6 +81,7 @@ const EditProfile = () => {
     }
   }
 
+  // 유저 닉네임 수정
   const updateUserNickname = async () => {
     try {
       await updateUserNicknameApi(userInfo.accessToken, userInfo.memberId, nickname).then((res) => {
@@ -94,6 +98,7 @@ const EditProfile = () => {
     }
   }
 
+  // 수정 버튼 클릭 시
   const onClickModifyBtn = () => {
     updateUserNickname()
   }
@@ -101,6 +106,8 @@ const EditProfile = () => {
   return (
     <Container>
       <Header text="내 프로필 수정" background={colors.grey7} />
+
+      {/* 유저 프로필 수정 부분*/}
       <ProfileImageWrapper>
         <ProfileImage src={profileImg} />
         <label htmlFor="file">
@@ -108,58 +115,43 @@ const EditProfile = () => {
         </label>
         <input type="file" name="file" id="file" style={{ display: 'none' }} onChange={handleImageChange} />
       </ProfileImageWrapper>
-      <SignUpNicknameLabel>아이디</SignUpNicknameLabel>
 
+      {/* 닉네임 수정 부분 */}
+      <SignUpNicknameLabel>아이디</SignUpNicknameLabel>
       <SignUpInputWrapper>
         <SingUpNicknameInput
-          isValid={isValid}
-          isClickDuplicate={isClickDuplicate}
-          isDuplicate={isDuplicate}
+          $isValid={isValid}
+          $isClickDuplicate={isClickDuplicate}
+          $isDuplicate={isDuplicate}
           value={nickname}
           onChange={onChangeNickname}
           placeholder="사용자 아이디를 입력해주세요."
         />
         <DuplicationCheckBtn onClick={checkDuplicateNickname}>중복 확인</DuplicationCheckBtn>
       </SignUpInputWrapper>
-      <UnderInputWrapper>
-        {!isClickDuplicate && nickname.length === 0 ? (
-          <UnderInputText>6-25자의 영문, 숫자, 기호(_)만 입력해주세요.</UnderInputText>
-        ) : !isClickDuplicate && nickname.length > 0 ? (
-          <UnderInputText></UnderInputText>
-        ) : isClickDuplicate && !isValid ? (
-          <UnderInputTextRed>
-            올바른 형식으로 입력해 주세요.
-            <br />
-            가능한 문자: 영어,숫자,특수기호(_)
-          </UnderInputTextRed>
-        ) : isClickDuplicate && isDuplicate ? (
-          <UnderInputTextRed>이미 존재하는 아이디에요.</UnderInputTextRed>
-        ) : (
-          <UnderInputText>사용가능한 아이디에요.</UnderInputText>
-        )}
 
-        <UnderInputNicknameLengthWrapper>
-          {nickname.length === 0 ? (
-            <UnderInputNicknameLengthText color={colors.grey4}>{nickname.length}</UnderInputNicknameLengthText>
-          ) : (
-            <UnderInputNicknameLengthText color={colors.grey3}>{nickname.length}</UnderInputNicknameLengthText>
-          )}
-          <UnderInputNicknameLengthText color={colors.grey4}>/</UnderInputNicknameLengthText>
-          <UnderInputNicknameLengthText color={colors.grey4}>25</UnderInputNicknameLengthText>
-        </UnderInputNicknameLengthWrapper>
-      </UnderInputWrapper>
+      {/* Input박스 아래 텍스트 컴포넌트 */}
+      <IsValidNicknameText
+        isValid={isValid}
+        isClickDuplicate={isClickDuplicate}
+        isDuplicate={isDuplicate}
+        nickname={nickname}
+      />
+
       <BottomButton $positive={nickname === '' ? false : true} text="수정하기" func={onClickModifyBtn} />
     </Container>
   )
 }
 
-export default EditProfile
+export default EditAccount
 
 const Container = styled.div`
   position: relative;
   width: 100%;
   height: 100%;
 `
+
+// 프로필 이미지 수정 부분
 const ProfileImageWrapper = styled.div`
   display: flex;
   flex-direction: column;
@@ -186,6 +178,8 @@ const EditButton = styled.div`
   letter-spacing: -0.48px;
   cursor: pointer;
 `
+
+// 닉네임 수정 부분
 const SignUpNicknameLabel = styled.div`
   align-self: stretch;
   margin: 40px 0px 0px 20px;
@@ -202,7 +196,7 @@ const SignUpInputWrapper = styled.div`
   height: 61px;
   margin: 4px 0px 0px 0px;
 `
-const SingUpNicknameInput = styled.input<{ isValid: boolean; isClickDuplicate: boolean; isDuplicate: boolean }>`
+const SingUpNicknameInput = styled.input<{ $isValid: boolean; $isClickDuplicate: boolean; $isDuplicate: boolean }>`
   display: flex;
   justify-content: center;
   align-items: center;
@@ -212,12 +206,12 @@ const SingUpNicknameInput = styled.input<{ isValid: boolean; isClickDuplicate: b
   margin: 0px 20px 0px 20px;
   padding: 20px;
   gap: 12px;
-  border: ${({ isValid, isClickDuplicate, isDuplicate }) =>
-    isClickDuplicate && !isValid
+  border: ${({ $isValid, $isClickDuplicate, $isDuplicate }) =>
+    $isClickDuplicate && !$isValid
       ? '1px solid #f00'
-      : isClickDuplicate && isDuplicate
+      : $isClickDuplicate && $isDuplicate
         ? '1px solid #f00'
-        : isClickDuplicate && !isDuplicate
+        : $isClickDuplicate && !$isDuplicate
           ? `1px solid ${colors.grey1}`
           : 'none'};
   border-radius: 12px;
@@ -256,40 +250,4 @@ const DuplicationCheckBtn = styled.button`
   letter-spacing: -0.48px;
   transform: translateY(-50%);
   cursor: pointer;
-`
-
-const UnderInputWrapper = styled.div`
-  display: flex;
-  justify-content: space-between;
-  width: 100%;
-  margin: 6px 0px 0px 0px;
-  padding: 0px 20px;
-`
-
-const UnderInputText = styled.div`
-  margin: 0px 0px 0px 8px;
-  color: ${colors.grey1};
-  font-family: Pretendard;
-  font-size: 12px;
-  font-weight: 400;
-  line-height: 130%;
-  letter-spacing: -0.24px;
-`
-
-const UnderInputTextRed = styled(UnderInputText)`
-  color: #f00;
-`
-
-const UnderInputNicknameLengthWrapper = styled.div`
-  display: flex;
-  margin: 0px 8px 0px 0px;
-  gap: 2px;
-`
-
-const UnderInputNicknameLengthText = styled.div<{ color: string }>`
-  color: ${(props) => props.color};
-  font-family: Pretendard;
-  font-size: 10px;
-  font-weight: 400;
-  letter-spacing: -0.4px;
 `

@@ -5,7 +5,7 @@ import { BottomButton } from '@/components/common/Button'
 import FolderList from '@/components/folder/FolderList'
 import { colors } from '@/styles/colors'
 
-const Ask = () => {
+const Support = () => {
   const [content, setContent] = useState<string>('')
 
   const handleChangeContent = (event: React.ChangeEvent<HTMLTextAreaElement>) => {
@@ -27,7 +27,7 @@ const Ask = () => {
   )
 }
 
-export default Ask
+export default Support
 
 const Container = styled.div`
   display: flex;
