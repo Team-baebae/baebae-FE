@@ -1,9 +1,9 @@
 import styled from 'styled-components'
-import Header from '../components/common/Header'
-import { colors } from '../styles/colors'
+import Header from '@/components/common/Header'
+import { colors } from '@/styles/colors'
 import { useEffect, useState } from 'react'
-import Flips from '../components/main/Flips'
-import QuotationMark from '../assets/main/QuotationMark.svg'
+import Flips from '@/components/main/Flips'
+import QuotationMark from '@/assets/main/QuotationMark.svg'
 
 const QuestionList = () => {
   const [askCount, setAskCount] = useState<number>(1)

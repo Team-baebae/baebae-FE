@@ -1,7 +1,7 @@
 import styled from 'styled-components'
-import Header from '../components/common/Header'
-import { colors } from '../styles/colors'
-import logo from '../assets/OnboardingIcon.svg'
+import Header from '@/components/common/Header'
+import { colors } from '@/styles/colors'
+import logo from '@/assets/OnboardingIcon.svg'
 
 const AnswerComplete = () => {
   return (

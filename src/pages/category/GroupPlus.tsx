@@ -1,22 +1,20 @@
 import styled from 'styled-components'
-import GroupHeader from '../components/common/GroupHeader'
-import { colors } from '../styles/colors'
+import GroupHeader from '../../components/common/GroupHeader'
+import { colors } from '../../styles/colors'
 import { useState } from 'react'
-import Feeds from '../components/folder/Feeds'
-import Flips from '../components/main/Flips'
-import { useLocation, useNavigate } from 'react-router-dom'
+import Feeds from '../../components/folder/Feeds'
+import Flips from '../../components/main/Flips'
+import { makeDirectoryApi, updateDirectoryImgApi } from '../../apis/DirectoryApi'
 import { useRecoilState } from 'recoil'
-import { userInfoState } from '../context/Atoms'
-import { UnFixedButton } from '../components/common/Button'
-import { modifyDirectoryApi } from '../apis/DirectoryApi'
+import { userInfoState } from '../../context/Atoms'
+import { UnFixedButton } from '../../components/common/Button'
+import { useNavigate } from 'react-router-dom'
 
-const GroupModify = () => {
+const GroupPlus = () => {
   const navigate = useNavigate()
-  //   넘겨받은 카카오 어세스 토큰 저장
-  const location = useLocation()
-  const categoryId = location.state?.categoryId
 
   const [userInfo, setUserInfo] = useRecoilState(userInfoState)
+
   const [directoryImgUrl, setDirectoryImgUrl] = useState<string>('')
   const [directoryImgFile, setDirectoryImgFile] = useState<File>()
   const [answerIds, setAnswerIds] = useState<any>([])
@@ -68,19 +66,16 @@ const GroupModify = () => {
       questionContent: '가은아 넌 양식이 좋아, 한식이 좋아?',
       writer: '하악',
     },
-    {
-      questionId: 7,
-      questionContent: '가은아 넌 양식이 좋아, 한식이 좋아?',
-      writer: '하악',
-    },
   ]
 
-  const modifyDirectory = async () => {
+  const makeDirectory = async () => {
     try {
-      await modifyDirectoryApi(userInfo.accessToken, categoryId, categoryName, answerIds).then((res) => {
-        console.log(res)
-        navigate(`/${userInfo.nickname}`)
-      })
+      await makeDirectoryApi(userInfo.accessToken, userInfo.memberId, directoryImgFile, categoryName, answerIds).then(
+        (res) => {
+          console.log(res)
+          navigate(`/${userInfo.nickname}`)
+        },
+      )
     } catch (err) {
       console.log(err)
     }
@@ -88,7 +83,7 @@ const GroupModify = () => {
 
   return (
     <Container>
-      <GroupHeader text="그룹 수정" background={colors.grey7} />
+      <GroupHeader text="새 그룹 추가" background={colors.grey7} />
       <FolderImgWrapper>
         <FolderImg />
       </FolderImgWrapper>
@@ -127,16 +122,16 @@ const GroupModify = () => {
       {feedList.length > 0 ? <Feeds data={feedList} /> : <Flips />}
       <UnFixedButton
         $positive={true}
-        func={modifyDirectory}
+        func={makeDirectory}
         func2={() => console.log('실패')}
-        text="그룹 수정하기"
+        text="그룹 추가하기"
         margin="30px 20px 30px 20px"
       />
     </Container>
   )
 }
 
-export default GroupModify
+export default GroupPlus
 
 const Container = styled.div`
   width: 100%;
@@ -231,6 +226,7 @@ const FolderNameConditionText = styled.div<{ color: string; fontSize: string; ma
   color: ${(props) => props.color};
   font-family: Pretendard;
   font-size: ${(props) => props.fontSize};
+
   font-style: normal;
   font-weight: 400;
   margin: ${(props) => props.margin || '0px'};

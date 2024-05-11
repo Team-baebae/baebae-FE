@@ -1,15 +1,15 @@
 import styled from 'styled-components'
-import { colors } from '../styles/colors'
+import { colors } from '../../styles/colors'
 import { useParams } from 'react-router-dom'
 import { useEffect, useState } from 'react'
-import MainHeader from '../components/common/MainHeader'
-import MainProfile from '../components/main/MainProfile'
-import Feed from '../components/main/Feed'
-import Ask from '../components/main/Ask'
-import { getMemberIdApi, isExistingNicknameApi } from '../apis/MainInfoApi'
+import MainHeader from '../../components/common/MainHeader'
+import MainProfile from '../../components/main/MainProfile'
+import Feed from '../../components/main/Feed'
+import Ask from '../../components/main/Ask'
+import { getMemberIdApi, isExistingNicknameApi } from '../../apis/MainInfoApi'
 import { useRecoilState, useRecoilValue } from 'recoil'
-import { UserInfoStateProps, isMineState, userInfoState } from '../context/Atoms'
-import { userDataProps } from '../components/main/types'
+import { UserInfoStateProps, isMineState, userInfoState } from '../../context/Atoms'
+import { userDataProps } from '../../components/main/types'
 
 const Main = () => {
   // url의 username

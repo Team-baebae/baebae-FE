@@ -1,8 +1,8 @@
 import styled from 'styled-components'
-import Header from '../components/common/Header'
-import { colors } from '../styles/colors'
-import { BottomButton } from '../components/common/Button'
-import FolderList from '../components/folder/FolderList'
+import Header from '../../components/common/Header'
+import { colors } from '../../styles/colors'
+import { BottomButton } from '../../components/common/Button'
+import FolderList from '../../components/folder/FolderList'
 
 const Folder = () => {
   return (

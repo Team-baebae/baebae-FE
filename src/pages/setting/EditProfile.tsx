@@ -1,11 +1,11 @@
 import styled from 'styled-components'
-import Header from '../components/common/Header'
-import { colors } from '../styles/colors'
+import Header from '../../components/common/Header'
+import { colors } from '../../styles/colors'
 import { useRecoilState } from 'recoil'
-import { userInfoState } from '../context/Atoms'
+import { userInfoState } from '../../context/Atoms'
 import { ChangeEvent, useState } from 'react'
-import { isExistingNicknameApi, updateUserNicknameApi, updateUserProfileApi } from '../apis/UserApi'
-import { BottomButton } from '../components/common/Button'
+import { isExistingNicknameApi, updateUserNicknameApi, updateUserProfileApi } from '../../apis/UserApi'
+import { BottomButton } from '../../components/common/Button'
 import { useNavigate } from 'react-router-dom'
 
 const EditProfile = () => {
