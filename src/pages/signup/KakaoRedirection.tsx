@@ -1,34 +1,26 @@
 import styled from 'styled-components'
 import { useNavigate } from 'react-router-dom'
 import { useEffect } from 'react'
-import { getKakaoUserInfoApi, isExistingAccountApi, loginApi } from '../apis/UserApi'
-import loading from '../assets/kakaoRedirection/Loading.svg'
-import { useRecoilState } from 'recoil'
-import { UserInfoStateProps, isLoggedInState, userInfoState } from '../context/Atoms'
+import { useRecoilState, useSetRecoilState } from 'recoil'
+import { getKakaoUserInfoApi, isExistingAccountApi, loginApi } from '@/apis/UserApi'
+import { UserInfoStateProps, isLoggedInState, userInfoState } from '@/context/Atoms'
+import loading from '@/assets/kakaoRedirection/Loading.svg'
 
 const KakaoRedirection = () => {
-  //카카오 인가코드
-  const code = new URL(document.location.toString()).searchParams.get('code')
   const navigate = useNavigate()
 
+  //카카오 인가코드
+  const code = new URL(document.location.toString()).searchParams.get('code')
   // 리코일 userInfo
   const [userInfo, setUserInfo] = useRecoilState<UserInfoStateProps>(userInfoState)
   // 리코일 로그인 여부
-  const [isLoggedIn, setIsLoggedIn] = useRecoilState(isLoggedInState)
-
-  // GetKakaoUserInfo함수의 response 인터페이스
-  interface KakaoUserInfoResponseProps {
-    data: any
-    status: number
-    statusText: string
-    headers: any
-    config: any
-  }
+  const setIsLoggedIn = useSetRecoilState(isLoggedInState)
 
   // 카카오에서 유저정보 받아오기
   const getKakaoUserInfo = async (code: string) => {
     try {
       await getKakaoUserInfoApi(code).then((res: KakaoUserInfoResponseProps) => {
+        console.log(res)
         if (res.status === 200) {
           isExistingAccount(res.data.access_token)
         } else {
@@ -41,19 +33,10 @@ const KakaoRedirection = () => {
     }
   }
 
-  // GetKakaoUserInfo함수의 response 인터페이스
-  interface isExistingAccountResponseProps {
-    data: any
-    status: number
-    statusText: string
-    headers: any
-    config: any
-  }
-
   // 이미 존재하는 회원인지 여부 확인(여기 accessToken은 카카오어세스토큰)
   const isExistingAccount = async (accessToken: string) => {
     try {
-      await isExistingAccountApi(accessToken).then((res: isExistingAccountResponseProps) => {
+      await isExistingAccountApi(accessToken).then((res: IsExistingAccountResponseProps) => {
         if (res.data.isExisting) {
           login(accessToken, 'null')
         } else {
@@ -67,15 +50,6 @@ const KakaoRedirection = () => {
     } catch (err) {
       console.log(err)
     }
-  }
-
-  // Login함수의 response 인터페이스
-  interface LoginProps {
-    data: any
-    status: number
-    statusText: string
-    headers: any
-    config: any
   }
 
   // 이미 존재하는 회원일 경우 바로 로그인 진행
@@ -105,6 +79,7 @@ const KakaoRedirection = () => {
     }
   }
 
+  // url에 코드 받으면 getKakaoUserInfo 함수 실행
   useEffect(() => {
     if (code) {
       getKakaoUserInfo(code)
@@ -113,8 +88,8 @@ const KakaoRedirection = () => {
 
   return (
     <Container>
-      <LoadingLoginImg src={loading} alt="loading" />
-      <LoadingLoginText>Loading..</LoadingLoginText>
+      <Loading src={loading} />
+      <LoadingText>Loading..</LoadingText>
     </Container>
   )
 }
@@ -122,20 +97,20 @@ const KakaoRedirection = () => {
 export default KakaoRedirection
 
 const Container = styled.div`
-  width: 100%;
   display: flex;
   flex-direction: column;
   align-items: center;
+  width: 100%;
 `
 
-const LoadingLoginImg = styled.img`
+const Loading = styled.img`
   width: 36px;
   height: 36px;
   margin: 300px 0px 0px 0px;
 `
 
-const LoadingLoginText = styled.div`
+const LoadingText = styled.div`
+  margin: 18px 0px 0px 0px;
   font-size: 20px;
   font-weight: 600;
-  margin: 18px 0px 0px 0px;
 `
