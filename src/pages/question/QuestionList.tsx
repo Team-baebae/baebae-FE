@@ -5,6 +5,7 @@ import Flips from '@/components/main/Flips'
 import { colors } from '@/styles/colors'
 import QuotationMark from '@/assets/main/QuotationMark.svg'
 
+// 답변을 기다리는 질문 리스트 페이지
 const QuestionList = () => {
   const [askCount, setAskCount] = useState<number>(1)
   const data = [
@@ -117,13 +118,13 @@ const WriterBlock = styled.div`
   letter-spacing: -0.2px;
 `
 const WriterRegion = styled.button`
+  border: none;
+  outline: none;
+  background-color: transparent;
   color: ${colors.grey1};
   font-family: Pretendard;
   font-size: 10px;
   font-weight: 500;
   line-height: 15px;
   letter-spacing: -0.2px;
-  border: none;
-  outline: none;
-  background-color: transparent;
 `
