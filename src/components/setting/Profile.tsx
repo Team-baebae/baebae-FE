@@ -1,14 +1,16 @@
 import styled from 'styled-components'
-import { colors } from '../../styles/colors'
 import { useNavigate } from 'react-router-dom'
-import { useRecoilState } from 'recoil'
-import { userInfoState } from '../../context/Atoms'
+import { useRecoilValue } from 'recoil'
+import { colors } from '@/styles/colors'
+import { userInfoState } from '@/context/Atoms'
 
+// 회원 프로필 컴포넌트
 const Profile = () => {
-  const [userInfo, setUserInfo] = useRecoilState(userInfoState)
-
   const navigate = useNavigate()
-  // const nickname = '닉네임'
+
+  //리코일 유저정보
+  const userInfo = useRecoilValue(userInfoState)
+
   return (
     <Container>
       <ProfileImage src={userInfo.profileImage} />
@@ -45,24 +47,22 @@ const Nickname = styled.div`
   color: ${colors.grey1};
   font-family: Pretendard;
   font-size: 18px;
-  font-style: normal;
   font-weight: 600;
   line-height: 27px;
   letter-spacing: -0.72px;
 `
 const EditButton = styled.button`
   display: flex;
-  padding: 4px 12px;
   justify-content: center;
   align-items: flex-start;
+  padding: 4px 12px;
   gap: 10px;
   border-radius: 100px;
   border: 1px solid ${colors.grey1};
-  background: #fff;
+  background-color: #fff;
   color: ${colors.grey1};
   font-family: Pretendard;
   font-size: 12px;
-  font-style: normal;
   font-weight: 500;
   line-height: 18px;
   letter-spacing: -0.48px;

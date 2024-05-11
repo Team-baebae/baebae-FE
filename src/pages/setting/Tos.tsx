@@ -2,6 +2,7 @@ import styled from 'styled-components'
 import Header from '@/components/common/Header'
 import { colors } from '@/styles/colors'
 
+// 이용약관 페이지
 const Tos = () => {
   return (
     <Container>

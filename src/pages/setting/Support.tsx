@@ -2,12 +2,12 @@ import styled from 'styled-components'
 import { useState } from 'react'
 import Header from '@/components/common/Header'
 import { BottomButton } from '@/components/common/Button'
-import FolderList from '@/components/folder/FolderList'
 import { colors } from '@/styles/colors'
 
+// 문의하기 페이지
 const Support = () => {
+  // 문의하기 텍스트 저장 및 수정
   const [content, setContent] = useState<string>('')
-
   const handleChangeContent = (event: React.ChangeEvent<HTMLTextAreaElement>) => {
     const value = event.target.value
     setContent(value)

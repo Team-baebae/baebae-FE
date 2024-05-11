@@ -5,6 +5,7 @@ import Settings from '@/components/setting/Settings'
 import AlramSetting from '@/components/setting/AlramSetting'
 import { colors } from '@/styles/colors'
 
+// 설정 페이지
 const Setting = () => {
   return (
     <>
