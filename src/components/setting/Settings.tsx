@@ -6,7 +6,7 @@ import Modal from '@/components/common/Modal'
 import { colors } from '@/styles/colors'
 import { logoutApi, signOutApi } from '@/apis/UserApi'
 import { isLoggedInState, userInfoState } from '@/context/Atoms'
-import ForwardArrow from '@/assets/ForwardArrow.svg'
+import ForwardArrow from '@/assets/setting/ForwardArrow.svg'
 
 // 설정리스트 컴포넌트
 const Settings = () => {
