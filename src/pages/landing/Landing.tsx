@@ -7,5 +7,10 @@ const Landing = () => {
 export default Landing
 
 const Container = styled.div`
-  font-family: Pretendard;
+  position: relative;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
 `

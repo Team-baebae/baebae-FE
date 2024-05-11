@@ -1,9 +1,9 @@
 import styled from 'styled-components'
-import Header from '../components/common/Header'
-import Profile from '../components/setting/Profile'
-import { colors } from '../styles/colors'
-import Settings from '../components/setting/Settings'
-import AlramSetting from '../components/setting/AlramSetting'
+import Header from '@/components/common/Header'
+import Profile from '@/components/setting/Profile'
+import Settings from '@/components/setting/Settings'
+import AlramSetting from '@/components/setting/AlramSetting'
+import { colors } from '@/styles/colors'
 
 const Setting = () => {
   return (
@@ -24,7 +24,5 @@ const Title = styled.div`
   color: ${colors.grey1};
   font-family: Pretendard;
   font-size: 16px;
-  font-style: normal;
   font-weight: 600;
-  line-height: normal;
 `
