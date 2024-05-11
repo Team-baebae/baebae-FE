@@ -1,14 +1,14 @@
 import styled from 'styled-components'
-import GroupHeader from '../../components/common/GroupHeader'
-import { colors } from '../../styles/colors'
 import { useState } from 'react'
-import Feeds from '../../components/folder/Feeds'
-import Flips from '../../components/main/Flips'
-import { useLocation, useNavigate } from 'react-router-dom'
 import { useRecoilState } from 'recoil'
-import { userInfoState } from '../../context/Atoms'
-import { UnFixedButton } from '../../components/common/Button'
-import { modifyDirectoryApi } from '../../apis/DirectoryApi'
+import { useLocation, useNavigate } from 'react-router-dom'
+import GroupHeader from '@/components/common/GroupHeader'
+import Feeds from '@/components/folder/Feeds'
+import Flips from '@/components/main/Flips'
+import { UnFixedButton } from '@/components/common/Button'
+import { userInfoState } from '@/context/Atoms'
+import { colors } from '@/styles/colors'
+import { modifyDirectoryApi } from '@/apis/DirectoryApi'
 
 const GroupModify = () => {
   const navigate = useNavigate()
@@ -139,25 +139,25 @@ const GroupModify = () => {
 export default GroupModify
 
 const Container = styled.div`
-  width: 100%;
-  height: 100%;
-  position: relative;
   display: flex;
   flex-direction: column;
+  position: relative;
+  width: 100%;
+  height: 100%;
 `
 
 const FolderImgWrapper = styled.div`
   display: flex;
+  justify-content: center;
+  align-items: center;
   width: 88px;
   height: 88px;
   padding: 5.996px 6px 6.004px 6px;
   margin: 20px 0px 0px 50%;
-  transform: translateX(-50%);
-  justify-content: center;
-  align-items: center;
   border-radius: 24px;
   border: 1.76px solid ${colors.grey5};
-  background: ${colors.white};
+  background-color: ${colors.white};
+  transform: translateX(-50%);
 `
 
 const FolderImg = styled.div`
@@ -166,55 +166,52 @@ const FolderImg = styled.div`
   flex-shrink: 0;
   border-radius: 16px;
   border: 1.76px solid ${colors.grey6};
-  background: ${colors.white};
+  background-color: ${colors.white};
 `
 
 const EditFolderImgText = styled.div`
   display: flex;
-  width: 87px;
-  height: 26px;
   justify-content: center;
   align-items: center;
+  width: 87px;
+  height: 26px;
   gap: 10px;
   margin: 9.09px 0px 0px 50%;
-  transform: translateX(-50%);
   border-radius: 100px;
   border: 1px solid ${colors.grey1};
-  background: ${colors.white};
+  background-color: ${colors.white};
   color: ${colors.grey1};
   font-family: Pretendard;
   font-size: 12px;
-  font-style: normal;
   font-weight: 500;
   line-height: 150%;
   letter-spacing: -0.48px;
+  transform: translateX(-50%);
   cursor: pointer;
 `
 const FolderNameLabel = styled.div`
   align-self: stretch;
+  margin: 40px 0px 0px 20px;
   color: ${colors.grey3};
   font-family: Pretendard;
   font-size: 12px;
-  font-style: normal;
   font-weight: 400;
   line-height: 150%;
   letter-spacing: -0.48px;
-  margin: 40px 0px 0px 20px;
 `
 
 const FolderName = styled.input`
   display: flex;
-  padding: 20px;
-  align-items: flex-start;
-  gap: 12px;
   flex-direction: column;
-  width: calc(100% - 40px);
+  align-items: flex-start;
   align-self: stretch;
-  border-radius: 12px;
-  background: ${colors.white};
+  width: calc(100% - 40px);
   margin: 4px 20px 0px 20px;
+  padding: 20px;
+  gap: 12px;
+  border-radius: 12px;
+  background-color: ${colors.white};
   border: none;
-
   &:focus {
     outline: none;
   }
@@ -222,18 +219,17 @@ const FolderName = styled.input`
 
 const FolderNameConditionWrapper = styled.div`
   display: flex;
+  justify-content: space-between;
   margin: 4px 20px 0px 20px;
   padding: 0px 8px;
-  justify-content: space-between;
 `
 
 const FolderNameConditionText = styled.div<{ color: string; fontSize: string; margin?: string }>`
+  margin: ${(props) => props.margin || '0px'};
   color: ${(props) => props.color};
   font-family: Pretendard;
   font-size: ${(props) => props.fontSize};
-  font-style: normal;
   font-weight: 400;
-  margin: ${(props) => props.margin || '0px'};
 `
 
 const FolderNameLengthWrapper = styled.div`

@@ -1,8 +1,8 @@
 import styled from 'styled-components'
-import Header from '@/components/common/Header'
-import { colors } from '@/styles/colors'
 import { useEffect, useState } from 'react'
+import Header from '@/components/common/Header'
 import Flips from '@/components/main/Flips'
+import { colors } from '@/styles/colors'
 import QuotationMark from '@/assets/main/QuotationMark.svg'
 
 const QuestionList = () => {
@@ -55,20 +55,16 @@ const Title = styled.div`
   color: ${colors.grey1};
   font-family: Pretendard;
   font-size: 18px;
-  font-style: normal;
   font-weight: 600;
-  line-height: normal;
   letter-spacing: -0.9px;
 `
 const CountText = styled.div<{ color: string }>`
   display: flex;
-  margin-left: 6px;
+  margin: 0px 0px 0px 6px;
   color: ${(props) => props.color};
   font-family: Pretendard;
   font-size: 18px;
-  font-style: normal;
   font-weight: 600;
-  line-height: normal;
   letter-spacing: -0.9px;
 `
 const ContentWrapper = styled.div<{ askCount: number }>`
@@ -76,9 +72,9 @@ const ContentWrapper = styled.div<{ askCount: number }>`
 `
 const GridContainer = styled.div`
   display: grid;
+  justify-content: center;
   grid-template-columns: repeat(2, 1fr);
   gap: 9px;
-  justify-content: center;
   margin: 0 20px;
 `
 const Icon = styled.img`
@@ -87,24 +83,23 @@ const Icon = styled.img`
 `
 const FlipWrapper = styled.div`
   display: flex;
-  flex: 1 0 0;
-  height: 179px;
-  padding: 30px 10px 10px 10px;
   flex-direction: column;
   justify-content: space-between;
   align-items: flex-start;
+  flex: 1 0 0;
+  height: 179px;
+  padding: 30px 10px 10px 10px;
   border-radius: 2px;
-  background: ${colors.white};
+  background-color: ${colors.white};
   box-shadow: 0px 4px 4px 0px rgba(0, 0, 0, 0.08);
 `
 const FlipContent = styled.div`
   display: flex;
   flex: 1 0 0;
-  margin-top: 18px;
+  margin: 18px 0px 0px 0px;
   color: ${colors.grey1};
   font-family: Pretendard;
   font-size: 14px;
-  font-style: normal;
   font-weight: 600;
   line-height: 21px;
   letter-spacing: -0.56px;
@@ -117,7 +112,6 @@ const WriterBlock = styled.div`
   color: ${colors.primary};
   font-family: Pretendard;
   font-size: 10px;
-  font-style: normal;
   font-weight: 500;
   line-height: 15px;
   letter-spacing: -0.2px;
@@ -126,7 +120,6 @@ const WriterRegion = styled.button`
   color: ${colors.grey1};
   font-family: Pretendard;
   font-size: 10px;
-  font-style: normal;
   font-weight: 500;
   line-height: 15px;
   letter-spacing: -0.2px;

@@ -24,12 +24,12 @@ const AnswerComplete = () => {
 export default AnswerComplete
 
 const Container = styled.div`
-  width: 100%;
-  height: 100%;
-  position: relative;
   display: flex;
   flex-direction: column;
   align-items: center;
+  position: relative;
+  width: 100%;
+  height: 100%;
   padding: 0px 0px 30px 0px;
 `
 
@@ -43,7 +43,6 @@ const UnderLogoText = styled.div`
   color: ${colors.grey1};
   font-family: Pretendard;
   font-size: 18px;
-  font-style: normal;
   font-weight: 600;
   line-height: 150%;
   letter-spacing: -0.36px;
@@ -60,19 +59,18 @@ const BtnWrapper = styled.div`
 `
 
 const Btn = styled.button<{ backgroundColor: string; color: string }>`
-  border: none;
   display: flex;
-  height: 56px;
-  padding: 16px 20px;
   justify-content: center;
   align-items: center;
   flex: 1 0 0;
+  height: 56px;
+  padding: 16px 20px;
+  border: none;
   border-radius: 12px;
   background-color: ${(props) => props.backgroundColor};
   color: ${(props) => props.color};
   font-family: Pretendard;
   font-size: 14px;
-  font-style: normal;
   font-weight: 600;
   line-height: 150%;
   letter-spacing: -0.28px;

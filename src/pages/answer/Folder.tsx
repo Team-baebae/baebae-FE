@@ -1,8 +1,8 @@
 import styled from 'styled-components'
-import Header from '../../components/common/Header'
-import { colors } from '../../styles/colors'
-import { BottomButton } from '../../components/common/Button'
-import FolderList from '../../components/folder/FolderList'
+import Header from '@/components/common/Header'
+import { BottomButton } from '@/components/common/Button'
+import FolderList from '@/components/folder/FolderList'
+import { colors } from '@/styles/colors'
 
 const Folder = () => {
   return (
@@ -24,22 +24,21 @@ const Folder = () => {
 export default Folder
 
 const Container = styled.div`
-  width: 100%;
-  height: 100%;
-  position: relative;
   display: flex;
   flex-direction: column;
   align-items: center;
+  position: relative;
+  width: 100%;
+  height: 100%;
 `
 
 const FolderHeaderText = styled.div`
   align-self: stretch;
+  margin: 20px 20px 0px 20px;
   color: ${colors.grey1};
   font-family: Pretendard;
   font-size: 18px;
-  font-style: normal;
   font-weight: 600;
   line-height: 150%;
   letter-spacing: -0.36px;
-  margin: 20px 20px 0px 20px;
 `

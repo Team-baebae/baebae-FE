@@ -1,15 +1,15 @@
 import styled from 'styled-components'
-import { colors } from '../../styles/colors'
 import { useParams } from 'react-router-dom'
 import { useEffect, useState } from 'react'
-import MainHeader from '../../components/common/MainHeader'
-import MainProfile from '../../components/main/MainProfile'
-import Feed from '../../components/main/Feed'
-import Ask from '../../components/main/Ask'
-import { getMemberIdApi, isExistingNicknameApi } from '../../apis/MainInfoApi'
 import { useRecoilState, useRecoilValue } from 'recoil'
-import { UserInfoStateProps, isMineState, userInfoState } from '../../context/Atoms'
-import { userDataProps } from '../../components/main/types'
+import MainHeader from '@/components/common/MainHeader'
+import MainProfile from '@/components/main/MainProfile'
+import Feed from '@/components/main/Feed'
+import Ask from '@/components/main/Ask'
+import { userDataProps } from '@/components/main/types'
+import { getMemberIdApi, isExistingNicknameApi } from '@/apis/MainInfoApi'
+import { UserInfoStateProps, isMineState, userInfoState } from '@/context/Atoms'
+import { colors } from '@/styles/colors'
 
 const Main = () => {
   // url의 username
@@ -72,8 +72,8 @@ export default Main
 const Container = styled.div``
 const CategoryBox = styled.div`
   display: flex;
-  height: 44px;
   align-items: flex-end;
+  height: 44px;
   flex: 1 0 0;
   gap: 18.5px;
   padding: 0px 21.25px;
@@ -82,17 +82,16 @@ const CategoryBox = styled.div`
 `
 const Category = styled.div<{ category: number; num: number }>`
   display: flex;
-  flex: 1 0 0;
   flex-direction: column;
-  height: 33px;
   align-items: center;
+  flex: 1 0 0;
+  height: 33px;
   gap: 9px;
   border-bottom: 2px solid ${(props) => (props.category == props.num ? colors.grey1 : colors.white)};
   color: ${(props) => (props.category == props.num ? colors.grey1 : colors.grey3)};
   text-align: center;
   font-family: Pretendard;
   font-size: 16px;
-  font-style: normal;
   font-weight: 600;
   line-height: 22px;
   letter-spacing: -0.6px;

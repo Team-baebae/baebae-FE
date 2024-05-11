@@ -1,6 +1,6 @@
 import { useState } from 'react'
-import DetailFeed from '../components/feed/DetailFeed'
 import styled from 'styled-components'
+import DetailFeed from '@/components/feed/DetailFeed'
 
 const DetailTestPage = () => {
   // 모달 버튼 클릭 유무를 저장할 state
