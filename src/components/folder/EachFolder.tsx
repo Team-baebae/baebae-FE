@@ -1,7 +1,7 @@
 import styled from 'styled-components'
 import { colors } from '../../styles/colors'
 import testImg from '../../assets/Glasses.svg'
-import plus from '../../assets/Plus.svg'
+import plus from '../../assets/main/Plus.svg'
 
 interface EachFolderProps {
   $positive: boolean

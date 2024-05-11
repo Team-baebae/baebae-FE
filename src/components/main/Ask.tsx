@@ -1,26 +1,23 @@
 import styled from 'styled-components'
-import NewIcon from '../../assets/main/NewIcon.svg'
-import ForwardArrow from '../../assets/ForwardArrow.svg'
-import Info from '../../assets/main/Info.svg'
 import { ChangeEvent, MouseEvent, useEffect, useState } from 'react'
-import { colors } from '../../styles/colors'
-import { useNavigate } from 'react-router-dom'
-import MiniToggle from '../common/MiniToggle'
-import { Button } from '../common/Button'
-import { userDataProps } from './types'
 import { useRecoilValue } from 'recoil'
-import { isLoggedInState, userInfoState } from '../../context/Atoms'
-import LoginModal from './LoginModal'
-import Tooltip from './Tooltip'
-import { postQuestionApi } from '../../apis/MainInfoApi'
+import { useNavigate } from 'react-router-dom'
 import { toast, Flip } from 'react-toastify'
 import 'react-toastify/dist/ReactToastify.css'
-import { StyledToastContainer } from '../toast/toastStyle'
+import MiniToggle from '@/components/common/MiniToggle'
+import { Button } from '@/components/common/Button'
+import { StyledToastContainer } from '@/components/toast/toastStyle'
+import LoginModal from '@/components/main/LoginModal'
+import Tooltip from '@/components/main/Tooltip'
+import { AskProps } from '@/components/main/types'
+import { colors } from '@/styles/colors'
+import { isLoggedInState, userInfoState } from '@/context/Atoms'
+import { postQuestionApi } from '@/apis/MainInfoApi'
+import NewIcon from '@/assets/main/NewIcon.svg'
+import ForwardArrow from '@/assets/setting/ForwardArrow.svg'
+import Info from '@/assets/main/Info.svg'
 
-interface AskProps {
-  userInfo: userDataProps
-  isMyPage: boolean
-}
+// 질문하기 컴포넌트
 const Ask = ({ userInfo, isMyPage }: AskProps) => {
   const isMine = JSON.stringify(isMyPage)
   const isLoggedIn = useRecoilValue(isLoggedInState)
@@ -136,11 +133,11 @@ const Container = styled.div`
 `
 const AskNotification = styled.div`
   display: flex;
-  padding: 12px 20px;
   justify-content: space-between;
   align-items: center;
+  padding: 12px 20px;
   border-radius: 12px;
-  background: ${colors.grey2};
+  background-color: ${colors.grey2};
   cursor: pointer;
 `
 const TextWrapper = styled.div<{ ml: string; color: string }>`
@@ -150,23 +147,22 @@ const TextWrapper = styled.div<{ ml: string; color: string }>`
   color: ${(props) => props.color};
   font-family: Pretendard;
   font-size: 12px;
-  font-style: normal;
   font-weight: 600;
-  line-height: normal;
   letter-spacing: -0.6px;
 `
 const Icon = styled.img``
+
 const AskContainer = styled.div<{ margin: string }>`
   display: flex;
-  height: 346px;
-  padding: 20px;
   flex-direction: column;
   justify-content: space-between;
   align-items: flex-start;
+  height: 346px;
+  margin-bottom: ${(props) => props.margin};
+  padding: 20px;
   border-radius: 2.127px;
   background-color: ${colors.white};
   box-shadow: 0px 5.259px 9.204px 0px rgba(0, 0, 0, 0.04);
-  margin-bottom: ${(props) => props.margin};
 `
 const TextRegion = styled.textarea`
   display: flex;
@@ -181,7 +177,6 @@ const TextRegion = styled.textarea`
   color: ${colors.grey1};
   font-family: Pretendard;
   font-size: 20px;
-  font-style: normal;
   font-weight: 500;
   line-height: 30px;
   letter-spacing: -0.8px;
@@ -195,31 +190,30 @@ const WriterBlock = styled.div`
   color: ${colors.primary};
   font-family: Pretendard;
   font-size: 14px;
-  font-style: normal;
   font-weight: 500;
   line-height: 21px;
   letter-spacing: -0.28px;
 `
 const WriterRegion = styled.input`
-  color: ${colors.grey1};
   width: 100%;
-  font-family: Pretendard;
-  font-size: 14px;
-  font-style: normal;
-  font-weight: 500;
-  line-height: 21px;
-  letter-spacing: -0.28px;
   margin-left: 12.6px;
   border: none;
   outline: none;
+  color: ${colors.grey1};
+  font-family: Pretendard;
+  font-size: 14px;
+  font-weight: 500;
+  line-height: 21px;
+  letter-spacing: -0.28px;
   &::placeholder {
     color: ${colors.grey5};
   }
 `
+
 const OpenProfileWrapper = styled.div<{ margin: string }>`
-  position: relative;
   display: flex;
   flex-direction: column;
+  position: relative;
   margin-bottom: ${(props) => props.margin};
 `
 const OpenProfile = styled.div`
@@ -236,7 +230,6 @@ const OpenProfileText = styled.div`
   color: ${colors.grey4};
   font-family: Pretendard;
   font-size: 12px;
-  font-style: normal;
   font-weight: 500;
   line-height: 18px;
   letter-spacing: -0.24px;

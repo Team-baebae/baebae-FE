@@ -11,14 +11,16 @@ import { getMemberIdApi, isExistingNicknameApi } from '@/apis/MainInfoApi'
 import { UserInfoStateProps, isMineState, userInfoState } from '@/context/Atoms'
 import { colors } from '@/styles/colors'
 
+// 로그인 성공 시 메인 페이지
 const Main = () => {
   // url의 username
   const { username } = useParams<{ username: string }>()
 
   // 유저 존재 여부
   const [isExisting, setIsExisting] = useState<boolean>(false)
+  // 유저 데이터 정보
   const [userData, setUserData] = useState<userDataProps>({ nickname: 'flipit', memberId: -1 })
-
+  // 내 페이지인지 여부 확인
   const [isMyPage, setIsMyPage] = useRecoilState(isMineState)
 
   // 유저의 존재 여부 확인 및 memberId 조회
@@ -43,6 +45,7 @@ const Main = () => {
     }
   }, [])
 
+  // category=0은 질문, 1은 피드
   const [category, setCategory] = useState<number>(0)
 
   return (
@@ -69,6 +72,7 @@ const Main = () => {
 }
 
 export default Main
+
 const Container = styled.div``
 const CategoryBox = styled.div`
   display: flex;
