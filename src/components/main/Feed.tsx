@@ -13,7 +13,7 @@ import Flips from '@/components/main/Flips'
 import { directoryProps } from '@/components/main/types'
 import { colors } from '@/styles/colors'
 import { deleteDirectoryApi, getDirectoriesApi } from '@/apis/DirectoryApi'
-import { userInfoState } from '@/context/Atoms'
+import { UserInfoStateProps, userInfoState } from '@/context/Atoms'
 import Plus from '@/assets/main/Plus.svg'
 import Pencil from '@/assets/main/Pencil.svg'
 import Trash from '@/assets/main/Trash.svg'
@@ -23,7 +23,7 @@ const Feed = () => {
   const navigate = useNavigate()
 
   // 리코일 userInfo
-  const userInfo = useRecoilValue(userInfoState)
+  const userInfo = useRecoilValue<UserInfoStateProps>(userInfoState)
 
   // 유저 디렉토리 리스트 저장
   const [directories, setDirectories] = useState<directoryProps[]>([])
