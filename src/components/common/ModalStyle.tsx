@@ -11,9 +11,10 @@ export const SearchModalBox = styled(motion.div)`
   height: 100%;
   background-color: rgba(0, 0, 0, 0.4);
   display: flex;
+  flex-direction: column;
   justify-content: center;
   align-items: center;
-  z-index: 100;
+  z-index: 5;
 `
 
 // 모달 스타일
@@ -29,5 +30,5 @@ export const SearchModalContent = styled(motion.div)<{
   background: ${colors.white};
   display: flex;
   flex-direction: column;
-  z-index: 100;
+  z-index: 5;
 `

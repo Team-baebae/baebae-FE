@@ -18,6 +18,8 @@ import GroupModify from './pages/GroupModify'
 import PrivacyPolicy from './pages/setting/PrivacyPolicy'
 import Ask from './pages/Ask'
 import Term from './pages/setting/Tos'
+import DetailTestPage from './pages/DetailTestPage'
+
 
 const Router = () => {
   return (
@@ -42,6 +44,7 @@ const Router = () => {
           <Route path=":username/questionList" element={<QuestionList />} />
           <Route path="groupPlus" element={<GroupPlus />} />
           <Route path="groupModify" element={<GroupModify />} />
+          <Route path="detailTest" element={<DetailTestPage />} />
         </Route>
       </Routes>
     </BrowserRouter>
