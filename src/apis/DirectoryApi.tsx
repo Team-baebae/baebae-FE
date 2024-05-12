@@ -1,9 +1,8 @@
-import axios from 'axios'
-
-const serverUrl = import.meta.env.VITE_SERVER_URL
+import { flipitAxios } from './apis'
 
 export const getDirectoriesApi = (accessToken: string, memberId: number) => {
-  return axios.get(`http://${serverUrl}/api/category/${memberId}`, {
+  let API = `/api/category/${memberId}`
+  return flipitAxios.get(API, {
     headers: {
       Authorization: `Bearer ${accessToken}`,
     },
@@ -31,7 +30,8 @@ export const makeDirectoryApi = (
   }
   formData.append('createCategory', JSON.stringify(createCategory))
 
-  return axios.post(`http://${serverUrl}/api/category/${memberId}`, formData, {
+  let API = `/api/category/${memberId}`
+  return flipitAxios.post(API, formData, {
     headers: {
       Authorization: `Bearer ${accessToken}`,
       'Content-Type': 'multipart/form-data', // 컨텐츠 타입을 multipart/form-data로 지정
@@ -40,7 +40,8 @@ export const makeDirectoryApi = (
 }
 
 export const deleteDirectoryApi = (accessToken: string, categoryId: number) => {
-  return axios.delete(`http://${serverUrl}/api/category/${categoryId}`, {
+  let API = `/api/category/${categoryId}`
+  return flipitAxios.delete(API, {
     headers: {
       Authorization: `Bearer ${accessToken}`,
     },
@@ -48,8 +49,9 @@ export const deleteDirectoryApi = (accessToken: string, categoryId: number) => {
 }
 
 export const modifyDirectoryApi = (accessToken: string, categoryId: number, categoryName: string, answerIds: any) => {
-  return axios.put(
-    `http://${serverUrl}/api/category/${categoryId}`,
+  let API = `/api/category/${categoryId}`
+  return flipitAxios.put(
+    API,
     {
       categoryId: categoryId,
       categoryName: categoryName,
@@ -68,7 +70,8 @@ export const updateDirectoryImgApi = (accessToken: string, categoryId: number, i
   const formData = new FormData()
   if (imageFile) formData.append('imageFile', imageFile)
 
-  return axios.patch(`http://${serverUrl}/api/category/${categoryId}/image`, formData, {
+  let API = `/api/category/${categoryId}/image`
+  return flipitAxios.patch(API, formData, {
     headers: {
       Authorization: `Bearer ${accessToken}`,
     },
