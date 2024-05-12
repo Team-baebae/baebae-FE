@@ -10,6 +10,7 @@ import { userDataProps } from '@/components/main/types'
 import { getMemberIdApi, isExistingNicknameApi } from '@/apis/MainInfoApi'
 import { UserInfoStateProps, isMineState, userInfoState } from '@/context/Atoms'
 import { colors } from '@/styles/colors'
+import NoUser from '@/components/main/NoUser'
 
 // 로그인 성공 시 메인 페이지
 const Main = () => {
@@ -65,7 +66,7 @@ const Main = () => {
           {category ? <Feed /> : <Ask userInfo={userData} isMyPage={isMyPage} />}
         </Container>
       ) : (
-        <Container>존재하지 않는 사용자입니다.</Container>
+        <NoUser />
       )}
     </>
   )
