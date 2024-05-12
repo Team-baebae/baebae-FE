@@ -71,7 +71,7 @@ const QuestionList = () => {
     )
     const windowBottom = windowHeight + window.pageYOffset
 
-    if (windowBottom >= docHeight && !loading && hasMore) {
+    if (windowBottom >= docHeight && !loading && hasMore && !scrollLoading) {
       setScrollLoading(true)
       getQuestionList(currentPage)
     }
@@ -80,7 +80,7 @@ const QuestionList = () => {
   useEffect(() => {
     window.addEventListener('scroll', handleScroll)
     return () => window.removeEventListener('scroll', handleScroll)
-  }, [loading, hasMore]) // 스크롤 이벤트 리스너 등록 및 해제
+  }, [scrollLoading, hasMore]) // 스크롤 이벤트 리스너 등록 및 해제
 
   // 닉네임 값으로 이동 경로 설정 필요
   const clickName = (active: boolean) => {
