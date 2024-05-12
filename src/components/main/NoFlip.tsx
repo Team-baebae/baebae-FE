@@ -3,7 +3,7 @@ import NoFeed from '@/assets/main/NoneFeed.svg'
 import { colors } from '@/styles/colors'
 
 // 해당 그룹에 피드가 없을 때 컴포넌트
-const Flips = () => {
+const NoFlip = () => {
   return (
     <Container>
       <Image src={NoFeed} width={150} height={146} />
@@ -15,7 +15,7 @@ const Flips = () => {
   )
 }
 
-export default Flips
+export default NoFlip
 
 const Container = styled.div`
   display: flex;
