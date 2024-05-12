@@ -6,6 +6,7 @@ import styled from 'styled-components'
 import { motion } from 'framer-motion'
 
 const Landing1 = () => {
+  const INSTA_URL = 'https://www.instagram.com/flipit.co.kr?igsh=aXpzcGRnaGVncHNq&utm_source=qr'
   const Variants = {
     default: {
       scale: 1,
@@ -36,7 +37,7 @@ const Landing1 = () => {
         <SubText>타인을 알아가고 본인을 표현하는</SubText>
         <TitleText>가장 단순한 방법, 플리빗.</TitleText>
       </TextWrapper>
-      <Button initial="default" whileHover="scaleUp" variants={Variants}>
+      <Button href={INSTA_URL} initial="default" whileHover="scaleUp" variants={Variants}>
         지금 시작하기
       </Button>
       <PhoneImage src={Intro} />
@@ -79,7 +80,7 @@ const TitleText = styled.h1`
   line-height: normal;
   letter-spacing: -1.6px;
 `
-const Button = styled(motion.button)`
+const Button = styled(motion.a)`
   display: flex;
   padding: 14px 20px;
   flex-direction: column;
@@ -87,8 +88,7 @@ const Button = styled(motion.button)`
   gap: 10px;
   border-radius: 100px;
   z-index: 10;
-  outline: none;
-  border: none;
+  text-decoration: none;
   background: ${colors.primary};
   color: ${colors.grey1};
   font-family: Pretendard;
