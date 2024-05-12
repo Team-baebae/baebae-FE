@@ -20,7 +20,6 @@ export default NoFlip
 const Container = styled.div`
   display: flex;
   flex-direction: column;
-  flex-direction: center;
   align-items: center;
   width: 100%;
   margin: 60px 0px;
