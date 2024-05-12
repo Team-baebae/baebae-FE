@@ -1,4 +1,3 @@
-import styled from 'styled-components'
 import { useNavigate } from 'react-router-dom'
 import { useEffect } from 'react'
 import { useRecoilState, useSetRecoilState } from 'recoil'
@@ -10,7 +9,7 @@ import {
 } from '@/pages/signup/types'
 import { getKakaoUserInfoApi, getUserInfoApi, isExistingAccountApi, loginApi } from '@/apis/UserApi'
 import { UserInfoStateProps, isLoggedInState, userInfoState } from '@/context/Atoms'
-import Loading from '@/assets/kakaoRedirection/Loading.svg'
+import Loading from '@/components/common/Loading'
 
 // 카카오 로그인 후 리다이렉션 페이지
 const KakaoRedirection = () => {
@@ -107,31 +106,7 @@ const KakaoRedirection = () => {
     }
   }, [code])
 
-  return (
-    <Container>
-      <LoadingIcon src={Loading} />
-      <LoadingText>Loading..</LoadingText>
-    </Container>
-  )
+  return <Loading />
 }
 
 export default KakaoRedirection
-
-const Container = styled.div`
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  width: 100%;
-`
-
-const LoadingIcon = styled.img`
-  width: 36px;
-  height: 36px;
-  margin: 300px 0px 0px 0px;
-`
-
-const LoadingText = styled.div`
-  margin: 18px 0px 0px 0px;
-  font-size: 20px;
-  font-weight: 600;
-`
