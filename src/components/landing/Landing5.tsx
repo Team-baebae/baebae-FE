@@ -2,7 +2,6 @@ import Phone from '@/assets/landing/PhoneFeed.png'
 import { colors } from '@/styles/colors'
 import styled from 'styled-components'
 import { motion } from 'framer-motion'
-import { useEffect, useState } from 'react'
 
 const Landing5 = () => {
   const Variants = {

@@ -2,7 +2,7 @@ import styled from 'styled-components'
 import { useNavigate } from 'react-router-dom'
 import { useRecoilState } from 'recoil'
 import { Flip, toast } from 'react-toastify'
-import { ChangeEvent, useEffect, useState } from 'react'
+import { ChangeEvent, useState } from 'react'
 import { BottomButton } from '@/components/common/Button'
 import Header from '@/components/common/Header'
 import IsValidNicknameText from '@/components/common/IsValidNicknameText'
@@ -39,7 +39,7 @@ const EditAccount = () => {
   // 유저 프로필 사진 업데이트
   const updateUserProfile = async (file: File) => {
     try {
-      await updateUserProfileApi(userInfo.accessToken, userInfo.memberId, file).then((res) => {
+      await updateUserProfileApi(userInfo.accessToken, userInfo.memberId, file).then(() => {
         setUserInfo({
           ...userInfo,
           profileImage: URL.createObjectURL(file),

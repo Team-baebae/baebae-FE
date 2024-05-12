@@ -68,7 +68,7 @@ export const getQuestionsApi = async (memberId: number, page: number, accessToke
 export const deleteQuestionsApi = async (questionId: number, accessToken: string) => {
   try {
     let API = `/api/questions/${questionId}`
-    const response = await flipitAxios.delete(API, {
+    await flipitAxios.delete(API, {
       params: questionId,
       headers: {
         Authorization: `Bearer ${accessToken}`,

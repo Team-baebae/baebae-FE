@@ -90,20 +90,3 @@ const WriterRegion = styled.button`
   border: none;
   outline: none;
 `
-
-const TotalFeedsBtn = styled.div`
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  height: 40px;
-  padding: 10px 12px;
-  margin: 26px 20px 20px 20px;
-  gap: 10px;
-  border-radius: 8px;
-  background: ${colors.grey1};
-  color: ${colors.white};
-  font-family: Pretendard;
-  font-size: 14px;
-  font-weight: 500;
-  letter-spacing: -0.28px;
-`

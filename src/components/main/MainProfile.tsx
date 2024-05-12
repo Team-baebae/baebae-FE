@@ -1,6 +1,6 @@
 import styled from 'styled-components'
 import { useEffect } from 'react'
-import { useRecoilState } from 'recoil'
+import { useRecoilValue } from 'recoil'
 import { colors } from '@/styles/colors'
 import { UserInfoStateProps, userInfoState } from '@/context/Atoms'
 import DefaultImage from '@/assets/main/DefaultImage.svg'
@@ -17,7 +17,7 @@ interface MainProfileProps {
 
 // 메인프로필 컴포넌트
 const MainProfile = ({ nickname }: MainProfileProps) => {
-  const [userInfo, setUserInfo] = useRecoilState<UserInfoStateProps>(userInfoState)
+  const userInfo = useRecoilValue<UserInfoStateProps>(userInfoState)
 
   const { Kakao } = window
   const javascriptKey: string = import.meta.env.VITE_KAKAO_JAVASCRIPT_KEY
