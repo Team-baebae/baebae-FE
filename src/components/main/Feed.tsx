@@ -10,7 +10,7 @@ import { Swiper, SwiperSlide } from 'swiper/react'
 import 'swiper/swiper-bundle.css'
 import 'swiper/css'
 import Feeds from '@/components/feed/Feeds'
-import Flips from '@/components/main/Flips'
+import NoFlip from '@/components/main/NoFlip'
 import { directoryProps } from '@/components/main/types'
 import { StyledToastContainer } from '@/components/toast/toastStyle'
 import { colors } from '@/styles/colors'
@@ -190,7 +190,7 @@ const Feed = () => {
         </Swiper>
       </TopComponent>
       {/* 해당 디렉토리 피드 리스트 부분 */}
-      {feedList.length > 0 ? <Feeds data={feedList} /> : <Flips />}
+      {feedList.length > 0 ? <Feeds data={feedList} /> : <NoFlip />}
       {/* BottomSheet 모달 부분 */}
       {open && (
         <BottomSheet open={open} snapPoints={() => [170]} onDismiss={handleDismissPlusMusicModal} blocking={true}>
