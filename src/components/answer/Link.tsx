@@ -133,28 +133,6 @@ const LinkIcon = styled.img`
 
 // 2단계 모달
 
-const SearchedLinkText = styled.div<{ color: string }>`
-  display: -webkit-box;
-  -webkit-box-orient: vertical;
-  -webkit-line-clamp: 1;
-  flex: 1 0 0;
-  display: flex;
-  padding: 12px 12px 12px 41px;
-  align-items: flex-start;
-  gap: 9px;
-  align-self: stretch;
-  border-radius: 12px;
-  background-color: ${colors.grey7};
-  color: ${(props) => props.color};
-  overflow: hidden;
-  text-overflow: ellipsis;
-  font-family: Pretendard;
-  font-size: 14px;
-  font-weight: 400;
-  line-height: 150%;
-  letter-spacing: -0.56px;
-`
-
 const SearchLinkInput = styled.input`
   display: flex;
   align-items: flex-start;

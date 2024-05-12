@@ -11,7 +11,7 @@ import 'react-spring-bottom-sheet/dist/style.css'
 import pencil from '@/assets/main/Pencil.svg'
 import trash from '@/assets/main/Trash.svg'
 import { useNavigate } from 'react-router-dom'
-import { useRecoilState } from 'recoil'
+import { useRecoilValue } from 'recoil'
 import { userInfoState } from '@/context/Atoms'
 import { deleteDirectoryApi, getDirectoriesApi } from '@/apis/DirectoryApi'
 import plus from '@/assets/main/Plus.svg'
@@ -36,7 +36,7 @@ const Groups = () => {
 
   const navigate = useNavigate()
 
-  const [userInfo, setUserInfo] = useRecoilState(userInfoState)
+  const userInfo = useRecoilValue(userInfoState)
 
   const [selectedDirectoryId, setSelectedDirectoryId] = useState<number>(0) // 선택된 디렉토리 ID 상태
   const holdTimer = useRef<number | null>(null) // useRef에 타입 명시
@@ -76,7 +76,7 @@ const Groups = () => {
 
   const deleteDirectory = async () => {
     try {
-      await deleteDirectoryApi(userInfo.accessToken, selectedDirectoryId).then((res) => {
+      await deleteDirectoryApi(userInfo.accessToken, selectedDirectoryId).then(() => {
         setOpen(false)
         getDirectories()
       })

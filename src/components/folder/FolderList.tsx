@@ -15,7 +15,6 @@ const FolderList = () => {
     setOpen(false)
   }
 
-  const [folderImgUrl, setFolderImgUrl] = useState<string>('')
   const [folderName, setFolderName] = useState<string>('')
 
   const onChangeFolderName = (e: React.ChangeEvent<HTMLInputElement>) => {

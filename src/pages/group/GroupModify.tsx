@@ -1,6 +1,6 @@
 import styled from 'styled-components'
 import { useState } from 'react'
-import { useRecoilState } from 'recoil'
+import { useRecoilValue } from 'recoil'
 import { Flip, toast } from 'react-toastify'
 import { useLocation, useNavigate } from 'react-router-dom'
 import GroupHeader from '@/components/common/GroupHeader'
@@ -17,7 +17,7 @@ import DefaultImg from '@/assets/main/DefaultImage.svg'
 const GroupModify = () => {
   const navigate = useNavigate()
 
-  const [userInfo, setUserInfo] = useRecoilState<UserInfoStateProps>(userInfoState)
+  const userInfo = useRecoilValue<UserInfoStateProps>(userInfoState)
 
   //   넘겨받은 카카오 categoryId 저장
   const location = useLocation()
@@ -30,7 +30,7 @@ const GroupModify = () => {
 
   const [groupImgUrl, setGroupImgUrl] = useState<string>(categoryImage)
   const [groupImgFile, setGroupImgFile] = useState<File>()
-  const [answerIds, setAnswerIds] = useState<any>([])
+  const [answerIds] = useState<any>([])
   // 이미지 파일 선택 핸들러
   const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files && e.target.files[0]

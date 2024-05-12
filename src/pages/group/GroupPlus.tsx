@@ -1,23 +1,23 @@
 import { useState } from 'react'
 import styled from 'styled-components'
-import { useRecoilState } from 'recoil'
+import { useRecoilValue } from 'recoil'
 import { useNavigate } from 'react-router-dom'
 import GroupHeader from '@/components/common/GroupHeader'
 import { UnFixedButton } from '@/components/common/Button'
 import Feeds from '@/components/folder/Feeds'
 import NoFlip from '@/components/main/NoFlip'
-import { makeDirectoryApi, updateDirectoryImgApi } from '@/apis/DirectoryApi'
+import { makeDirectoryApi } from '@/apis/DirectoryApi'
 import { userInfoState } from '@/context/Atoms'
 import { colors } from '@/styles/colors'
 
 const GroupPlus = () => {
   const navigate = useNavigate()
 
-  const [userInfo, setUserInfo] = useRecoilState(userInfoState)
+  const userInfo = useRecoilValue(userInfoState)
 
-  const [directoryImgUrl, setDirectoryImgUrl] = useState<string>('')
+  const [, setDirectoryImgUrl] = useState<string>('')
   const [directoryImgFile, setDirectoryImgFile] = useState<File>()
-  const [answerIds, setAnswerIds] = useState<any>([])
+  const [answerIds] = useState<any>([])
   // 이미지 파일 선택 핸들러
   const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files && e.target.files[0]
