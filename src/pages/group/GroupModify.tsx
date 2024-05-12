@@ -36,9 +36,9 @@ const GroupModify = () => {
     const file = e.target.files && e.target.files[0]
     // 이미지 파일을 보낼 시엔 formData로 file을 추가해야함(추후 추가)
     if (file) {
-      setGroupImgFile(file)
       setGroupImgUrl(URL.createObjectURL(file)) // 미리보기를 위해 파일 URL 생성
       setIsEditGroupImg(true)
+      setGroupImgFile(file)
     }
   }
 
@@ -159,7 +159,7 @@ const GroupModify = () => {
       {feedList.length > 0 ? <Feeds data={feedList} /> : <Flips />}
       <UnFixedButton
         $positive={groupName === '' ? false : true}
-        func={modifyDirectory}
+        func={onClickModifyBtn}
         func2={() => toast('그룹명을 입력해주세요')}
         text="그룹 수정하기"
         margin="30px 20px 30px 20px"
