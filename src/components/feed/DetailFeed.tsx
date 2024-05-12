@@ -22,7 +22,7 @@ interface ModalProps {
 
 const DetailFeed = (props: ModalProps) => {
   const backModal = props.clickModal
-  const [isFlipped, setIsFlipped] = useState(false)
+  const [isFlipped, setIsFlipped] = useState<boolean>(false)
 
   const spring = {
     type: 'spring',
