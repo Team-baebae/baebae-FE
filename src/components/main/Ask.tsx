@@ -84,28 +84,33 @@ const Ask = ({ userInfo, isMyPage }: AskProps) => {
           <Icon width={20} height={20} src={ForwardArrow} />
         </AskNotification>
       )}
-      <AskContainer margin={isMyPage ? '53px' : '0'}>
+      <AskContainer>
         <TextRegion
           placeholder={`이런 질문은 어떤가요?\n너의 패션 스타일이 궁금해!\n무슨 음식 좋아해?`}
           value={text}
           onChange={onChangeText}
         />
         <WriterBlock>
-          FROM <WriterRegion placeholder="자유롭게 입력해주세요" type="text" value={writer} onChange={onChangeWriter} />
+          FROM{' '}
+          <WriterRegion
+            placeholder="자유롭게 입력해주세요"
+            type="text"
+            value={writer}
+            onChange={onChangeWriter}
+            maxLength={10}
+          />
         </WriterBlock>
       </AskContainer>
-      {!isMyPage && (
-        <OpenProfileWrapper margin={isMyPage ? '0' : '78px'}>
-          <OpenProfile>
-            <MiniToggle isActive={isProfileOn} setIsActive={setIsProfileOn} />
-            <OpenProfileText>
-              질문자 프로필 공개
-              <Icon width={18} height={18} src={Info} onClick={clickIcon} />
-            </OpenProfileText>
-          </OpenProfile>
-          <Tooltip show={showTooltip} clickIcon={clickIcon} />
-        </OpenProfileWrapper>
-      )}
+      <OpenProfileWrapper margin={isMyPage ? '30px' : '82px'}>
+        <OpenProfile>
+          <MiniToggle isActive={isProfileOn} setIsActive={setIsProfileOn} />
+          <OpenProfileText>
+            질문자 프로필 공개
+            <Icon width={18} height={18} src={Info} onClick={clickIcon} />
+          </OpenProfileText>
+        </OpenProfile>
+        <Tooltip show={showTooltip} clickIcon={clickIcon} />
+      </OpenProfileWrapper>
       <Button $positive={true} func={submitHandler} text="질문하기" />
       <StyledToastContainer
         position="bottom-center"
@@ -152,13 +157,12 @@ const TextWrapper = styled.div<{ ml: string; color: string }>`
 `
 const Icon = styled.img``
 
-const AskContainer = styled.div<{ margin: string }>`
+const AskContainer = styled.div`
   display: flex;
   flex-direction: column;
   justify-content: space-between;
   align-items: flex-start;
   height: 346px;
-  margin-bottom: ${(props) => props.margin};
   padding: 20px;
   border-radius: 2.127px;
   background-color: ${colors.white};

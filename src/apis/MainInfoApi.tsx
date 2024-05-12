@@ -48,12 +48,15 @@ export const postQuestionApi = async (memberId: number, question: QuestionProps,
   }
 }
 
-// 질문 조회 api -> pageable param 추가 필요
-export const getQuestionsApi = async (memberId: number) => {
+// 답변하지 않은 질문 조회 api -> pageable param 추가 필요
+export const getQuestionsApi = async (memberId: number, page: number, accessToken: string) => {
   try {
-    let API = `/api/questions`
+    let API = `/api/questions/unanswered/${memberId}?page=${page}&size=8`
     const response = await flipitAxios.get(API, {
       params: memberId,
+      headers: {
+        Authorization: `Bearer ${accessToken}`,
+      },
     })
     return response.data
   } catch (error) {
@@ -62,11 +65,14 @@ export const getQuestionsApi = async (memberId: number) => {
 }
 
 // 질문 삭제 api
-export const deleteQuestionsApi = async (questionId: number) => {
+export const deleteQuestionsApi = async (questionId: number, accessToken: string) => {
   try {
     let API = `/api/questions/${questionId}`
     const response = await flipitAxios.delete(API, {
       params: questionId,
+      headers: {
+        Authorization: `Bearer ${accessToken}`,
+      },
     })
   } catch (error) {
     console.error(error)
