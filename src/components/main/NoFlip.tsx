@@ -2,7 +2,6 @@ import styled from 'styled-components'
 import NoFeed from '@/assets/main/NoneFeed.svg'
 import { colors } from '@/styles/colors'
 
-// 해당 그룹에 피드가 없을 때 컴포넌트
 const NoFlip = () => {
   return (
     <Container>

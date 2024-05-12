@@ -2,41 +2,37 @@ import { useState } from 'react'
 import styled from 'styled-components'
 import { useRecoilState } from 'recoil'
 import { useNavigate } from 'react-router-dom'
-import { Flip, toast } from 'react-toastify'
 import GroupHeader from '@/components/common/GroupHeader'
 import { UnFixedButton } from '@/components/common/Button'
 import Feeds from '@/components/folder/Feeds'
 import NoFlip from '@/components/main/NoFlip'
-import { StyledToastContainer } from '@/components/toast/toastStyle'
 import { makeDirectoryApi, updateDirectoryImgApi } from '@/apis/DirectoryApi'
 import { userInfoState } from '@/context/Atoms'
 import { colors } from '@/styles/colors'
-import DefaultImg from '@/assets/main/DefaultImage.svg'
 
-// 그룹 수정 페이지
 const GroupPlus = () => {
   const navigate = useNavigate()
 
   const [userInfo, setUserInfo] = useRecoilState(userInfoState)
 
-  const [groupImgUrl, setGroupImgUrl] = useState<string>('')
-  const [groupImgFile, setGroupImgFile] = useState<File>()
+  const [directoryImgUrl, setDirectoryImgUrl] = useState<string>('')
+  const [directoryImgFile, setDirectoryImgFile] = useState<File>()
   const [answerIds, setAnswerIds] = useState<any>([])
   // 이미지 파일 선택 핸들러
   const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files && e.target.files[0]
     // 이미지 파일을 보낼 시엔 formData로 file을 추가해야함(추후 추가)
     if (file) {
-      setGroupImgFile(file)
-      setGroupImgUrl(URL.createObjectURL(file)) // 미리보기를 위해 파일 URL 생성
+      setDirectoryImgFile(file)
+      setDirectoryImgUrl(URL.createObjectURL(file)) // 미리보기를 위해 파일 URL 생성
     }
   }
 
-  const [groupName, setGroupName] = useState<string>('')
+  const [categoryName, setCategoryName] = useState<string>('')
 
   const onChangeFolderName = (e: React.ChangeEvent<HTMLInputElement>) => {
     const value = e.target.value
-    setGroupName(value)
+    setCategoryName(value)
   }
 
   const feedList = [
@@ -72,13 +68,12 @@ const GroupPlus = () => {
     },
   ]
 
-  // 그룹 생성
   const makeDirectory = async () => {
     try {
-      await makeDirectoryApi(userInfo.accessToken, userInfo.memberId, groupImgFile, groupName, answerIds).then(
+      await makeDirectoryApi(userInfo.accessToken, userInfo.memberId, directoryImgFile, categoryName, answerIds).then(
         (res) => {
           console.log(res)
-          navigate(-1)
+          navigate(`/${userInfo.nickname}`)
         },
       )
     } catch (err) {
@@ -90,26 +85,26 @@ const GroupPlus = () => {
     <Container>
       <GroupHeader text="새 그룹 추가" background={colors.grey7} />
       <FolderImgWrapper>
-        {groupImgUrl === '' ? <FolderImg src={DefaultImg} /> : <FolderImg src={groupImgUrl} />}
+        <FolderImg />
       </FolderImgWrapper>
       <label htmlFor="file">
         <EditFolderImgText>사진 수정하기</EditFolderImgText>
       </label>
       <input type="file" name="file" id="file" style={{ display: 'none' }} onChange={handleImageChange} />
       <FolderNameLabel>그룹명</FolderNameLabel>
-      <FolderName value={groupName} onChange={onChangeFolderName} placeholder="그룹명을 입력해주세요" />
+      <FolderName value={categoryName} onChange={onChangeFolderName} placeholder="그룹명을 입력해주세요" />
       <FolderNameConditionWrapper>
         <FolderNameConditionText color={colors.grey1} fontSize="12px">
           2-8자로 입력해주세요.
         </FolderNameConditionText>
         <FolderNameLengthWrapper>
-          {groupName.length > 0 ? (
+          {categoryName.length > 0 ? (
             <FolderNameConditionText color={colors.grey2} fontSize="10px">
-              {groupName.length}
+              {categoryName.length}
             </FolderNameConditionText>
           ) : (
             <FolderNameConditionText color={colors.grey4} fontSize="10px">
-              {groupName.length}
+              {categoryName.length}
             </FolderNameConditionText>
           )}
 
@@ -126,22 +121,11 @@ const GroupPlus = () => {
       </FolderNameConditionText>
       {feedList.length > 0 ? <Feeds data={feedList} /> : <NoFlip />}
       <UnFixedButton
-        $positive={groupName === '' ? false : true}
+        $positive={true}
         func={makeDirectory}
-        func2={() => toast('그룸명을 입력해주세요')}
+        func2={() => console.log('실패')}
         text="그룹 추가하기"
         margin="30px 20px 30px 20px"
-      />
-      <StyledToastContainer
-        position="bottom-center"
-        autoClose={1000}
-        hideProgressBar
-        pauseOnHover={false}
-        closeOnClick={false}
-        closeButton={false}
-        rtl={false}
-        theme="dark"
-        transition={Flip}
       />
     </Container>
   )
@@ -171,7 +155,7 @@ const FolderImgWrapper = styled.div`
   transform: translateX(-50%);
 `
 
-const FolderImg = styled.img`
+const FolderImg = styled.div`
   width: 76px;
   height: 76px;
   flex-shrink: 0;
