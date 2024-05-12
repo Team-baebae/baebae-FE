@@ -1,33 +1,67 @@
 import { BrowserRouter, Routes, Route } from 'react-router-dom'
-import Outer from './pages/Outer'
-import Landing from './pages/Landing'
-import Login from './pages/Login'
-import KakaoRedirection from './pages/KakaoRedirection'
-import Spotify from './pages/Spotify'
-import SignUpTerms from './pages/SignUpTerms'
-import SignUpNickname from './pages/SignUpNickname'
-import Setting from './pages/Setting'
-import EditProfile from './pages/EditProfile'
-import SignUpOnBoarding from './pages/SignUpOnBoarding'
-import Main from './pages/Main'
-import QuestionList from './pages/QuestionList'
+import Outer from '@/pages/Outer'
+import Landing from '@/pages/landing/Landing'
+import Login from '@/pages/login/Login'
+import KakaoRedirection from '@/pages/signup/KakaoRedirection'
+import SignUpTerms from '@/pages/signup/SignUpTerms'
+import SignUpNickname from '@/pages/signup/SignUpNickname'
+import Setting from '@/pages/setting/Setting'
+import EditProfile from '@/pages/setting/EditAccount'
+import SignUpOnBoarding from '@/pages/signup/SignUpOnBoarding'
+import Answer from '@/pages/answer/Answer'
+import Folder from '@/pages/answer/Folder'
+import AnswerComplete from '@/pages/answer/AnswerComplete'
+import Main from '@/pages/main/Main'
+import QuestionList from '@/pages/question/QuestionList'
+import GroupPlus from '@/pages/group/GroupPlus'
+import GroupModify from '@/pages/group/GroupModify'
+import PrivacyPolicy from '@/pages/setting/PrivacyPolicy'
+import Ask from '@/pages/setting/Support'
+import Tos from '@/pages/setting/Tos'
+import DetailTestPage from '@/pages/DetailTestPage'
+import Groups from './pages/category/Groups'
 
 const Router = () => {
   return (
     <BrowserRouter>
       <Routes>
         <Route path="/" element={<Outer />}>
-          <Route path="" element={<Landing />} />
+          <Route index element={<Landing />} />
           <Route path="login" element={<Login />} />
           <Route path="auth" element={<KakaoRedirection />} />
-          <Route path="signup/terms" element={<SignUpTerms />} />
-          <Route path="signup/nickname" element={<SignUpNickname />} />
-          <Route path="signup/onboarding" element={<SignUpOnBoarding />} />
-          <Route path=":username" element={<Main />} />
-          <Route path=":username/questionList" element={<QuestionList />} />
-          <Route path="spotify" element={<Spotify />} />
-          <Route path="setting" element={<Setting />} />
-          <Route path="setting/editProfile" element={<EditProfile />} />
+          <Route path="signup">
+            <Route path="terms" element={<SignUpTerms />} />
+            <Route path="nickname" element={<SignUpNickname />} />
+            <Route path="complete" element={<SignUpOnBoarding />} />
+          </Route>
+          <Route path="settings">
+            <Route index element={<Setting />} />
+            <Route path="account/edit" element={<EditProfile />} />
+            <Route path="terms">
+              <Route path="serviceTerms" element={<Tos />} />
+              <Route path="privacyPolicy" element={<PrivacyPolicy />} />
+            </Route>
+            <Route path="support" element={<Ask />} />
+          </Route>
+          <Route path=":username">
+            <Route index element={<Main />} />
+          </Route>
+          <Route path="questions">
+            <Route index element={<QuestionList />} />
+            <Route path=":questionId">
+              <Route path="answer" element={<Answer />} />
+              <Route path="group" element={<Folder />} />
+              <Route path="complete" element={<AnswerComplete />} />
+            </Route>
+          </Route>
+          <Route path="groups">
+            <Route index element={<Groups />} />
+            <Route path="new" element={<GroupPlus />} />
+            <Route path=":groupId">
+              <Route path="edit" element={<GroupModify />} />
+            </Route>
+          </Route>
+          <Route path="detailTest" element={<DetailTestPage />} />
         </Route>
       </Routes>
     </BrowserRouter>
