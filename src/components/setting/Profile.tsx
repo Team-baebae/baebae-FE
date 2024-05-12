@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router-dom'
 import { useRecoilValue } from 'recoil'
 import { colors } from '@/styles/colors'
 import { UserInfoStateProps, userInfoState } from '@/context/Atoms'
+import DefaultImg from '@/assets/main/DefaultImage.svg'
 
 // 회원 프로필 컴포넌트
 const Profile = () => {
@@ -13,7 +14,11 @@ const Profile = () => {
 
   return (
     <Container>
-      <ProfileImage src={userInfo.profileImage} />
+      {userInfo.profileImage === null ? (
+        <ProfileImage src={DefaultImg} />
+      ) : (
+        <ProfileImage src={userInfo.profileImage} />
+      )}
       <ProfileContents>
         <Nickname>{userInfo.nickname}</Nickname>
         <EditButton onClick={() => navigate('/settings/account/edit')}>내 프로필 수정하기</EditButton>

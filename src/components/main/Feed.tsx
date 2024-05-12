@@ -5,12 +5,14 @@ import { useNavigate } from 'react-router-dom'
 import { BottomSheet } from 'react-spring-bottom-sheet'
 import 'react-spring-bottom-sheet/dist/style.css'
 import { useGesture } from '@use-gesture/react'
+import { Flip, toast } from 'react-toastify'
 import { Swiper, SwiperSlide } from 'swiper/react'
 import 'swiper/swiper-bundle.css'
 import 'swiper/css'
 import Feeds from '@/components/feed/Feeds'
 import Flips from '@/components/main/Flips'
 import { directoryProps } from '@/components/main/types'
+import { StyledToastContainer } from '@/components/toast/toastStyle'
 import { colors } from '@/styles/colors'
 import { deleteDirectoryApi, getDirectoriesApi } from '@/apis/DirectoryApi'
 import { UserInfoStateProps, userInfoState } from '@/context/Atoms'
@@ -31,6 +33,7 @@ const Feed = () => {
   const getDirectories = async () => {
     try {
       await getDirectoriesApi(userInfo.accessToken, userInfo.memberId).then((res) => {
+        console.log(res)
         setDirectories(res.data.categories)
       })
     } catch (err) {
@@ -73,11 +76,15 @@ const Feed = () => {
 
   // 보여줄 선택된 디렉토리
   const [selectedDirectoryId, setSelectedDirectoryId] = useState<number>(0)
+  const [selectedDirectoryGroupName, setSelectedDirectoryGroupName] = useState<string>('')
+  const [selectedDirectoryImage, setSelectedDirectoryImage] = useState<string>('')
 
   // open은 모달 열고 닫는 상태
   const [open, setOpen] = useState<boolean>(false)
-  const openModal = (directoryId: number) => {
-    setSelectedDirectoryId(directoryId) // 선택된 디렉토리 ID 설정
+  const openModal = (categoryId: number, categoryImage: string, categoryName: string) => {
+    setSelectedDirectoryId(categoryId)
+    setSelectedDirectoryImage(categoryImage)
+    setSelectedDirectoryGroupName(categoryName)
     setOpen(true)
   }
   // 모달 이전상태로 변화
@@ -89,9 +96,10 @@ const Feed = () => {
   const holdTimer = useRef<number | null>(null) // useRef에 타입 명시
   const bind = useGesture({
     onPointerDown: ({ event, args }) => {
-      const directoryId = args[0] as number // args를 통해 directoryId 받기
+      const [categoryId, categoryImage, categoryName] = args as [number, string, string]
+
       event.preventDefault()
-      holdTimer.current = window.setTimeout(() => openModal(directoryId), 500)
+      holdTimer.current = window.setTimeout(() => openModal(categoryId, categoryImage, categoryName), 500)
     },
     onPointerUp: () => {
       if (holdTimer.current !== null) {
@@ -113,6 +121,11 @@ const Feed = () => {
       await deleteDirectoryApi(userInfo.accessToken, selectedDirectoryId).then((res) => {
         setOpen(false)
         getDirectories()
+        if (res.status === 204) {
+          toast('그룹이 삭제되었습니다')
+        } else {
+          toast('피드가 있는 그룹은 삭제가 불가능합니다')
+        }
       })
     } catch (err) {
       console.log(err)
@@ -124,6 +137,8 @@ const Feed = () => {
     navigate(`/groups/${selectedDirectoryId}/edit`, {
       state: {
         categoryId: selectedDirectoryId,
+        categoryImage: selectedDirectoryImage,
+        categoryName: selectedDirectoryGroupName,
       },
     })
   }
@@ -147,7 +162,7 @@ const Feed = () => {
               <SwiperSlide key={item.categoryId}>
                 <GroupWrapper>
                   <GroupImgWrapper
-                    {...bind(item.categoryId)}
+                    {...bind(item.categoryId, item.categoryImage, item.categoryName)}
                     onContextMenu={(e) => {
                       e.preventDefault()
                       e.stopPropagation()
@@ -189,6 +204,17 @@ const Feed = () => {
           </BottomSheetEachWrapper>
         </BottomSheet>
       )}
+      <StyledToastContainer
+        position="bottom-center"
+        autoClose={1000}
+        hideProgressBar
+        pauseOnHover={false}
+        closeOnClick={false}
+        closeButton={false}
+        rtl={false}
+        theme="dark"
+        transition={Flip}
+      />
     </Container>
   )
 }

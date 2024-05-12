@@ -13,20 +13,20 @@ export const getDirectoriesApi = (accessToken: string, memberId: number) => {
 export const makeDirectoryApi = (
   accessToken: string,
   memberId: number,
-  categoryImage: File | undefined,
-  categoryName: string,
+  groupImgFile: File | undefined,
+  groupName: string,
   answerIds: any,
 ) => {
   // FormData 객체 생성
   const formData = new FormData()
   // categoryImage가 undefined가 아니면 FormData에 추가
-  if (categoryImage) {
-    formData.append('categoryImage', categoryImage)
+  if (groupImgFile) {
+    formData.append('categoryImage', groupImgFile)
   } else {
     console.warn('No category image provided')
   }
   const createCategory = {
-    categoryName: categoryName,
+    categoryName: groupName,
     answerIds: answerIds,
   }
   formData.append('createCategory', JSON.stringify(createCategory))
@@ -55,6 +55,7 @@ export const modifyDirectoryApi = (accessToken: string, categoryId: number, cate
       categoryName: categoryName,
       answerIds: answerIds,
     },
+
     {
       headers: {
         Authorization: `Bearer ${accessToken}`,
@@ -63,16 +64,13 @@ export const modifyDirectoryApi = (accessToken: string, categoryId: number, cate
   )
 }
 
-export const updateDirectoryImgApi = (accessToken: string, categoryId: number, imageFile: File) => {
-  return axios.patch(
-    `http://${serverUrl}/api/category/${categoryId}/image`,
-    {
-      imageFile: imageFile,
+export const updateDirectoryImgApi = (accessToken: string, categoryId: number, imageFile: File | undefined) => {
+  const formData = new FormData()
+  if (imageFile) formData.append('imageFile', imageFile)
+
+  return axios.patch(`http://${serverUrl}/api/category/${categoryId}/image`, formData, {
+    headers: {
+      Authorization: `Bearer ${accessToken}`,
     },
-    {
-      headers: {
-        Authorization: `Bearer ${accessToken}`,
-      },
-    },
-  )
+  })
 }

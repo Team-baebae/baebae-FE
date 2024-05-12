@@ -4,6 +4,7 @@ import { colors } from '../../styles/colors'
 interface BottomButtonProps {
   $positive: boolean
   func: any
+  func2?: any
   text: string
 }
 
@@ -22,18 +23,13 @@ interface Buttonprops {
 }
 
 // 공통 초록색 버튼 구현 ($positive가 true일경우 진한초록, false일경우 연한초록)
-export const BottomButton = ({ $positive, func, text }: BottomButtonProps) => {
+export const BottomButton = ({ $positive, func, func2, text }: BottomButtonProps) => {
   return $positive ? (
     <GreenCommonBtn onClick={func} $positive={true}>
       {text}
     </GreenCommonBtn>
   ) : (
-    <GreenCommonBtn
-      onClick={() => {
-        console.log('비활성화 상태')
-      }}
-      $positive={false}
-    >
+    <GreenCommonBtn onClick={func2} $positive={false}>
       {text}
     </GreenCommonBtn>
   )

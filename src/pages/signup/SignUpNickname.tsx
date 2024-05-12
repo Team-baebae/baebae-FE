@@ -5,8 +5,8 @@ import { useNavigate, useLocation } from 'react-router-dom'
 import Header from '@/components/common/Header'
 import { BottomButton } from '@/components/common/Button'
 import IsValidNicknameText from '@/components/common/IsValidNicknameText'
-import { LoginProps } from '@/pages/signup/types'
-import { isExistingNicknameApi, loginApi } from '@/apis/UserApi'
+import { LoginProps, GetUserInfoProps } from '@/pages/signup/types'
+import { getUserInfoApi, isExistingNicknameApi, loginApi } from '@/apis/UserApi'
 import { colors } from '@/styles/colors'
 import { UserInfoStateProps, isLoggedInState, userInfoState } from '@/context/Atoms'
 
@@ -63,30 +63,41 @@ const SignUpNickname = () => {
     }
   }
 
-  // 로그인 함수
+  // 이미 존재하는 회원일 경우 바로 로그인 진행
   const login = async (kakaoAccessToken: string, nickname: string) => {
     try {
-      await loginApi(kakaoAccessToken, nickname).then((res: LoginProps) => {
+      await loginApi(kakaoAccessToken, nickname).then(async (res: LoginProps) => {
         if (res.status === 200) {
+          console.log(res)
           console.log(res.data.accessToken)
-          setUserInfo({
-            ...userInfo,
-            memberId: res.data.id,
-            nickname: res.data.nickname,
-            email: res.data.email,
-            accessToken: res.data.accessToken,
-            refreshToken: res.data.refreshToken,
-          })
+          console.log(res.data.id)
+          getUserInfo(res.data)
           setIsLoggedIn(true)
-          navigate('/signup/onboarding', {
-            state: {
-              nickname: res.data.nickname,
-            },
-          })
+          navigate(`/${res.data.nickname}`)
         } else {
           alert('로그인 실패')
           navigate('/login')
         }
+      })
+    } catch (err) {
+      console.log(err)
+    }
+  }
+
+  // 유저 정보 받아오기
+  const getUserInfo = async (data: GetUserInfoProps) => {
+    try {
+      await getUserInfoApi(data.accessToken, data.id).then((res) => {
+        console.log(res)
+        setUserInfo({
+          ...userInfo,
+          memberId: data.id,
+          nickname: data.nickname,
+          email: data.email,
+          accessToken: data.accessToken,
+          refreshToken: data.refreshToken,
+          profileImage: res.data.profileImage,
+        })
       })
     } catch (err) {
       console.log(err)

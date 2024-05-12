@@ -26,7 +26,7 @@ const Ask = ({ userInfo, isMyPage }: AskProps) => {
   const [askCount, setAskCount] = useState<number>(0)
   const navigate = useNavigate()
   const questionClick = () => {
-    navigate(`/${userInfo?.nickname}/questions`)
+    navigate(`/questions`)
   }
 
   useEffect(() => {

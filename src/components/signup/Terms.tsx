@@ -61,10 +61,18 @@ const Terms = ({ isChecked, setIsChecked }: TermsProps) => {
         ) : (
           <TermCheckIcon
             onClick={() => {
-              setIsChecked({
-                ...isChecked,
-                isCheckedFirst: true,
-              })
+              if (isChecked.isCheckedSecond && isChecked.isCheckedThird) {
+                setIsChecked({
+                  ...isChecked,
+                  isCheckedTotal: true,
+                  isCheckedFirst: true,
+                })
+              } else {
+                setIsChecked({
+                  ...isChecked,
+                  isCheckedFirst: true,
+                })
+              }
             }}
             src={Unchecked}
           />
@@ -98,10 +106,18 @@ const Terms = ({ isChecked, setIsChecked }: TermsProps) => {
         ) : (
           <TermCheckIcon
             onClick={() => {
-              setIsChecked({
-                ...isChecked,
-                isCheckedSecond: true,
-              })
+              if (isChecked.isCheckedFirst && isChecked.isCheckedThird) {
+                setIsChecked({
+                  ...isChecked,
+                  isCheckedTotal: true,
+                  isCheckedSecond: true,
+                })
+              } else {
+                setIsChecked({
+                  ...isChecked,
+                  isCheckedSecond: true,
+                })
+              }
             }}
             src={Unchecked}
           />
@@ -129,10 +145,18 @@ const Terms = ({ isChecked, setIsChecked }: TermsProps) => {
         ) : (
           <TermCheckIcon
             onClick={() => {
-              setIsChecked({
-                ...isChecked,
-                isCheckedThird: true,
-              })
+              if (isChecked.isCheckedFirst && isChecked.isCheckedSecond) {
+                setIsChecked({
+                  ...isChecked,
+                  isCheckedTotal: true,
+                  isCheckedThird: true,
+                })
+              } else {
+                setIsChecked({
+                  ...isChecked,
+                  isCheckedThird: true,
+                })
+              }
             }}
             src={Unchecked}
           />
@@ -171,6 +195,7 @@ const TermCheckIcon = styled.img`
   width: 20px;
   height: 20px;
   flex-shrink: 0;
+  cursor: pointer;
 `
 
 const TermText = styled.div<{ color: string; fontWeight: string }>`

@@ -28,7 +28,7 @@ const GroupHeader = ({ text, background }: HeaderProps) => {
         src={xIcon}
         alt="X"
         onClick={() => {
-          navigate('/nickname')
+          navigate(-1)
         }}
       />
     </HeaderTotalComponent>
