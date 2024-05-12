@@ -1,10 +1,10 @@
 import styled from 'styled-components'
-import EachFolder from './EachFolder'
 import { BottomSheet } from 'react-spring-bottom-sheet'
 import 'react-spring-bottom-sheet/dist/style.css'
 import { useState } from 'react'
-import { colors } from '../../styles/colors'
-import { UnFixedButton } from '../common/Button'
+import EachFolder from '@/components/folder/EachFolder'
+import { colors } from '@/styles/colors'
+import { UnFixedButton } from '@/components/common/Button'
 
 const FolderList = () => {
   // open은 모달 열고 닫는 상태

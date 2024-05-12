@@ -4,6 +4,7 @@ import { BottomButton } from '@/components/common/Button'
 import FolderList from '@/components/folder/FolderList'
 import { colors } from '@/styles/colors'
 
+// 답변 완료 후 그룹 선택 페이지
 const Folder = () => {
   return (
     <Container>

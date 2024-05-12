@@ -1,28 +1,33 @@
+import { useEffect, useRef, useState } from 'react'
 import styled from 'styled-components'
-import logo from '../../assets/Logo.svg'
-import plus from '../../assets/Plus.svg'
-import { colors } from '../../styles/colors'
-import Flips from './Flips'
+import { useRecoilValue } from 'recoil'
+import { useNavigate } from 'react-router-dom'
+import { BottomSheet } from 'react-spring-bottom-sheet'
+import 'react-spring-bottom-sheet/dist/style.css'
+import { useGesture } from '@use-gesture/react'
 import { Swiper, SwiperSlide } from 'swiper/react'
 import 'swiper/swiper-bundle.css'
 import 'swiper/css'
-import Feeds from '../feed/Feeds'
-import { useEffect, useRef, useState } from 'react'
-import { useGesture } from '@use-gesture/react'
-import { BottomSheet } from 'react-spring-bottom-sheet'
-import 'react-spring-bottom-sheet/dist/style.css'
-import pencil from '../../assets/feed/Pencil.svg'
-import trash from '../../assets/feed/Trash.svg'
-import { deleteDirectoryApi, getDirectoriesApi } from '../../apis/DirectoryApi'
-import { useRecoilState } from 'recoil'
-import { userInfoState } from '../../context/Atoms'
-import { useNavigate } from 'react-router-dom'
+import Feeds from '@/components/feed/Feeds'
+import Flips from '@/components/main/Flips'
+import { directoryProps } from '@/components/main/types'
+import { colors } from '@/styles/colors'
+import { deleteDirectoryApi, getDirectoriesApi } from '@/apis/DirectoryApi'
+import { UserInfoStateProps, userInfoState } from '@/context/Atoms'
+import Plus from '@/assets/main/Plus.svg'
+import Pencil from '@/assets/main/Pencil.svg'
+import Trash from '@/assets/main/Trash.svg'
 
+// 메인페이지 피드 컴포넌트
 const Feed = () => {
   const navigate = useNavigate()
 
-  const [userInfo, setUserInfo] = useRecoilState(userInfoState)
+  // 리코일 userInfo
+  const userInfo = useRecoilValue<UserInfoStateProps>(userInfoState)
 
+  // 유저 디렉토리 리스트 저장
+  const [directories, setDirectories] = useState<directoryProps[]>([])
+  // 유저 디렉토리 조회
   const getDirectories = async () => {
     try {
       await getDirectoriesApi(userInfo.accessToken, userInfo.memberId).then((res) => {
@@ -32,15 +37,6 @@ const Feed = () => {
       console.log(err)
     }
   }
-
-  interface directory {
-    categoryId: number
-    categoryName: string
-    answerAnswers: number[]
-    categoryImage: string
-  }
-
-  const [directories, setDirectories] = useState<directory[]>([])
 
   const feedList = [
     {
@@ -75,12 +71,11 @@ const Feed = () => {
     },
   ]
 
-  const [selectedDirectoryId, setSelectedDirectoryId] = useState<number>(0) // 선택된 디렉토리 ID 상태
-  const holdTimer = useRef<number | null>(null) // useRef에 타입 명시
+  // 보여줄 선택된 디렉토리
+  const [selectedDirectoryId, setSelectedDirectoryId] = useState<number>(0)
 
   // open은 모달 열고 닫는 상태
   const [open, setOpen] = useState<boolean>(false)
-
   const openModal = (directoryId: number) => {
     setSelectedDirectoryId(directoryId) // 선택된 디렉토리 ID 설정
     setOpen(true)
@@ -90,7 +85,8 @@ const Feed = () => {
     setOpen(false)
   }
 
-  // 꾹 누르기 기능
+  // 폴더 꾹 눌러 모달창 뜨게하는 기능
+  const holdTimer = useRef<number | null>(null) // useRef에 타입 명시
   const bind = useGesture({
     onPointerDown: ({ event, args }) => {
       const directoryId = args[0] as number // args를 통해 directoryId 받기
@@ -111,6 +107,7 @@ const Feed = () => {
     },
   })
 
+  // 디렉토리 삭제
   const deleteDirectory = async () => {
     try {
       await deleteDirectoryApi(userInfo.accessToken, selectedDirectoryId).then((res) => {
@@ -122,6 +119,7 @@ const Feed = () => {
     }
   }
 
+  // 디렉토리 수정페이지로 이동
   const moveModifyDirectory = () => {
     navigate(`/groups/${selectedDirectoryId}/edit`, {
       state: {
@@ -136,6 +134,7 @@ const Feed = () => {
 
   return (
     <Container>
+      {/* 디렉토리 부분 */}
       <TopComponent>
         <Swiper
           style={{ width: '100%' }}
@@ -168,22 +167,24 @@ const Feed = () => {
                 onClick={() => {
                   navigate('/groups/new')
                 }}
-                src={plus}
+                src={Plus}
               />
               <GroupName>추가</GroupName>
             </GroupWrapper>
           </SwiperSlide>
         </Swiper>
       </TopComponent>
+      {/* 해당 디렉토리 피드 리스트 부분 */}
       {feedList.length > 0 ? <Feeds data={feedList} /> : <Flips />}
+      {/* BottomSheet 모달 부분 */}
       {open && (
         <BottomSheet open={open} snapPoints={() => [170]} onDismiss={handleDismissPlusMusicModal} blocking={true}>
           <BottomSheetEachWrapper onClick={moveModifyDirectory}>
-            <BottomSheetEachIcon src={pencil} />
+            <BottomSheetEachIcon src={Pencil} />
             <BottomSheetEachText color={colors.grey1}>그룹 수정하기</BottomSheetEachText>
           </BottomSheetEachWrapper>
           <BottomSheetEachWrapper onClick={deleteDirectory}>
-            <BottomSheetEachIcon src={trash} />
+            <BottomSheetEachIcon src={Trash} />
             <BottomSheetEachText color="#f00">그룹 삭제하기</BottomSheetEachText>
           </BottomSheetEachWrapper>
         </BottomSheet>
@@ -200,12 +201,13 @@ const Container = styled.div`
   margin: 20px;
   gap: 14px;
 `
+
+// 디렉토리
 const TopComponent = styled.div`
   display: flex;
   flex-direction: row;
   align-items: center;
 `
-
 const GroupWrapper = styled.div`
   display: flex;
   flex-direction: column;
@@ -216,17 +218,16 @@ const GroupWrapper = styled.div`
 `
 const GroupImgWrapper = styled.div`
   display: flex;
+  justify-content: center;
+  align-items: center;
   width: 44px;
   height: 44px;
   padding: 3px;
-  justify-content: center;
-  align-items: center;
   border-radius: 12px;
   border: 1px solid ${colors.grey5};
-  background: ${colors.white};
+  background-color: ${colors.white};
   user-select: none;
 `
-
 const GroupImg = styled.img`
   width: 38px;
   height: 38px;
@@ -237,42 +238,37 @@ const GroupImg = styled.img`
   user-select: none;
   pointer-events: none;
 `
-
 const GroupName = styled.div`
   color: ${colors.grey3};
   font-family: Pretendard;
   font-size: 10px;
-  font-style: normal;
   font-weight: 500;
   line-height: 150%;
   letter-spacing: -0.4px;
 `
-
 const GroupPlusImg = styled.img`
   width: 44px;
   height: 44px;
 `
 
+// 모달
 const BottomSheetEachWrapper = styled.div`
   display: flex;
+  align-items: center;
   width: 100%;
   padding: 20px;
-  align-items: center;
   gap: 12px;
-  background: ${colors.white};
+  background-color: ${colors.white};
 `
-
 const BottomSheetEachIcon = styled.img`
   width: 20px;
   height: 20px;
   flex-shrink: 0;
 `
-
 const BottomSheetEachText = styled.div<{ color: string }>`
   color: ${(props) => props.color};
   font-family: Pretendard;
   font-size: 14px;
-  font-style: normal;
   font-weight: 500;
   line-height: 150%;
   letter-spacing: -0.56px;

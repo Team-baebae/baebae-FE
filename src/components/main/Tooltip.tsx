@@ -1,6 +1,6 @@
 import styled, { keyframes } from 'styled-components'
-import { colors } from '../../styles/colors'
-import CloseIcon from '../../assets/main/Close.svg'
+import { colors } from '@/styles/colors'
+import CloseIcon from '@/assets/main/Close.svg'
 
 interface ToolTipProps {
   show: boolean
@@ -31,10 +31,10 @@ const Tooltip = ({ show, clickIcon }: ToolTipProps) => {
 export default Tooltip
 
 const Container = styled.div<{ show: number }>`
-  position: absolute;
   display: ${({ show }) => (show ? 'flex' : 'none')};
   flex-direction: column;
   align-items: center;
+  position: absolute;
   left: 29px;
   top: 20px;
   animation: ${({ show }) => show && fadeIn} 0.3s ease;
@@ -48,19 +48,17 @@ const Triangle = styled.div`
 `
 const AlertBox = styled.div`
   display: flex;
-  padding: 6px 8px;
   justify-content: center;
   align-items: center;
+  padding: 6px 8px;
   gap: 4px;
   color: ${colors.white};
   border-radius: 4px;
-  background: #333;
+  background-color: #333;
   text-align: center;
   font-family: Pretendard;
   font-size: 12px;
-  font-style: normal;
   font-weight: 400;
-  line-height: normal;
   letter-spacing: -0.6px;
 `
 const Icon = styled.img``

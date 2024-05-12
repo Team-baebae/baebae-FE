@@ -84,7 +84,7 @@ export const logoutApi = (accessToken: string) => {
   )
 }
 
-export const resignApi = (accessToken: string, memberId: number) => {
+export const signOutApi = (accessToken: string, memberId: number) => {
   return axios.delete(`http://${serverUrl}/api/member/${memberId}`, {
     headers: {
       Authorization: `Bearer ${accessToken}`,

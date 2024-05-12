@@ -1,6 +1,6 @@
 import styled from 'styled-components'
-import { colors } from '../../styles/colors'
-import ExampleImage from '../../assets/main/DefaultImage.svg'
+import { colors } from '@/styles/colors'
+import ExampleImage from '@/assets/main/DefaultImage.svg'
 
 const BackFeedContents = () => {
   const answer = '나의 패션스타일은 답변답변답변답변 답변답변답변답변'

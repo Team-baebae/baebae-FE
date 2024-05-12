@@ -1,13 +1,14 @@
 import styled from 'styled-components'
 import Header from '@/components/common/Header'
 import { colors } from '@/styles/colors'
-import logo from '@/assets/OnboardingIcon.svg'
+import LogoIcon from '@/assets/signup/OnboardingIcon.svg'
 
+// 답변 완료 페이지
 const AnswerComplete = () => {
   return (
     <Container>
       <Header text="답변하기" background={colors.grey7} />
-      <Logo src={logo} alt="logo" />
+      <Logo src={LogoIcon} />
       <UnderLogoText>답변이 완료되었어요!</UnderLogoText>
       <BtnWrapper>
         <Btn color={colors.grey1} backgroundColor={colors.white}>

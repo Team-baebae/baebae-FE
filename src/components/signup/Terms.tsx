@@ -1,23 +1,17 @@
 import styled from 'styled-components'
-import unchecked from '../../assets/UnChecked.svg'
-import checked from '../../assets/Checked.svg'
-import { colors } from '../../styles/colors'
 import { useNavigate } from 'react-router-dom'
+import { TermsProps } from '@/components/signup/types'
+import { colors } from '@/styles/colors'
+import Unchecked from '@/assets/signup/UnChecked.svg'
+import Checked from '@/assets/signup/Checked.svg'
 
-interface TermsProps {
-  isChecked: {
-    isCheckedTotal: boolean
-    isCheckedFirst: boolean
-    isCheckedSecond: boolean
-    isCheckedThird: boolean
-  }
-  setIsChecked: any
-}
-
+// 이용 약관 항목 3가지를 담은 컴포넌트
 const Terms = ({ isChecked, setIsChecked }: TermsProps) => {
   const navigate = useNavigate()
+
   return (
     <Container>
+      {/* 모두 동의 약관 */}
       <TermWrapper>
         {isChecked.isCheckedTotal ? (
           <TermCheckIcon
@@ -30,8 +24,7 @@ const Terms = ({ isChecked, setIsChecked }: TermsProps) => {
                 isCheckedThird: false,
               })
             }}
-            src={checked}
-            alt="v"
+            src={Checked}
           />
         ) : (
           <TermCheckIcon
@@ -44,8 +37,7 @@ const Terms = ({ isChecked, setIsChecked }: TermsProps) => {
                 isCheckedThird: true,
               })
             }}
-            src={unchecked}
-            alt="v"
+            src={Unchecked}
           />
         )}
         <TermText fontWeight="600" color={colors.grey1}>
@@ -53,6 +45,7 @@ const Terms = ({ isChecked, setIsChecked }: TermsProps) => {
         </TermText>
       </TermWrapper>
       <Line />
+      {/* 필수 약관 동의 */}
       <TermWrapper>
         {isChecked.isCheckedFirst ? (
           <TermCheckIcon
@@ -63,8 +56,7 @@ const Terms = ({ isChecked, setIsChecked }: TermsProps) => {
                 isCheckedFirst: false,
               })
             }}
-            src={checked}
-            alt="v"
+            src={Checked}
           />
         ) : (
           <TermCheckIcon
@@ -74,8 +66,7 @@ const Terms = ({ isChecked, setIsChecked }: TermsProps) => {
                 isCheckedFirst: true,
               })
             }}
-            src={unchecked}
-            alt="v"
+            src={Unchecked}
           />
         )}
         <TermText fontWeight="500" color={colors.grey3}>
@@ -91,6 +82,7 @@ const Terms = ({ isChecked, setIsChecked }: TermsProps) => {
           보기
         </UnderlinedTermText>
       </TermWrapper>
+      {/* 필수 약관 동의 */}
       <TermWrapper margin="24px 0px 0px 0px">
         {isChecked.isCheckedSecond ? (
           <TermCheckIcon
@@ -101,8 +93,7 @@ const Terms = ({ isChecked, setIsChecked }: TermsProps) => {
                 isCheckedSecond: false,
               })
             }}
-            src={checked}
-            alt="v"
+            src={Checked}
           />
         ) : (
           <TermCheckIcon
@@ -112,8 +103,7 @@ const Terms = ({ isChecked, setIsChecked }: TermsProps) => {
                 isCheckedSecond: true,
               })
             }}
-            src={unchecked}
-            alt="v"
+            src={Unchecked}
           />
         )}
         <TermText fontWeight="500" color={colors.grey3}>
@@ -123,6 +113,7 @@ const Terms = ({ isChecked, setIsChecked }: TermsProps) => {
           보기
         </UnderlinedTermText>
       </TermWrapper>
+      {/* 선택 약관 동의 */}
       <TermWrapper margin="24px 0px 0px 0px">
         {isChecked.isCheckedThird ? (
           <TermCheckIcon
@@ -133,8 +124,7 @@ const Terms = ({ isChecked, setIsChecked }: TermsProps) => {
                 isCheckedThird: false,
               })
             }}
-            src={checked}
-            alt="v"
+            src={Checked}
           />
         ) : (
           <TermCheckIcon
@@ -144,8 +134,7 @@ const Terms = ({ isChecked, setIsChecked }: TermsProps) => {
                 isCheckedThird: true,
               })
             }}
-            src={unchecked}
-            alt="v"
+            src={Unchecked}
           />
         )}
         <TermText fontWeight="500" color={colors.grey3}>
@@ -162,18 +151,18 @@ const Terms = ({ isChecked, setIsChecked }: TermsProps) => {
 export default Terms
 
 const Container = styled.div`
-  width: calc(100% - 40px);
-  height: 100%;
   display: flex;
   flex-direction: column;
+  width: calc(100% - 40px);
+  height: 100%;
   margin: 0px 20px 0px 20px;
 `
 
 const TermWrapper = styled.div<{ margin?: string }>`
-  position: relative;
   display: flex;
   flex-direction: row;
   align-items: center;
+  position: relative;
   gap: 12px;
   margin: ${(props) => props.margin || '0px'};
 `
@@ -187,23 +176,21 @@ const TermCheckIcon = styled.img`
 const TermText = styled.div<{ color: string; fontWeight: string }>`
   font-family: Pretendard;
   font-size: 14px;
-  font-style: normal;
   font-weight: 500;
-  line-height: normal;
   letter-spacing: -0.56px;
   color: ${(props) => props.color};
   font-weight: ${(props) => props.fontWeight};
 `
 
 const UnderlinedTermText = styled(TermText)`
-  text-decoration-line: underline;
   position: absolute;
+  text-decoration-line: underline;
   right: 0px;
 `
 
 const Line = styled.div`
-  height: 1px;
   align-self: stretch;
+  height: 1px;
   margin: 16px 0px;
-  background: ${colors.grey5};
+  background-color: ${colors.grey5};
 `

@@ -1,5 +1,5 @@
 // GetKakaoUserInfo함수의 response 인터페이스
-interface KakaoUserInfoResponseProps {
+export interface KakaoUserInfoResponseProps {
   data: {
     token_type: string
     access_token: string
@@ -17,7 +17,7 @@ interface KakaoUserInfoResponseProps {
 }
 
 // isExistingAccount함수의 response 인터페이스
-interface IsExistingAccountResponseProps {
+export interface IsExistingAccountResponseProps {
   data: any
   status: number
   statusText: string
@@ -26,7 +26,7 @@ interface IsExistingAccountResponseProps {
 }
 
 // Login함수의 response 인터페이스
-interface LoginProps {
+export interface LoginProps {
   data: any
   status: number
   statusText: string

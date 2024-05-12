@@ -1,7 +1,8 @@
 import styled from 'styled-components'
-import { colors } from '../../styles/colors'
-import Toggle from '../common/Toggle'
+import Toggle from '@/components/common/Toggle'
+import { colors } from '@/styles/colors'
 
+// 알림 설정 컴포넌트
 const AlramSetting = () => {
   return (
     <Container>
@@ -30,10 +31,10 @@ const Container = styled.div`
 `
 const ContentsWrapper = styled.div`
   display: flex;
-  flex: 1 0 0;
   flex-direction: row;
   justify-content: space-between;
   align-items: center;
+  flex: 1 0 0;
 `
 const TextWrapper = styled.div`
   display: flex;
@@ -44,15 +45,11 @@ const Contents = styled.div`
   color: ${colors.black};
   font-family: Pretendard;
   font-size: 14px;
-  font-style: normal;
   font-weight: 500;
-  line-height: normal;
 `
 const MiniContents = styled.div`
   color: ${colors.grey4};
   font-family: Pretendard;
   font-size: 12px;
-  font-style: normal;
   font-weight: 500;
-  line-height: normal;
 `

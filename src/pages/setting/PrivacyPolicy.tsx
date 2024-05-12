@@ -2,6 +2,7 @@ import styled from 'styled-components'
 import Header from '@/components/common/Header'
 import { colors } from '@/styles/colors'
 
+// 개인정보처리방침 페이지
 const PrivacyPolicy = () => {
   return (
     <Container>

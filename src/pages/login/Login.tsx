@@ -1,8 +1,8 @@
 import styled from 'styled-components'
 import { colors } from '@/styles/colors'
-import Logo from '@/assets/Logo.svg'
+import Logo from '@/assets/login/Logo.svg'
 import LoginBackground from '@/assets/login/LoginBack.svg'
-import KakaoIcon from '@/assets/KakaoIcon.svg'
+import KakaoIcon from '@/assets/login/KakaoIcon.svg'
 
 // 로그인 페이지
 const Login = () => {
