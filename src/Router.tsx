@@ -20,6 +20,7 @@ import Ask from '@/pages/setting/Support'
 import Tos from '@/pages/setting/Tos'
 import DetailTestPage from '@/pages/DetailTestPage'
 import Groups from './pages/category/Groups'
+import Alrams from './pages/alram/Alrams'
 
 const Router = () => {
   return (
@@ -60,6 +61,9 @@ const Router = () => {
             <Route path=":groupId">
               <Route path="edit" element={<GroupModify />} />
             </Route>
+          </Route>
+          <Route path="alrams">
+            <Route index element={<Alrams />} />
           </Route>
           <Route path="detailTest" element={<DetailTestPage />} />
         </Route>

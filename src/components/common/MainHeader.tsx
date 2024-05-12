@@ -21,7 +21,7 @@ const MainHeader = ({ background }: HeaderProps) => {
         }}
       />
       <HeaderRight>
-        <HeaderRightIcon src={Alram} alt="alram" />
+        <HeaderRightIcon src={Alram} alt="alram" onClick={() => navigate('/alrams')} />
         <HeaderRightIcon
           src={Setting}
           alt="setting"
