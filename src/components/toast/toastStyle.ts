@@ -13,6 +13,7 @@ export const StyledToastContainer = styled(ToastContainer)`
     color: ${colors.white};
     font-family: Pretendard;
     font-size: 16px;
+    margin: 0px 20px 30px 20px;
     font-style: normal;
     font-weight: 600;
     line-height: 24px;

@@ -14,7 +14,7 @@ export interface AskProps {
 export interface directoryProps {
   categoryId: number
   categoryName: string
-  answerAnswers: number[]
+  answerIds: number[]
   categoryImage: string
 }
 

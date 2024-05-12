@@ -2,13 +2,16 @@ import { useState } from 'react'
 import styled from 'styled-components'
 import { useRecoilState } from 'recoil'
 import { useNavigate } from 'react-router-dom'
+import { Flip, toast } from 'react-toastify'
 import GroupHeader from '@/components/common/GroupHeader'
 import { UnFixedButton } from '@/components/common/Button'
 import Feeds from '@/components/folder/Feeds'
 import Flips from '@/components/main/Flips'
+import { StyledToastContainer } from '@/components/toast/toastStyle'
 import { makeDirectoryApi, updateDirectoryImgApi } from '@/apis/DirectoryApi'
 import { userInfoState } from '@/context/Atoms'
 import { colors } from '@/styles/colors'
+import DefaultImg from '@/assets/main/DefaultImage.svg'
 
 // 그룹 수정 페이지
 const GroupPlus = () => {
@@ -75,7 +78,7 @@ const GroupPlus = () => {
       await makeDirectoryApi(userInfo.accessToken, userInfo.memberId, groupImgFile, groupName, answerIds).then(
         (res) => {
           console.log(res)
-          navigate(`/${userInfo.nickname}`)
+          navigate(-1)
         },
       )
     } catch (err) {
@@ -87,7 +90,7 @@ const GroupPlus = () => {
     <Container>
       <GroupHeader text="새 그룹 추가" background={colors.grey7} />
       <FolderImgWrapper>
-        <FolderImg />
+        {groupImgUrl === '' ? <FolderImg src={DefaultImg} /> : <FolderImg src={groupImgUrl} />}
       </FolderImgWrapper>
       <label htmlFor="file">
         <EditFolderImgText>사진 수정하기</EditFolderImgText>
@@ -123,11 +126,22 @@ const GroupPlus = () => {
       </FolderNameConditionText>
       {feedList.length > 0 ? <Feeds data={feedList} /> : <Flips />}
       <UnFixedButton
-        $positive={true}
+        $positive={groupName === '' ? false : true}
         func={makeDirectory}
-        func2={() => console.log('실패')}
+        func2={() => toast('그룸명을 입력해주세요')}
         text="그룹 추가하기"
         margin="30px 20px 30px 20px"
+      />
+      <StyledToastContainer
+        position="bottom-center"
+        autoClose={1000}
+        hideProgressBar
+        pauseOnHover={false}
+        closeOnClick={false}
+        closeButton={false}
+        rtl={false}
+        theme="dark"
+        transition={Flip}
       />
     </Container>
   )
@@ -157,7 +171,7 @@ const FolderImgWrapper = styled.div`
   transform: translateX(-50%);
 `
 
-const FolderImg = styled.div`
+const FolderImg = styled.img`
   width: 76px;
   height: 76px;
   flex-shrink: 0;

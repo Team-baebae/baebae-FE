@@ -1,10 +1,12 @@
 import styled from 'styled-components'
 import { useNavigate } from 'react-router-dom'
 import { useRecoilState } from 'recoil'
+import { Flip, toast } from 'react-toastify'
 import { ChangeEvent, useEffect, useState } from 'react'
 import { BottomButton } from '@/components/common/Button'
 import Header from '@/components/common/Header'
 import IsValidNicknameText from '@/components/common/IsValidNicknameText'
+import { StyledToastContainer } from '@/components/toast/toastStyle'
 import { colors } from '@/styles/colors'
 import { UserInfoStateProps, userInfoState } from '@/context/Atoms'
 import { isExistingNicknameApi, updateUserNicknameApi, updateUserProfileApi } from '@/apis/UserApi'
@@ -15,12 +17,22 @@ const EditAccount = () => {
   const navigate = useNavigate()
 
   const [userInfo, setUserInfo] = useRecoilState<UserInfoStateProps>(userInfoState)
+  const startNickname = userInfo.nickname
+  // 사진 수정했는지 여부 확인
+  const [isEditProfileImg, setIsEditProfileImg] = useState(false)
+
+  // 유저 프로필 이미지 저장
+  const [profileImg, setProfileImg] = useState<string>(userInfo.profileImage)
+  // 유저 프로필 파일 저장
+  const [profileFile, setProfileFile] = useState<File>()
 
   // 이미지 파일 선택 핸들러
   const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files && e.target.files[0]
     if (file) {
-      updateUserProfile(file)
+      setProfileImg(URL.createObjectURL(file)) // 미리보기를 위해 파일 URL 저장
+      setProfileFile(file)
+      setIsEditProfileImg(true)
     }
   }
 
@@ -32,7 +44,6 @@ const EditAccount = () => {
           ...userInfo,
           profileImage: URL.createObjectURL(file),
         })
-        setProfileImg(URL.createObjectURL(file)) // 미리보기를 위해 파일 URL 저장
       })
     } catch (err) {
       console.log(err)
@@ -41,7 +52,6 @@ const EditAccount = () => {
 
   // 닉네임 입력 및 유효성 확인 (형식에 맞는지만 체크)
   const [nickname, setNickname] = useState<string>(userInfo.nickname)
-  const [profileImg, setProfileImg] = useState<string>(userInfo.profileImage)
   const [isValid, setIsValid] = useState<boolean>(true)
   const isValidNickname = (nickname: string): boolean => {
     const regex = /^[a-zA-Z0-9_-]{6,25}$/
@@ -100,7 +110,12 @@ const EditAccount = () => {
 
   // 수정 버튼 클릭 시
   const onClickModifyBtn = () => {
-    updateUserNickname()
+    if (isEditProfileImg && profileFile) {
+      updateUserProfile(profileFile)
+      updateUserNickname()
+    } else {
+      updateUserNickname() // profileFile이 없으면 닉네임만 업데이트
+    }
   }
 
   return (
@@ -109,7 +124,7 @@ const EditAccount = () => {
 
       {/* 유저 프로필 수정 부분*/}
       <ProfileImageWrapper>
-        {userInfo.profileImage === null ? <ProfileImage src={DefaultImg} /> : <ProfileImage src={profileImg} />}
+        {profileImg === null ? <ProfileImage src={DefaultImg} /> : <ProfileImage src={profileImg} />}
         <label htmlFor="file">
           <EditButton>사진 수정하기</EditButton>
         </label>
@@ -139,9 +154,21 @@ const EditAccount = () => {
       />
 
       <BottomButton
-        $positive={isValid && isClickDuplicate && !isDuplicate ? true : false}
+        $positive={(isValid && isClickDuplicate && !isDuplicate) || startNickname === nickname ? true : false}
         text="수정하기"
         func={onClickModifyBtn}
+        func2={() => toast('올바른 아이디 형식을 입력하세요')}
+      />
+      <StyledToastContainer
+        position="bottom-center"
+        autoClose={1000}
+        hideProgressBar
+        pauseOnHover={false}
+        closeOnClick={false}
+        closeButton={false}
+        rtl={false}
+        theme="dark"
+        transition={Flip}
       />
     </Container>
   )

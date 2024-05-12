@@ -1,25 +1,34 @@
 import styled from 'styled-components'
 import { useState } from 'react'
 import { useRecoilState } from 'recoil'
+import { Flip, toast } from 'react-toastify'
 import { useLocation, useNavigate } from 'react-router-dom'
 import GroupHeader from '@/components/common/GroupHeader'
 import Feeds from '@/components/folder/Feeds'
 import Flips from '@/components/main/Flips'
 import { UnFixedButton } from '@/components/common/Button'
+import { StyledToastContainer } from '@/components/toast/toastStyle'
 import { UserInfoStateProps, userInfoState } from '@/context/Atoms'
 import { colors } from '@/styles/colors'
-import { modifyDirectoryApi } from '@/apis/DirectoryApi'
+import { modifyDirectoryApi, updateDirectoryImgApi } from '@/apis/DirectoryApi'
+import DefaultImg from '@/assets/main/DefaultImage.svg'
 
 // 새 그룹 생성페이지
 const GroupModify = () => {
   const navigate = useNavigate()
 
-  //   넘겨받은 카카오 어세스 토큰 저장
+  const [userInfo, setUserInfo] = useRecoilState<UserInfoStateProps>(userInfoState)
+
+  //   넘겨받은 카카오 categoryId 저장
   const location = useLocation()
   const categoryId = location.state?.categoryId
+  const categoryImage = location.state?.categoryImage
+  const categoryName = location.state?.categoryName
 
-  const [userInfo, setUserInfo] = useRecoilState<UserInfoStateProps>(userInfoState)
-  const [groupImgUrl, setGroupImgUrl] = useState<string>('')
+  // 사진 수정했는지 여부 확인
+  const [isEditGroupImg, setIsEditGroupImg] = useState(false)
+
+  const [groupImgUrl, setGroupImgUrl] = useState<string>(categoryImage)
   const [groupImgFile, setGroupImgFile] = useState<File>()
   const [answerIds, setAnswerIds] = useState<any>([])
   // 이미지 파일 선택 핸들러
@@ -29,10 +38,11 @@ const GroupModify = () => {
     if (file) {
       setGroupImgFile(file)
       setGroupImgUrl(URL.createObjectURL(file)) // 미리보기를 위해 파일 URL 생성
+      setIsEditGroupImg(true)
     }
   }
 
-  const [groupName, setGroupName] = useState<string>('')
+  const [groupName, setGroupName] = useState<string>(categoryName)
 
   const onChangeFolderName = (e: React.ChangeEvent<HTMLInputElement>) => {
     const value = e.target.value
@@ -81,10 +91,30 @@ const GroupModify = () => {
     try {
       await modifyDirectoryApi(userInfo.accessToken, categoryId, groupName, answerIds).then((res) => {
         console.log(res)
-        navigate(`/${userInfo.nickname}`)
+        toast('그룹 설정이 수정되었어요!')
+        navigate(-1)
       })
     } catch (err) {
       console.log(err)
+    }
+  }
+
+  const updateDirectoryImg = async () => {
+    try {
+      await updateDirectoryImgApi(userInfo.accessToken, categoryId, groupImgFile).then((res) => {
+        console.log(res)
+      })
+    } catch (err) {
+      console.log(err)
+    }
+  }
+
+  const onClickModifyBtn = () => {
+    if (isEditGroupImg && groupImgFile) {
+      updateDirectoryImg()
+      modifyDirectory()
+    } else {
+      modifyDirectory()
     }
   }
 
@@ -92,7 +122,7 @@ const GroupModify = () => {
     <Container>
       <GroupHeader text="그룹 수정" background={colors.grey7} />
       <FolderImgWrapper>
-        <FolderImg />
+        {groupImgUrl === '' ? <FolderImg src={DefaultImg} /> : <FolderImg src={groupImgUrl} />}
       </FolderImgWrapper>
       <label htmlFor="file">
         <EditFolderImgText>사진 수정하기</EditFolderImgText>
@@ -128,11 +158,22 @@ const GroupModify = () => {
       </FolderNameConditionText>
       {feedList.length > 0 ? <Feeds data={feedList} /> : <Flips />}
       <UnFixedButton
-        $positive={true}
+        $positive={groupName === '' ? false : true}
         func={modifyDirectory}
-        func2={() => console.log('실패')}
+        func2={() => toast('그룹명을 입력해주세요')}
         text="그룹 수정하기"
         margin="30px 20px 30px 20px"
+      />
+      <StyledToastContainer
+        position="bottom-center"
+        autoClose={1000}
+        hideProgressBar
+        pauseOnHover={false}
+        closeOnClick={false}
+        closeButton={false}
+        rtl={false}
+        theme="dark"
+        transition={Flip}
       />
     </Container>
   )
@@ -162,7 +203,7 @@ const FolderImgWrapper = styled.div`
   transform: translateX(-50%);
 `
 
-const FolderImg = styled.div`
+const FolderImg = styled.img`
   width: 76px;
   height: 76px;
   flex-shrink: 0;
