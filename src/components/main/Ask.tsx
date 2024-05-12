@@ -91,7 +91,14 @@ const Ask = ({ userInfo, isMyPage }: AskProps) => {
           onChange={onChangeText}
         />
         <WriterBlock>
-          FROM <WriterRegion placeholder="자유롭게 입력해주세요" type="text" value={writer} onChange={onChangeWriter} />
+          FROM{' '}
+          <WriterRegion
+            placeholder="자유롭게 입력해주세요"
+            type="text"
+            value={writer}
+            onChange={onChangeWriter}
+            maxLength={10}
+          />
         </WriterBlock>
       </AskContainer>
       {!isMyPage && (
