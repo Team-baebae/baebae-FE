@@ -6,7 +6,7 @@ import { Flip, toast } from 'react-toastify'
 import GroupHeader from '@/components/common/GroupHeader'
 import { UnFixedButton } from '@/components/common/Button'
 import Feeds from '@/components/folder/Feeds'
-import Flips from '@/components/main/Flips'
+import NoFlip from '@/components/main/NoFlip'
 import { StyledToastContainer } from '@/components/toast/toastStyle'
 import { makeDirectoryApi, updateDirectoryImgApi } from '@/apis/DirectoryApi'
 import { userInfoState } from '@/context/Atoms'
@@ -124,7 +124,7 @@ const GroupPlus = () => {
       <FolderNameConditionText color={colors.grey3} fontSize="12px" margin="40px 20px 0px 20px">
         추가할 플립 선택
       </FolderNameConditionText>
-      {feedList.length > 0 ? <Feeds data={feedList} /> : <Flips />}
+      {feedList.length > 0 ? <Feeds data={feedList} /> : <NoFlip />}
       <UnFixedButton
         $positive={groupName === '' ? false : true}
         func={makeDirectory}

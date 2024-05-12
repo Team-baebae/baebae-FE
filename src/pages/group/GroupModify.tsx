@@ -5,7 +5,7 @@ import { Flip, toast } from 'react-toastify'
 import { useLocation, useNavigate } from 'react-router-dom'
 import GroupHeader from '@/components/common/GroupHeader'
 import Feeds from '@/components/folder/Feeds'
-import Flips from '@/components/main/Flips'
+import NoFlip from '@/components/main/NoFlip'
 import { UnFixedButton } from '@/components/common/Button'
 import { StyledToastContainer } from '@/components/toast/toastStyle'
 import { UserInfoStateProps, userInfoState } from '@/context/Atoms'
@@ -156,7 +156,7 @@ const GroupModify = () => {
       <FolderNameConditionText color={colors.grey3} fontSize="12px" margin="40px 20px 0px 20px">
         추가할 플립 선택
       </FolderNameConditionText>
-      {feedList.length > 0 ? <Feeds data={feedList} /> : <Flips />}
+      {feedList.length > 0 ? <Feeds data={feedList} /> : <NoFlip />}
       <UnFixedButton
         $positive={groupName === '' ? false : true}
         func={onClickModifyBtn}

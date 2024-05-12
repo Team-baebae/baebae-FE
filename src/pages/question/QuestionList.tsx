@@ -1,7 +1,7 @@
 import styled from 'styled-components'
 import { useEffect, useState } from 'react'
 import Header from '@/components/common/Header'
-import Flips from '@/components/main/Flips'
+import NoFlip from '@/components/main/NoFlip'
 import { colors } from '@/styles/colors'
 import QuotationMark from '@/assets/question/QuotationMark.svg'
 
@@ -25,7 +25,7 @@ const QuestionList = () => {
       </Title>
       <ContentWrapper askCount={askCount}>
         {askCount == 0 ? (
-          <Flips />
+          <NoFlip />
         ) : (
           <GridContainer>
             {data.map((value) => (
