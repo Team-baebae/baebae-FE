@@ -8,13 +8,13 @@ import 'swiper/css'
 import { useGesture } from '@use-gesture/react'
 import { BottomSheet } from 'react-spring-bottom-sheet'
 import 'react-spring-bottom-sheet/dist/style.css'
-import pencil from '../../assets/feed/Pencil.svg'
-import trash from '../../assets/feed/Trash.svg'
+import pencil from '@/assets/main/Pencil.svg'
+import trash from '@/assets/main/Trash.svg'
 import { useNavigate } from 'react-router-dom'
 import { useRecoilState } from 'recoil'
 import { userInfoState } from '@/context/Atoms'
 import { deleteDirectoryApi, getDirectoriesApi } from '@/apis/DirectoryApi'
-import plus from '../../assets/Plus.svg'
+import plus from '@/assets/main/Plus.svg'
 
 const Groups = () => {
   interface directory {
