@@ -20,9 +20,9 @@ const Landing3 = () => {
 
   const Variants = {
     default: {
-      opacity: 0.8,
+      opacity: 0.9,
       transition: {
-        duration: 2,
+        duration: 0.5,
         delay: 0,
       },
     },
@@ -30,7 +30,7 @@ const Landing3 = () => {
       x: 0,
       opacity: 1,
       transition: {
-        duration: 2,
+        duration: 0.5,
         delay: 0,
       },
     },
@@ -54,7 +54,7 @@ const Landing3 = () => {
         <TitleText>{`소통의 시작,\n어색하지 않게 질문으로`}</TitleText>
       </TextWrapper>
       <ImageWrapper key={imageIndex} onClick={changeImage}>
-        <PhoneImage src={images[imageIndex]} initial="default" animate="phone" variants={Variants} />
+        <PhoneImage src={images[imageIndex]} initial="default" animate="phone" exit="default" variants={Variants} />
       </ImageWrapper>
       <SubText>{`상대방이 직접 열어둔 플리빗 페이지를 통해\n소통을 위한 한발짝을 더 쉽게 할 수 있습니다.`}</SubText>
     </Container>

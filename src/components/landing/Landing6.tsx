@@ -4,6 +4,8 @@ import styled from 'styled-components'
 import { motion } from 'framer-motion'
 
 const Landing6 = () => {
+  const INSTA_URL = 'https://www.instagram.com/flipit.co.kr?igsh=aXpzcGRnaGVncHNq&utm_source=qr'
+
   const Variants = {
     offscreen: {
       y: +50,
@@ -24,7 +26,7 @@ const Landing6 = () => {
       <TextWrapper>
         <TitleText>{`플리빗 매거진을 구독하고\n서비스 OPEN 소식을\n받아 보세요.`}</TitleText>
       </TextWrapper>
-      <ImageWrapper>
+      <ImageWrapper href={INSTA_URL}>
         <PhoneImage src={Phone} initial="default" animate="onscreen" variants={Variants} />
       </ImageWrapper>
     </Container>
@@ -60,12 +62,13 @@ const TitleText = styled.h1`
   letter-spacing: -1.5px;
   white-space: pre-wrap;
 `
-const ImageWrapper = styled(motion.div)`
+const ImageWrapper = styled(motion.a)`
   display: flex;
   justify-content: center;
   background-color: ${colors.white};
   border-radius: 30px;
   margin-bottom: 30px;
+  cursor: pointer;
 `
 const PhoneImage = styled(motion.img)`
   width: 315px;
