@@ -7,9 +7,10 @@ export const answerApi = (accessToken: string, memberId: number, imageFile: File
   const formData = new FormData()
   // categoryImage가 undefined가 아니면 FormData에 추가
   if (imageFile) {
-    formData.append('imageFiles', imageFile)
+    formData.append('imageFile', imageFile)
   }
-  formData.append('request', request)
+
+  formData.append('request', JSON.stringify(request))
   return flipitAxios.post(API, formData, {
     headers: {
       Authorization: `Bearer ${accessToken}`,

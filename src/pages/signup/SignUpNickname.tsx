@@ -63,7 +63,6 @@ const SignUpNickname = () => {
     }
   }
 
-  // 이미 존재하는 회원일 경우 바로 로그인 진행
   const login = async (kakaoAccessToken: string, nickname: string) => {
     try {
       await loginApi(kakaoAccessToken, nickname).then(async (res: LoginProps) => {
@@ -73,7 +72,11 @@ const SignUpNickname = () => {
           console.log(res.data.id)
           getUserInfo(res.data)
           setIsLoggedIn(true)
-          navigate(`/${res.data.nickname}`)
+          navigate(`/signup/complete`, {
+            state: {
+              nickname: nickname,
+            },
+          })
         } else {
           alert('로그인 실패')
           navigate('/login')
