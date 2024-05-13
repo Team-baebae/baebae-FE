@@ -62,7 +62,7 @@ const Container = styled(motion.div)`
   margin-top: 60px;
 `
 const TextWrapper = styled.div`
-  gap: 6px;
+  gap: 10px;
   text-align: center;
   margin-bottom: 30px;
 `
