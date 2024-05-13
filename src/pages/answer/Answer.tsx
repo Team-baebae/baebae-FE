@@ -53,6 +53,7 @@ const Answer = () => {
 
   const onClickAnswerBtn = async () => {
     try {
+      console.log(musicAudio)
       await answerApi(userInfo.accessToken, userInfo.memberId, imageFile, {
         questionId: question.questionId,
         content: content,
@@ -61,6 +62,7 @@ const Answer = () => {
         musicSinger: musicSinger,
         musicAudioUrl: musicAudio,
       }).then((res) => {
+        navigate(-1)
         console.log(res)
       })
     } catch (err) {

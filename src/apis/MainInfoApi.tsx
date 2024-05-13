@@ -9,7 +9,7 @@ interface QuestionProps {
 // 닉네임 중복 여부 확인해서 해당 유저 존재하는지 체크하는 api
 export const isExistingNicknameApi = async (nickname: string) => {
   try {
-    let API = `/api/oauth/nickname/isExisting?nickname=${nickname}`
+    let API = `/api/auth/nickname/isExisting?nickname=${nickname}`
     const response = await flipitAxios.get(API, {
       params: nickname,
     })
