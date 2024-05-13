@@ -13,8 +13,8 @@ const Landing2 = () => {
       y: 0,
       opacity: 1,
       transition: {
-        duration: 0.8,
-        delay: 0,
+        duration: 1,
+        delay: 0.1,
       },
     },
   }

@@ -29,8 +29,8 @@ const Landing4 = () => {
       y: 0,
       opacity: 1,
       transition: {
-        duration: 0.8,
-        delay: 0,
+        duration: 1.2,
+        delay: 0.1,
       },
     },
   }
@@ -59,7 +59,7 @@ const Landing4 = () => {
             }}
           >
             {/* 뒷면 */}
-            <LandingFeedBack />
+            <LandingFeedBack topFeed={true} answer="요즘 약간 조약돌 네일?" />
           </CardWrapper>
         </FlipWrapper>
       </FeedWrapper>
