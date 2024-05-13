@@ -1,3 +1,4 @@
+import { useState } from 'react'
 import { flipitAxios } from './apis'
 
 export const answerApi = (accessToken: string, memberId: number, imageFile: File | undefined, request: any) => {
@@ -18,14 +19,25 @@ export const answerApi = (accessToken: string, memberId: number, imageFile: File
   })
 }
 
-export const getFeedsApi = (accessToken: string, memberId: number) => {
-  const sort = ['createdDate,desc']
-  let API = `/api/answers?memberId=${memberId}&page=0&size=10&sort=${sort}`
-  return flipitAxios.get(API, {
-    headers: {
-      Authorization: `Bearer ${accessToken}`,
-    },
-  })
+export const getFeedsApi = (accessToken: string, memberId: number, selectedDirectoryId: number) => {
+  // const recent = 'createdDate,desc'
+  // const sort = JSON.stringify(recent)
+
+  if (selectedDirectoryId === 0) {
+    let API = `/api/answers?memberId=${memberId}&page=0&size=10`
+    return flipitAxios.get(API, {
+      headers: {
+        Authorization: `Bearer ${accessToken}`,
+      },
+    })
+  } else {
+    let API = `/api/answers?memberId=${memberId}&category=${selectedDirectoryId}&page=0&size=10`
+    return flipitAxios.get(API, {
+      headers: {
+        Authorization: `Bearer ${accessToken}`,
+      },
+    })
+  }
 }
 
 export const connectGroupApi = (accessToken: string, categoryId: number, answerId: number) => {
