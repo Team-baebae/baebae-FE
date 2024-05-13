@@ -3,17 +3,29 @@ import { colors } from '@/styles/colors'
 import QuotesOpen from '@/assets/answer/QuotesOpen.svg'
 import QuotesClose from '@/assets/answer/QuotesClose.svg'
 
+interface QuestionProps {
+  question: {
+    questionId: number
+    content: string
+    nickname: string
+    profileOnOff: boolean
+    createdDate: string
+    isAnswered: boolean
+    fcmtoken: string
+  }
+}
+
 // 답변페이지의 질문 보여주는 컴포넌트
-const Question = () => {
+const Question = ({ question }: QuestionProps) => {
   return (
     <>
       <SenderWrapper>
         <SenderText color={colors.primary}>FROM</SenderText>
-        <SenderText color={colors.grey4}>유자인님</SenderText>
+        <SenderText color={colors.grey4}>{question.nickname}님</SenderText>
       </SenderWrapper>
       <QuestionWrapper>
         <QuestionQuotes src={QuotesOpen} />
-        <QuestionText>가은아 넌 양식이 좋아, 한식이 좋아?</QuestionText>
+        <QuestionText>{question.content}</QuestionText>
         <QuestionQuotes src={QuotesClose} />
       </QuestionWrapper>
     </>

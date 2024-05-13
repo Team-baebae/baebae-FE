@@ -12,8 +12,8 @@ const Setting = () => {
       <Header text="설정" background={colors.white} />
       <Profile />
       <Settings />
-      <Title>알림 설정</Title>
-      <AlramSetting />
+      {/* <Title>알림 설정</Title> */}
+      {/* <AlramSetting /> */}
     </>
   )
 }

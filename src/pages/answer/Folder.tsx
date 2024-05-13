@@ -3,9 +3,34 @@ import Header from '@/components/common/Header'
 import { BottomButton } from '@/components/common/Button'
 import FolderList from '@/components/folder/FolderList'
 import { colors } from '@/styles/colors'
+import { useRecoilState } from 'recoil'
+import { UserInfoStateProps, userInfoState } from '@/context/Atoms'
+import { getDirectoriesApi } from '@/apis/DirectoryApi'
+import { useState } from 'react'
+
+interface directory {
+  categoryId: number
+  categoryName: string
+  answerAnswers: number[]
+  categoryImage: string
+}
 
 // 답변 완료 후 그룹 선택 페이지
 const Folder = () => {
+  const [userInfo, setUserInfo] = useRecoilState<UserInfoStateProps>(userInfoState)
+  const [selectedDirectoryId, setSelectedDirectoryId] = useState<number>(0) // 선택된 디렉토리 ID 상태
+
+  const [directories, setDirectories] = useState()
+  const getDirectories = async () => {
+    try {
+      await getDirectoriesApi(userInfo.accessToken, userInfo.memberId).then((res) => {
+        setDirectories(res.data.categories)
+      })
+    } catch (err) {
+      console.log(err)
+    }
+  }
+
   return (
     <Container>
       <Header text="답변하기" background={colors.grey7} />

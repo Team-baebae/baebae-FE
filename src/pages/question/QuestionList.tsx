@@ -124,7 +124,16 @@ const QuestionList = () => {
         ) : (
           <GridContainer>
             {questions.map((value) => (
-              <FlipWrapper key={value.questionId}>
+              <FlipWrapper
+                onClick={() => {
+                  navigate(`/questions/${value.questionId}/answer`, {
+                    state: {
+                      question: value,
+                    },
+                  })
+                }}
+                key={value.questionId}
+              >
                 <DeleteIcon src={CloseIcon} onClick={() => clickDeletion(value.questionId)} />
                 <Icon src={QuotationMark} />
                 <FlipContent>{value.content}</FlipContent>
