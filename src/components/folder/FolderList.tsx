@@ -9,7 +9,7 @@ import { directoryProps } from '../main/types'
 import { useRecoilValue } from 'recoil'
 import { UserInfoStateProps, userInfoState } from '@/context/Atoms'
 import { getDirectoriesApi, makeDirectoryApi } from '@/apis/DirectoryApi'
-import DefaultImg from '@/assets/main/DefaultImage.svg'
+import DefaultImg from '@/assets/main/DefaultImage.png'
 import { useNavigate } from 'react-router-dom'
 
 interface FolderListProps {

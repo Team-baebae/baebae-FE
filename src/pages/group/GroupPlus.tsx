@@ -10,7 +10,7 @@ import NoFlip from '@/components/main/NoFlip'
 import { makeDirectoryApi } from '@/apis/DirectoryApi'
 import { userInfoState } from '@/context/Atoms'
 import { colors } from '@/styles/colors'
-import DefaultImg from '@/assets/main/DefaultImage.svg'
+import DefaultImg from '@/assets/main/DefaultImage.png'
 import { getFeedsApi } from '@/apis/AnswerApi'
 
 const GroupPlus = () => {
