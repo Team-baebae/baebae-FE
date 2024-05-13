@@ -1,10 +1,25 @@
-import Phone from '@/assets/landing/PhoneInsta.png'
 import { colors } from '@/styles/colors'
 import styled from 'styled-components'
 import { motion } from 'framer-motion'
+import { useState } from 'react'
+import LandingTelepathy from './LandingTelepathy'
+import LandingFeedBack from './LandingFeedBack'
 
 const Landing6 = () => {
-  const INSTA_URL = 'https://www.instagram.com/flipit.co.kr?igsh=aXpzcGRnaGVncHNq&utm_source=qr'
+  const heartNum = 23
+  const seeNum = 20
+  const sadNum = 100
+  const [giveTelepathy, setGiveTelepathy] = useState<boolean>(false)
+  const [popLottie, setPopLottie] = useState<boolean>(false)
+
+  const clickTelepathy = (e: React.MouseEvent<HTMLDivElement>) => {
+    e.stopPropagation()
+    !giveTelepathy && setPopLottie(true)
+    setGiveTelepathy(!giveTelepathy)
+    setTimeout(() => {
+      setPopLottie(false)
+    }, 2350)
+  }
 
   const Variants = {
     offscreen: {
@@ -15,20 +30,44 @@ const Landing6 = () => {
       y: 0,
       opacity: 1,
       transition: {
-        duration: 0.8,
-        delay: 0,
+        duration: 1.2,
+        delay: 0.1,
       },
     },
   }
   return (
     <Container initial="offscreen" whileInView="onscreen" variants={Variants}>
-      <CategoryText>플리빗 매거진</CategoryText>
+      <CategoryText>홈 · 취향 피드</CategoryText>
       <TextWrapper>
-        <TitleText>{`플리빗 매거진을 구독하고\n서비스 OPEN 소식을\n받아 보세요.`}</TitleText>
+        <TitleText>{`사소한 피드백을 통한\n소통의 재미`}</TitleText>
       </TextWrapper>
-      <ImageWrapper href={INSTA_URL}>
-        <PhoneImage src={Phone} initial="default" animate="onscreen" variants={Variants} />
-      </ImageWrapper>
+      <FeedWrapper>
+        <FlipContainer>통했당 버튼을 눌러보세요!</FlipContainer>
+        <CardWrapper>
+          <LandingFeedBack topFeed={false} answer="난 스트리트 빈티지 느낌!" />
+          <BottomContents>
+            <EmotionButton state={true}>
+              <EmotionText>🖤</EmotionText>
+              <EmotionText>{heartNum}</EmotionText>
+            </EmotionButton>
+            <EmotionButton state={true}>
+              <EmotionText>👀</EmotionText>
+              <EmotionText>{seeNum}</EmotionText>
+            </EmotionButton>
+            <EmotionButton state={true}>
+              <EmotionText>🥺</EmotionText>
+              <EmotionText>{sadNum}</EmotionText>
+            </EmotionButton>
+            <TelepathyButton state={giveTelepathy} onClick={clickTelepathy}>
+              <EmotionText style={{ fontSize: 20 }}>👉🏻</EmotionText>
+              <EmotionText style={{ fontSize: 20 }}>👈🏻</EmotionText>
+              <EmotionText>통했당!</EmotionText>
+            </TelepathyButton>
+          </BottomContents>
+          {popLottie && <LandingTelepathy />}
+        </CardWrapper>
+      </FeedWrapper>
+      <SubText>{`친구와 내가 플립을 통해 서로 소통할 수 있어요.\n일방적인 좋아요가 아닌, 통했당으로!`}</SubText>
     </Container>
   )
 }
@@ -42,7 +81,7 @@ const Container = styled(motion.div)`
   padding: 50px 30px;
 `
 const CategoryText = styled.h3`
-  color: ${colors.white};
+  color: ${colors.green};
   font-family: Pretendard;
   font-size: 16px;
   font-weight: 600;
@@ -62,15 +101,69 @@ const TitleText = styled.h1`
   letter-spacing: -1.5px;
   white-space: pre-wrap;
 `
-const ImageWrapper = styled(motion.a)`
+const SubText = styled.h3`
+  color: ${colors.white};
+  font-family: Pretendard;
+  font-size: 17px;
+  font-weight: 400;
+  line-height: 25.5px;
+  letter-spacing: -0.34px;
+  white-space: pre-wrap;
+`
+const BottomContents = styled.div`
+  width: 315px;
   display: flex;
-  justify-content: center;
-  background-color: ${colors.white};
-  border-radius: 30px;
-  margin-bottom: 30px;
+  flex-direction: row;
+  gap: 6px;
+  margin-top: 8px;
+`
+const EmotionButton = styled.div<{ state: boolean }>`
+  display: flex;
+  height: 30px;
+  padding: 4px 8px;
+  align-items: center;
+  gap: 4px;
+  border-radius: 100px;
+  background: ${(props) => (props.state ? colors.green : colors.white)};
+`
+const TelepathyButton = styled.div<{ state: boolean }>`
+  display: flex;
+  height: 30px;
+  padding: 4px 12px;
+  align-items: center;
+  gap: 4px;
+  border-radius: 100px;
+  background: ${(props) => (props.state ? colors.primary : colors.white)};
   cursor: pointer;
 `
-const PhoneImage = styled(motion.img)`
-  width: 315px;
-  height: 440px;
+const EmotionText = styled.div`
+  color: ${colors.grey1};
+  font-family: Pretendard;
+  font-size: 12px;
+  font-style: normal;
+  font-weight: 500;
+  line-height: 18px;
+  letter-spacing: -0.24px;
+`
+const CardWrapper = styled.div`
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+`
+const FeedWrapper = styled.div`
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 28px;
+  margin-bottom: 30px;
+`
+const FlipContainer = styled.div`
+  text-align: center;
+  color: ${colors.white};
+  font-family: Pretendard;
+  font-size: 18px;
+  font-style: normal;
+  font-weight: 400;
+  line-height: 27px;
+  letter-spacing: -0.9px;
 `

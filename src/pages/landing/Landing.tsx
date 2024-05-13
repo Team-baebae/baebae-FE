@@ -6,6 +6,7 @@ import Landing3 from '@/components/landing/Landing3'
 import Landing4 from '@/components/landing/Landing4'
 import Landing5 from '@/components/landing/Landing5'
 import Landing6 from '@/components/landing/Landing6'
+import Landing7 from '@/components/landing/Landing7'
 
 const Landing = () => {
   return (
@@ -19,6 +20,7 @@ const Landing = () => {
       <Landing4 />
       <Landing5 />
       <Landing6 />
+      <Landing7 />
     </Container>
   )
 }
