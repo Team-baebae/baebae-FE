@@ -10,7 +10,7 @@ export const getKakaoUserInfoApi = (code: string) => {
 
 // 카카오 어세스토큰을 통하여 회원가입 여부 확인
 export const isExistingAccountApi = (accessToken: string) => {
-  let API = `/api/oauth/isExisting`
+  let API = `/api/auth/isExisting`
   return flipitAxios.get(API, {
     headers: {
       Authorization: `Bearer ${accessToken}`,
@@ -20,13 +20,13 @@ export const isExistingAccountApi = (accessToken: string) => {
 
 // 존재하는 닉네임인지 여부확인
 export const isExistingNicknameApi = (nickname: string) => {
-  let API = `/api/oauth/nickname/isExisting?nickname=${nickname}`
+  let API = `/api/auth/nickname/isExisting?nickname=${nickname}`
   return flipitAxios.get(API)
 }
 
 // 카카오 어세스토큰을 통하여 jwt토큰 받기
 export const loginApi = (accessToken: string, nickname: string) => {
-  let API = `/api/oauth/login`
+  let API = `/api/auth/login`
   return flipitAxios.post(
     API,
     { memberType: 'KAKAO', nickname: nickname },
@@ -81,7 +81,7 @@ export const updateUserNicknameApi = (accessToken: string, memberId: number, nic
 
 // 로그아웃
 export const logoutApi = (accessToken: string) => {
-  let API = `/api/oauth/logout`
+  let API = `/api/auth/logout`
   return flipitAxios.post(
     API,
     {},
