@@ -1,6 +1,6 @@
 import { useCallback, useEffect, useRef, useState } from 'react'
 import styled from 'styled-components'
-import { useRecoilValue } from 'recoil'
+import { useRecoilState, useRecoilValue } from 'recoil'
 import { useNavigate } from 'react-router-dom'
 import { BottomSheet } from 'react-spring-bottom-sheet'
 import 'react-spring-bottom-sheet/dist/style.css'
@@ -15,7 +15,7 @@ import { directoryProps } from '@/components/main/types'
 import { StyledToastContainer } from '@/components/toast/toastStyle'
 import { colors } from '@/styles/colors'
 import { deleteDirectoryApi, getDirectoriesApi } from '@/apis/DirectoryApi'
-import { UserInfoStateProps, userInfoState } from '@/context/Atoms'
+import { UserInfoStateProps, isMineState, userInfoState } from '@/context/Atoms'
 import Plus from '@/assets/main/Plus.svg'
 import Pencil from '@/assets/main/Pencil.svg'
 import Trash from '@/assets/main/Trash.svg'
@@ -27,7 +27,8 @@ const Feed = () => {
 
   // 리코일 userInfo
   const userInfo = useRecoilValue<UserInfoStateProps>(userInfoState)
-
+  // 내 페이지인지 여부 확인
+  const [isMyPage, setIsMyPage] = useRecoilState(isMineState)
   // 유저 디렉토리 리스트 저장
   const [directories, setDirectories] = useState<directoryProps[]>([])
   // 유저 디렉토리 조회
@@ -140,14 +141,14 @@ const Feed = () => {
 
   const getFeeds = useCallback(async () => {
     try {
-      await getFeedsApi(userInfo.accessToken, userInfo.memberId).then((res) => {
+      await getFeedsApi(userInfo.accessToken, userInfo.memberId, selectedDirectoryId).then((res) => {
         console.log(res)
         setFeedList(res.data.content)
       })
     } catch (err) {
       console.log(err)
     }
-  }, [])
+  }, [selectedDirectoryId])
 
   useEffect(() => {
     getFeeds()
@@ -168,6 +169,8 @@ const Feed = () => {
               <SwiperSlide key={item.categoryId}>
                 <GroupWrapper>
                   <GroupImgWrapper
+                    onClick={() => setSelectedDirectoryId(item.categoryId)}
+                    selected={selectedDirectoryId === item.categoryId}
                     {...bind(item.categoryId, item.categoryImage, item.categoryName, item.answerIds)}
                     onContextMenu={(e) => {
                       e.preventDefault()
@@ -181,18 +184,19 @@ const Feed = () => {
               </SwiperSlide>
             )
           })}
-
-          <SwiperSlide>
-            <GroupWrapper>
-              <GroupPlusImg
-                onClick={() => {
-                  navigate('/groups/new')
-                }}
-                src={Plus}
-              />
-              <GroupName>추가</GroupName>
-            </GroupWrapper>
-          </SwiperSlide>
+          {isMyPage && (
+            <SwiperSlide>
+              <GroupWrapper>
+                <GroupPlusImg
+                  onClick={() => {
+                    navigate('/groups/new')
+                  }}
+                  src={Plus}
+                />
+                <GroupName>추가</GroupName>
+              </GroupWrapper>
+            </SwiperSlide>
+          )}
         </Swiper>
       </TopComponent>
       {/* 해당 디렉토리 피드 리스트 부분 */}
@@ -248,7 +252,7 @@ const GroupWrapper = styled.div`
   width: 44px;
   height: 63px;
 `
-const GroupImgWrapper = styled.div`
+const GroupImgWrapper = styled.div<{ selected: boolean }>`
   display: flex;
   justify-content: center;
   align-items: center;
@@ -256,7 +260,7 @@ const GroupImgWrapper = styled.div`
   height: 44px;
   padding: 3px;
   border-radius: 12px;
-  border: 1px solid ${colors.grey5};
+  border: ${(props) => (props.selected ? `1px solid ${colors.grey1}` : `1px solid ${colors.grey5}`)};
   background-color: ${colors.white};
   user-select: none;
 `

@@ -8,7 +8,7 @@ import Feed from '@/components/main/Feed'
 import Ask from '@/components/main/Ask'
 import { userDataProps } from '@/components/main/types'
 import { getMemberIdApi, isExistingNicknameApi } from '@/apis/MainInfoApi'
-import { UserInfoStateProps, isMineState, userInfoState } from '@/context/Atoms'
+import { UserInfoStateProps, isMineState, ownerUserData, userInfoState } from '@/context/Atoms'
 import { colors } from '@/styles/colors'
 import NoUser from '@/components/main/NoUser'
 
@@ -20,7 +20,7 @@ const Main = () => {
   // 유저 존재 여부
   const [isExisting, setIsExisting] = useState<boolean>(false)
   // 유저 데이터 정보
-  const [userData, setUserData] = useState<userDataProps>({ nickname: 'flipit', memberId: -1 })
+  const [userData, setUserData] = useRecoilState(ownerUserData)
   // 내 페이지인지 여부 확인
   const [isMyPage, setIsMyPage] = useRecoilState(isMineState)
 
