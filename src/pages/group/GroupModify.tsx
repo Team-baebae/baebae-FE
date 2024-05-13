@@ -1,13 +1,11 @@
 import styled from 'styled-components'
 import { useCallback, useEffect, useState } from 'react'
 import { useRecoilValue } from 'recoil'
-import { Flip, toast } from 'react-toastify'
 import { useLocation, useNavigate } from 'react-router-dom'
 import GroupHeader from '@/components/common/GroupHeader'
 import Feeds from '@/components/folder/Feeds'
 import NoFlip from '@/components/main/NoFlip'
 import { UnFixedButton } from '@/components/common/Button'
-import { StyledToastContainer } from '@/components/toast/toastStyle'
 import { UserInfoStateProps, userInfoState } from '@/context/Atoms'
 import { colors } from '@/styles/colors'
 import { modifyDirectoryApi, updateDirectoryImgApi } from '@/apis/DirectoryApi'
@@ -161,20 +159,9 @@ const GroupModify = () => {
       <UnFixedButton
         $positive={groupName === '' ? false : true}
         func={onClickModifyBtn}
-        func2={() => toast('그룹명을 입력해주세요')}
+        func2={() => console.log('수정 실패')}
         text="그룹 수정하기"
         margin="30px 20px 30px 20px"
-      />
-      <StyledToastContainer
-        position="bottom-center"
-        autoClose={1000}
-        hideProgressBar
-        pauseOnHover={false}
-        closeOnClick={false}
-        closeButton={false}
-        rtl={false}
-        theme="dark"
-        transition={Flip}
       />
     </Container>
   )
