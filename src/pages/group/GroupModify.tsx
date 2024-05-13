@@ -9,7 +9,7 @@ import { UnFixedButton } from '@/components/common/Button'
 import { UserInfoStateProps, userInfoState } from '@/context/Atoms'
 import { colors } from '@/styles/colors'
 import { modifyDirectoryApi, updateDirectoryImgApi } from '@/apis/DirectoryApi'
-import DefaultImg from '@/assets/main/DefaultImage.svg'
+import DefaultImg from '@/assets/main/DefaultImage.png'
 import { getFeedsApi } from '@/apis/AnswerApi'
 
 // 새 그룹 생성페이지

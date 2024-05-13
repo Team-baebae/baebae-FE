@@ -10,7 +10,7 @@ import { StyledToastContainer } from '@/components/toast/toastStyle'
 import { colors } from '@/styles/colors'
 import { UserInfoStateProps, userInfoState } from '@/context/Atoms'
 import { isExistingNicknameApi, updateUserNicknameApi, updateUserProfileApi } from '@/apis/UserApi'
-import DefaultImg from '@/assets/main/DefaultImage.svg'
+import DefaultImg from '@/assets/main/DefaultImage.png'
 
 // 계정 정보 수정 페이지
 const EditAccount = () => {
