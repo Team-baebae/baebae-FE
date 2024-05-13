@@ -1,13 +1,11 @@
 import { useCallback, useEffect, useState } from 'react'
 import styled from 'styled-components'
 import { useRecoilValue } from 'recoil'
-import { Flip, toast } from 'react-toastify'
 import { useNavigate } from 'react-router-dom'
 import GroupHeader from '@/components/common/GroupHeader'
 import { UnFixedButton } from '@/components/common/Button'
 import Feeds from '@/components/folder/Feeds'
 import NoFlip from '@/components/main/NoFlip'
-import { StyledToastContainer } from '@/components/toast/toastStyle'
 
 import { makeDirectoryApi } from '@/apis/DirectoryApi'
 import { userInfoState } from '@/context/Atoms'
@@ -138,20 +136,9 @@ const GroupPlus = () => {
       <UnFixedButton
         $positive={categoryName === '' ? false : true}
         func={makeDirectory}
-        func2={() => toast('그룹명을 입력해주세요')}
+        func2={() => console.log('그룹 생성 실패')}
         text="그룹 추가하기"
         margin="30px 20px 30px 20px"
-      />
-      <StyledToastContainer
-        position="bottom-center"
-        autoClose={1000}
-        hideProgressBar
-        pauseOnHover={false}
-        closeOnClick={false}
-        closeButton={false}
-        rtl={false}
-        theme="dark"
-        transition={Flip}
       />
     </Container>
   )

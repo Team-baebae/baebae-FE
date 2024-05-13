@@ -2,10 +2,8 @@ import styled from 'styled-components'
 import { BottomSheet } from 'react-spring-bottom-sheet'
 import 'react-spring-bottom-sheet/dist/style.css'
 import { useEffect, useState } from 'react'
-import { Flip, toast } from 'react-toastify'
 import EachFolder from '@/components/folder/EachFolder'
 import { colors } from '@/styles/colors'
-import { StyledToastContainer } from '@/components/toast/toastStyle'
 import { UnFixedButton } from '@/components/common/Button'
 import { directoryProps } from '../main/types'
 import { useRecoilValue } from 'recoil'
@@ -141,21 +139,10 @@ const FolderList = ({ selectedDirectoryId, setSelectedDirectoryId }: FolderListP
           $positive={categoryName === '' ? false : true}
           func={makeDirectory}
           func2={() => {
-            toast('그룹명을 입력해주세요')
+            console.log('그룹 추가 실패')
           }}
           text="추가하기"
           margin="20px 20px 0px 20px"
-        />
-        <StyledToastContainer
-          position="bottom-center"
-          autoClose={1000}
-          hideProgressBar
-          pauseOnHover={false}
-          closeOnClick={false}
-          closeButton={false}
-          rtl={false}
-          theme="dark"
-          transition={Flip}
         />
       </BottomSheet>
     </Container>
