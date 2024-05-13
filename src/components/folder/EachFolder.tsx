@@ -25,7 +25,11 @@ const EachFolder = ({ selectedDirectoryId, directory, $positive, func }: EachFol
           </NewFolderImgWrapper>
         )}
 
-        {$positive ? <FolderName>{directory?.categoryName}</FolderName> : <FolderName>추가</FolderName>}
+        {$positive ? (
+          <FolderName selected={selectedDirectoryId === directory?.categoryId}>{directory?.categoryName}</FolderName>
+        ) : (
+          <FolderName selected={selectedDirectoryId === directory?.categoryId}>추가</FolderName>
+        )}
       </FolderWrapper>
     </>
   )
@@ -66,10 +70,10 @@ const PlusImg = styled.img`
   width: 100%;
   height: 100%;
 `
-const FolderName = styled.div`
+const FolderName = styled.div<{ selected: boolean }>`
   text-align: center;
   margin: 6px 0px 0px 0px;
-  color: ${colors.grey3};
+  color: ${(props) => (props.selected ? `${colors.grey1}` : `${colors.grey3}`)};
   font-family: Pretendard;
   font-size: 15px;
   font-weight: 500;
