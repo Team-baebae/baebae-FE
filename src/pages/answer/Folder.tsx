@@ -3,28 +3,32 @@ import Header from '@/components/common/Header'
 import { BottomButton } from '@/components/common/Button'
 import FolderList from '@/components/folder/FolderList'
 import { colors } from '@/styles/colors'
-import { useRecoilState } from 'recoil'
+import { useRecoilValue } from 'recoil'
 import { UserInfoStateProps, userInfoState } from '@/context/Atoms'
-import { getDirectoriesApi } from '@/apis/DirectoryApi'
 import { useState } from 'react'
-
-interface directory {
-  categoryId: number
-  categoryName: string
-  answerAnswers: number[]
-  categoryImage: string
-}
+import { useLocation, useNavigate, useParams } from 'react-router-dom'
+import { connectGroupApi } from '@/apis/AnswerApi'
 
 // 답변 완료 후 그룹 선택 페이지
 const Folder = () => {
-  const [userInfo, setUserInfo] = useRecoilState<UserInfoStateProps>(userInfoState)
+  const { questionId } = useParams()
+
+  const location = useLocation()
+  const answerId = location.state?.answerId
+  console.log(answerId)
+
   const [selectedDirectoryId, setSelectedDirectoryId] = useState<number>(0) // 선택된 디렉토리 ID 상태
 
-  const [directories, setDirectories] = useState()
-  const getDirectories = async () => {
+  const navigate = useNavigate()
+
+  // 리코일 userInfo
+  const userInfo = useRecoilValue<UserInfoStateProps>(userInfoState)
+
+  const connetGroup = async () => {
     try {
-      await getDirectoriesApi(userInfo.accessToken, userInfo.memberId).then((res) => {
-        setDirectories(res.data.categories)
+      await connectGroupApi(userInfo.accessToken, selectedDirectoryId, answerId).then((res) => {
+        console.log(res)
+        navigate(`/questions/${questionId}/complete`)
       })
     } catch (err) {
       console.log(err)
@@ -35,14 +39,8 @@ const Folder = () => {
     <Container>
       <Header text="답변하기" background={colors.grey7} />
       <FolderHeaderText>이 플립을 어떤 그룹에 추가할까요?</FolderHeaderText>
-      <FolderList />
-      <BottomButton
-        $positive={false}
-        func={() => {
-          console.log('완료')
-        }}
-        text="완료"
-      />
+      <FolderList selectedDirectoryId={selectedDirectoryId} setSelectedDirectoryId={setSelectedDirectoryId} />
+      <BottomButton $positive={selectedDirectoryId === 0 ? false : true} func={connetGroup} text="완료" />
     </Container>
   )
 }

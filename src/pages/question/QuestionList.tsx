@@ -134,7 +134,13 @@ const QuestionList = () => {
                 }}
                 key={value.questionId}
               >
-                <DeleteIcon src={CloseIcon} onClick={() => clickDeletion(value.questionId)} />
+                <DeleteIcon
+                  src={CloseIcon}
+                  onClick={(event) => {
+                    event.stopPropagation()
+                    clickDeletion(value.questionId)
+                  }}
+                />
                 <Icon src={QuotationMark} />
                 <FlipContent>{value.content}</FlipContent>
                 <WriterBlock>
@@ -204,6 +210,7 @@ const DeleteIcon = styled.img`
   right: 4px;
   width: 24px;
   height: 24px;
+  z-index: 5;
   cursor: pointer;
 `
 const Icon = styled.img`

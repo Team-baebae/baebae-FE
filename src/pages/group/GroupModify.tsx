@@ -1,5 +1,5 @@
 import styled from 'styled-components'
-import { useState } from 'react'
+import { useCallback, useEffect, useState } from 'react'
 import { useRecoilValue } from 'recoil'
 import { Flip, toast } from 'react-toastify'
 import { useLocation, useNavigate } from 'react-router-dom'
@@ -12,6 +12,7 @@ import { UserInfoStateProps, userInfoState } from '@/context/Atoms'
 import { colors } from '@/styles/colors'
 import { modifyDirectoryApi, updateDirectoryImgApi } from '@/apis/DirectoryApi'
 import DefaultImg from '@/assets/main/DefaultImage.svg'
+import { getFeedsApi } from '@/apis/AnswerApi'
 
 // 새 그룹 생성페이지
 const GroupModify = () => {
@@ -24,13 +25,13 @@ const GroupModify = () => {
   const categoryId = location.state?.categoryId
   const categoryImage = location.state?.categoryImage
   const categoryName = location.state?.categoryName
+  const [selectedAnswerIds, setSelectedAnswerIds] = useState<number[]>(location.state?.answerIds)
 
   // 사진 수정했는지 여부 확인
   const [isEditGroupImg, setIsEditGroupImg] = useState(false)
 
   const [groupImgUrl, setGroupImgUrl] = useState<string>(categoryImage)
   const [groupImgFile, setGroupImgFile] = useState<File>()
-  const [answerIds] = useState<any>([])
   // 이미지 파일 선택 핸들러
   const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files && e.target.files[0]
@@ -49,50 +50,31 @@ const GroupModify = () => {
     setGroupName(value)
   }
 
-  const feedList = [
-    {
-      questionId: 1,
-      questionContent: '가은아 넌 양식이 좋아, 한식이 좋아?',
-      writer: '하이',
-    },
-    {
-      questionId: 2,
-      questionContent: '가은아 넌 양식이 좋아, 한식이 좋아?',
-      writer: '하염',
-    },
-    {
-      questionId: 3,
-      questionContent: '가은아 넌 양식이 좋아, 한식이 좋아?',
-      writer: '하익',
-    },
-    {
-      questionId: 4,
-      questionContent: '가은아 넌 양식이 좋아, 한식이 좋아?',
-      writer: '하웅',
-    },
-    {
-      questionId: 5,
-      questionContent: '가은아 넌 양식이 좋아, 한식이 좋아?',
-      writer: '하열',
-    },
-    {
-      questionId: 6,
-      questionContent: '가은아 넌 양식이 좋아, 한식이 좋아?',
-      writer: '하악',
-    },
-    {
-      questionId: 7,
-      questionContent: '가은아 넌 양식이 좋아, 한식이 좋아?',
-      writer: '하악',
-    },
-  ]
+  interface FeedProps {
+    answerId: number
+    questionId: number
+    questionContent: string
+    memberId: number
+    content: string
+    linkAttachments: string[]
+    musicName: string
+    musicSinger: string
+    musicAudioUrl: string
+    imageUrls: string[]
+    createdDate: string
+    heartCount: number
+    curiousCount: number
+    sadCount: number
+    fcmtoken: string
+  }
+
+  const [feedList, setFeedList] = useState<FeedProps[]>([])
 
   const modifyDirectory = async () => {
     try {
-      await modifyDirectoryApi(userInfo.accessToken, categoryId, groupName, answerIds).then((res) => {
+      await modifyDirectoryApi(userInfo.accessToken, categoryId, groupName, selectedAnswerIds).then((res) => {
         console.log(res)
-        toast('그룹 설정이 수정되었어요!')
-        navigate(-1)
+        navigate(-1) // 현재 페이지에서 뒤로 이동
       })
     } catch (err) {
       console.log(err)
@@ -118,11 +100,26 @@ const GroupModify = () => {
     }
   }
 
+  const getFeeds = useCallback(async () => {
+    try {
+      await getFeedsApi(userInfo.accessToken, userInfo.memberId).then((res) => {
+        console.log(res)
+        setFeedList(res.data.content)
+      })
+    } catch (err) {
+      console.log(err)
+    }
+  }, [])
+
+  useEffect(() => {
+    getFeeds()
+  }, [getFeeds])
+
   return (
     <Container>
       <GroupHeader text="그룹 수정" background={colors.grey7} />
       <FolderImgWrapper>
-        {groupImgUrl === '' ? <FolderImg src={DefaultImg} /> : <FolderImg src={groupImgUrl} />}
+        <FolderImg src={groupImgUrl} />
       </FolderImgWrapper>
       <label htmlFor="file">
         <EditFolderImgText>사진 수정하기</EditFolderImgText>
@@ -156,7 +153,11 @@ const GroupModify = () => {
       <FolderNameConditionText color={colors.grey3} fontSize="12px" margin="40px 20px 0px 20px">
         추가할 플립 선택
       </FolderNameConditionText>
-      {feedList.length > 0 ? <Feeds data={feedList} /> : <NoFlip />}
+      {feedList.length > 0 ? (
+        <Feeds data={feedList} selectedAnswerIds={selectedAnswerIds} setSelectedAnswerIds={setSelectedAnswerIds} />
+      ) : (
+        <NoFlip />
+      )}
       <UnFixedButton
         $positive={groupName === '' ? false : true}
         func={onClickModifyBtn}

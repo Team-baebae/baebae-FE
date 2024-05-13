@@ -2,19 +2,37 @@ import styled from 'styled-components'
 import Header from '@/components/common/Header'
 import { colors } from '@/styles/colors'
 import LogoIcon from '@/assets/signup/OnboardingIcon.svg'
+import { useNavigate } from 'react-router-dom'
+import { useRecoilValue } from 'recoil'
+import { userInfoState } from '@/context/Atoms'
 
 // 답변 완료 페이지
 const AnswerComplete = () => {
+  const navigate = useNavigate()
+  const userInfo = useRecoilValue(userInfoState)
+
   return (
     <Container>
       <Header text="답변하기" background={colors.grey7} />
       <Logo src={LogoIcon} />
       <UnderLogoText>답변이 완료되었어요!</UnderLogoText>
       <BtnWrapper>
-        <Btn color={colors.grey1} backgroundColor={colors.white}>
+        <Btn
+          onClick={() => {
+            navigate('/questions')
+          }}
+          color={colors.grey1}
+          backgroundColor={colors.white}
+        >
           새로운 질문 보러가기
         </Btn>
-        <Btn color={colors.grey1} backgroundColor={colors.primary}>
+        <Btn
+          onClick={() => {
+            navigate(`/${userInfo.nickname}`)
+          }}
+          color={colors.grey1}
+          backgroundColor={colors.primary}
+        >
           작성한 플립 보러가기
         </Btn>
       </BtnWrapper>

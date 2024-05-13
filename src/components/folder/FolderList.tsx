@@ -1,55 +1,131 @@
 import styled from 'styled-components'
 import { BottomSheet } from 'react-spring-bottom-sheet'
 import 'react-spring-bottom-sheet/dist/style.css'
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
+import { Flip, toast } from 'react-toastify'
 import EachFolder from '@/components/folder/EachFolder'
 import { colors } from '@/styles/colors'
+import { StyledToastContainer } from '@/components/toast/toastStyle'
 import { UnFixedButton } from '@/components/common/Button'
+import { directoryProps } from '../main/types'
+import { useRecoilValue } from 'recoil'
+import { UserInfoStateProps, userInfoState } from '@/context/Atoms'
+import { getDirectoriesApi, makeDirectoryApi } from '@/apis/DirectoryApi'
+import DefaultImg from '@/assets/main/DefaultImage.svg'
+import { useNavigate } from 'react-router-dom'
 
-const FolderList = () => {
+interface FolderListProps {
+  selectedDirectoryId: number
+  setSelectedDirectoryId: any
+}
+
+const FolderList = ({ selectedDirectoryId, setSelectedDirectoryId }: FolderListProps) => {
+  const navigate = useNavigate()
+
+  // 리코일 userInfo
+  const userInfo = useRecoilValue<UserInfoStateProps>(userInfoState)
+  // 유저 디렉토리 리스트 저장
+  const [directories, setDirectories] = useState<directoryProps[]>([])
+  // 유저 디렉토리 조회
+  const getDirectories = async () => {
+    try {
+      await getDirectoriesApi(userInfo.accessToken, userInfo.memberId).then((res) => {
+        console.log(res)
+        setDirectories(res.data.categories)
+      })
+    } catch (err) {
+      console.log(err)
+    }
+  }
+
+  useEffect(() => {
+    getDirectories()
+  }, [])
+
   // open은 모달 열고 닫는 상태
   const [open, setOpen] = useState<boolean>(false)
-
   // 모달 이전상태로 변화
   const handleDismissPlusMusicModal = () => {
     setOpen(false)
   }
 
-  const [folderName, setFolderName] = useState<string>('')
+  const [directoryImgUrl, setDirectoryImgUrl] = useState<string>('')
+  const [directoryImgFile, setDirectoryImgFile] = useState<File>()
+  const [selectedAnswerIds, setSelectedAnswerIds] = useState<number[]>([])
+  // 이미지 파일 선택 핸들러
+  const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files && e.target.files[0]
+    // 이미지 파일을 보낼 시엔 formData로 file을 추가해야함(추후 추가)
+    if (file) {
+      setDirectoryImgFile(file)
+      setDirectoryImgUrl(URL.createObjectURL(file)) // 미리보기를 위해 파일 URL 생성
+    }
+  }
+
+  const [categoryName, setCategoryName] = useState<string>('')
 
   const onChangeFolderName = (e: React.ChangeEvent<HTMLInputElement>) => {
     const value = e.target.value
-    setFolderName(value)
+    setCategoryName(value)
+  }
+
+  const makeDirectory = async () => {
+    try {
+      await makeDirectoryApi(
+        userInfo.accessToken,
+        userInfo.memberId,
+        directoryImgFile,
+        categoryName,
+        selectedAnswerIds,
+      ).then((res) => {
+        setDirectories([...directories, res.data])
+        setOpen(false)
+        setDirectoryImgUrl('')
+        setDirectoryImgFile(undefined)
+        setCategoryName('')
+      })
+    } catch (err) {
+      console.log(err)
+    }
   }
 
   return (
     <Container>
-      <EachFolder $positive={true} func={() => console.log('폴더 추가')} />
-      <EachFolder $positive={true} func={() => console.log('폴더 추가')} />
-      <EachFolder $positive={true} func={() => console.log('폴더 추가')} />
-      <EachFolder $positive={true} func={() => console.log('폴더 추가')} />
-      <EachFolder $positive={true} func={() => console.log('폴더 추가')} />
-      <EachFolder $positive={true} func={() => console.log('폴더 추가')} />
-      <EachFolder $positive={false} func={() => setOpen(!open)} />
+      {directories.map((item: any) => {
+        return (
+          <EachFolder
+            selectedDirectoryId={selectedDirectoryId}
+            directory={item}
+            $positive={true}
+            func={() => setSelectedDirectoryId(item.categoryId)}
+          />
+        )
+      })}
+
+      <EachFolder selectedDirectoryId={selectedDirectoryId} $positive={false} func={() => setOpen(!open)} />
       <BottomSheet open={open} snapPoints={() => [433.09091]} onDismiss={handleDismissPlusMusicModal} blocking={true}>
         <PlusLinkText>새 그룹 추가</PlusLinkText>
         <FolderImgWrapper>
-          <FolderImg />
+          {directoryImgUrl === '' ? <FolderImg src={DefaultImg} /> : <FolderImg src={directoryImgUrl} />}
         </FolderImgWrapper>
-        <EditFolderImgText>사진 수정하기</EditFolderImgText>
-        <FolderName value={folderName} onChange={onChangeFolderName} placeholder="그룹명을 입력해주세요" />
+        <label htmlFor="file">
+          <EditFolderImgText>사진 수정하기</EditFolderImgText>
+        </label>
+        <input type="file" name="file" id="file" style={{ display: 'none' }} onChange={handleImageChange} />
+
+        <FolderName value={categoryName} onChange={onChangeFolderName} placeholder="그룹명을 입력해주세요" />
         <FolderNameConditionWrapper>
           <FolderNameConditionText color={colors.grey1} fontSize="12px">
             2-8자로 입력해주세요.
           </FolderNameConditionText>
           <FolderNameLengthWrapper>
-            {folderName.length > 0 ? (
+            {categoryName.length > 0 ? (
               <FolderNameConditionText color={colors.grey2} fontSize="10px">
-                {folderName.length}
+                {categoryName.length}
               </FolderNameConditionText>
             ) : (
               <FolderNameConditionText color={colors.grey4} fontSize="10px">
-                {folderName.length}
+                {categoryName.length}
               </FolderNameConditionText>
             )}
 
@@ -62,15 +138,24 @@ const FolderList = () => {
           </FolderNameLengthWrapper>
         </FolderNameConditionWrapper>
         <UnFixedButton
-          $positive={true}
-          func={() => {
-            console.log('수정')
-          }}
+          $positive={categoryName === '' ? false : true}
+          func={makeDirectory}
           func2={() => {
-            console.log('수정실패')
+            toast('그룹명을 입력해주세요')
           }}
           text="추가하기"
           margin="20px 20px 0px 20px"
+        />
+        <StyledToastContainer
+          position="bottom-center"
+          autoClose={1000}
+          hideProgressBar
+          pauseOnHover={false}
+          closeOnClick={false}
+          closeButton={false}
+          rtl={false}
+          theme="dark"
+          transition={Flip}
         />
       </BottomSheet>
     </Container>
@@ -117,7 +202,7 @@ const FolderImgWrapper = styled.div`
   background: ${colors.white};
 `
 
-const FolderImg = styled.div`
+const FolderImg = styled.img`
   width: 76px;
   height: 76px;
   flex-shrink: 0;
