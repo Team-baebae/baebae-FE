@@ -2,27 +2,30 @@ import styled from 'styled-components'
 import { colors } from '@/styles/colors'
 import TestImg from '@/assets/Glasses.svg'
 import Plus from '@/assets/main/Plus.svg'
+import { directoryProps } from '../main/types'
 
 interface EachFolderProps {
+  selectedDirectoryId: number
+  directory?: directoryProps
   $positive: boolean
   func: any
 }
 
-const EachFolder = ({ $positive, func }: EachFolderProps) => {
+const EachFolder = ({ selectedDirectoryId, directory, $positive, func }: EachFolderProps) => {
   return (
     <>
       <FolderWrapper>
         {$positive ? (
-          <FolderImgWrapper onClick={func}>
-            <FolderImg src={TestImg} />
+          <FolderImgWrapper selected={selectedDirectoryId === directory?.categoryId} onClick={func}>
+            <FolderImg src={directory?.categoryImage} />
           </FolderImgWrapper>
         ) : (
-          <NewFolderImgWrapper onClick={func}>
+          <NewFolderImgWrapper selected={selectedDirectoryId === directory?.categoryId} onClick={func}>
             <PlusImg src={Plus} />
           </NewFolderImgWrapper>
         )}
 
-        {$positive ? <FolderName>음식</FolderName> : <FolderName>추가</FolderName>}
+        {$positive ? <FolderName>{directory?.categoryName}</FolderName> : <FolderName>추가</FolderName>}
       </FolderWrapper>
     </>
   )
@@ -34,7 +37,7 @@ const FolderWrapper = styled.div`
   width: 66px;
   height: 95px;
 `
-const FolderImgWrapper = styled.div`
+const FolderImgWrapper = styled.div<{ selected: boolean }>`
   display: flex;
   justify-content: center;
   align-items: center;
@@ -42,7 +45,7 @@ const FolderImgWrapper = styled.div`
   height: 66px;
   padding: 4.5px;
   border-radius: 18px;
-  border: 1.5px solid ${colors.grey5};
+  border: ${(props) => (props.selected ? `1.5px solid ${colors.grey1}` : `1.5px solid ${colors.grey5}`)};
   background-color: ${colors.white};
   cursor: pointer;
 `

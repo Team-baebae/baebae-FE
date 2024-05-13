@@ -17,3 +17,26 @@ export const answerApi = (accessToken: string, memberId: number, imageFile: File
     },
   })
 }
+
+export const getFeedsApi = (accessToken: string, memberId: number) => {
+  const sort = ['createdDate,desc']
+  let API = `/api/answers?memberId=${memberId}&page=0&size=10&sort=${sort}`
+  return flipitAxios.get(API, {
+    headers: {
+      Authorization: `Bearer ${accessToken}`,
+    },
+  })
+}
+
+export const connectGroupApi = (accessToken: string, categoryId: number, answerId: number) => {
+  let API = `/api/category/${categoryId}/answers/${answerId}`
+  return flipitAxios.post(
+    API,
+    {},
+    {
+      headers: {
+        Authorization: `Bearer ${accessToken}`,
+      },
+    },
+  )
+}

@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from 'react'
+import { useCallback, useEffect, useRef, useState } from 'react'
 import styled from 'styled-components'
 import { useRecoilValue } from 'recoil'
 import { useNavigate } from 'react-router-dom'
@@ -19,6 +19,7 @@ import { UserInfoStateProps, userInfoState } from '@/context/Atoms'
 import Plus from '@/assets/main/Plus.svg'
 import Pencil from '@/assets/main/Pencil.svg'
 import Trash from '@/assets/main/Trash.svg'
+import { getFeedsApi } from '@/apis/AnswerApi'
 
 // 메인페이지 피드 컴포넌트
 const Feed = () => {
@@ -41,50 +42,39 @@ const Feed = () => {
     }
   }
 
-  const feedList = [
-    {
-      questionId: 1,
-      questionContent: '가은아 넌 양식이 좋아, 한식이 좋아?',
-      writer: '하이',
-    },
-    {
-      questionId: 2,
-      questionContent: '가은아 넌 양식이 좋아, 한식이 좋아?',
-      writer: '하염',
-    },
-    {
-      questionId: 3,
-      questionContent: '가은아 넌 양식이 좋아, 한식이 좋아?',
-      writer: '하익',
-    },
-    {
-      questionId: 4,
-      questionContent: '가은아 넌 양식이 좋아, 한식이 좋아?',
-      writer: '하웅',
-    },
-    {
-      questionId: 5,
-      questionContent: '가은아 넌 양식이 좋아, 한식이 좋아?',
-      writer: '하열',
-    },
-    {
-      questionId: 6,
-      questionContent: '가은아 넌 양식이 좋아, 한식이 좋아?',
-      writer: '하악',
-    },
-  ]
+  interface FeedProps {
+    answerId: number
+    questionId: number
+    questionContent: string
+    memberId: number
+    content: string
+    linkAttachments: string[]
+    musicName: string
+    musicSinger: string
+    musicAudioUrl: string
+    imageUrls: string[]
+    createdDate: string
+    heartCount: number
+    curiousCount: number
+    sadCount: number
+    fcmtoken: string
+  }
+
+  const [feedList, setFeedList] = useState<FeedProps[]>([])
 
   // 보여줄 선택된 디렉토리
   const [selectedDirectoryId, setSelectedDirectoryId] = useState<number>(0)
   const [selectedDirectoryGroupName, setSelectedDirectoryGroupName] = useState<string>('')
   const [selectedDirectoryImage, setSelectedDirectoryImage] = useState<string>('')
+  const [selectedDirectoryAnswerIds, setSelectedDirectoryAnswerIds] = useState<number[]>([])
 
   // open은 모달 열고 닫는 상태
   const [open, setOpen] = useState<boolean>(false)
-  const openModal = (categoryId: number, categoryImage: string, categoryName: string) => {
+  const openModal = (categoryId: number, categoryImage: string, categoryName: string, answerIds: number[]) => {
     setSelectedDirectoryId(categoryId)
     setSelectedDirectoryImage(categoryImage)
     setSelectedDirectoryGroupName(categoryName)
+    setSelectedDirectoryAnswerIds(answerIds)
     setOpen(true)
   }
   // 모달 이전상태로 변화
@@ -96,10 +86,10 @@ const Feed = () => {
   const holdTimer = useRef<number | null>(null) // useRef에 타입 명시
   const bind = useGesture({
     onPointerDown: ({ event, args }) => {
-      const [categoryId, categoryImage, categoryName] = args as [number, string, string]
+      const [categoryId, categoryImage, categoryName, answerIds] = args as [number, string, string, number[]]
 
       event.preventDefault()
-      holdTimer.current = window.setTimeout(() => openModal(categoryId, categoryImage, categoryName), 500)
+      holdTimer.current = window.setTimeout(() => openModal(categoryId, categoryImage, categoryName, answerIds), 500)
     },
     onPointerUp: () => {
       if (holdTimer.current !== null) {
@@ -123,12 +113,12 @@ const Feed = () => {
         getDirectories()
         if (res.status === 204) {
           toast('그룹이 삭제되었습니다')
-        } else {
-          toast('피드가 있는 그룹은 삭제가 불가능합니다')
         }
       })
     } catch (err) {
       console.log(err)
+      setOpen(false)
+      toast('피드가 있는 그룹은 삭제가 불가능합니다')
     }
   }
 
@@ -139,6 +129,7 @@ const Feed = () => {
         categoryId: selectedDirectoryId,
         categoryImage: selectedDirectoryImage,
         categoryName: selectedDirectoryGroupName,
+        answerIds: selectedDirectoryAnswerIds,
       },
     })
   }
@@ -146,6 +137,21 @@ const Feed = () => {
   useEffect(() => {
     getDirectories()
   }, [])
+
+  const getFeeds = useCallback(async () => {
+    try {
+      await getFeedsApi(userInfo.accessToken, userInfo.memberId).then((res) => {
+        console.log(res)
+        setFeedList(res.data.content)
+      })
+    } catch (err) {
+      console.log(err)
+    }
+  }, [])
+
+  useEffect(() => {
+    getFeeds()
+  }, [getFeeds])
 
   return (
     <Container>
@@ -162,7 +168,7 @@ const Feed = () => {
               <SwiperSlide key={item.categoryId}>
                 <GroupWrapper>
                   <GroupImgWrapper
-                    {...bind(item.categoryId, item.categoryImage, item.categoryName)}
+                    {...bind(item.categoryId, item.categoryImage, item.categoryName, item.answerIds)}
                     onContextMenu={(e) => {
                       e.preventDefault()
                       e.stopPropagation()

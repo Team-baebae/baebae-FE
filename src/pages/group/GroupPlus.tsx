@@ -1,23 +1,28 @@
-import { useState } from 'react'
+import { useCallback, useEffect, useState } from 'react'
 import styled from 'styled-components'
 import { useRecoilValue } from 'recoil'
+import { Flip, toast } from 'react-toastify'
 import { useNavigate } from 'react-router-dom'
 import GroupHeader from '@/components/common/GroupHeader'
 import { UnFixedButton } from '@/components/common/Button'
 import Feeds from '@/components/folder/Feeds'
 import NoFlip from '@/components/main/NoFlip'
+import { StyledToastContainer } from '@/components/toast/toastStyle'
+
 import { makeDirectoryApi } from '@/apis/DirectoryApi'
 import { userInfoState } from '@/context/Atoms'
 import { colors } from '@/styles/colors'
+import DefaultImg from '@/assets/main/DefaultImage.svg'
+import { getFeedsApi } from '@/apis/AnswerApi'
 
 const GroupPlus = () => {
   const navigate = useNavigate()
 
   const userInfo = useRecoilValue(userInfoState)
 
-  const [, setDirectoryImgUrl] = useState<string>('')
+  const [directoryImgUrl, setDirectoryImgUrl] = useState<string>('')
   const [directoryImgFile, setDirectoryImgFile] = useState<File>()
-  const [answerIds] = useState<any>([])
+  const [selectedAnswerIds, setSelectedAnswerIds] = useState<number[]>([])
   // 이미지 파일 선택 핸들러
   const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files && e.target.files[0]
@@ -35,57 +40,63 @@ const GroupPlus = () => {
     setCategoryName(value)
   }
 
-  const feedList = [
-    {
-      questionId: 1,
-      questionContent: '가은아 넌 양식이 좋아, 한식이 좋아?',
-      writer: '하이',
-    },
-    {
-      questionId: 2,
-      questionContent: '가은아 넌 양식이 좋아, 한식이 좋아?',
-      writer: '하염',
-    },
-    {
-      questionId: 3,
-      questionContent: '가은아 넌 양식이 좋아, 한식이 좋아?',
-      writer: '하익',
-    },
-    {
-      questionId: 4,
-      questionContent: '가은아 넌 양식이 좋아, 한식이 좋아?',
-      writer: '하웅',
-    },
-    {
-      questionId: 5,
-      questionContent: '가은아 넌 양식이 좋아, 한식이 좋아?',
-      writer: '하열',
-    },
-    {
-      questionId: 6,
-      questionContent: '가은아 넌 양식이 좋아, 한식이 좋아?',
-      writer: '하악',
-    },
-  ]
+  interface FeedProps {
+    answerId: number
+    questionId: number
+    questionContent: string
+    memberId: number
+    content: string
+    linkAttachments: string[]
+    musicName: string
+    musicSinger: string
+    musicAudioUrl: string
+    imageUrls: string[]
+    createdDate: string
+    heartCount: number
+    curiousCount: number
+    sadCount: number
+    fcmtoken: string
+  }
+
+  const [feedList, setFeedList] = useState<FeedProps[]>([])
+
+  const getFeeds = useCallback(async () => {
+    try {
+      await getFeedsApi(userInfo.accessToken, userInfo.memberId).then((res) => {
+        console.log(res)
+        setFeedList(res.data.content)
+      })
+    } catch (err) {
+      console.log(err)
+    }
+  }, [])
 
   const makeDirectory = async () => {
     try {
-      await makeDirectoryApi(userInfo.accessToken, userInfo.memberId, directoryImgFile, categoryName, answerIds).then(
-        (res) => {
-          console.log(res)
-          navigate(`/${userInfo.nickname}`)
-        },
-      )
+      await makeDirectoryApi(
+        userInfo.accessToken,
+        userInfo.memberId,
+        directoryImgFile,
+        categoryName,
+        selectedAnswerIds,
+      ).then((res) => {
+        console.log(res)
+        navigate(`/${userInfo.nickname}`)
+      })
     } catch (err) {
       console.log(err)
     }
   }
 
+  useEffect(() => {
+    getFeeds()
+  }, [getFeeds])
+
   return (
     <Container>
       <GroupHeader text="새 그룹 추가" background={colors.grey7} />
       <FolderImgWrapper>
-        <FolderImg />
+        {directoryImgUrl === '' ? <FolderImg src={DefaultImg} /> : <FolderImg src={directoryImgUrl} />}
       </FolderImgWrapper>
       <label htmlFor="file">
         <EditFolderImgText>사진 수정하기</EditFolderImgText>
@@ -119,13 +130,28 @@ const GroupPlus = () => {
       <FolderNameConditionText color={colors.grey3} fontSize="12px" margin="40px 20px 0px 20px">
         추가할 플립 선택
       </FolderNameConditionText>
-      {feedList.length > 0 ? <Feeds data={feedList} /> : <NoFlip />}
+      {feedList.length > 0 ? (
+        <Feeds data={feedList} selectedAnswerIds={selectedAnswerIds} setSelectedAnswerIds={setSelectedAnswerIds} />
+      ) : (
+        <NoFlip />
+      )}
       <UnFixedButton
-        $positive={true}
+        $positive={categoryName === '' ? false : true}
         func={makeDirectory}
-        func2={() => console.log('실패')}
+        func2={() => toast('그룹명을 입력해주세요')}
         text="그룹 추가하기"
         margin="30px 20px 30px 20px"
+      />
+      <StyledToastContainer
+        position="bottom-center"
+        autoClose={1000}
+        hideProgressBar
+        pauseOnHover={false}
+        closeOnClick={false}
+        closeButton={false}
+        rtl={false}
+        theme="dark"
+        transition={Flip}
       />
     </Container>
   )
@@ -155,7 +181,7 @@ const FolderImgWrapper = styled.div`
   transform: translateX(-50%);
 `
 
-const FolderImg = styled.div`
+const FolderImg = styled.img`
   width: 76px;
   height: 76px;
   flex-shrink: 0;

@@ -1,27 +1,58 @@
 import styled from 'styled-components'
 import { colors } from '@/styles/colors'
 import QuotationMark from '@/assets/question/QuotationMark.svg'
+import CheckBlackBack from '@/assets/feed/CheckBlackBack.svg'
 
 interface FeedProps {
+  answerId: number
   questionId: number
   questionContent: string
-  writer: string
+  memberId: number
+  content: string
+  linkAttachments: string[]
+  musicName: string
+  musicSinger: string
+  musicAudioUrl: string
+  imageUrls: string[]
+  createdDate: string
+  heartCount: number
+  curiousCount: number
+  sadCount: number
+  fcmtoken: string
 }
 
 interface FeedsProps {
   data: FeedProps[]
+  selectedAnswerIds: number[]
+  setSelectedAnswerIds: any
 }
 
-const Feeds = ({ data }: FeedsProps) => {
+const Feeds = ({ data, selectedAnswerIds, setSelectedAnswerIds }: FeedsProps) => {
+  const handleFlipWrapperClick = (answerId: number) => {
+    setSelectedAnswerIds((prev: number[]) => {
+      const isSelected = prev.includes(answerId)
+      if (isSelected) {
+        return prev.filter((id) => id !== answerId)
+      } else {
+        return [...prev, answerId]
+      }
+    })
+  }
+
   return (
     <>
       <GridContainer>
         {data.map((feed) => (
-          <FlipWrapper>
+          <FlipWrapper
+            key={feed.answerId}
+            onClick={() => handleFlipWrapperClick(feed.answerId)}
+            selected={selectedAnswerIds.includes(feed.answerId)}
+          >
+            {selectedAnswerIds.includes(feed.answerId) && <CheckIcon src={CheckBlackBack} />}
             <Icon src={QuotationMark} />
             <FlipContent>{feed.questionContent}</FlipContent>
             <WriterBlock>
-              FROM <WriterRegion>{feed.writer}님</WriterRegion>
+              FROM <WriterRegion>추후수정님</WriterRegion>
             </WriterBlock>
           </FlipWrapper>
         ))}
@@ -43,7 +74,8 @@ const Icon = styled.img`
   width: 7.72px;
   height: 6.28px;
 `
-const FlipWrapper = styled.div`
+const FlipWrapper = styled.div<{ selected: boolean }>`
+  position: relative;
   display: flex;
   flex-direction: column;
   justify-content: space-between;
@@ -52,9 +84,21 @@ const FlipWrapper = styled.div`
   height: 179px;
   padding: 30px 10px 10px 10px;
   border-radius: 2px;
-  background: ${colors.white};
+  background-color: ${(props) => (props.selected ? 'rgba(138, 138, 138, 0.30)' : `${colors.white}`)};
   box-shadow: 0px 4px 4px 0px rgba(0, 0, 0, 0.08);
+  border: ${(props) => props.selected && `2px solid ${colors.grey1}`};
 `
+
+const CheckIcon = styled.img`
+  position: absolute;
+  right: 10px;
+  top: 10px;
+  width: 20px;
+  height: 20px;
+  background-color: ${colors.grey1};
+  border-radius: 100px;
+`
+
 const FlipContent = styled.div`
   display: flex;
   flex: 1 0 0;
@@ -80,6 +124,7 @@ const WriterBlock = styled.div`
 `
 
 const WriterRegion = styled.button`
+  margin: 0px 0px 0px 4px;
   background-color: transparent;
   color: ${colors.grey4};
   font-family: Pretendard;

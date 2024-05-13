@@ -62,7 +62,11 @@ const Answer = () => {
         musicSinger: musicSinger,
         musicAudioUrl: musicAudio,
       }).then((res) => {
-        navigate(-1)
+        navigate(`/questions/${question.questionId}/group`, {
+          state: {
+            answerId: res.data.answerId,
+          },
+        })
         console.log(res)
       })
     } catch (err) {

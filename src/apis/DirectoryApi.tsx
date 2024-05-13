@@ -14,7 +14,7 @@ export const makeDirectoryApi = (
   memberId: number,
   groupImgFile: File | undefined,
   groupName: string,
-  answerIds: any,
+  selectedAnswerIds: any,
 ) => {
   // FormData 객체 생성
   const formData = new FormData()
@@ -26,7 +26,7 @@ export const makeDirectoryApi = (
   }
   const createCategory = {
     categoryName: groupName,
-    answerIds: answerIds,
+    answerIds: selectedAnswerIds,
   }
   formData.append('createCategory', JSON.stringify(createCategory))
 
@@ -48,14 +48,18 @@ export const deleteDirectoryApi = (accessToken: string, categoryId: number) => {
   })
 }
 
-export const modifyDirectoryApi = (accessToken: string, categoryId: number, categoryName: string, answerIds: any) => {
+export const modifyDirectoryApi = (
+  accessToken: string,
+  categoryId: number,
+  categoryName: string,
+  selectedAnswerIds: number[],
+) => {
   let API = `/api/category/${categoryId}`
   return flipitAxios.put(
     API,
     {
-      categoryId: categoryId,
       categoryName: categoryName,
-      answerIds: answerIds,
+      answerIds: selectedAnswerIds,
     },
 
     {

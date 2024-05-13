@@ -3,9 +3,21 @@ import { colors } from '../../styles/colors'
 import QuotationMark from '../../assets/question/QuotationMark.svg'
 
 interface FeedProps {
+  answerId: number
   questionId: number
   questionContent: string
-  writer: string
+  memberId: number
+  content: string
+  linkAttachments: string[]
+  musicName: string
+  musicSinger: string
+  musicAudioUrl: string
+  imageUrls: string[]
+  createdDate: string
+  heartCount: number
+  curiousCount: number
+  sadCount: number
+  fcmtoken: string
 }
 
 interface FeedsProps {
@@ -21,7 +33,7 @@ const Feeds = ({ data }: FeedsProps) => {
             <Icon src={QuotationMark} />
             <FlipContent>{feed.questionContent}</FlipContent>
             <WriterBlock>
-              FROM <WriterRegion>{feed.writer}님</WriterRegion>
+              FROM<WriterRegion>추후수정님</WriterRegion>
             </WriterBlock>
           </FlipWrapper>
         ))}
@@ -82,6 +94,7 @@ const WriterBlock = styled.div`
 `
 
 const WriterRegion = styled.button`
+  margin: 0px 0px 0px 4px;
   color: ${colors.grey4};
   font-family: Pretendard;
   font-size: 10px;
