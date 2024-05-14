@@ -1,6 +1,6 @@
 import styled from 'styled-components'
-import NoFeed from '@/assets/main/NoneFeed.svg'
 import { colors } from '@/styles/colors'
+import NoFeed from '@/assets/main/NoneFeed.svg'
 
 // 검색한 사용자가 없을 때 컴포넌트
 const NoUser = () => {
@@ -20,7 +20,6 @@ const Container = styled.div`
   align-items: center;
   width: 100%;
   margin-top: 210px;
-  align-items: center;
   gap: 30px;
 `
 const Image = styled.img``

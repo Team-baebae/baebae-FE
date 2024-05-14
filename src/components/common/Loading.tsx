@@ -19,9 +19,9 @@ const Container = styled.div`
 `
 
 const Icon = styled.img`
+  margin: 300px 0px 0px 0px;
   width: 36px;
   height: 36px;
-  margin: 300px 0px 0px 0px;
 `
 
 const LoadingText = styled.div`
