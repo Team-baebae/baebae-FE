@@ -40,6 +40,12 @@ const Feed = () => {
       await getDirectoriesApi(ownerUserInfo.memberId).then((res) => {
         console.log(res)
         setDirectories(res.data.categories)
+        if (res.data.categories.length !== 0) {
+          setSelectedDirectoryId(res.data.categories[0].categoryId)
+          setSelectedDirectoryImage(res.data.categories[0].categoryImage)
+          setSelectedDirectoryGroupName(res.data.categories[0].categoryName)
+          setSelectedDirectoryAnswerIds(res.data.categories[0].answerIds)
+        }
       })
     } catch (err) {
       console.log(err)
