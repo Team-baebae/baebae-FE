@@ -1,6 +1,7 @@
 import styled from 'styled-components'
 import LoadingIcon from '@/assets/kakaoRedirection/Loading.svg'
 
+// 카카오 로그인 로딩 컴포넌트
 const Loading = () => {
   return (
     <Container>

@@ -12,6 +12,7 @@ interface IsValidNicknameTextProps {
 const IsValidNicknameText = ({ isValid, isClickDuplicate, isDuplicate, nickname }: IsValidNicknameTextProps) => {
   return (
     <UnderInputWrapper>
+      {/* 닉네임이 조건에 맞는지 여부 */}
       {!isClickDuplicate && nickname.length === 0 ? (
         <UnderInputText>6-25자의 영문, 숫자, 기호(_)만 입력해주세요.</UnderInputText>
       ) : !isClickDuplicate && nickname.length > 0 ? (
@@ -27,7 +28,7 @@ const IsValidNicknameText = ({ isValid, isClickDuplicate, isDuplicate, nickname 
       ) : (
         <UnderInputText>사용가능한 아이디에요.</UnderInputText>
       )}
-
+      {/* 닉네임의 텍스트 길이 */}
       <UnderInputNicknameLengthWrapper>
         {nickname.length === 0 ? (
           <UnderInputNicknameLengthText color={colors.grey4}>{nickname.length}</UnderInputNicknameLengthText>

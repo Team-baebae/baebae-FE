@@ -1,15 +1,15 @@
 import styled from 'styled-components'
-import BackArrow from '../../assets/answer/BackArrow.svg'
-import xIcon from '../../assets/feed/XIcon.svg'
-
-import { colors } from '../../styles/colors'
 import { useNavigate } from 'react-router-dom'
+import { colors } from '@/styles/colors'
+import BackArrow from '@/assets/answer/BackArrow.svg'
+import xIcon from '@/assets/feed/XIcon.svg'
 
 interface HeaderProps {
   text: string
   background: string
 }
 
+// 그룹페이지 헤더 컴포넌트
 const GroupHeader = ({ text, background }: HeaderProps) => {
   const navigate = useNavigate()
 
@@ -38,10 +38,10 @@ const GroupHeader = ({ text, background }: HeaderProps) => {
 export default GroupHeader
 
 const HeaderTotalComponent = styled.div<{ background: string }>`
-  position: relative;
   display: flex;
   justify-content: center;
   align-items: center;
+  position: relative;
   width: 100%;
   height: 48px;
   background-color: ${(props) => props.background};
@@ -59,7 +59,6 @@ const HeaderText = styled.div`
   color: ${colors.grey1};
   font-family: Pretendard;
   font-size: 16px;
-  font-style: normal;
   font-weight: 700;
   line-height: 24px;
   letter-spacing: -0.32px;
