@@ -121,7 +121,9 @@ const DetailFeed = (props: ModalProps) => {
       // 다른 노래의 버튼을 누르면 기존 노래 중지 후 새로운 노래 재생
       if (currentAudio) {
         currentAudio.pause()
+        setIsPlaying(false)
       }
+
       const audio = new Audio(previewUrl)
       setCurrentAudio(audio)
       audio.play()
@@ -163,9 +165,9 @@ const DetailFeed = (props: ModalProps) => {
                     {selectedFeed?.musicName} - {selectedFeed?.musicSinger}
                   </OverflowText>
                   {currentAudio && currentAudio.src === selectedFeed.musicAudioUrl && isPlaying ? (
-                    <Icon onClick={() => handlePreview(selectedFeed.musicAudioUrl)} src={PauseIcon} alt="pause" />
+                    <Icon src={PauseIcon} alt="pause" />
                   ) : (
-                    <Icon onClick={() => handlePreview(selectedFeed.musicAudioUrl)} src={PlayIcon} alt="play" />
+                    <Icon src={PlayIcon} alt="play" />
                   )}
                 </LinkButton>
               )}

@@ -141,9 +141,9 @@ const TotalPageFeed = (props: TotalPageFeedProps) => {
                   {selectedFeed?.musicName} - {selectedFeed?.musicSinger}
                 </OverflowText>
                 {props.currentAudio && props.currentAudio.src === selectedFeed.musicAudioUrl && isPlaying ? (
-                  <Icon onClick={() => handlePreview(selectedFeed.musicAudioUrl)} src={PauseIcon} alt="pause" />
+                  <Icon src={PauseIcon} alt="pause" />
                 ) : (
-                  <Icon onClick={() => handlePreview(selectedFeed.musicAudioUrl)} src={PlayIcon} alt="play" />
+                  <Icon src={PlayIcon} alt="play" />
                 )}
               </LinkButton>
             )}
