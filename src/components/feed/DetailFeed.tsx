@@ -16,6 +16,7 @@ import pencil from '../../assets/main/Pencil.svg'
 import trash from '../../assets/main/Trash.svg'
 import Download from '../../assets/Download.svg'
 import TelePathyMotion from './TelepathyMotion'
+import { useNavigate } from 'react-router-dom'
 
 interface FeedProps {
   answerId: number
@@ -39,12 +40,22 @@ interface ModalProps {
   setShowModal: any
   showModal: boolean
   selectedFeed: FeedProps
+  selectedDirectoryId: number
+  selectedDirectoryImage: string
+  selectedDirectoryGroupName: string
+  selectedDirectoryAnswerIds: number[]
 }
 
 const DetailFeed = (props: ModalProps) => {
   const setShowModal = props.setShowModal
   const showModal = props.showModal
   const selectedFeed = props.selectedFeed
+  const selectedDirectoryId = props.selectedDirectoryId
+  const selectedDirectoryImage = props.selectedDirectoryImage
+  const selectedDirectoryGroupName = props.selectedDirectoryGroupName
+  const selectedDirectoryAnswerIds = props.selectedDirectoryAnswerIds
+
+  const navigate = useNavigate()
 
   const [isFlipped, setIsFlipped] = useState<boolean>(false)
 
@@ -235,18 +246,33 @@ const DetailFeed = (props: ModalProps) => {
       {open && (
         <BottomSheet
           open={open}
-          snapPoints={() => [170]}
+          snapPoints={() => [231]}
           onDismiss={handleDismiss}
           blocking={true}
           style={{ zIndex: 100 }}
         >
           <BottomSheetEachWrapper>
             <BottomSheetEachIcon src={pencil} />
+            <BottomSheetEachText color={colors.grey1}>플립 수정하기</BottomSheetEachText>
+          </BottomSheetEachWrapper>
+          <BottomSheetEachWrapper
+            onClick={() => {
+              navigate(`/groups/${selectedDirectoryId}/edit`, {
+                state: {
+                  categoryId: selectedDirectoryId,
+                  categoryImage: selectedDirectoryImage,
+                  categoryName: selectedDirectoryGroupName,
+                  answerIds: selectedDirectoryAnswerIds,
+                },
+              })
+            }}
+          >
+            <BottomSheetEachIcon src={pencil} />
             <BottomSheetEachText color={colors.grey1}>그룹 수정하기</BottomSheetEachText>
           </BottomSheetEachWrapper>
           <BottomSheetEachWrapper>
             <BottomSheetEachIcon src={trash} />
-            <BottomSheetEachText color="#f00">그룹 삭제하기</BottomSheetEachText>
+            <BottomSheetEachText color="#f00">플립 삭제하기</BottomSheetEachText>
           </BottomSheetEachWrapper>
         </BottomSheet>
       )}
