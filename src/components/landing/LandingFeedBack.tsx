@@ -25,11 +25,10 @@ const Photo = styled.img`
 const FlipWrapper = styled.div`
   display: flex;
   flex-direction: column;
+  justify-content: space-between;
   width: 300px;
   height: 329.448px;
   padding: 18.4px;
-  flex-direction: column;
-  justify-content: space-between;
   gap: 18px;
   border-radius: 2px;
   background: ${colors.white};

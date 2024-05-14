@@ -1,10 +1,10 @@
 import styled from 'styled-components'
 import { motion } from 'framer-motion'
 import { useState } from 'react'
-import LandingLogoWhite from '@/assets/landing/LandingLogoWhite.svg'
+import LandingFeedFront from '@/components/landing/LandingFeedFront'
+import LandingFeedBack from '@/components/landing/LandingFeedBack'
 import { colors } from '@/styles/colors'
-import LandingFeedFront from './LandingFeedFront'
-import LandingFeedBack from './LandingFeedBack'
+import LandingLogoWhite from '@/assets/landing/LandingLogoWhite.svg'
 
 const Landing4 = () => {
   const [isFlipped, setIsFlipped] = useState<boolean>(false)
