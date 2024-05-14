@@ -14,11 +14,12 @@ import DefaultImg from '@/assets/main/DefaultImage.png'
 const EditAccount = () => {
   const navigate = useNavigate()
 
+  // 리코일 로그인한 유저정보
   const [userInfo, setUserInfo] = useRecoilState<UserInfoStateProps>(userInfoState)
   const startNickname = userInfo.nickname
+
   // 사진 수정했는지 여부 확인
   const [isEditProfileImg, setIsEditProfileImg] = useState(false)
-
   // 유저 프로필 이미지 저장
   const [profileImg, setProfileImg] = useState<string>(userInfo.profileImage)
   // 유저 프로필 파일 저장
@@ -55,7 +56,6 @@ const EditAccount = () => {
     const regex = /^[a-zA-Z0-9_-]{6,25}$/
     return regex.test(nickname)
   }
-
   // 닉네임 수정
   const onChangeNickname = (e: ChangeEvent<HTMLInputElement>) => {
     const value = e.target.value
@@ -64,12 +64,10 @@ const EditAccount = () => {
     setIsClickDuplicate(false)
     setIsDuplicate(false)
   }
-
   // 닉네임 중복인지 여부 저장
   const [isDuplicate, setIsDuplicate] = useState<boolean>(false)
   //중복 확인 버튼 누른 직후 상태 저장
   const [isClickDuplicate, setIsClickDuplicate] = useState<boolean>(false)
-
   // 닉네임 중복 확인
   const checkDuplicateNickname = async () => {
     try {
@@ -150,7 +148,7 @@ const EditAccount = () => {
         isDuplicate={isDuplicate}
         nickname={nickname}
       />
-
+      {/* 수정 버튼 */}
       <BottomButton
         $positive={(isValid && isClickDuplicate && !isDuplicate) || startNickname === nickname ? true : false}
         text="수정하기"
@@ -172,7 +170,6 @@ const Container = styled.div`
   height: 100%;
 `
 
-// 프로필 이미지 수정 부분
 const ProfileImageWrapper = styled.div`
   display: flex;
   flex-direction: column;
