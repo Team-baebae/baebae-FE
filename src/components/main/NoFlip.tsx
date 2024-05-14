@@ -1,7 +1,8 @@
 import styled from 'styled-components'
-import NoFeed from '@/assets/main/NoneFeed.svg'
 import { colors } from '@/styles/colors'
+import NoFeed from '@/assets/main/NoneFeed.svg'
 
+// 해당 디렉토리의 피드가 없을 때 컴포넌트
 const NoFlip = () => {
   return (
     <Container>
