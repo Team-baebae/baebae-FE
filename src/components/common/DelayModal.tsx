@@ -1,12 +1,13 @@
 import { useEffect, useState } from 'react'
 import styled from 'styled-components'
-import { colors } from '../../styles/colors'
+import { colors } from '@/styles/colors'
 
 interface DelayModalProps {
   text: string
   setIsOpenDelayModal: any
 }
 
+// 2초 뒤 사라지는 모달 컴포넌트
 const DelayModal = ({ setIsOpenDelayModal, text }: DelayModalProps) => {
   const [showMessage, setShowMessage] = useState<boolean>(false)
 
@@ -25,12 +26,12 @@ export default DelayModal
 
 const Container = styled.div`
   display: flex;
-  width: calc(100% - 40px);
-  height: 56px;
-  padding: 16px 67px;
   justify-content: center;
   align-items: center;
   position: absolute;
+  width: calc(100% - 40px);
+  height: 56px;
+  padding: 16px 67px;
   left: 20px;
   bottom: 42px;
   border-radius: 12px;
@@ -41,7 +42,6 @@ const Container = styled.div`
     'liga' off;
   font-family: Pretendard;
   font-size: 16px;
-  font-style: normal;
   font-weight: 600;
   line-height: 150%;
   letter-spacing: -0.32px;

@@ -1,7 +1,7 @@
-import { SearchModalBox, SearchModalContent } from './ModalStyle'
 import styled from 'styled-components'
-import { colors } from '../../styles/colors'
 import { AnimatePresence } from 'framer-motion'
+import { SearchModalBox, SearchModalContent } from '@/components/common/ModalStyle'
+import { colors } from '@/styles/colors'
 
 interface ModalProps {
   content: string
@@ -11,6 +11,8 @@ interface ModalProps {
   func2: any
   clickModal: () => void
 }
+
+// 공통 모달 컴포넌트
 const Modal = (props: ModalProps) => {
   // 전달받은 state 함수
   const { content, buttonText1, buttonText2, func1, func2, clickModal } = props
@@ -45,13 +47,13 @@ const Modal = (props: ModalProps) => {
 export default Modal
 
 const ModalContent = styled.div`
-  position: relative;
   display: flex;
   flex-direction: column;
-  width: 100%;
-  height: 100%;
   justify-content: center;
   align-items: center;
+  position: relative;
+  width: 100%;
+  height: 100%;
   gap: 8px;
 `
 const Content = styled.div`
@@ -59,26 +61,23 @@ const Content = styled.div`
   text-align: center;
   font-family: Pretendard;
   font-size: 16px;
-  font-style: normal;
   font-weight: 600;
-  line-height: normal;
   letter-spacing: -0.32px;
   margin: 40px 22px 52px 22px;
 `
 const Button = styled.button<{ $positive: boolean }>`
   display: flex;
-  height: 56px;
-  padding: 16px 0px;
   justify-content: center;
   align-items: center;
   align-self: stretch;
+  height: 56px;
+  padding: 16px 0px;
   border-radius: 12px;
   background: ${(props) => (props.$positive ? colors.primary : colors.white)};
   border: 1px solid ${(props) => (props.$positive ? colors.primary : colors.grey5)};
   color: ${(props) => (props.$positive ? colors.grey1 : colors.grey3)};
   font-family: Pretendard;
   font-size: 16px;
-  font-style: normal;
   font-weight: 600;
   line-height: 24px;
   letter-spacing: -0.32px;

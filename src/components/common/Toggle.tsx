@@ -2,6 +2,7 @@ import { useState } from 'react'
 import styled from 'styled-components'
 import { colors } from '../../styles/colors'
 
+// 토글
 const Toggle = () => {
   const [isActive, setIsActive] = useState(false)
 
@@ -16,15 +17,14 @@ const Toggle = () => {
 export default Toggle
 
 const ToggleSwitch = styled.label`
-  position: relative;
   display: inline-block;
+  position: relative;
   width: 52px;
   height: 26px;
 `
 
 const ToggleSlider = styled.span`
   position: absolute;
-  cursor: pointer;
   top: 0;
   left: 0;
   right: 0;
@@ -33,7 +33,7 @@ const ToggleSlider = styled.span`
   -webkit-transition: 0.4s;
   transition: 0.4s;
   border-radius: 100px;
-
+  cursor: pointer;
   &:before {
     position: absolute;
     content: '';

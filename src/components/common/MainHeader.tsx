@@ -8,6 +8,7 @@ interface HeaderProps {
   background: string
 }
 
+// 메인페이지의 헤더 컴포넌트
 const MainHeader = ({ background }: HeaderProps) => {
   const navigate = useNavigate()
 
