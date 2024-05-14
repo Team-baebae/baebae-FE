@@ -4,7 +4,7 @@ import { EachCategoryProps } from '@/components/category/types'
 import Plus from '@/assets/main/Plus.svg'
 
 // 답변 작성 후 나오는 카테고리 연결페이지의 각자의 카테고리 컴포넌트
-const EachFolder = ({ selectedCategoryId, category, $positive, func }: EachCategoryProps) => {
+const AnswerEachFolder = ({ selectedCategoryId, category, $positive, func }: EachCategoryProps) => {
   return (
     <>
       <FolderWrapper>
@@ -28,7 +28,7 @@ const EachFolder = ({ selectedCategoryId, category, $positive, func }: EachCateg
   )
 }
 
-export default EachFolder
+export default AnswerEachFolder
 
 const FolderWrapper = styled.div`
   width: 66px;

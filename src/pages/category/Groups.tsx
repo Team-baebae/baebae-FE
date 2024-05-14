@@ -1,68 +1,58 @@
 import styled from 'styled-components'
 import { useCallback, useEffect, useRef, useState } from 'react'
-import Header from '@/components/common/Header'
-import { colors } from '@/styles/colors'
 import { Flip, toast } from 'react-toastify'
-
 import { Swiper, SwiperSlide } from 'swiper/react'
 import 'swiper/swiper-bundle.css'
 import 'swiper/css'
 import { useGesture } from '@use-gesture/react'
 import { BottomSheet } from 'react-spring-bottom-sheet'
 import 'react-spring-bottom-sheet/dist/style.css'
-import pencil from '@/assets/main/Pencil.svg'
-import trash from '@/assets/main/Trash.svg'
-import { useNavigate } from 'react-router-dom'
-import { useRecoilState, useRecoilValue } from 'recoil'
-import { isMineState, ownerUserData, userInfoState } from '@/context/Atoms'
-import { deleteCategoryApi, getCategoriesApi } from '@/apis/CategoryApi'
-import plus from '@/assets/main/Plus.svg'
-import { getFeedsApi } from '@/apis/AnswerApi'
+import { useLocation, useNavigate } from 'react-router-dom'
+import { useRecoilValue } from 'recoil'
 import { StyledToastContainer } from '@/components/toast/toastStyle'
 import { categoryProps } from '@/components/category/types'
+import Header from '@/components/common/Header'
+import { FeedProps } from '@/components/feed/types'
+import TotalPageFeeds from '@/components/category/TotalPageFeeds'
+import { colors } from '@/styles/colors'
+import { getFeedsApi } from '@/apis/AnswerApi'
+import { deleteCategoryApi, getCategoriesApi } from '@/apis/CategoryApi'
+import { isMineState, ownerUserData, userInfoState } from '@/context/Atoms'
+import plus from '@/assets/main/Plus.svg'
+import pencil from '@/assets/main/Pencil.svg'
+import trash from '@/assets/main/Trash.svg'
 
+// 해당 카테고리 피드 전체보기 페이지
 const Groups = () => {
-  interface FeedProps {
-    answerId: number
-    questionId: number
-    questionContent: string
-    memberId: number
-    content: string
-    linkAttachments: string[]
-    musicName: string
-    musicSinger: string
-    musicAudioUrl: string
-    imageUrls: string[]
-    createdDate: string
-    heartCount: number
-    curiousCount: number
-    sadCount: number
-    fcmtoken: string
-  }
-
-  // 리코일 계정주인의 userInfo
-  const [ownerUserInfo, setOwnerUserInfo] = useRecoilState(ownerUserData)
-  // 내 페이지인지 여부 확인
-  const [isMyPage, setIsMyPage] = useRecoilState(isMineState)
-
   const navigate = useNavigate()
 
+  // 넘겨받은 category 정보 저장
+  const location = useLocation()
+
+  // 리코일 계정주인의 userInfo
+  const ownerUserInfo = useRecoilValue(ownerUserData)
+  // 내 페이지인지 여부 확인
+  const isMyPage = useRecoilValue(isMineState)
+  // 로그인 한 유저의 userInfo
   const userInfo = useRecoilValue(userInfoState)
 
   // 보여줄 선택된 디렉토리
-  const [selectedDirectoryId, setSelectedDirectoryId] = useState<number>(0)
-  const [selectedDirectoryGroupName, setSelectedDirectoryGroupName] = useState<string>('')
-  const [selectedDirectoryImage, setSelectedDirectoryImage] = useState<string>('')
-  const [selectedDirectoryAnswerIds, setSelectedDirectoryAnswerIds] = useState<number[]>([])
-  const holdTimer = useRef<number | null>(null) // useRef에 타입 명시
+  const [selectedCategoryId, setSelectedCategoryId] = useState<number>(location.state?.selectedCategoryId)
+  const [selectedCategoryGroupName, setSelectedCategoryGroupName] = useState<string>(
+    location.state?.selectedCategoryGroupName,
+  )
+  const [selectedCategoryImage, setSelectedCategoryImage] = useState<string>(location.state?.selectedCategoryImage)
+  const [selectedCategoryAnswerIds, setSelectedCategoryAnswerIds] = useState<number[]>(
+    location.state?.selectedCategoryAnswerIds,
+  )
 
-  // open은 모달 열고 닫는 상태
+  // open은 모달 열고 닫는 상태 (해당 디렉토리 수정,삭제 오픈)
   const [open, setOpen] = useState<boolean>(false)
   const openModal = (categoryId: number, categoryImage: string, categoryName: string, answerIds: number[]) => {
-    setSelectedDirectoryId(categoryId)
-    setSelectedDirectoryImage(categoryImage)
-    setSelectedDirectoryGroupName(categoryName)
-    setSelectedDirectoryAnswerIds(answerIds)
+    setSelectedCategoryId(categoryId)
+    setSelectedCategoryImage(categoryImage)
+    setSelectedCategoryGroupName(categoryName)
+    setSelectedCategoryAnswerIds(answerIds)
     setOpen(true)
   }
   // 모달 이전상태로 변화
@@ -71,6 +61,7 @@ const Groups = () => {
   }
 
   // 꾹 누르기 기능
+  const holdTimer = useRef<number | null>(null) // useRef에 타입 명시
   const bind = useGesture({
     onPointerDown: ({ event, args }) => {
       const [categoryId, categoryImage, categoryName, answerIds] = args as [number, string, string, number[]]
@@ -91,12 +82,12 @@ const Groups = () => {
     },
   })
 
-  // 디렉토리 삭제
-  const deleteDirectory = async () => {
+  // 카테고리 삭제
+  const deleteCategory = async () => {
     try {
-      await deleteCategoryApi(userInfo.accessToken, selectedDirectoryId).then((res) => {
+      await deleteCategoryApi(userInfo.accessToken, selectedCategoryId).then((res) => {
         setOpen(false)
-        getDirectories()
+        getCategories()
         if (res.status === 204) {
           toast('그룹이 삭제되었습니다')
         }
@@ -108,52 +99,47 @@ const Groups = () => {
     }
   }
 
-  // 디렉토리 수정페이지로 이동
-  const moveModifyDirectory = () => {
-    navigate(`/groups/${selectedDirectoryId}/edit`, {
+  // 카테고리 수정페이지로 이동
+  const moveModifyCategory = () => {
+    navigate(`/groups/${selectedCategoryId}/edit`, {
       state: {
-        categoryId: selectedDirectoryId,
-        categoryImage: selectedDirectoryImage,
-        categoryName: selectedDirectoryGroupName,
-        answerIds: selectedDirectoryAnswerIds,
+        categoryId: selectedCategoryId,
+        categoryImage: selectedCategoryImage,
+        categoryName: selectedCategoryGroupName,
+        answerIds: selectedCategoryAnswerIds,
       },
     })
   }
 
-  useEffect(() => {
-    getDirectories()
-  }, [])
-
-  // 유저 디렉토리 조회
-  const getDirectories = async () => {
+  // 계정 주인 카테고리 조회
+  const [categories, setCategories] = useState<categoryProps[]>([])
+  const getCategories = async () => {
     try {
       await getCategoriesApi(ownerUserInfo.memberId).then((res) => {
         console.log(res)
-        setDirectories(res.data.categories)
-        if (res.data.categories.length !== 0) {
-          setSelectedDirectoryId(res.data.categories[0].categoryId)
-          setSelectedDirectoryImage(res.data.categories[0].categoryImage)
-          setSelectedDirectoryGroupName(res.data.categories[0].categoryName)
-          setSelectedDirectoryAnswerIds(res.data.categories[0].answerIds)
-        }
+        setCategories(res.data.categories)
       })
     } catch (err) {
       console.log(err)
     }
   }
 
-  const [directories, setDirectories] = useState<categoryProps[]>([])
+  useEffect(() => {
+    getCategories()
+  }, [])
+
+  // 해당 카테고리 피드리스트 조회
   const [feedList, setFeedList] = useState<FeedProps[]>([])
   const getFeeds = useCallback(async () => {
     try {
-      await getFeedsApi(ownerUserInfo.memberId, selectedDirectoryId).then((res) => {
+      await getFeedsApi(ownerUserInfo.memberId, selectedCategoryId).then((res) => {
         console.log(res)
         setFeedList(res.data.content)
       })
     } catch (err) {
       console.log(err)
     }
-  }, [selectedDirectoryId])
+  }, [selectedCategoryId])
 
   useEffect(() => {
     getFeeds()
@@ -162,6 +148,7 @@ const Groups = () => {
   return (
     <Container>
       <Header text="전체보기" background={colors.grey7} />
+      {/* 카테고리 리스트 */}
       <TopComponent>
         <Swiper
           style={{ width: '100%' }}
@@ -169,18 +156,18 @@ const Groups = () => {
           onSwiper={(swiper) => console.log(swiper)}
           onSlideChange={() => console.log('slide change')}
         >
-          {directories.map((item) => {
+          {categories.map((item) => {
             return (
               <SwiperSlide key={item.categoryId}>
                 <GroupWrapper>
                   <GroupImgWrapper
                     onClick={() => {
-                      setSelectedDirectoryId(item.categoryId)
-                      setSelectedDirectoryImage(item.categoryImage)
-                      setSelectedDirectoryGroupName(item.categoryName)
-                      setSelectedDirectoryAnswerIds(item.answerIds)
+                      setSelectedCategoryId(item.categoryId)
+                      setSelectedCategoryImage(item.categoryImage)
+                      setSelectedCategoryGroupName(item.categoryName)
+                      setSelectedCategoryAnswerIds(item.answerIds)
                     }}
-                    selected={selectedDirectoryId === item.categoryId}
+                    selected={selectedCategoryId === item.categoryId}
                     {...bind(item.categoryId, item.categoryImage, item.categoryName, item.answerIds)}
                     onContextMenu={(e) => {
                       e.preventDefault()
@@ -194,7 +181,7 @@ const Groups = () => {
               </SwiperSlide>
             )
           })}
-
+          {/* 카테고리 생성 */}
           {isMyPage && (
             <SwiperSlide>
               <GroupWrapper>
@@ -209,19 +196,15 @@ const Groups = () => {
             </SwiperSlide>
           )}
         </Swiper>
-        {open && (
-          <BottomSheet open={open} snapPoints={() => [170]} onDismiss={handleDismissPlusMusicModal} blocking={true}>
-            <BottomSheetEachWrapper onClick={moveModifyDirectory}>
-              <BottomSheetEachIcon src={pencil} />
-              <BottomSheetEachText color={colors.grey1}>그룹 수정하기</BottomSheetEachText>
-            </BottomSheetEachWrapper>
-            <BottomSheetEachWrapper onClick={deleteDirectory}>
-              <BottomSheetEachIcon src={trash} />
-              <BottomSheetEachText color="#f00">그룹 삭제하기</BottomSheetEachText>
-            </BottomSheetEachWrapper>
-          </BottomSheet>
-        )}
       </TopComponent>
+      {/* 해당 카테고리 피드 부분 */}
+      <TotalPageFeeds
+        feedList={feedList}
+        selectedCategoryId={selectedCategoryId}
+        selectedCategoryImage={selectedCategoryImage}
+        selectedCategoryGroupName={selectedCategoryGroupName}
+        selectedCategoryAnswerIds={selectedCategoryAnswerIds}
+      />
       <StyledToastContainer
         position="bottom-center"
         autoClose={1000}
@@ -233,6 +216,19 @@ const Groups = () => {
         theme="dark"
         transition={Flip}
       />
+      {/* 꾹 눌렀을 때 나오는 bottom sheet 모달 */}
+      {open && (
+        <BottomSheet open={open} snapPoints={() => [170]} onDismiss={handleDismissPlusMusicModal} blocking={true}>
+          <BottomSheetEachWrapper onClick={moveModifyCategory}>
+            <BottomSheetEachIcon src={pencil} />
+            <BottomSheetEachText color={colors.grey1}>그룹 수정하기</BottomSheetEachText>
+          </BottomSheetEachWrapper>
+          <BottomSheetEachWrapper onClick={deleteCategory}>
+            <BottomSheetEachIcon src={trash} />
+            <BottomSheetEachText color="#f00">그룹 삭제하기</BottomSheetEachText>
+          </BottomSheetEachWrapper>
+        </BottomSheet>
+      )}
     </Container>
   )
 }

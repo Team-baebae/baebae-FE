@@ -18,7 +18,7 @@ export interface FeedProps {
 }
 
 // 피드리스트 컴포넌트 props
-export interface FeedsProps {
+export interface FeedListProps {
   data: FeedProps[]
   selectedCategoryId: number
   selectedCategoryImage: string

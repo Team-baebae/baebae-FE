@@ -1,7 +1,8 @@
 import styled from 'styled-components'
 import { useState } from 'react'
+import { useNavigate } from 'react-router-dom'
 import DetailFeed from '@/components/feed/DetailFeed'
-import { FeedProps, FeedsProps } from '@/components/feed/types'
+import { FeedProps, FeedListProps } from '@/components/feed/types'
 import { colors } from '@/styles/colors'
 import QuotationMark from '@/assets/question/QuotationMark.svg'
 
@@ -12,7 +13,9 @@ const FeedList = ({
   selectedCategoryImage,
   selectedCategoryGroupName,
   selectedCategoryAnswerIds,
-}: FeedsProps) => {
+}: FeedListProps) => {
+  const navigate = useNavigate()
+
   // 선택된 필드 확대모달 띄워주기 위한 상태 저장
   const [selectedFeed, setSelectedFeed] = useState<FeedProps>({
     answerId: -1,
@@ -58,7 +61,20 @@ const FeedList = ({
         ))}
       </GridContainer>
       {/* 해당 카테고리 피드리스트 전체보기 */}
-      <TotalFeedsBtn>전체 보기</TotalFeedsBtn>
+      <TotalFeedsBtn
+        onClick={() => {
+          navigate('/groups', {
+            state: {
+              selectedCategoryId: selectedCategoryId,
+              selectedCategoryImage: selectedCategoryImage,
+              selectedCategoryGroupName: selectedCategoryGroupName,
+              selectedCategoryAnswerIds: selectedCategoryAnswerIds,
+            },
+          })
+        }}
+      >
+        전체 보기
+      </TotalFeedsBtn>
       {/* 피드 누를시 피드 확대 */}
       {showModal && (
         <DetailFeed
