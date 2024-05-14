@@ -1,19 +1,8 @@
 import styled from 'styled-components'
+import { QuestionProps } from '@/components/answer/types'
 import { colors } from '@/styles/colors'
 import QuotesOpen from '@/assets/answer/QuotesOpen.svg'
 import QuotesClose from '@/assets/answer/QuotesClose.svg'
-
-interface QuestionProps {
-  question: {
-    questionId: number
-    content: string
-    nickname: string
-    profileOnOff: boolean
-    createdDate: string
-    isAnswered: boolean
-    fcmtoken: string
-  }
-}
 
 // 답변페이지의 질문 보여주는 컴포넌트
 const Question = ({ question }: QuestionProps) => {

@@ -4,7 +4,7 @@ import { colors } from '@/styles/colors'
 import BackArrow from '@/assets/answer/BackArrow.svg'
 
 // 답변 페이지 최상단 헤더 컴포넌트 (예외 : 뒤로 가기 시 바로 가지는 게 아닌 경고창이 나오도록 설정)
-const PersonalHeader = ({ text, background, func }: HeaderProps) => {
+const AnswerHeader = ({ text, background, func }: HeaderProps) => {
   return (
     <HeaderTotalComponent background={background}>
       <HeaderLeftIcon src={BackArrow} alt="<" onClick={func} />
@@ -13,7 +13,7 @@ const PersonalHeader = ({ text, background, func }: HeaderProps) => {
   )
 }
 
-export default PersonalHeader
+export default AnswerHeader
 
 const HeaderTotalComponent = styled.div<{ background: string }>`
   display: flex;

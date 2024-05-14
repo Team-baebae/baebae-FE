@@ -1,7 +1,7 @@
-import Phone from '@/assets/landing/PhoneInsta.png'
-import { colors } from '@/styles/colors'
 import styled from 'styled-components'
 import { motion } from 'framer-motion'
+import { colors } from '@/styles/colors'
+import Phone from '@/assets/landing/PhoneInsta.png'
 
 const Landing7 = () => {
   const INSTA_URL = 'https://www.instagram.com/flipit.co.kr?igsh=aXpzcGRnaGVncHNq&utm_source=qr'
@@ -65,9 +65,9 @@ const TitleText = styled.h1`
 const ImageWrapper = styled(motion.a)`
   display: flex;
   justify-content: center;
+  margin-bottom: 30px;
   background-color: ${colors.white};
   border-radius: 30px;
-  margin-bottom: 30px;
   cursor: pointer;
 `
 const PhoneImage = styled(motion.img)`

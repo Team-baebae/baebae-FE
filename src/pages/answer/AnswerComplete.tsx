@@ -1,14 +1,15 @@
 import styled from 'styled-components'
-import Header from '@/components/common/Header'
-import { colors } from '@/styles/colors'
-import LogoIcon from '@/assets/signup/OnboardingIcon.svg'
 import { useNavigate } from 'react-router-dom'
 import { useRecoilValue } from 'recoil'
+import Header from '@/components/common/Header'
+import { colors } from '@/styles/colors'
 import { userInfoState } from '@/context/Atoms'
+import LogoIcon from '@/assets/signup/OnboardingIcon.svg'
 
 // 답변 완료 페이지
 const AnswerComplete = () => {
   const navigate = useNavigate()
+  // 로그인 한 userInfo
   const userInfo = useRecoilValue(userInfoState)
 
   return (

@@ -4,11 +4,10 @@ import styled from 'styled-components'
 import { useRecoilValue } from 'recoil'
 import { useNavigate } from 'react-router-dom'
 import { BottomSheet } from 'react-spring-bottom-sheet'
-import { SearchModalBox } from '@/components/common/ModalStyle'
 import BackFeedContents from '@/components/feed/BackFeedContents'
 import FrontFeedContents from '@/components/feed/FrontFeedContents'
 import TelePathyMotion from '@/components/feed/TelepathyMotion'
-import { ModalProps } from '@/components/feed/types'
+import { TotalPageFeedProps } from '@/components/category/types'
 import { colors } from '@/styles/colors'
 import { deleteFeedApi } from '@/apis/AnswerApi'
 import { isMineState, userInfoState } from '@/context/Atoms'
@@ -16,18 +15,16 @@ import MusicIcon from '@/assets/MusicWhite.svg'
 import PlayIcon from '@/assets/PlayGray.svg'
 import PauseIcon from '@/assets/PauseGray.svg'
 import LinkIcon from '@/assets/LinkWhite.svg'
-import MoreDots from '@/assets/MoreDots.svg'
 import pencil from '@/assets/main/Pencil.svg'
 import trash from '@/assets/main/Trash.svg'
-import Download from '@/assets/Download.svg'
+import Download from '@/assets/category/Download.svg'
+import Share from '@/assets/category/Share.svg'
+import MoreDot from '@/assets/category/Dot.svg'
 
 // 피드 누를 시 피드 확대 컴포넌트
-const DetailFeed = (props: ModalProps) => {
+const TotalPageFeed = (props: TotalPageFeedProps) => {
   const navigate = useNavigate()
 
-  // 모달창 열고 닫기
-  const setShowModal = props.setShowModal
-  const showModal = props.showModal
   // 선택된 피드
   const selectedFeed = props.selectedFeed
   // 선택된 카테고리
@@ -35,6 +32,10 @@ const DetailFeed = (props: ModalProps) => {
   const selectedCategoryImage = props.selectedCategoryImage
   const selectedCategoryGroupName = props.selectedCategoryGroupName
   const selectedCategoryAnswerIds = props.selectedCategoryAnswerIds
+  const currentAudio = props.currentAudio
+  const setCurrentAudio = props.setCurrentAudio
+  const isPlaying = props.isPlaying
+  const setIsPlaying = props.setIsPlaying
 
   // 리코일 로그인한 유저의 유저정보
   const userInfo = useRecoilValue(userInfoState)
@@ -42,18 +43,6 @@ const DetailFeed = (props: ModalProps) => {
   const isMyPage = useRecoilValue(isMineState)
   // 어느면을 바라볼지 state
   const [isFlipped, setIsFlipped] = useState<boolean>(false)
-
-  // 모달 밖 클릭 시
-  const backModal = () => {
-    // 모달 내릴 때 오디오 끄기
-    if (isPlaying) {
-      currentAudio?.pause()
-      setIsPlaying(false)
-      setShowModal(!showModal)
-    } else {
-      setShowModal(!showModal)
-    }
-  }
 
   const spring = {
     type: 'spring',
@@ -103,10 +92,6 @@ const DetailFeed = (props: ModalProps) => {
   }
   const [popLottie, setPopLottie] = useState<boolean>(false)
 
-  //현재 실행하고 있는 트랙 저장
-  const [currentAudio, setCurrentAudio] = useState<HTMLAudioElement | null>(null)
-  //현재 실행중인지 여부 확인
-  const [isPlaying, setIsPlaying] = useState<boolean>(false)
   //트랙 미리듣기 (한번에 여러개의 오디오가 드리지 않게 설정)
   const handlePreview = (previewUrl: string) => {
     if (currentAudio && currentAudio.src === previewUrl) {
@@ -144,125 +129,112 @@ const DetailFeed = (props: ModalProps) => {
   }
 
   return (
-    <>
+    <Container>
       <AnimatePresence>
-        <SearchModalBox
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          exit={{ opacity: 0 }}
-          style={{ zIndex: 0 }}
-          onClick={backModal}
-        >
-          {/* 음악,링크,설정 */}
-          <TopContents>
-            <Links>
-              {selectedFeed?.musicName !== '' && (
-                <LinkButton onClick={MusicClick}>
-                  <Icon src={MusicIcon} />
-                  <OverflowText width="60px">
-                    {selectedFeed?.musicName} - {selectedFeed?.musicSinger}
-                  </OverflowText>
-                  {currentAudio && currentAudio.src === selectedFeed.musicAudioUrl && isPlaying ? (
-                    <Icon onClick={() => handlePreview(selectedFeed.musicAudioUrl)} src={PauseIcon} alt="pause" />
-                  ) : (
-                    <Icon onClick={() => handlePreview(selectedFeed.musicAudioUrl)} src={PlayIcon} alt="play" />
-                  )}
-                </LinkButton>
-              )}
-              {selectedFeed?.linkAttachments[0] !== '' && (
-                <LinkButton onClick={LinkClick}>
-                  <Icon src={LinkIcon} />
-                  <OverflowText width="82px">{selectedFeed?.linkAttachments[0]}</OverflowText>
-                </LinkButton>
-              )}
-            </Links>
-            {isMyPage && <Icon src={MoreDots} width={24} height={24} onClick={MoreClick} />}
-          </TopContents>
-          {/* 피드 */}
-          <ModalWrapper onClick={handleClick} transition={spring}>
-            <CardWrapper
-              animate={{ rotateY: isFlipped ? -180 : 0 }}
-              transition={spring}
-              style={{ zIndex: isFlipped ? 0 : 1 }}
-            >
-              {/* 앞면 질문 */}
-              <FrontFeedContents selectedFeed={selectedFeed} />
-            </CardWrapper>
-            <CardWrapper
-              initial={{ rotateY: 180 }}
-              animate={{ rotateY: isFlipped ? 0 : 180 }}
-              transition={spring}
-              style={{
-                zIndex: isFlipped ? 1 : 0,
-              }}
-            >
-              {/* 뒷면 답변*/}
-              <BackFeedContents selectedFeed={selectedFeed} />
-            </CardWrapper>
-          </ModalWrapper>
-          {/* 반응 */}
-          <BottomContents>
-            <EmotionButton
-              state={giveHeart}
-              onClick={(e) => {
-                e.stopPropagation()
-                setGiveHeart(!giveHeart)
-              }}
-            >
-              <EmotionText>🖤</EmotionText>
-              <EmotionText>{selectedFeed.heartCount}</EmotionText>
-            </EmotionButton>
-            <EmotionButton
-              state={giveSee}
-              onClick={(e) => {
-                e.stopPropagation()
-                setGiveSee(!giveSee)
-              }}
-            >
-              <EmotionText>👀</EmotionText>
-              <EmotionText>{selectedFeed.curiousCount}</EmotionText>
-            </EmotionButton>
-            <EmotionButton
-              state={giveSad}
-              onClick={(e) => {
-                e.stopPropagation()
-                setGiveSad(!giveSad)
-              }}
-            >
-              <EmotionText>🥺</EmotionText>
-              <EmotionText>{selectedFeed.sadCount}</EmotionText>
-            </EmotionButton>
-            <TelepathyButton state={giveTelepathy} onClick={clickTelepathy}>
-              <EmotionText style={{ fontSize: 20 }}>👉🏻</EmotionText>
-              <EmotionText style={{ fontSize: 20 }}>👈🏻</EmotionText>
-              <EmotionText>통했당!</EmotionText>
-            </TelepathyButton>
-          </BottomContents>
-          {/* 화면 캡쳐,공유 */}
-          <ButtonComponent>
-            <ShareButton background={colors.grey1} color={colors.white}>
-              <Icon src={Download} />
-              저장하기
-            </ShareButton>
-            <ShareButton background={colors.primary} color={colors.grey1}>
-              공유하기
-            </ShareButton>
-          </ButtonComponent>
-        </SearchModalBox>
+        {/* 음악,링크,설정 */}
+        <TopContents>
+          <Links>
+            {selectedFeed?.musicName !== '' && (
+              <LinkButton onClick={MusicClick}>
+                <Icon src={MusicIcon} />
+                <OverflowText width="60px">
+                  {selectedFeed?.musicName} - {selectedFeed?.musicSinger}
+                </OverflowText>
+                {props.currentAudio && props.currentAudio.src === selectedFeed.musicAudioUrl && isPlaying ? (
+                  <Icon onClick={() => handlePreview(selectedFeed.musicAudioUrl)} src={PauseIcon} alt="pause" />
+                ) : (
+                  <Icon onClick={() => handlePreview(selectedFeed.musicAudioUrl)} src={PlayIcon} alt="play" />
+                )}
+              </LinkButton>
+            )}
+            {selectedFeed?.linkAttachments[0] !== '' && (
+              <LinkButton onClick={LinkClick}>
+                <Icon src={LinkIcon} />
+                <OverflowText width="82px">{selectedFeed?.linkAttachments[0]}</OverflowText>
+              </LinkButton>
+            )}
+          </Links>
+          {isMyPage && <Icon src={MoreDot} width={24} height={24} onClick={MoreClick} />}
+        </TopContents>
+        {/* 피드 */}
+        <ModalWrapper onClick={handleClick} transition={spring}>
+          <CardWrapper
+            animate={{ rotateY: isFlipped ? -180 : 0 }}
+            transition={spring}
+            style={{ zIndex: isFlipped ? 0 : 1 }}
+          >
+            {/* 앞면 질문 */}
+            <FrontFeedContents selectedFeed={selectedFeed} />
+          </CardWrapper>
+          <CardWrapper
+            initial={{ rotateY: 180 }}
+            animate={{ rotateY: isFlipped ? 0 : 180 }}
+            transition={spring}
+            style={{
+              zIndex: isFlipped ? 1 : 0,
+            }}
+          >
+            {/* 뒷면 답변*/}
+            <BackFeedContents selectedFeed={selectedFeed} />
+          </CardWrapper>
+        </ModalWrapper>
+        {/* 반응 */}
+        <BottomContents>
+          <EmotionButton
+            state={giveHeart}
+            onClick={(e) => {
+              e.stopPropagation()
+              setGiveHeart(!giveHeart)
+            }}
+          >
+            <EmotionText>🖤</EmotionText>
+            <EmotionText>{selectedFeed.heartCount}</EmotionText>
+          </EmotionButton>
+          <EmotionButton
+            state={giveSee}
+            onClick={(e) => {
+              e.stopPropagation()
+              setGiveSee(!giveSee)
+            }}
+          >
+            <EmotionText>👀</EmotionText>
+            <EmotionText>{selectedFeed.curiousCount}</EmotionText>
+          </EmotionButton>
+          <EmotionButton
+            state={giveSad}
+            onClick={(e) => {
+              e.stopPropagation()
+              setGiveSad(!giveSad)
+            }}
+          >
+            <EmotionText>🥺</EmotionText>
+            <EmotionText>{selectedFeed.sadCount}</EmotionText>
+          </EmotionButton>
+          <TelepathyButton state={giveTelepathy} onClick={clickTelepathy}>
+            <EmotionText style={{ fontSize: 20 }}>👉🏻</EmotionText>
+            <EmotionText style={{ fontSize: 20 }}>👈🏻</EmotionText>
+            <EmotionText>통했당!</EmotionText>
+          </TelepathyButton>
+        </BottomContents>
       </AnimatePresence>
       {/* ...누를 시 나오는 설정 모달 */}
       {open && (
         <BottomSheet
           open={open}
-          snapPoints={() => [231]}
+          snapPoints={() => [353]}
           onDismiss={handleDismiss}
           blocking={true}
           style={{ zIndex: 100 }}
         >
           <BottomSheetEachWrapper>
-            <BottomSheetEachIcon src={pencil} />
-            <BottomSheetEachText color={colors.grey1}>플립 수정하기</BottomSheetEachText>
+            <BottomSheetEachIcon src={Share} />
+            <BottomSheetEachText color={colors.grey1}>공유하기</BottomSheetEachText>
           </BottomSheetEachWrapper>
+          <BottomSheetEachWrapper>
+            <BottomSheetEachIcon src={Download} />
+            <BottomSheetEachText color={colors.grey1}>저장하기</BottomSheetEachText>
+          </BottomSheetEachWrapper>
+
           <BottomSheetEachWrapper
             onClick={() => {
               navigate(`/groups/${selectedCategoryId}/edit`, {
@@ -278,6 +250,12 @@ const DetailFeed = (props: ModalProps) => {
             <BottomSheetEachIcon src={pencil} />
             <BottomSheetEachText color={colors.grey1}>그룹 수정하기</BottomSheetEachText>
           </BottomSheetEachWrapper>
+
+          <BottomSheetEachWrapper>
+            <BottomSheetEachIcon src={pencil} />
+            <BottomSheetEachText color={colors.grey1}>플립 수정하기</BottomSheetEachText>
+          </BottomSheetEachWrapper>
+
           <BottomSheetEachWrapper onClick={deleteFeed}>
             <BottomSheetEachIcon src={trash} />
             <BottomSheetEachText color="#f00">플립 삭제하기</BottomSheetEachText>
@@ -286,11 +264,17 @@ const DetailFeed = (props: ModalProps) => {
       )}
       {/* 통했당 누를 시 통했당 로띠 애니메이션 */}
       {popLottie && <TelePathyMotion />}
-    </>
+    </Container>
   )
 }
 
-export default DetailFeed
+export default TotalPageFeed
+
+const Container = styled.div`
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+`
 
 const ModalWrapper = styled(motion.div)`
   width: 315px;
@@ -313,6 +297,7 @@ const TopContents = styled.div`
   justify-content: space-between;
   width: 315px;
   margin-bottom: 8px;
+  margin-top: 20px;
 `
 const Links = styled.div`
   display: flex;
@@ -349,6 +334,7 @@ const BottomContents = styled.div`
   width: 315px;
   gap: 6px;
   margin-top: 8px;
+  margin-bottom: 20px;
 `
 const EmotionButton = styled.div<{ state: boolean }>`
   display: flex;
@@ -400,29 +386,4 @@ const BottomSheetEachText = styled.div<{ color: string }>`
   font-weight: 500;
   line-height: 150%;
   letter-spacing: -0.56px;
-`
-const ShareButton = styled.div<{ background: string; color: string }>`
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  height: 56px;
-  padding: 16px 20px;
-  gap: 12px;
-  flex: 1 0 0;
-  border-radius: 12px;
-  color: ${(props) => props.color};
-  background: ${(props) => props.background};
-  font-family: Pretendard;
-  font-size: 14px;
-  font-weight: 600;
-  line-height: 21px;
-  letter-spacing: -0.28px;
-`
-const ButtonComponent = styled.div`
-  display: flex;
-  flex-direction: row;
-  position: absolute;
-  bottom: 30px;
-  width: 315px;
-  gap: 10px;
 `

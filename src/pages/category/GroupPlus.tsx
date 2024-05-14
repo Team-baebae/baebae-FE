@@ -1,108 +1,52 @@
-import styled from 'styled-components'
 import { useCallback, useEffect, useState } from 'react'
+import styled from 'styled-components'
 import { useRecoilValue } from 'recoil'
-import { useLocation, useNavigate } from 'react-router-dom'
+import { useNavigate } from 'react-router-dom'
 import GroupHeader from '@/components/common/GroupHeader'
-import Feeds from '@/components/folder/Feeds'
-import NoFlip from '@/components/main/NoFlip'
 import { UnFixedButton } from '@/components/common/Button'
-import { UserInfoStateProps, userInfoState } from '@/context/Atoms'
-import { colors } from '@/styles/colors'
-import { modifyDirectoryApi, updateDirectoryImgApi } from '@/apis/DirectoryApi'
-import DefaultImg from '@/assets/main/DefaultImage.png'
+import Feeds from '@/components/category/Feeds'
+import NoFlip from '@/components/main/NoFlip'
+import { makeCategoryApi } from '@/apis/CategoryApi'
 import { getFeedsApi } from '@/apis/AnswerApi'
+import { userInfoState } from '@/context/Atoms'
+import { colors } from '@/styles/colors'
+import DefaultImg from '@/assets/main/DefaultImage.png'
+import { FeedProps } from '@/components/feed/types'
 
-// 새 그룹 생성페이지
-const GroupModify = () => {
+// 새 그룹 생성 페이지
+const GroupPlus = () => {
   const navigate = useNavigate()
 
-  const userInfo = useRecoilValue<UserInfoStateProps>(userInfoState)
+  // 리코일 로그인한 userInfo
+  const userInfo = useRecoilValue(userInfoState)
 
-  //   넘겨받은 카카오 categoryId 저장
-  const location = useLocation()
-  const categoryId = location.state?.categoryId
-  const categoryImage = location.state?.categoryImage
-  const categoryName = location.state?.categoryName
-  const [selectedAnswerIds, setSelectedAnswerIds] = useState<number[]>(location.state?.answerIds)
-
-  // 사진 수정했는지 여부 확인
-  const [isEditGroupImg, setIsEditGroupImg] = useState(false)
-
-  const [groupImgUrl, setGroupImgUrl] = useState<string>(categoryImage)
-  const [groupImgFile, setGroupImgFile] = useState<File>()
+  // 카테고리 정보 저장
+  const [categoryImgUrl, setCategoryImgUrl] = useState<string>('')
+  const [categoryImgFile, setCategoryImgFile] = useState<File>()
+  const [selectedAnswerIds, setSelectedAnswerIds] = useState<number[]>([])
   // 이미지 파일 선택 핸들러
   const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files && e.target.files[0]
     // 이미지 파일을 보낼 시엔 formData로 file을 추가해야함(추후 추가)
     if (file) {
-      setGroupImgUrl(URL.createObjectURL(file)) // 미리보기를 위해 파일 URL 생성
-      setIsEditGroupImg(true)
-      setGroupImgFile(file)
+      setCategoryImgFile(file)
+      setCategoryImgUrl(URL.createObjectURL(file)) // 미리보기를 위해 파일 URL 생성
     }
   }
 
-  const [groupName, setGroupName] = useState<string>(categoryName)
-
+  // 카테고리 이름
+  const [categoryName, setCategoryName] = useState<string>('')
   const onChangeFolderName = (e: React.ChangeEvent<HTMLInputElement>) => {
     const value = e.target.value
-    setGroupName(value)
+    setCategoryName(value)
   }
 
-  interface FeedProps {
-    answerId: number
-    questionId: number
-    questionContent: string
-    memberId: number
-    content: string
-    linkAttachments: string[]
-    musicName: string
-    musicSinger: string
-    musicAudioUrl: string
-    imageUrls: string[]
-    createdDate: string
-    heartCount: number
-    curiousCount: number
-    sadCount: number
-    fcmtoken: string
-  }
-
+  //전체 피드리스트 조회
   const [feedList, setFeedList] = useState<FeedProps[]>([])
-
-  const modifyDirectory = async () => {
-    try {
-      await modifyDirectoryApi(userInfo.accessToken, categoryId, groupName, selectedAnswerIds).then((res) => {
-        console.log(res)
-        navigate(-1) // 현재 페이지에서 뒤로 이동
-      })
-    } catch (err) {
-      console.log(err)
-    }
-  }
-
-  const updateDirectoryImg = async () => {
-    try {
-      await updateDirectoryImgApi(userInfo.accessToken, categoryId, groupImgFile).then((res) => {
-        console.log(res)
-      })
-    } catch (err) {
-      console.log(err)
-    }
-  }
-
-  const onClickModifyBtn = () => {
-    if (isEditGroupImg && groupImgFile) {
-      updateDirectoryImg()
-      modifyDirectory()
-    } else {
-      modifyDirectory()
-    }
-  }
-
-  const selectedDirectoryId = 0
-
+  const selectedCategoryId = 0
   const getFeeds = useCallback(async () => {
     try {
-      await getFeedsApi(userInfo.memberId, selectedDirectoryId).then((res) => {
+      await getFeedsApi(userInfo.memberId, selectedCategoryId).then((res) => {
         console.log(res)
         setFeedList(res.data.content)
       })
@@ -111,34 +55,54 @@ const GroupModify = () => {
     }
   }, [])
 
+  // 카테고리 생성
+  const makecategory = async () => {
+    try {
+      await makeCategoryApi(
+        userInfo.accessToken,
+        userInfo.memberId,
+        categoryImgFile,
+        categoryName,
+        selectedAnswerIds,
+      ).then((res) => {
+        console.log(res)
+        navigate(`/${userInfo.nickname}`)
+      })
+    } catch (err) {
+      console.log(err)
+    }
+  }
+
   useEffect(() => {
     getFeeds()
   }, [getFeeds])
 
   return (
     <Container>
-      <GroupHeader text="그룹 수정" background={colors.grey7} />
+      <GroupHeader text="새 그룹 추가" background={colors.grey7} />
+      {/* 카테고리 이미지 */}
       <FolderImgWrapper>
-        <FolderImg src={groupImgUrl} />
+        {categoryImgUrl === '' ? <FolderImg src={DefaultImg} /> : <FolderImg src={categoryImgUrl} />}
       </FolderImgWrapper>
       <label htmlFor="file">
         <EditFolderImgText>사진 수정하기</EditFolderImgText>
       </label>
       <input type="file" name="file" id="file" style={{ display: 'none' }} onChange={handleImageChange} />
+      {/* 카테고리 이름 */}
       <FolderNameLabel>그룹명</FolderNameLabel>
-      <FolderName value={groupName} onChange={onChangeFolderName} placeholder="그룹명을 입력해주세요" />
+      <FolderName value={categoryName} onChange={onChangeFolderName} placeholder="그룹명을 입력해주세요" />
       <FolderNameConditionWrapper>
         <FolderNameConditionText color={colors.grey1} fontSize="12px">
           2-8자로 입력해주세요.
         </FolderNameConditionText>
         <FolderNameLengthWrapper>
-          {groupName.length > 0 ? (
+          {categoryName.length > 0 ? (
             <FolderNameConditionText color={colors.grey2} fontSize="10px">
-              {groupName.length}
+              {categoryName.length}
             </FolderNameConditionText>
           ) : (
             <FolderNameConditionText color={colors.grey4} fontSize="10px">
-              {groupName.length}
+              {categoryName.length}
             </FolderNameConditionText>
           )}
 
@@ -153,23 +117,25 @@ const GroupModify = () => {
       <FolderNameConditionText color={colors.grey3} fontSize="12px" margin="40px 20px 0px 20px">
         추가할 플립 선택
       </FolderNameConditionText>
+      {/* 전체 피드리스트 */}
       {feedList.length > 0 ? (
         <Feeds data={feedList} selectedAnswerIds={selectedAnswerIds} setSelectedAnswerIds={setSelectedAnswerIds} />
       ) : (
         <NoFlip />
       )}
+      {/* 카테고리 생성 버튼 */}
       <UnFixedButton
-        $positive={groupName === '' ? false : true}
-        func={onClickModifyBtn}
-        func2={() => console.log('수정 실패')}
-        text="그룹 수정하기"
+        $positive={categoryName === '' ? false : true}
+        func={makecategory}
+        func2={() => console.log('그룹 생성 실패')}
+        text="그룹 추가하기"
         margin="30px 20px 30px 20px"
       />
     </Container>
   )
 }
 
-export default GroupModify
+export default GroupPlus
 
 const Container = styled.div`
   display: flex;
@@ -238,10 +204,10 @@ const FolderName = styled.input`
   flex-direction: column;
   align-items: flex-start;
   align-self: stretch;
-  width: calc(100% - 40px);
   margin: 4px 20px 0px 20px;
   padding: 20px;
   gap: 12px;
+  width: calc(100% - 40px);
   border-radius: 12px;
   background-color: ${colors.white};
   border: none;

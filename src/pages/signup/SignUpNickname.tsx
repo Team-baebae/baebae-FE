@@ -114,7 +114,7 @@ const SignUpNickname = () => {
         플리빗을 사용하기 위한 <br />
         아이디가 필요해요!
       </SignUpHeaderText>
-
+      {/* 아이디 입력받기 */}
       <SignUpNicknameLabel>아이디</SignUpNicknameLabel>
       <SignUpInputWrapper>
         <SingUpNicknameInput

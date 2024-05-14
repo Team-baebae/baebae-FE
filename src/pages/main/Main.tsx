@@ -1,30 +1,29 @@
 import styled from 'styled-components'
 import { useParams } from 'react-router-dom'
 import { useEffect, useState } from 'react'
-import { useRecoilState, useRecoilValue } from 'recoil'
+import { useRecoilValue, useSetRecoilState } from 'recoil'
 import MainHeader from '@/components/common/MainHeader'
 import MainProfile from '@/components/main/MainProfile'
-import Feed from '@/components/main/Feed'
-import Ask from '@/components/main/Ask'
-import { userDataProps } from '@/components/main/types'
+import Feed from '@/components/feed/Feed'
+import Ask from '@/components/question/Ask'
+import NoUser from '@/components/main/NoUser'
 import { getMemberIdApi, isExistingNicknameApi } from '@/apis/MainInfoApi'
 import { UserInfoStateProps, isMineState, ownerUserData, userInfoState } from '@/context/Atoms'
 import { colors } from '@/styles/colors'
-import NoUser from '@/components/main/NoUser'
 
 // 로그인 성공 시 메인 페이지
 const Main = () => {
-  // url의 username
+  // url의 username 뽑아내기
   const { username } = useParams<{ username: string }>()
 
   // 유저 존재 여부
   const [isExisting, setIsExisting] = useState<boolean>(false)
-  // 유저 데이터 정보
-  const [userData, setUserData] = useRecoilState(ownerUserData)
+  // 리코일 계정주인 데이터 정보
+  const setUserData = useSetRecoilState(ownerUserData)
   // 내 페이지인지 여부 확인
-  const [isMyPage, setIsMyPage] = useRecoilState(isMineState)
+  const setIsMyPage = useSetRecoilState(isMineState)
 
-  // 유저의 존재 여부 확인 및 memberId 조회
+  // 유저의 존재 여부 확인 및 계정주인의 memberId 조회
   const userCheck = (nickname: string) => {
     isExistingNicknameApi(nickname).then((result) => {
       result.isExisting == true && setIsExisting(true)
@@ -36,10 +35,11 @@ const Main = () => {
     })
   }
 
-  // 리코일에서 받은 사용자의 userInfo
+  // 리코일에서 받은 로그인한 사용자의 userInfo
   const myInfo = useRecoilValue<UserInfoStateProps>(userInfoState)
   const myMemberId = myInfo.memberId
 
+  // url의 닉네임으로 실제 있는 계정인지 확인
   useEffect(() => {
     if (username) {
       userCheck(username)
@@ -63,7 +63,7 @@ const Main = () => {
               피드
             </Category>
           </CategoryBox>
-          {category ? <Feed /> : <Ask userInfo={userData} isMyPage={isMyPage} />}
+          {category ? <Feed /> : <Ask />}
         </Container>
       ) : (
         <NoUser />

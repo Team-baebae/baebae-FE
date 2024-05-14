@@ -1,9 +1,9 @@
 import { AnimatePresence } from 'framer-motion'
-import { SearchModalBox } from '../common/ModalStyle'
 import Lottie from 'lottie-react'
-import TelepathyMotion from '../../assets/lottie/Telepathy.json'
 import styled from 'styled-components'
-import { colors } from '../../styles/colors'
+import { SearchModalBox } from '@/components/common/ModalStyle'
+import { colors } from '@/styles/colors'
+import TelepathyMotion from '@/assets/lottie/Telepathy.json'
 
 const LandingTelepathy = () => {
   const nickname1 = 'SEUNNGENY_'
@@ -48,23 +48,21 @@ const TextWrapper = styled.div`
   color: ${colors.white};
   font-family: Pretendard;
   font-size: 14px;
-  font-style: normal;
   font-weight: 500;
   line-height: 21px;
   letter-spacing: -0.28px;
 `
 const NicknameBox = styled.div`
   display: flex;
-  padding: 4px 8px;
   justify-content: center;
   align-items: center;
+  padding: 4px 8px;
   gap: 4px;
   border-radius: 100px;
   background: ${colors.primary};
   color: ${colors.grey1};
   font-family: Pretendard;
   font-size: 10px;
-  font-style: normal;
   font-weight: 600;
   line-height: 15px;
   letter-spacing: -0.2px;

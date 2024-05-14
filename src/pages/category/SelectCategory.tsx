@@ -1,32 +1,35 @@
 import styled from 'styled-components'
-import Header from '@/components/common/Header'
-import { BottomButton } from '@/components/common/Button'
-import FolderList from '@/components/folder/FolderList'
-import { colors } from '@/styles/colors'
 import { useRecoilValue } from 'recoil'
-import { UserInfoStateProps, userInfoState } from '@/context/Atoms'
 import { useState } from 'react'
 import { useLocation, useNavigate, useParams } from 'react-router-dom'
+import Header from '@/components/common/Header'
+import { BottomButton } from '@/components/common/Button'
+import AnswerFolderList from '@/components/category/AnswerFolderList'
+import { colors } from '@/styles/colors'
+import { UserInfoStateProps, userInfoState } from '@/context/Atoms'
 import { connectGroupApi } from '@/apis/AnswerApi'
 
 // 답변 완료 후 그룹 선택 페이지
-const Folder = () => {
-  const { questionId } = useParams()
-
-  const location = useLocation()
-  const answerId = location.state?.answerId
-  console.log(answerId)
-
-  const [selectedDirectoryId, setSelectedDirectoryId] = useState<number>(0) // 선택된 디렉토리 ID 상태
-
+const SelectCategory = () => {
   const navigate = useNavigate()
 
-  // 리코일 userInfo
+  // url에서 questionId 추출
+  const { questionId } = useParams()
+
+  // 전달받은 answerId
+  const location = useLocation()
+  const answerId = location.state?.answerId
+
+  // 선택된 카테고리 저장
+  const [selectedCategoryId, setSelectedCategoryId] = useState<number>(0)
+
+  // 리코일 로그인하 유저정보
   const userInfo = useRecoilValue<UserInfoStateProps>(userInfoState)
 
+  // 작성한 답변 카테고리와 연결
   const connetGroup = async () => {
     try {
-      await connectGroupApi(userInfo.accessToken, selectedDirectoryId, answerId).then((res) => {
+      await connectGroupApi(userInfo.accessToken, selectedCategoryId, answerId).then((res) => {
         console.log(res)
         navigate(`/questions/${questionId}/complete`)
       })
@@ -39,13 +42,13 @@ const Folder = () => {
     <Container>
       <Header text="답변하기" background={colors.grey7} />
       <FolderHeaderText>이 플립을 어떤 그룹에 추가할까요?</FolderHeaderText>
-      <FolderList selectedDirectoryId={selectedDirectoryId} setSelectedDirectoryId={setSelectedDirectoryId} />
-      <BottomButton $positive={selectedDirectoryId === 0 ? false : true} func={connetGroup} text="완료" />
+      <AnswerFolderList selectedCategoryId={selectedCategoryId} setSelectedCategoryId={setSelectedCategoryId} />
+      <BottomButton $positive={selectedCategoryId === 0 ? false : true} func={connetGroup} text="완료" />
     </Container>
   )
 }
 
-export default Folder
+export default SelectCategory
 
 const Container = styled.div`
   display: flex;

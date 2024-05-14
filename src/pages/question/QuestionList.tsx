@@ -1,32 +1,37 @@
 import styled from 'styled-components'
 import { useEffect, useState } from 'react'
+import { useRecoilValue } from 'recoil'
+import { useNavigate } from 'react-router-dom'
 import Header from '@/components/common/Header'
 import NoFlip from '@/components/main/NoFlip'
-import { colors } from '@/styles/colors'
-import QuotationMark from '@/assets/question/QuotationMark.svg'
-import { deleteQuestionsApi, getQuestionsApi } from '@/apis/MainInfoApi'
-import { useRecoilValue } from 'recoil'
-import { userInfoState } from '@/context/Atoms'
-import { QuestionProps } from './types'
-import { useNavigate } from 'react-router-dom'
+import { QuestionProps } from '@/components/question/types'
 import Loading from '@/components/common/Loading'
-import CloseIcon from '@/assets/main/Close.svg'
 import Modal from '@/components/common/Modal'
+import { colors } from '@/styles/colors'
+import { deleteQuestionsApi, getQuestionsApi } from '@/apis/MainInfoApi'
+import { userInfoState } from '@/context/Atoms'
+import CloseIcon from '@/assets/main/Close.svg'
+import QuotationMark from '@/assets/question/QuotationMark.svg'
 
 // 답변을 기다리는 질문 리스트 페이지
 const QuestionList = () => {
+  const navigate = useNavigate()
+
+  // 리코일 로그인 한 유저정보
   const userData = useRecoilValue(userInfoState)
   const myMemberId = userData.memberId
   const accessToken = userData.accessToken
-  const navigate = useNavigate()
 
+  // 질문 개수
   const [askCount, setAskCount] = useState<number>(0)
   const [currentPage, setCurrentPage] = useState<number>(0)
-  const [questions, setQuestions] = useState<QuestionProps[]>([])
   const [hasMore, setHasMore] = useState<boolean>(true)
   const [loading, setLoading] = useState<boolean>(true) // 첫 데이터 로딩 상태
   const [scrollLoading, setScrollLoading] = useState<boolean>(true) // 무한스크롤 로딩 상태
 
+  // 질문리스트 저장
+  const [questions, setQuestions] = useState<QuestionProps[]>([])
+  // 질문리스트 받기
   const getQuestionList = async (page: number) => {
     await getQuestionsApi(myMemberId, page, accessToken).then((result) => {
       if (result.length > 0) {
@@ -70,7 +75,6 @@ const QuestionList = () => {
       html.offsetHeight,
     )
     const windowBottom = windowHeight + window.pageYOffset
-
     if (windowBottom >= docHeight && !loading && hasMore && !scrollLoading) {
       setScrollLoading(true)
       getQuestionList(currentPage)
@@ -93,6 +97,7 @@ const QuestionList = () => {
   // 버튼 클릭시 모달 버튼 클릭 유무를 설정하는 state 함수
   const clickModal = () => setShowModal(!showModal)
 
+  // 질문 삭제
   const [deleteId, setDeleteId] = useState<number>(-1)
   const deleteQuestion = (questionId: number) => {
     deleteQuestionsApi(questionId, accessToken).then(() => {
@@ -155,6 +160,7 @@ const QuestionList = () => {
         )}
         {scrollLoading && <div>loading...</div>}
       </ContentWrapper>
+      {/* 삭제 누를 시 나오는 모달 */}
       {showModal && (
         <Modal
           content="해당 질문을 삭제하시겠어요?"

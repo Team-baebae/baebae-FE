@@ -8,7 +8,7 @@ import { UserInfoStateProps, userInfoState } from '@/context/Atoms'
 const Profile = () => {
   const navigate = useNavigate()
 
-  //리코일 유저정보
+  //리코일 로그인한 유저정보
   const userInfo = useRecoilValue<UserInfoStateProps>(userInfoState)
 
   return (

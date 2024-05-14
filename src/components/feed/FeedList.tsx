@@ -1,42 +1,22 @@
 import styled from 'styled-components'
-import { colors } from '../../styles/colors'
-import QuotationMark from '../../assets/question/QuotationMark.svg'
 import { useState } from 'react'
-import DetailFeed from './DetailFeed'
+import { useNavigate } from 'react-router-dom'
+import DetailFeed from '@/components/feed/DetailFeed'
+import { FeedProps, FeedListProps } from '@/components/feed/types'
+import { colors } from '@/styles/colors'
+import QuotationMark from '@/assets/question/QuotationMark.svg'
 
-interface FeedProps {
-  answerId: number
-  questionId: number
-  questionContent: string
-  memberId: number
-  content: string
-  linkAttachments: string[]
-  musicName: string
-  musicSinger: string
-  musicAudioUrl: string
-  imageUrls: string[]
-  createdDate: string
-  heartCount: number
-  curiousCount: number
-  sadCount: number
-  fcmtoken: string
-}
-
-interface FeedsProps {
-  data: FeedProps[]
-  selectedDirectoryId: number
-  selectedDirectoryImage: string
-  selectedDirectoryGroupName: string
-  selectedDirectoryAnswerIds: number[]
-}
-
-const Feeds = ({
+// 해당 카테고리에 속한 피드들 보여주는 컴포넌트
+const FeedList = ({
   data,
-  selectedDirectoryId,
-  selectedDirectoryImage,
-  selectedDirectoryGroupName,
-  selectedDirectoryAnswerIds,
-}: FeedsProps) => {
+  selectedCategoryId,
+  selectedCategoryImage,
+  selectedCategoryGroupName,
+  selectedCategoryAnswerIds,
+}: FeedListProps) => {
+  const navigate = useNavigate()
+
+  // 선택된 필드 확대모달 띄워주기 위한 상태 저장
   const [selectedFeed, setSelectedFeed] = useState<FeedProps>({
     answerId: -1,
     questionId: -1,
@@ -54,14 +34,15 @@ const Feeds = ({
     sadCount: -1,
     fcmtoken: '',
   })
-  // 모달 버튼 클릭 유무를 저장할 state
+
+  // 모달 버튼 클릭 유무를 저장할 state (피드 확대)
   const [showModal, setShowModal] = useState<boolean>(false)
   // 버튼 클릭시 모달 버튼 클릭 유무를 설정하는 state 함수
   const clickFlip = (feed: FeedProps) => {
     setSelectedFeed(feed)
     clickModal()
   }
-
+  // 모달창 열고 닫는 state 함수
   const clickModal = () => {
     setShowModal(!showModal)
   }
@@ -79,23 +60,38 @@ const Feeds = ({
           </FlipWrapper>
         ))}
       </GridContainer>
-      <TotalFeedsBtn>전체 보기</TotalFeedsBtn>
+      {/* 해당 카테고리 피드리스트 전체보기 */}
+      <TotalFeedsBtn
+        onClick={() => {
+          navigate('/groups', {
+            state: {
+              selectedCategoryId: selectedCategoryId,
+              selectedCategoryImage: selectedCategoryImage,
+              selectedCategoryGroupName: selectedCategoryGroupName,
+              selectedCategoryAnswerIds: selectedCategoryAnswerIds,
+            },
+          })
+        }}
+      >
+        전체 보기
+      </TotalFeedsBtn>
+      {/* 피드 누를시 피드 확대 */}
       {showModal && (
         <DetailFeed
           setShowModal={setShowModal}
           showModal={showModal}
           selectedFeed={selectedFeed}
-          selectedDirectoryId={selectedDirectoryId}
-          selectedDirectoryImage={selectedDirectoryImage}
-          selectedDirectoryGroupName={selectedDirectoryGroupName}
-          selectedDirectoryAnswerIds={selectedDirectoryAnswerIds}
+          selectedCategoryId={selectedCategoryId}
+          selectedCategoryImage={selectedCategoryImage}
+          selectedCategoryGroupName={selectedCategoryGroupName}
+          selectedCategoryAnswerIds={selectedCategoryAnswerIds}
         />
       )}
     </>
   )
 }
 
-export default Feeds
+export default FeedList
 
 const GridContainer = styled.div`
   display: grid;

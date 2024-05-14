@@ -1,13 +1,14 @@
-import styled from 'styled-components'
-import NavLogo from '../../assets/nav/NavLogo.svg'
-import Alram from '../../assets/nav/Alarm.svg'
-import Setting from '../../assets/nav/Setting.svg'
 import { useNavigate } from 'react-router-dom'
+import styled from 'styled-components'
+import NavLogo from '@/assets/nav/NavLogo.svg'
+import Alram from '@/assets/nav/Alarm.svg'
+import Setting from '@/assets/nav/Setting.svg'
 
 interface HeaderProps {
   background: string
 }
 
+// 메인페이지의 헤더 컴포넌트
 const MainHeader = ({ background }: HeaderProps) => {
   const navigate = useNavigate()
 
@@ -53,9 +54,9 @@ const HeaderLeftIcon = styled.img`
   cursor: pointer;
 `
 const HeaderRight = styled.div`
-  position: absolute;
   display: flex;
   justify-content: center;
+  position: absolute;
   right: 20px;
   gap: 20px;
 `

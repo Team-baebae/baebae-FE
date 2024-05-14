@@ -7,35 +7,47 @@ import 'react-toastify/dist/ReactToastify.css'
 import MiniToggle from '@/components/common/MiniToggle'
 import { Button } from '@/components/common/Button'
 import { StyledToastContainer } from '@/components/toast/toastStyle'
-import LoginModal from '@/components/main/LoginModal'
-import Tooltip from '@/components/main/Tooltip'
-import { AskProps } from '@/components/main/types'
+import LoginModal from '@/components/question/LoginModal'
+import Tooltip from '@/components/question/Tooltip'
 import { colors } from '@/styles/colors'
-import { isLoggedInState, userInfoState } from '@/context/Atoms'
+import { isLoggedInState, isMineState, ownerUserData, userInfoState } from '@/context/Atoms'
 import { postQuestionApi } from '@/apis/MainInfoApi'
 import NewIcon from '@/assets/main/NewIcon.svg'
 import ForwardArrow from '@/assets/setting/ForwardArrow.svg'
 import Info from '@/assets/main/Info.svg'
 
 // 질문하기 컴포넌트
-const Ask = ({ userInfo, isMyPage }: AskProps) => {
-  const isMine = JSON.stringify(isMyPage)
-  const isLoggedIn = useRecoilValue(isLoggedInState)
-  const writerToken = useRecoilValue(userInfoState).accessToken
-  const receiverId = userInfo.memberId
-  const [askCount, setAskCount] = useState<number>(0)
+const Ask = () => {
   const navigate = useNavigate()
+
+  // 리코일 계정주인 데이터 정보
+  const userInfo = useRecoilValue(ownerUserData)
+  //계정 주인의 memberId
+  const receiverId = userInfo.memberId
+
+  // 내 페이지인지 여부 확인
+  const isMyPage = useRecoilValue(isMineState)
+  const isMine = JSON.stringify(isMyPage)
+
+  // 로그인 된 상태인지 확인
+  const isLoggedIn = useRecoilValue(isLoggedInState)
+  // 로그인 되었다면 로그인 된 사람의 어세스토큰
+  const writerToken = useRecoilValue(userInfoState).accessToken
+
+  // 답변을 기다리는 질문 개수와 클릭 시
+  const [askCount, setAskCount] = useState<number>(0)
   const questionClick = () => {
     navigate(`/questions`)
   }
 
+  // 답변 개수 입력 받기
   useEffect(() => {
     // api 연동
     setAskCount(3)
     console.log(`나의 페이지인가? : ${isMine}`)
   }, [])
 
-  // 모달 버튼 클릭 유무를 저장할 state
+  // 모달 버튼 클릭 유무를 저장할 state (로그인 안했을 시 나오는 모달)
   const [showModal, setShowModal] = useState<boolean>(false)
   // 버튼 클릭시 모달 버튼 클릭 유무를 설정하는 state 함수
   const clickModal = () => setShowModal(!showModal)
@@ -72,6 +84,7 @@ const Ask = ({ userInfo, isMyPage }: AskProps) => {
 
   return (
     <Container>
+      {/* 답변을 기다리는 질문은 계정 주인만 볼 수 있다 */}
       {isMyPage == true && (
         <AskNotification onClick={questionClick}>
           {askCount && <Icon width={34.25} height={16} src={NewIcon} />}
@@ -84,6 +97,7 @@ const Ask = ({ userInfo, isMyPage }: AskProps) => {
           <Icon width={20} height={20} src={ForwardArrow} />
         </AskNotification>
       )}
+      {/* 질문 입력 */}
       <AskContainer>
         <TextRegion
           placeholder={`이런 질문은 어떤가요?\n너의 패션 스타일이 궁금해!\n무슨 음식 좋아해?`}
@@ -101,6 +115,7 @@ const Ask = ({ userInfo, isMyPage }: AskProps) => {
           />
         </WriterBlock>
       </AskContainer>
+      {/* 프로필 공개여부 */}
       <OpenProfileWrapper margin={isMyPage ? '30px' : '82px'}>
         <OpenProfile>
           <MiniToggle isActive={isProfileOn} setIsActive={setIsProfileOn} />
@@ -111,6 +126,7 @@ const Ask = ({ userInfo, isMyPage }: AskProps) => {
         </OpenProfile>
         <Tooltip show={showTooltip} clickIcon={clickIcon} />
       </OpenProfileWrapper>
+      {/* 최하단 버튼 */}
       <Button $positive={true} func={submitHandler} text="질문하기" />
       <StyledToastContainer
         position="bottom-center"
@@ -123,6 +139,7 @@ const Ask = ({ userInfo, isMyPage }: AskProps) => {
         theme="dark"
         transition={Flip}
       />
+      {/* 로그인 안하고 질문 시 나오는 모달 */}
       {showModal && <LoginModal content={`앗!\n로그인을 해야 질문을 남길 수 있어요😥`} clickModal={clickModal} />}
     </Container>
   )

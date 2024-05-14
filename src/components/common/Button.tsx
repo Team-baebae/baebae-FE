@@ -1,13 +1,14 @@
 import styled from 'styled-components'
-import { colors } from '../../styles/colors'
+import { colors } from '@/styles/colors'
 
+// 하단 고정 버튼
 interface BottomButtonProps {
   $positive: boolean
   func: any
   func2?: any
   text: string
 }
-
+// margin설정 버튼
 interface UnFixedButtonprops {
   $positive: boolean
   func: any
@@ -15,7 +16,7 @@ interface UnFixedButtonprops {
   text: string
   margin: string
 }
-
+// 일반 버튼
 interface Buttonprops {
   $positive: boolean
   func: any
@@ -83,10 +84,10 @@ const GreenCommonBtn = styled.button<{ $positive: boolean }>`
     cursor: pointer;
   }
   @media screen and (width > 768px) {
-    position: absolute;
-    bottom: 30px;
     display: flex;
     justify-content: center;
+    position: absolute;
+    bottom: 30px;
     width: 335px;
     border: none;
     border-radius: 12px;
@@ -103,44 +104,42 @@ const GreenCommonBtn = styled.button<{ $positive: boolean }>`
 const UnFixedGreenCommonBtn = styled.button<{ margin: string; $positive: boolean }>`
   @media screen and (width <= 768px) {
     display: flex;
+    justify-content: center;
+    align-items: center;
     width: calc(100% - 40px);
     height: 56px;
     padding: 16px 20px;
-    justify-content: center;
-    align-items: center;
+    margin: ${(props) => props.margin};
+    background: ${(props) => (props.$positive ? colors.primary : colors.primary40)};
     border-radius: 12px;
+    border: none;
+    outline: none;
     font-family: Pretendard;
     font-size: 14px;
-    font-style: normal;
     font-weight: 600;
     line-height: 150%;
     letter-spacing: -0.28px;
-    margin: ${(props) => props.margin};
-    background: ${(props) => (props.$positive ? colors.primary : colors.primary40)};
     color: ${(props) => (props.$positive ? colors.grey1 : colors.grey3)};
-    border: none;
-    outline: none;
     cursor: pointer;
   }
   @media screen and (width > 768px) {
     display: flex;
+    justify-content: center;
+    align-items: center;
     width: 335px;
     height: 56px;
     padding: 16px 20px;
-    justify-content: center;
-    align-items: center;
+    margin: ${(props) => props.margin};
     border-radius: 12px;
+    background: ${(props) => (props.$positive ? colors.primary : colors.primary40)};
+    border: none;
+    outline: none;
     font-family: Pretendard;
     font-size: 14px;
-    font-style: normal;
     font-weight: 600;
     line-height: 150%;
     letter-spacing: -0.28px;
-    margin: ${(props) => props.margin};
-    background: ${(props) => (props.$positive ? colors.primary : colors.primary40)};
     color: ${(props) => (props.$positive ? colors.grey1 : colors.grey3)};
-    border: none;
-    outline: none;
     cursor: pointer;
   }
 `

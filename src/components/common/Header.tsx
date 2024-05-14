@@ -1,13 +1,14 @@
 import styled from 'styled-components'
-import BackArrow from '../../assets/answer/BackArrow.svg'
-import { colors } from '../../styles/colors'
 import { useNavigate } from 'react-router-dom'
+import { colors } from '@/styles/colors'
+import BackArrow from '@/assets/answer/BackArrow.svg'
 
 interface HeaderProps {
   text: string
   background: string
 }
 
+// 페이지들의 공통헤더 컴포넌트
 const Header = ({ text, background }: HeaderProps) => {
   const navigate = useNavigate()
 
@@ -20,7 +21,6 @@ const Header = ({ text, background }: HeaderProps) => {
           navigate(-1)
         }}
       />
-
       <HeaderText>{text}</HeaderText>
     </HeaderTotalComponent>
   )
@@ -50,7 +50,6 @@ const HeaderText = styled.div`
   color: ${colors.grey1};
   font-family: Pretendard;
   font-size: 16px;
-  font-style: normal;
   font-weight: 700;
   line-height: 24px;
   letter-spacing: -0.32px;
