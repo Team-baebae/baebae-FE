@@ -21,11 +21,11 @@ import Tos from '@/pages/setting/Tos'
 import QuestionList from '@/pages/question/QuestionList'
 //답변
 import Answer from '@/pages/answer/Answer'
-import Folder from '@/pages/answer/Folder'
+import Folder from '@/pages/category/SelectCategory'
 import AnswerComplete from '@/pages/answer/AnswerComplete'
 //카테고리
-import GroupPlus from '@/pages/group/GroupPlus'
-import GroupModify from '@/pages/group/GroupModify'
+import GroupPlus from '@/pages/category/GroupPlus'
+import GroupModify from '@/pages/category/GroupModify'
 import Groups from '@/pages/category/Groups'
 // 테스트
 import DetailTestPage from '@/pages/DetailTestPage'

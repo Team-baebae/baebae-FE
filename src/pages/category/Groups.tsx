@@ -15,11 +15,11 @@ import trash from '@/assets/main/Trash.svg'
 import { useNavigate } from 'react-router-dom'
 import { useRecoilState, useRecoilValue } from 'recoil'
 import { isMineState, ownerUserData, userInfoState } from '@/context/Atoms'
-import { deleteDirectoryApi, getDirectoriesApi } from '@/apis/DirectoryApi'
+import { deleteCategoryApi, getCategoriesApi } from '@/apis/CategoryApi'
 import plus from '@/assets/main/Plus.svg'
 import { getFeedsApi } from '@/apis/AnswerApi'
 import { StyledToastContainer } from '@/components/toast/toastStyle'
-import { directoryProps } from '@/components/main/types'
+import { categoryProps } from '@/components/category/types'
 
 const Groups = () => {
   interface FeedProps {
@@ -94,7 +94,7 @@ const Groups = () => {
   // 디렉토리 삭제
   const deleteDirectory = async () => {
     try {
-      await deleteDirectoryApi(userInfo.accessToken, selectedDirectoryId).then((res) => {
+      await deleteCategoryApi(userInfo.accessToken, selectedDirectoryId).then((res) => {
         setOpen(false)
         getDirectories()
         if (res.status === 204) {
@@ -127,7 +127,7 @@ const Groups = () => {
   // 유저 디렉토리 조회
   const getDirectories = async () => {
     try {
-      await getDirectoriesApi(ownerUserInfo.memberId).then((res) => {
+      await getCategoriesApi(ownerUserInfo.memberId).then((res) => {
         console.log(res)
         setDirectories(res.data.categories)
         if (res.data.categories.length !== 0) {
@@ -142,7 +142,7 @@ const Groups = () => {
     }
   }
 
-  const [directories, setDirectories] = useState<directoryProps[]>([])
+  const [directories, setDirectories] = useState<categoryProps[]>([])
   const [feedList, setFeedList] = useState<FeedProps[]>([])
   const getFeeds = useCallback(async () => {
     try {

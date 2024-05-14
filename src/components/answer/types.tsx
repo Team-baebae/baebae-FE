@@ -1,3 +1,15 @@
+export interface QuestionProps {
+  question: {
+    questionId: number
+    content: string
+    nickname: string
+    profileOnOff: boolean
+    createdDate: string
+    isAnswered: boolean
+    fcmtoken: string
+  }
+}
+
 // Link Props
 export interface LinkProps {
   linkAttachments: string

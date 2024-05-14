@@ -1,34 +1,27 @@
 import styled from 'styled-components'
 import { colors } from '@/styles/colors'
-import TestImg from '@/assets/Glasses.svg'
+import { EachCategoryProps } from '@/components/category/types'
 import Plus from '@/assets/main/Plus.svg'
-import { directoryProps } from '../question/types'
 
-interface EachFolderProps {
-  selectedDirectoryId: number
-  directory?: directoryProps
-  $positive: boolean
-  func: any
-}
-
-const EachFolder = ({ selectedDirectoryId, directory, $positive, func }: EachFolderProps) => {
+// 답변 작성 후 나오는 카테고리 연결페이지의 각자의 카테고리 컴포넌트
+const EachFolder = ({ selectedCategoryId, category, $positive, func }: EachCategoryProps) => {
   return (
     <>
       <FolderWrapper>
         {$positive ? (
-          <FolderImgWrapper selected={selectedDirectoryId === directory?.categoryId} onClick={func}>
-            <FolderImg src={directory?.categoryImage} />
+          <FolderImgWrapper selected={selectedCategoryId === category?.categoryId} onClick={func}>
+            <FolderImg src={category?.categoryImage} />
           </FolderImgWrapper>
         ) : (
-          <NewFolderImgWrapper selected={selectedDirectoryId === directory?.categoryId} onClick={func}>
+          <NewFolderImgWrapper selected={selectedCategoryId === category?.categoryId} onClick={func}>
             <PlusImg src={Plus} />
           </NewFolderImgWrapper>
         )}
 
         {$positive ? (
-          <FolderName selected={selectedDirectoryId === directory?.categoryId}>{directory?.categoryName}</FolderName>
+          <FolderName selected={selectedCategoryId === category?.categoryId}>{category?.categoryName}</FolderName>
         ) : (
-          <FolderName selected={selectedDirectoryId === directory?.categoryId}>추가</FolderName>
+          <FolderName selected={selectedCategoryId === category?.categoryId}>추가</FolderName>
         )}
       </FolderWrapper>
     </>
