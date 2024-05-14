@@ -3,12 +3,12 @@ import { useCallback, useEffect, useState } from 'react'
 import { useRecoilValue } from 'recoil'
 import { useLocation, useNavigate } from 'react-router-dom'
 import GroupHeader from '@/components/common/GroupHeader'
-import Feeds from '@/components/folder/Feeds'
+import Feeds from '@/components/category/Feeds'
 import NoFlip from '@/components/main/NoFlip'
 import { UnFixedButton } from '@/components/common/Button'
 import { UserInfoStateProps, userInfoState } from '@/context/Atoms'
 import { colors } from '@/styles/colors'
-import { modifyDirectoryApi, updateDirectoryImgApi } from '@/apis/DirectoryApi'
+import { modifyCategoryApi, updateCategoryImgApi } from '@/apis/CategoryApi'
 import DefaultImg from '@/assets/main/DefaultImage.png'
 import { getFeedsApi } from '@/apis/AnswerApi'
 
@@ -70,7 +70,7 @@ const GroupModify = () => {
 
   const modifyDirectory = async () => {
     try {
-      await modifyDirectoryApi(userInfo.accessToken, categoryId, groupName, selectedAnswerIds).then((res) => {
+      await modifyCategoryApi(userInfo.accessToken, categoryId, groupName, selectedAnswerIds).then((res) => {
         console.log(res)
         navigate(-1) // 현재 페이지에서 뒤로 이동
       })
@@ -81,7 +81,7 @@ const GroupModify = () => {
 
   const updateDirectoryImg = async () => {
     try {
-      await updateDirectoryImgApi(userInfo.accessToken, categoryId, groupImgFile).then((res) => {
+      await updateCategoryImgApi(userInfo.accessToken, categoryId, groupImgFile).then((res) => {
         console.log(res)
       })
     } catch (err) {

@@ -4,10 +4,10 @@ import { useRecoilValue } from 'recoil'
 import { useNavigate } from 'react-router-dom'
 import GroupHeader from '@/components/common/GroupHeader'
 import { UnFixedButton } from '@/components/common/Button'
-import Feeds from '@/components/folder/Feeds'
+import Feeds from '@/components/category/Feeds'
 import NoFlip from '@/components/main/NoFlip'
 
-import { makeDirectoryApi } from '@/apis/DirectoryApi'
+import { makeCategoryApi } from '@/apis/CategoryApi'
 import { userInfoState } from '@/context/Atoms'
 import { colors } from '@/styles/colors'
 import DefaultImg from '@/assets/main/DefaultImage.png'
@@ -71,7 +71,7 @@ const GroupPlus = () => {
 
   const makeDirectory = async () => {
     try {
-      await makeDirectoryApi(
+      await makeCategoryApi(
         userInfo.accessToken,
         userInfo.memberId,
         directoryImgFile,

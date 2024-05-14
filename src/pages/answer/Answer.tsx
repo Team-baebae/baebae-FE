@@ -1,5 +1,6 @@
 import styled from 'styled-components'
 import { useState } from 'react'
+import { useRecoilValue } from 'recoil'
 import { useLocation, useNavigate } from 'react-router-dom'
 import Question from '@/components/answer/Question'
 import { UnFixedButton } from '@/components/common/Button'
@@ -7,26 +8,26 @@ import Music from '@/components/answer/Music'
 import Link from '@/components/answer/Link'
 import DelayModal from '@/components/common/DelayModal'
 import Modal from '@/components/common/Modal'
-import PersonalHeader from '@/components/answer/PersonalHeader'
+import AnswerHeader from '@/components/common/AnswerHeader'
 import { colors } from '@/styles/colors'
 import { answerApi } from '@/apis/AnswerApi'
-import { useRecoilState } from 'recoil'
-import { UserInfoStateProps, userInfoState } from '@/context/Atoms'
+import { userInfoState } from '@/context/Atoms'
 
+// 질문에 대한 답변 페이지
 const Answer = () => {
   const navigate = useNavigate()
-  // 넘겨 받은 카카오 어세스토큰 저장
+  // 넘겨 받은 질문 정보 저장
   const location = useLocation()
   const question = location.state?.question
 
-  const [userInfo, setUserInfo] = useRecoilState<UserInfoStateProps>(userInfoState)
+  // 리코일 로그인한 유저정보
+  const userInfo = useRecoilValue(userInfoState)
 
   // 이미지 파일 선택 핸들러
   const [imageFile, setImageFile] = useState<File>()
   const [imageUrl, setImageUrl] = useState<string>('')
   const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files && e.target.files[0]
-    // 이미지 파일을 보낼 시엔 formData로 file을 추가해야함(추후 추가)
     if (file) {
       setImageUrl(URL.createObjectURL(file)) // 미리보기를 위해 파일 URL 생성
       setImageFile(file)
@@ -51,9 +52,9 @@ const Answer = () => {
   // 작성 중 뒤로가기를 누를 때
   const [isOpenBackWarningModal, setIsOpenBackWarningModal] = useState(false)
 
+  // 답변하기 버튼 누를 시
   const onClickAnswerBtn = async () => {
     try {
-      console.log(musicAudio)
       await answerApi(userInfo.accessToken, userInfo.memberId, imageFile, {
         questionId: question.questionId,
         content: content,
@@ -76,7 +77,8 @@ const Answer = () => {
 
   return (
     <Container>
-      <PersonalHeader func={() => setIsOpenBackWarningModal(true)} text="답변하기" background={colors.grey7} />
+      <AnswerHeader func={() => setIsOpenBackWarningModal(true)} text="답변하기" background={colors.grey7} />
+      {/* 질문 */}
       <Question question={question} />
       {/* 답변 이미지 */}
       <PolaroidContainer>
@@ -154,7 +156,6 @@ const Container = styled.div`
   height: 100%;
   padding: 0px 0px 30px 0px;
 `
-// 사진
 const PolaroidContainer = styled.div`
   display: flex;
   flex-direction: column;
@@ -201,6 +202,9 @@ const PlusImgText = styled.div`
 const AnswerText = styled.textarea`
   align-self: stretch;
   height: 42px;
+  border: none;
+  outline: none;
+  resize: none;
   flex-shrink: 0;
   color: ${colors.grey1};
   font-family: Pretendard;
@@ -208,9 +212,6 @@ const AnswerText = styled.textarea`
   font-weight: 400;
   line-height: 150%;
   letter-spacing: -0.56px;
-  border: none;
-  outline: none;
-  resize: none;
   &::placeholder {
     color: ${colors.grey5};
   }
