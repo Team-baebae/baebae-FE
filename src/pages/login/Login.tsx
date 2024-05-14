@@ -45,9 +45,8 @@ const Container = styled.div`
 
 const Background = styled.img`
   position: absolute;
-  left: -86px;
   z-index: 1;
-  width: 569.454px;
+  width: 100%;
   height: 722.534px;
 `
 
