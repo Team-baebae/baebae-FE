@@ -24,9 +24,19 @@ interface FeedProps {
 
 interface FeedsProps {
   data: FeedProps[]
+  selectedDirectoryId: number
+  selectedDirectoryImage: string
+  selectedDirectoryGroupName: string
+  selectedDirectoryAnswerIds: number[]
 }
 
-const Feeds = ({ data }: FeedsProps) => {
+const Feeds = ({
+  data,
+  selectedDirectoryId,
+  selectedDirectoryImage,
+  selectedDirectoryGroupName,
+  selectedDirectoryAnswerIds,
+}: FeedsProps) => {
   const [selectedFeed, setSelectedFeed] = useState<FeedProps>({
     answerId: -1,
     questionId: -1,
@@ -70,7 +80,17 @@ const Feeds = ({ data }: FeedsProps) => {
         ))}
       </GridContainer>
       <TotalFeedsBtn>전체 보기</TotalFeedsBtn>
-      {showModal && <DetailFeed setShowModal={setShowModal} showModal={showModal} selectedFeed={selectedFeed} />}
+      {showModal && (
+        <DetailFeed
+          setShowModal={setShowModal}
+          showModal={showModal}
+          selectedFeed={selectedFeed}
+          selectedDirectoryId={selectedDirectoryId}
+          selectedDirectoryImage={selectedDirectoryImage}
+          selectedDirectoryGroupName={selectedDirectoryGroupName}
+          selectedDirectoryAnswerIds={selectedDirectoryAnswerIds}
+        />
+      )}
     </>
   )
 }

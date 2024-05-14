@@ -172,7 +172,12 @@ const Feed = () => {
               <SwiperSlide key={item.categoryId}>
                 <GroupWrapper>
                   <GroupImgWrapper
-                    onClick={() => setSelectedDirectoryId(item.categoryId)}
+                    onClick={() => {
+                      setSelectedDirectoryId(item.categoryId)
+                      setSelectedDirectoryImage(item.categoryImage)
+                      setSelectedDirectoryGroupName(item.categoryName)
+                      setSelectedDirectoryAnswerIds(item.answerIds)
+                    }}
                     selected={selectedDirectoryId === item.categoryId}
                     {...bind(item.categoryId, item.categoryImage, item.categoryName, item.answerIds)}
                     onContextMenu={(e) => {
@@ -203,7 +208,17 @@ const Feed = () => {
         </Swiper>
       </TopComponent>
       {/* 해당 디렉토리 피드 리스트 부분 */}
-      {feedList.length > 0 ? <Feeds data={feedList} /> : <NoFlip />}
+      {feedList.length > 0 ? (
+        <Feeds
+          data={feedList}
+          selectedDirectoryId={selectedDirectoryId}
+          selectedDirectoryImage={selectedDirectoryImage}
+          selectedDirectoryGroupName={selectedDirectoryGroupName}
+          selectedDirectoryAnswerIds={selectedDirectoryAnswerIds}
+        />
+      ) : (
+        <NoFlip />
+      )}
       {/* BottomSheet 모달 부분 */}
       {open && (
         <BottomSheet open={open} snapPoints={() => [170]} onDismiss={handleDismissPlusMusicModal} blocking={true}>
