@@ -102,7 +102,7 @@ const GroupModify = () => {
 
   const getFeeds = useCallback(async () => {
     try {
-      await getFeedsApi(userInfo.accessToken, userInfo.memberId, selectedDirectoryId).then((res) => {
+      await getFeedsApi(userInfo.memberId, selectedDirectoryId).then((res) => {
         console.log(res)
         setFeedList(res.data.content)
       })

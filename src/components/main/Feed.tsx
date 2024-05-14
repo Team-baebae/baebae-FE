@@ -15,7 +15,7 @@ import { directoryProps } from '@/components/main/types'
 import { StyledToastContainer } from '@/components/toast/toastStyle'
 import { colors } from '@/styles/colors'
 import { deleteDirectoryApi, getDirectoriesApi } from '@/apis/DirectoryApi'
-import { UserInfoStateProps, isMineState, userInfoState } from '@/context/Atoms'
+import { UserInfoStateProps, isMineState, ownerUserData, userInfoState } from '@/context/Atoms'
 import Plus from '@/assets/main/Plus.svg'
 import Pencil from '@/assets/main/Pencil.svg'
 import Trash from '@/assets/main/Trash.svg'
@@ -27,6 +27,9 @@ const Feed = () => {
 
   // 리코일 userInfo
   const userInfo = useRecoilValue<UserInfoStateProps>(userInfoState)
+  // 리코일 계정주인의 userInfo
+  const [ownerUserInfo, setOwnerUserInfo] = useRecoilState(ownerUserData)
+
   // 내 페이지인지 여부 확인
   const [isMyPage, setIsMyPage] = useRecoilState(isMineState)
   // 유저 디렉토리 리스트 저장
@@ -34,7 +37,7 @@ const Feed = () => {
   // 유저 디렉토리 조회
   const getDirectories = async () => {
     try {
-      await getDirectoriesApi(userInfo.accessToken, userInfo.memberId).then((res) => {
+      await getDirectoriesApi(ownerUserInfo.memberId).then((res) => {
         console.log(res)
         setDirectories(res.data.categories)
       })
@@ -141,7 +144,7 @@ const Feed = () => {
 
   const getFeeds = useCallback(async () => {
     try {
-      await getFeedsApi(userInfo.accessToken, userInfo.memberId, selectedDirectoryId).then((res) => {
+      await getFeedsApi(ownerUserInfo.memberId, selectedDirectoryId).then((res) => {
         console.log(res)
         setFeedList(res.data.content)
       })

@@ -31,7 +31,7 @@ const Main = () => {
       result.isExisting == true &&
         getMemberIdApi(nickname).then((result) => {
           setUserData({ nickname: nickname, memberId: result.memberId })
-          myMemberId == result.memberId ? setIsMyPage(true) : setIsMyPage(false)
+          myMemberId === result.memberId ? setIsMyPage(true) : setIsMyPage(false)
         })
     })
   }
@@ -54,7 +54,7 @@ const Main = () => {
       {isExisting ? (
         <Container>
           <MainHeader background={colors.white} />
-          <MainProfile nickname={username} />
+          <MainProfile />
           <CategoryBox>
             <Category category={category} num={0} onClick={() => setCategory(0)}>
               질문
