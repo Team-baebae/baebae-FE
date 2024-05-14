@@ -10,7 +10,7 @@ import DelayModal from '@/components/common/DelayModal'
 import Modal from '@/components/common/Modal'
 import AnswerHeader from '@/components/common/AnswerHeader'
 import { colors } from '@/styles/colors'
-import { answerApi } from '@/apis/AnswerApi'
+import { answerApi, modifyFeedApi } from '@/apis/AnswerApi'
 import { userInfoState } from '@/context/Atoms'
 
 // 질문에 대한 답변 페이지
@@ -18,14 +18,17 @@ const Answer = () => {
   const navigate = useNavigate()
   // 넘겨 받은 질문 정보 저장
   const location = useLocation()
+  // question만 받으면 질문리스트에서 온 것
+  // selectedFeed까지 모두 받으면 피드 수정에서 온 것
   const question = location.state?.question
+  const selectedFeed = location.state?.selectedFeed
 
   // 리코일 로그인한 유저정보
   const userInfo = useRecoilValue(userInfoState)
 
   // 이미지 파일 선택 핸들러
   const [imageFile, setImageFile] = useState<File>()
-  const [imageUrl, setImageUrl] = useState<string>('')
+  const [imageUrl, setImageUrl] = useState<string>(selectedFeed.imageUrls[0])
   const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files && e.target.files[0]
     if (file) {
@@ -35,17 +38,17 @@ const Answer = () => {
   }
 
   // 텍스트 저장
-  const [content, setContent] = useState<string>('')
+  const [content, setContent] = useState<string>(selectedFeed.content)
   const onChangeContent = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
     const value = e.target.value
     setContent(value)
   }
 
   // 모달창에서 선택받은 음악 관련 정보, 링크 저장
-  const [musicName, setMusicName] = useState<string>('')
-  const [musicAudio, setMusicAudio] = useState<string>('')
-  const [musicSinger, setMusicSinger] = useState<string>('')
-  const [linkAttachments, setLinkAttachments] = useState<string>('')
+  const [musicName, setMusicName] = useState<string>(selectedFeed.musicName)
+  const [musicAudio, setMusicAudio] = useState<string>(selectedFeed.musicAudioUrl)
+  const [musicSinger, setMusicSinger] = useState<string>(selectedFeed.musicSinger)
+  const [linkAttachments, setLinkAttachments] = useState<string>(selectedFeed.linkAttachments[0])
 
   // 사진 또는 텍스트 작성없이 답변하려할 때
   const [isOpenDelayModal, setIsOpenDelayModal] = useState(false)
@@ -75,9 +78,34 @@ const Answer = () => {
     }
   }
 
+  // 피드 수정 시 수정하기 버튼 누를 시
+  const onClickModifyFeedBtn = async () => {
+    console.log(musicAudio)
+    try {
+      await modifyFeedApi(userInfo.accessToken, selectedFeed.answerId, imageFile, {
+        questionId: selectedFeed.questionId,
+        content: content,
+        linkAttachments: [linkAttachments],
+        musicName: musicName,
+        musicSinger: musicSinger,
+        musicAudioUrl: musicAudio,
+      }).then((res) => {
+        console.log(res)
+        console.log('피드 수정 성공')
+        navigate(`/juuuunny`)
+      })
+    } catch (err) {
+      console.log(err)
+    }
+  }
+
   return (
     <Container>
-      <AnswerHeader func={() => setIsOpenBackWarningModal(true)} text="답변하기" background={colors.grey7} />
+      {selectedFeed ? (
+        <AnswerHeader func={() => setIsOpenBackWarningModal(true)} text="피드 수정" background={colors.grey7} />
+      ) : (
+        <AnswerHeader func={() => setIsOpenBackWarningModal(true)} text="답변하기" background={colors.grey7} />
+      )}
       {/* 질문 */}
       <Question question={question} />
       {/* 답변 이미지 */}
@@ -107,14 +135,14 @@ const Answer = () => {
       <UnFixedButton
         $positive={imageUrl !== '' && content !== '' ? true : false}
         func={() => {
-          onClickAnswerBtn()
+          selectedFeed ? onClickModifyFeedBtn() : onClickAnswerBtn()
         }}
         func2={() => {
           {
             imageUrl === '' || content === '' ? setIsOpenDelayModal(true) : console.log('비활성화')
           }
         }}
-        text="다음"
+        text={selectedFeed ? '수정하기' : '다음'}
         margin="83px 20px 0px 20px"
       />
       {/* 사진 또는 텍스트 작성없이 답변하러 할 때 */}

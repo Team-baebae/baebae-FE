@@ -261,7 +261,21 @@ const DetailFeed = (props: ModalProps) => {
           blocking={true}
           style={{ zIndex: 100 }}
         >
-          <BottomSheetEachWrapper>
+          <BottomSheetEachWrapper
+            onClick={() => {
+              navigate(`/questions/${selectedFeed.questionId}/answer`, {
+                state: {
+                  question: {
+                    questionId: selectedFeed.questionId,
+                    content: selectedFeed.questionContent,
+                    nickname: '추후수정',
+                  },
+                  selectedFeed: selectedFeed,
+                  condition: '수정',
+                },
+              })
+            }}
+          >
             <BottomSheetEachIcon src={pencil} />
             <BottomSheetEachText color={colors.grey1}>플립 수정하기</BottomSheetEachText>
           </BottomSheetEachWrapper>

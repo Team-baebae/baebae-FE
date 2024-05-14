@@ -1,4 +1,3 @@
-import { useState } from 'react'
 import { flipitAxios } from './apis'
 
 export const answerApi = (accessToken: string, memberId: number, imageFile: File | undefined, request: any) => {
@@ -48,6 +47,24 @@ export const connectGroupApi = (accessToken: string, categoryId: number, answerI
 export const deleteFeedApi = (accessToken: string, answerId: number) => {
   let API = `/api/answers/${answerId}`
   return flipitAxios.delete(API, {
+    headers: {
+      Authorization: `Bearer ${accessToken}`,
+    },
+  })
+}
+
+export const modifyFeedApi = (accessToken: string, answerId: number, imageFile: File | undefined, request: any) => {
+  let API = `/api/answers/${answerId}`
+
+  // FormData 객체 생성
+  const formData = new FormData()
+  // categoryImage가 undefined가 아니면 FormData에 추가
+  if (imageFile) {
+    formData.append('imageFile', imageFile)
+  }
+
+  formData.append('request', JSON.stringify(request))
+  return flipitAxios.put(API, formData, {
     headers: {
       Authorization: `Bearer ${accessToken}`,
     },
