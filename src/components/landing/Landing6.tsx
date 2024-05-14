@@ -1,13 +1,9 @@
-
-import Phone from '@/assets/landing/PhoneInsta.png'
-
-import { colors } from '@/styles/colors'
 import styled from 'styled-components'
 import { motion } from 'framer-motion'
 import { useState } from 'react'
-import LandingTelepathy from './LandingTelepathy'
-import LandingFeedBack from './LandingFeedBack'
-
+import { colors } from '@/styles/colors'
+import LandingTelepathy from '@/components/landing/LandingTelepathy'
+import LandingFeedBack from '@/components/landing/LandingFeedBack'
 
 const Landing6 = () => {
   const heartNum = 23
@@ -115,26 +111,26 @@ const SubText = styled.h3`
   white-space: pre-wrap;
 `
 const BottomContents = styled.div`
-  width: 315px;
   display: flex;
   flex-direction: row;
+  width: 315px;
   gap: 6px;
   margin-top: 8px;
 `
 const EmotionButton = styled.div<{ state: boolean }>`
   display: flex;
+  align-items: center;
   height: 30px;
   padding: 4px 8px;
-  align-items: center;
+  background: ${(props) => (props.state ? colors.green : colors.white)};
   gap: 4px;
   border-radius: 100px;
-  background: ${(props) => (props.state ? colors.green : colors.white)};
 `
 const TelepathyButton = styled.div<{ state: boolean }>`
   display: flex;
+  align-items: center;
   height: 30px;
   padding: 4px 12px;
-  align-items: center;
   gap: 4px;
   border-radius: 100px;
   background: ${(props) => (props.state ? colors.primary : colors.white)};
@@ -144,7 +140,6 @@ const EmotionText = styled.div`
   color: ${colors.grey1};
   font-family: Pretendard;
   font-size: 12px;
-  font-style: normal;
   font-weight: 500;
   line-height: 18px;
   letter-spacing: -0.24px;
@@ -166,7 +161,6 @@ const FlipContainer = styled.div`
   color: ${colors.white};
   font-family: Pretendard;
   font-size: 18px;
-  font-style: normal;
   font-weight: 400;
   line-height: 27px;
   letter-spacing: -0.9px;

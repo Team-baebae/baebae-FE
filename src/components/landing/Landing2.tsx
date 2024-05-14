@@ -1,7 +1,7 @@
 import styled from 'styled-components'
 import { motion } from 'framer-motion'
-import LandingLogoGradient from '@/assets/landing/LandingLogoGradient.svg'
 import { colors } from '@/styles/colors'
+import LandingLogoGradient from '@/assets/landing/LandingLogoGradient.svg'
 
 const Landing2 = () => {
   const Variants = {

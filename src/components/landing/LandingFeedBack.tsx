@@ -25,16 +25,14 @@ const Photo = styled.img`
 const FlipWrapper = styled.div`
   display: flex;
   flex-direction: column;
-  width: 300px;
-  height: 329.448px;
-
-  padding: 18.4px;
   flex-direction: column;
   justify-content: space-between;
+  width: 300px;
+  height: 329.448px;
+  padding: 18.4px;
   gap: 18px;
   border-radius: 2px;
   background: ${colors.white};
-
   box-shadow: 0px 7.362px 7.362px 0px rgba(0, 0, 0, 0.2);
 `
 const ContentWrapper = styled.div`
@@ -44,9 +42,7 @@ const ContentWrapper = styled.div`
   text-align: center;
   text-overflow: ellipsis;
   font-family: Pretendard;
-
   font-size: 20px;
-
   font-weight: 500;
   line-height: 30px;
   letter-spacing: -0.4px;
