@@ -1,9 +1,9 @@
 import styled from 'styled-components'
+import { useNavigate } from 'react-router-dom'
 import { colors } from '@/styles/colors'
 import Logo from '@/assets/login/Logo.svg'
 import LoginBackground from '@/assets/login/LoginBack.svg'
 import KakaoIcon from '@/assets/login/KakaoIcon.svg'
-import { useNavigate } from 'react-router-dom'
 
 // 로그인 페이지
 const Login = () => {
