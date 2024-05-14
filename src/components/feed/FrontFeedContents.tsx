@@ -2,15 +2,36 @@ import styled from 'styled-components'
 import { colors } from '../../styles/colors'
 import QuotationMark from '../../assets/question/QuotationMark.svg'
 
-const FrontFeedContents = () => {
-  const question = '너의 패션이 궁금해!'
-  const writer = '패셔니스타'
+interface FeedProps {
+  answerId: number
+  questionId: number
+  questionContent: string
+  memberId: number
+  content: string
+  linkAttachments: string[]
+  musicName: string
+  musicSinger: string
+  musicAudioUrl: string
+  imageUrls: string[]
+  createdDate: string
+  heartCount: number
+  curiousCount: number
+  sadCount: number
+  fcmtoken: string
+}
 
+interface Props {
+  selectedFeed: FeedProps
+}
+
+const FrontFeedContents = (props: Props) => {
+  const writer = '추후수정'
+  const selectedFeed = props.selectedFeed
   return (
     <FlipWrapper>
       <ContentWrapper>
         <Icon src={QuotationMark} />
-        <FlipContent>{question}</FlipContent>
+        <FlipContent>{selectedFeed.questionContent}</FlipContent>
       </ContentWrapper>
       <WriterBlock>
         FROM <WriterRegion>{writer}님</WriterRegion>

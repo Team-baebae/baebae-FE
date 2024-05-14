@@ -246,6 +246,7 @@ const TopComponent = styled.div`
   display: flex;
   flex-direction: row;
   align-items: center;
+  z-index: 0;
 `
 const GroupWrapper = styled.div`
   display: flex;
