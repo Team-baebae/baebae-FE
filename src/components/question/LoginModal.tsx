@@ -1,10 +1,11 @@
 import styled from 'styled-components'
 import { AnimatePresence } from 'framer-motion'
 import { SearchModalBox, SearchModalContent } from '@/components/common/ModalStyle'
-import { ModalProps } from '@/components/main/types'
+import { ModalProps } from '@/components/question/types'
 import { colors } from '@/styles/colors'
 import KakaoIcon from '@/assets/login/KakaoIcon.svg'
 
+// 로그인 모달 컴포넌트
 const LoginModal = (props: ModalProps) => {
   // 전달받은 state 함수
   const { content, clickModal } = props

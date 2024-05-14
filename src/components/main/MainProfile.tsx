@@ -1,10 +1,10 @@
 import styled from 'styled-components'
 import { useEffect } from 'react'
 import { useRecoilState, useRecoilValue } from 'recoil'
+import { getOwnerProfileApi } from '@/apis/MainInfoApi'
 import { colors } from '@/styles/colors'
 import { UserInfoStateProps, ownerUserData, userInfoState } from '@/context/Atoms'
 import DefaultImage from '@/assets/main/DefaultImage.png'
-import { getOwnerProfileApi } from '@/apis/MainInfoApi'
 
 declare global {
   interface Window {
@@ -14,10 +14,10 @@ declare global {
 
 // 메인프로필 컴포넌트
 const MainProfile = () => {
-  const userInfo = useRecoilValue<UserInfoStateProps>(userInfoState)
-  // 유저 데이터 정보
+  // 리코일 계정 주인의 데이터 정보
   const [ownerUserInfo, setOwnerUserInfo] = useRecoilState(ownerUserData)
 
+  // 공유
   const { Kakao } = window
   const javascriptKey: string = import.meta.env.VITE_KAKAO_JAVASCRIPT_KEY
   const realUrl: string = import.meta.env.VITE_CLIENT_URL

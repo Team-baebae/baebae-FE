@@ -2,7 +2,7 @@ import styled from 'styled-components'
 import { colors } from '@/styles/colors'
 import TestImg from '@/assets/Glasses.svg'
 import Plus from '@/assets/main/Plus.svg'
-import { directoryProps } from '../main/types'
+import { directoryProps } from '../question/types'
 
 interface EachFolderProps {
   selectedDirectoryId: number
