@@ -3,9 +3,12 @@ import { colors } from '@/styles/colors'
 import Logo from '@/assets/login/Logo.svg'
 import LoginBackground from '@/assets/login/LoginBack.svg'
 import KakaoIcon from '@/assets/login/KakaoIcon.svg'
+import { useNavigate } from 'react-router-dom'
 
 // 로그인 페이지
 const Login = () => {
+  const navigate = useNavigate()
+
   // 카카오 로그인 버튼 누를 시 link로 이동
   const clientId = import.meta.env.VITE_KAKAO_CLIENT_ID
   const redirectUri = import.meta.env.VITE_KAKAO_REDIRECT_URI
@@ -18,7 +21,7 @@ const Login = () => {
   return (
     <Container>
       <Background src={LoginBackground} />
-      <FlipItLogo src={Logo} />
+      <FlipItLogo onClick={() => navigate('/')} src={Logo} />
       <ContentTextTop>타인을 알아가고 본인을 표현하는</ContentTextTop>
       <ContentTextBottom>가장 단순한 방법, 플리빗.</ContentTextBottom>
       <KakaoLoginBtn onClick={loginHandler}>
@@ -52,6 +55,8 @@ const FlipItLogo = styled.img`
   width: 200.001px;
   height: 89.743px;
   margin: 290.63px 0px 0px 0px;
+  z-index: 1;
+  cursor: pointer;
 `
 
 // FlipIt 설명 내용

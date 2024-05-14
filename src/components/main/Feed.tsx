@@ -254,6 +254,7 @@ const GroupWrapper = styled.div`
   gap: 4px;
   width: 44px;
   height: 63px;
+  cursor: pointer;
 `
 const GroupImgWrapper = styled.div<{ selected: boolean }>`
   display: flex;

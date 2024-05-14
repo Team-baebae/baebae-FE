@@ -66,6 +66,7 @@ const FlipWrapper = styled.div`
   border-radius: 2px;
   background: ${colors.white};
   box-shadow: 0px 4px 4px 0px rgba(0, 0, 0, 0.08);
+  cursor: pointer;
 `
 const FlipContent = styled.div`
   display: flex;

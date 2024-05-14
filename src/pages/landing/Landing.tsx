@@ -40,4 +40,5 @@ const Header = styled.div`
 const Icon = styled.img`
   width: 68.577px;
   height: 30px;
+  cursor: pointer;
 `
