@@ -17,6 +17,9 @@ import trash from '../../assets/main/Trash.svg'
 import Download from '../../assets/Download.svg'
 import TelePathyMotion from './TelepathyMotion'
 import { useNavigate } from 'react-router-dom'
+import { deleteFeedApi } from '@/apis/AnswerApi'
+import { useRecoilState } from 'recoil'
+import { userInfoState } from '@/context/Atoms'
 
 interface FeedProps {
   answerId: number
@@ -56,6 +59,7 @@ const DetailFeed = (props: ModalProps) => {
   const selectedDirectoryAnswerIds = props.selectedDirectoryAnswerIds
 
   const navigate = useNavigate()
+  const [userInfo, setUserInfo] = useRecoilState(userInfoState)
 
   const [isFlipped, setIsFlipped] = useState<boolean>(false)
 
@@ -138,6 +142,19 @@ const DetailFeed = (props: ModalProps) => {
       setCurrentAudio(audio)
       audio.play()
       setIsPlaying(true)
+    }
+  }
+
+  const deleteFeed = async () => {
+    try {
+      await deleteFeedApi(userInfo.accessToken, selectedFeed.answerId).then((res) => {
+        console.log(res)
+        if (res.status === 204) {
+          window.location.reload()
+        }
+      })
+    } catch (err) {
+      console.log(err)
     }
   }
 
@@ -270,7 +287,7 @@ const DetailFeed = (props: ModalProps) => {
             <BottomSheetEachIcon src={pencil} />
             <BottomSheetEachText color={colors.grey1}>그룹 수정하기</BottomSheetEachText>
           </BottomSheetEachWrapper>
-          <BottomSheetEachWrapper>
+          <BottomSheetEachWrapper onClick={deleteFeed}>
             <BottomSheetEachIcon src={trash} />
             <BottomSheetEachText color="#f00">플립 삭제하기</BottomSheetEachText>
           </BottomSheetEachWrapper>

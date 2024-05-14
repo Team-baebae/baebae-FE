@@ -44,3 +44,12 @@ export const connectGroupApi = (accessToken: string, categoryId: number, answerI
     },
   )
 }
+
+export const deleteFeedApi = (accessToken: string, answerId: number) => {
+  let API = `/api/answers/${answerId}`
+  return flipitAxios.delete(API, {
+    headers: {
+      Authorization: `Bearer ${accessToken}`,
+    },
+  })
+}
