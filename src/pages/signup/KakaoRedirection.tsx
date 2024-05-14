@@ -6,7 +6,7 @@ import {
   IsExistingAccountResponseProps,
   LoginProps,
   GetUserInfoProps,
-} from '@/pages/signup/types'
+} from '@/components/signup/types'
 import { getKakaoUserInfoApi, getUserInfoApi, isExistingAccountApi, loginApi } from '@/apis/UserApi'
 import { UserInfoStateProps, isLoggedInState, userInfoState } from '@/context/Atoms'
 import Loading from '@/components/common/Loading'
