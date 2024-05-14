@@ -35,15 +35,15 @@ const Landing3 = () => {
       },
     },
     offscreen: {
-      y: +50,
+      y: +100,
       opacity: 0,
     },
     onscreen: {
       y: 0,
       opacity: 1,
       transition: {
-        duration: 0.8,
-        delay: 0,
+        duration: 1.2,
+        delay: 0.1,
       },
     },
   }
