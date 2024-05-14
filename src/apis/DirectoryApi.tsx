@@ -1,12 +1,8 @@
 import { flipitAxios } from './apis'
 
-export const getDirectoriesApi = (accessToken: string, memberId: number) => {
+export const getDirectoriesApi = (memberId: number) => {
   let API = `/api/category/${memberId}`
-  return flipitAxios.get(API, {
-    headers: {
-      Authorization: `Bearer ${accessToken}`,
-    },
-  })
+  return flipitAxios.get(API)
 }
 
 export const makeDirectoryApi = (

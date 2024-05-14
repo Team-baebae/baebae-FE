@@ -27,7 +27,7 @@ const FolderList = ({ selectedDirectoryId, setSelectedDirectoryId }: FolderListP
   // 유저 디렉토리 조회
   const getDirectories = async () => {
     try {
-      await getDirectoriesApi(userInfo.accessToken, userInfo.memberId).then((res) => {
+      await getDirectoriesApi(userInfo.memberId).then((res) => {
         console.log(res)
         setDirectories(res.data.categories)
       })

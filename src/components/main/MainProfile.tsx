@@ -1,29 +1,38 @@
 import styled from 'styled-components'
 import { useEffect } from 'react'
-import { useRecoilValue } from 'recoil'
+import { useRecoilState, useRecoilValue } from 'recoil'
 import { colors } from '@/styles/colors'
-import { UserInfoStateProps, userInfoState } from '@/context/Atoms'
-import DefaultImage from '@/assets/main/DefaultImage.svg'
+import { UserInfoStateProps, ownerUserData, userInfoState } from '@/context/Atoms'
+import DefaultImage from '@/assets/main/DefaultImage.png'
+import { getOwnerProfileApi } from '@/apis/MainInfoApi'
 
 declare global {
   interface Window {
     Kakao: any
   }
 }
-interface MainProfileProps {
-  nickname: string | undefined
-  // image: string 프로필 이미지도 받아오기
-}
 
 // 메인프로필 컴포넌트
-const MainProfile = ({ nickname }: MainProfileProps) => {
+const MainProfile = () => {
   const userInfo = useRecoilValue<UserInfoStateProps>(userInfoState)
+  // 유저 데이터 정보
+  const [ownerUserInfo, setOwnerUserInfo] = useRecoilState(ownerUserData)
 
   const { Kakao } = window
   const javascriptKey: string = import.meta.env.VITE_KAKAO_JAVASCRIPT_KEY
   const realUrl: string = import.meta.env.VITE_CLIENT_URL
 
+  const getOwnerProfile = () => {
+    getOwnerProfileApi(ownerUserInfo.memberId).then((res) => {
+      setOwnerUserInfo({
+        ...ownerUserInfo,
+        imageUrl: res.imageUrl,
+      })
+    })
+  }
+
   useEffect(() => {
+    getOwnerProfile()
     // init 해주기 전에 clean up 을 해준다.
     Kakao.cleanup()
     Kakao.init(javascriptKey)
@@ -39,14 +48,14 @@ const MainProfile = ({ nickname }: MainProfileProps) => {
         description: '플리빗은 세상과 SNS로 대화하는 현세대의 소통 방법을 개선하고자 하는 Q&A 플랫폼입니다.',
         imageUrl: 'https://images.velog.io/images/sdb016/post/5d955cc9-06d0-433d-a059-a352e6f93d39/test.png',
         link: {
-          mobileWebUrl: `${realUrl}/${nickname}`,
+          mobileWebUrl: `${realUrl}/${ownerUserInfo.nickname}`,
         },
       },
       buttons: [
         {
           title: '플리빗 보러가기',
           link: {
-            mobileWebUrl: `${realUrl}/${nickname}`,
+            mobileWebUrl: `${realUrl}/${ownerUserInfo.nickname}`,
           },
         },
       ],
@@ -59,7 +68,7 @@ const MainProfile = ({ nickname }: MainProfileProps) => {
         await navigator.share({
           title: '타인을 알아가고 본인을 표현하는 가장 단순한 방법, 플리빗',
           text: '플리빗은 세상과 SNS로 대화하는 현세대의 소통 방법을 개선하고자 하는 Q&A 플랫폼입니다.',
-          url: `https://www.flipit.co.kr/${nickname}`,
+          url: `https://www.flipit.co.kr/${ownerUserInfo.nickname}`,
         })
       } catch (err) {
         console.log('에러')
@@ -72,13 +81,13 @@ const MainProfile = ({ nickname }: MainProfileProps) => {
   return (
     <Container>
       <ProfileContents>
-        <Nickname>{nickname}</Nickname>
+        <Nickname>{ownerUserInfo.nickname}</Nickname>
         <ShareButton onClick={sharing}>내 플리빗 초대</ShareButton>
       </ProfileContents>
-      {userInfo.profileImage === null ? (
+      {ownerUserInfo.imageUrl === '' ? (
         <ProfileImage src={DefaultImage} />
       ) : (
-        <ProfileImage src={userInfo.profileImage} />
+        <ProfileImage src={ownerUserInfo.imageUrl} />
       )}
     </Container>
   )
@@ -97,7 +106,8 @@ const Container = styled.div`
 const ProfileImage = styled.img`
   width: 80px;
   height: 80px;
-  border-radius: 80px;
+  border-radius: 100px;
+  background: lightgray 50% / cover no-repeat;
 `
 const ProfileContents = styled.div`
   display: flex;

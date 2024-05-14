@@ -60,7 +60,7 @@ const GroupPlus = () => {
   const selectedDirectoryId = 0
   const getFeeds = useCallback(async () => {
     try {
-      await getFeedsApi(userInfo.accessToken, userInfo.memberId, selectedDirectoryId).then((res) => {
+      await getFeedsApi(userInfo.memberId, selectedDirectoryId).then((res) => {
         console.log(res)
         setFeedList(res.data.content)
       })

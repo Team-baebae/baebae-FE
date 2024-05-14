@@ -32,6 +32,18 @@ export const getMemberIdApi = async (nickname: string) => {
   }
 }
 
+export const getOwnerProfileApi = async (memberId: number) => {
+  try {
+    let API = `api/member/profile-image/${memberId}`
+    const response = await flipitAxios.get(API, {
+      params: memberId,
+    })
+    return response.data
+  } catch (error) {
+    console.error(error)
+  }
+}
+
 // 질문 보내는 api
 export const postQuestionApi = async (memberId: number, question: QuestionProps, accessToken: string) => {
   try {
