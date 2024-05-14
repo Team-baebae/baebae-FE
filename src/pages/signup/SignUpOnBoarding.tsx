@@ -3,6 +3,8 @@ import { useLocation, useNavigate } from 'react-router-dom'
 import { BottomButton } from '@/components/common/Button'
 import { colors } from '@/styles/colors'
 import OnBoardingIcon from '@/assets/signup/OnboardingIcon.svg'
+import { useEffect } from 'react'
+import { registerServiceWorker, requestPermission } from '@/firebase-messaging-sw'
 
 // 회원가입 성공 화면
 const SignUpOnBoarding = () => {
@@ -12,6 +14,10 @@ const SignUpOnBoarding = () => {
   const location = useLocation()
   const nickname = location.state?.nickname
 
+  useEffect(() => {
+    requestPermission()
+    registerServiceWorker()
+  }, [])
   return (
     <Container>
       <Icon src={OnBoardingIcon} />

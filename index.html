@@ -21,16 +21,16 @@
     <script type="module" src="/src/main.tsx"></script>
     <script>
       if ('serviceWorker' in navigator) {
-        navigator.serviceWorker
-          .register('/service-worker.js')
-          .then((registration) => {
-            console.log('Service worker registration succeeded:', registration)
-          })
-          .catch((err) => {
-            console.log('Service worker registration failed:', error)
-          })
-      } else {
-        console.log('Service workers are not supported.')
+        window.addEventListener('load', function () {
+          navigator.serviceWorker
+            .register('/firebase-messaging-sw.js')
+            .then(function (registration) {
+              console.log('Service Worker가 scope에 등록되었습니다.:', registration.scope)
+            })
+            .catch(function (err) {
+              console.log('Service Worker 등록 실패:', err)
+            })
+        })
       }
     </script>
   </body>
