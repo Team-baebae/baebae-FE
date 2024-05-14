@@ -1,7 +1,7 @@
-import Phone from '@/assets/landing/PhoneFeed.png'
-import { colors } from '@/styles/colors'
 import styled from 'styled-components'
 import { motion } from 'framer-motion'
+import Phone from '@/assets/landing/PhoneFeed.png'
+import { colors } from '@/styles/colors'
 
 const Landing5 = () => {
   const Variants = {

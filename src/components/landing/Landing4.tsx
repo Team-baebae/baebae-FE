@@ -1,8 +1,8 @@
-import LandingLogoWhite from '@/assets/landing/LandingLogoWhite.svg'
-import { colors } from '@/styles/colors'
 import styled from 'styled-components'
 import { motion } from 'framer-motion'
 import { useState } from 'react'
+import LandingLogoWhite from '@/assets/landing/LandingLogoWhite.svg'
+import { colors } from '@/styles/colors'
 import LandingFeedFront from './LandingFeedFront'
 import LandingFeedBack from './LandingFeedBack'
 

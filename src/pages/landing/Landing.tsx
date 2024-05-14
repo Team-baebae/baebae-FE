@@ -26,11 +26,11 @@ const Landing = () => {
 export default Landing
 
 const Container = styled.div`
-  position: relative;
-  width: 100%;
   display: flex;
   flex-direction: column;
   align-items: center;
+  position: relative;
+  width: 100%;
   background-color: #181818;
 `
 const Header = styled.div`

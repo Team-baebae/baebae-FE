@@ -1,7 +1,7 @@
-import Phone from '@/assets/landing/PhoneInsta.png'
-import { colors } from '@/styles/colors'
 import styled from 'styled-components'
 import { motion } from 'framer-motion'
+import { colors } from '@/styles/colors'
+import Phone from '@/assets/landing/PhoneInsta.png'
 
 const Landing6 = () => {
   const INSTA_URL = 'https://www.instagram.com/flipit.co.kr?igsh=aXpzcGRnaGVncHNq&utm_source=qr'
