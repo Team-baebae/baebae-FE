@@ -337,7 +337,7 @@ const SearchMusicInput = styled.input`
   border-radius: 12px;
   background-color: ${colors.grey7};
   flex: 1 0 0;
-  color: ${colors.grey5};
+  color: ${colors.grey1};
   font-family: Pretendard;
   font-size: 14px;
   font-weight: 400;
@@ -346,6 +346,9 @@ const SearchMusicInput = styled.input`
   border: none;
   outline: none;
   cursor: pointer;
+  &::placeholder {
+    color: ${colors.grey5};
+  }
 `
 
 //2단계 모달 각 트랙

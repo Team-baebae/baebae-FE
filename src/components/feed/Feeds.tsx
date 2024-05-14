@@ -1,6 +1,8 @@
 import styled from 'styled-components'
 import { colors } from '../../styles/colors'
 import QuotationMark from '../../assets/question/QuotationMark.svg'
+import { useState } from 'react'
+import DetailFeed from './DetailFeed'
 
 interface FeedProps {
   answerId: number
@@ -25,11 +27,40 @@ interface FeedsProps {
 }
 
 const Feeds = ({ data }: FeedsProps) => {
+  const [selectedFeed, setSelectedFeed] = useState<FeedProps>({
+    answerId: -1,
+    questionId: -1,
+    questionContent: '',
+    memberId: -1,
+    content: '',
+    linkAttachments: [''],
+    musicName: '',
+    musicSinger: '',
+    musicAudioUrl: '',
+    imageUrls: [''],
+    createdDate: '',
+    heartCount: -1,
+    curiousCount: -1,
+    sadCount: -1,
+    fcmtoken: '',
+  })
+  // 모달 버튼 클릭 유무를 저장할 state
+  const [showModal, setShowModal] = useState<boolean>(false)
+  // 버튼 클릭시 모달 버튼 클릭 유무를 설정하는 state 함수
+  const clickFlip = (feed: FeedProps) => {
+    setSelectedFeed(feed)
+    clickModal()
+  }
+
+  const clickModal = () => {
+    setShowModal(!showModal)
+  }
+
   return (
     <>
       <GridContainer>
         {data.map((feed) => (
-          <FlipWrapper>
+          <FlipWrapper key={feed.answerId} onClick={() => clickFlip(feed)}>
             <Icon src={QuotationMark} />
             <FlipContent>{feed.questionContent}</FlipContent>
             <WriterBlock>
@@ -39,6 +70,7 @@ const Feeds = ({ data }: FeedsProps) => {
         ))}
       </GridContainer>
       <TotalFeedsBtn>전체 보기</TotalFeedsBtn>
+      {showModal && <DetailFeed setShowModal={setShowModal} showModal={showModal} selectedFeed={selectedFeed} />}
     </>
   )
 }
