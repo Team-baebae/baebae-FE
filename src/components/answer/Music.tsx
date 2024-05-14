@@ -324,6 +324,7 @@ const SearchedMusicText = styled.div<{ color: string }>`
   font-weight: 400;
   line-height: 150%;
   letter-spacing: -0.56px;
+  cursor: pointer;
 `
 
 const SearchMusicInput = styled.input`
@@ -362,6 +363,7 @@ const EachTrackWrapper = styled.div`
   padding: 20px;
   gap: 10px;
   background-color: ${colors.white};
+  cursor: pointer;
   &:hover {
     background-color: ${colors.grey7};
   }

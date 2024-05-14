@@ -87,6 +87,7 @@ const FlipWrapper = styled.div<{ selected: boolean }>`
   background-color: ${(props) => (props.selected ? 'rgba(138, 138, 138, 0.30)' : `${colors.white}`)};
   box-shadow: 0px 4px 4px 0px rgba(0, 0, 0, 0.08);
   border: ${(props) => props.selected && `2px solid ${colors.grey1}`};
+  cursor: pointer;
 `
 
 const CheckIcon = styled.img`

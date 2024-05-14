@@ -55,4 +55,5 @@ const QBtn = styled.button`
   font-weight: 600;
   line-height: 18px;
   letter-spacing: -0.24px;
+  cursor: pointer;
 `

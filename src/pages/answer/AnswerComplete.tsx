@@ -93,4 +93,5 @@ const Btn = styled.button<{ backgroundColor: string; color: string }>`
   font-weight: 600;
   line-height: 150%;
   letter-spacing: -0.28px;
+  cursor: pointer;
 `

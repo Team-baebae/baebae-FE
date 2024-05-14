@@ -211,6 +211,7 @@ const UnderlinedTermText = styled(TermText)`
   position: absolute;
   text-decoration-line: underline;
   right: 0px;
+  cursor: pointer;
 `
 
 const Line = styled.div`

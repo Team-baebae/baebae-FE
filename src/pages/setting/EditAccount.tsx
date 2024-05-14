@@ -165,6 +165,9 @@ export default EditAccount
 
 const Container = styled.div`
   position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
   width: 100%;
   height: 100%;
 `
@@ -174,7 +177,7 @@ const ProfileImageWrapper = styled.div`
   display: flex;
   flex-direction: column;
   align-items: center;
-  margin: 40px 20px;
+  margin: 40px 20px 0px;
   gap: 12px;
 `
 const ProfileImage = styled.img`
