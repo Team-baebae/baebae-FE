@@ -4,7 +4,7 @@ import { useState } from 'react'
 import { useLocation, useNavigate, useParams } from 'react-router-dom'
 import Header from '@/components/common/Header'
 import { BottomButton } from '@/components/common/Button'
-import FolderList from '@/components/category/FolderList'
+import AnswerFolderList from '@/components/category/AnswerFolderList'
 import { colors } from '@/styles/colors'
 import { UserInfoStateProps, userInfoState } from '@/context/Atoms'
 import { connectGroupApi } from '@/apis/AnswerApi'
@@ -42,7 +42,7 @@ const SelectCategory = () => {
     <Container>
       <Header text="답변하기" background={colors.grey7} />
       <FolderHeaderText>이 플립을 어떤 그룹에 추가할까요?</FolderHeaderText>
-      <FolderList selectedCategoryId={selectedCategoryId} setSelectedCategoryId={setSelectedCategoryId} />
+      <AnswerFolderList selectedCategoryId={selectedCategoryId} setSelectedCategoryId={setSelectedCategoryId} />
       <BottomButton $positive={selectedCategoryId === 0 ? false : true} func={connetGroup} text="완료" />
     </Container>
   )

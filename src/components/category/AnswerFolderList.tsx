@@ -4,7 +4,7 @@ import { useRecoilValue } from 'recoil'
 import { useEffect, useState } from 'react'
 import { BottomSheet } from 'react-spring-bottom-sheet'
 import 'react-spring-bottom-sheet/dist/style.css'
-import EachFolder from '@/components/category/EachFolder'
+import AnswerEachFolder from '@/components/category/AnswerEachFolder'
 import { UnFixedButton } from '@/components/common/Button'
 import { FolderListProps, categoryProps } from '@/components/category/types'
 import { colors } from '@/styles/colors'
@@ -13,7 +13,7 @@ import { getCategoriesApi, makeCategoryApi } from '@/apis/CategoryApi'
 import DefaultImg from '@/assets/main/DefaultImage.png'
 
 // 답변 입력 후 카테고리 선택페이지의 카테고리리스트 컴포넌트
-const FolderList = ({ selectedCategoryId, setSelectedCategoryId }: FolderListProps) => {
+const AnswerFolderList = ({ selectedCategoryId, setSelectedCategoryId }: FolderListProps) => {
   const navigate = useNavigate()
 
   // 리코일 로그인한 userInfo
@@ -90,7 +90,7 @@ const FolderList = ({ selectedCategoryId, setSelectedCategoryId }: FolderListPro
       {/* 카테고리 리스트 보여주기 */}
       {categories.map((item: any) => {
         return (
-          <EachFolder
+          <AnswerEachFolder
             selectedCategoryId={selectedCategoryId}
             category={item}
             $positive={true}
@@ -99,7 +99,7 @@ const FolderList = ({ selectedCategoryId, setSelectedCategoryId }: FolderListPro
         )
       })}
       {/* 카테고리 추가 */}
-      <EachFolder selectedCategoryId={selectedCategoryId} $positive={false} func={() => setOpen(!open)} />
+      <AnswerEachFolder selectedCategoryId={selectedCategoryId} $positive={false} func={() => setOpen(!open)} />
       {/* 카테고리 추가 시 나오는 bottom sheet 모달 */}
       <BottomSheet open={open} snapPoints={() => [433.09091]} onDismiss={handleDismissPlusMusicModal} blocking={true}>
         <PlusLinkText>새 그룹 추가</PlusLinkText>
@@ -150,7 +150,7 @@ const FolderList = ({ selectedCategoryId, setSelectedCategoryId }: FolderListPro
     </Container>
   )
 }
-export default FolderList
+export default AnswerFolderList
 
 const Container = styled.div`
   display: grid;

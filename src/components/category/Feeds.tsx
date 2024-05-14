@@ -1,33 +1,12 @@
 import styled from 'styled-components'
+import { FeedsProps } from '@/components/category/types'
 import { colors } from '@/styles/colors'
 import QuotationMark from '@/assets/question/QuotationMark.svg'
 import CheckBlackBack from '@/assets/feed/CheckBlackBack.svg'
 
-interface FeedProps {
-  answerId: number
-  questionId: number
-  questionContent: string
-  memberId: number
-  content: string
-  linkAttachments: string[]
-  musicName: string
-  musicSinger: string
-  musicAudioUrl: string
-  imageUrls: string[]
-  createdDate: string
-  heartCount: number
-  curiousCount: number
-  sadCount: number
-  fcmtoken: string
-}
-
-interface FeedsProps {
-  data: FeedProps[]
-  selectedAnswerIds: number[]
-  setSelectedAnswerIds: any
-}
-
+// 전체 모든피드들을 보여주는 컴포넌트
 const Feeds = ({ data, selectedAnswerIds, setSelectedAnswerIds }: FeedsProps) => {
+  // 피드 클릭 시 선택한 피드 리스트에 추가
   const handleFlipWrapperClick = (answerId: number) => {
     setSelectedAnswerIds((prev: number[]) => {
       const isSelected = prev.includes(answerId)

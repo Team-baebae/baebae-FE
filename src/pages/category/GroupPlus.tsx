@@ -6,61 +6,47 @@ import GroupHeader from '@/components/common/GroupHeader'
 import { UnFixedButton } from '@/components/common/Button'
 import Feeds from '@/components/category/Feeds'
 import NoFlip from '@/components/main/NoFlip'
-
 import { makeCategoryApi } from '@/apis/CategoryApi'
+import { getFeedsApi } from '@/apis/AnswerApi'
 import { userInfoState } from '@/context/Atoms'
 import { colors } from '@/styles/colors'
 import DefaultImg from '@/assets/main/DefaultImage.png'
-import { getFeedsApi } from '@/apis/AnswerApi'
+import { FeedProps } from '@/components/feed/types'
 
+// 새 그룹 생성 페이지
 const GroupPlus = () => {
   const navigate = useNavigate()
 
+  // 리코일 로그인한 userInfo
   const userInfo = useRecoilValue(userInfoState)
 
-  const [directoryImgUrl, setDirectoryImgUrl] = useState<string>('')
-  const [directoryImgFile, setDirectoryImgFile] = useState<File>()
+  // 카테고리 정보 저장
+  const [categoryImgUrl, setCategoryImgUrl] = useState<string>('')
+  const [categoryImgFile, setCategoryImgFile] = useState<File>()
   const [selectedAnswerIds, setSelectedAnswerIds] = useState<number[]>([])
   // 이미지 파일 선택 핸들러
   const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files && e.target.files[0]
     // 이미지 파일을 보낼 시엔 formData로 file을 추가해야함(추후 추가)
     if (file) {
-      setDirectoryImgFile(file)
-      setDirectoryImgUrl(URL.createObjectURL(file)) // 미리보기를 위해 파일 URL 생성
+      setCategoryImgFile(file)
+      setCategoryImgUrl(URL.createObjectURL(file)) // 미리보기를 위해 파일 URL 생성
     }
   }
 
+  // 카테고리 이름
   const [categoryName, setCategoryName] = useState<string>('')
-
   const onChangeFolderName = (e: React.ChangeEvent<HTMLInputElement>) => {
     const value = e.target.value
     setCategoryName(value)
   }
 
-  interface FeedProps {
-    answerId: number
-    questionId: number
-    questionContent: string
-    memberId: number
-    content: string
-    linkAttachments: string[]
-    musicName: string
-    musicSinger: string
-    musicAudioUrl: string
-    imageUrls: string[]
-    createdDate: string
-    heartCount: number
-    curiousCount: number
-    sadCount: number
-    fcmtoken: string
-  }
-
+  //전체 피드리스트 조회
   const [feedList, setFeedList] = useState<FeedProps[]>([])
-  const selectedDirectoryId = 0
+  const selectedCategoryId = 0
   const getFeeds = useCallback(async () => {
     try {
-      await getFeedsApi(userInfo.memberId, selectedDirectoryId).then((res) => {
+      await getFeedsApi(userInfo.memberId, selectedCategoryId).then((res) => {
         console.log(res)
         setFeedList(res.data.content)
       })
@@ -69,12 +55,13 @@ const GroupPlus = () => {
     }
   }, [])
 
-  const makeDirectory = async () => {
+  // 카테고리 생성
+  const makecategory = async () => {
     try {
       await makeCategoryApi(
         userInfo.accessToken,
         userInfo.memberId,
-        directoryImgFile,
+        categoryImgFile,
         categoryName,
         selectedAnswerIds,
       ).then((res) => {
@@ -93,13 +80,15 @@ const GroupPlus = () => {
   return (
     <Container>
       <GroupHeader text="새 그룹 추가" background={colors.grey7} />
+      {/* 카테고리 이미지 */}
       <FolderImgWrapper>
-        {directoryImgUrl === '' ? <FolderImg src={DefaultImg} /> : <FolderImg src={directoryImgUrl} />}
+        {categoryImgUrl === '' ? <FolderImg src={DefaultImg} /> : <FolderImg src={categoryImgUrl} />}
       </FolderImgWrapper>
       <label htmlFor="file">
         <EditFolderImgText>사진 수정하기</EditFolderImgText>
       </label>
       <input type="file" name="file" id="file" style={{ display: 'none' }} onChange={handleImageChange} />
+      {/* 카테고리 이름 */}
       <FolderNameLabel>그룹명</FolderNameLabel>
       <FolderName value={categoryName} onChange={onChangeFolderName} placeholder="그룹명을 입력해주세요" />
       <FolderNameConditionWrapper>
@@ -128,14 +117,16 @@ const GroupPlus = () => {
       <FolderNameConditionText color={colors.grey3} fontSize="12px" margin="40px 20px 0px 20px">
         추가할 플립 선택
       </FolderNameConditionText>
+      {/* 전체 피드리스트 */}
       {feedList.length > 0 ? (
         <Feeds data={feedList} selectedAnswerIds={selectedAnswerIds} setSelectedAnswerIds={setSelectedAnswerIds} />
       ) : (
         <NoFlip />
       )}
+      {/* 카테고리 생성 버튼 */}
       <UnFixedButton
         $positive={categoryName === '' ? false : true}
-        func={makeDirectory}
+        func={makecategory}
         func2={() => console.log('그룹 생성 실패')}
         text="그룹 추가하기"
         margin="30px 20px 30px 20px"
