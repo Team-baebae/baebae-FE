@@ -1,11 +1,11 @@
 import { flipitAxios } from './apis'
 
-export const getDirectoriesApi = (memberId: number) => {
+export const getCategoriesApi = (memberId: number) => {
   let API = `/api/category/${memberId}`
   return flipitAxios.get(API)
 }
 
-export const makeDirectoryApi = (
+export const makeCategoryApi = (
   accessToken: string,
   memberId: number,
   groupImgFile: File | undefined,
@@ -35,7 +35,7 @@ export const makeDirectoryApi = (
   })
 }
 
-export const deleteDirectoryApi = (accessToken: string, categoryId: number) => {
+export const deleteCategoryApi = (accessToken: string, categoryId: number) => {
   let API = `/api/category/${categoryId}`
   return flipitAxios.delete(API, {
     headers: {
@@ -44,7 +44,7 @@ export const deleteDirectoryApi = (accessToken: string, categoryId: number) => {
   })
 }
 
-export const modifyDirectoryApi = (
+export const modifyCategoryApi = (
   accessToken: string,
   categoryId: number,
   categoryName: string,
@@ -66,7 +66,7 @@ export const modifyDirectoryApi = (
   )
 }
 
-export const updateDirectoryImgApi = (accessToken: string, categoryId: number, imageFile: File | undefined) => {
+export const updateCategoryImgApi = (accessToken: string, categoryId: number, imageFile: File | undefined) => {
   const formData = new FormData()
   if (imageFile) formData.append('imageFile', imageFile)
 

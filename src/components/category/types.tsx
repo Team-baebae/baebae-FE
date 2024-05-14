@@ -1,5 +1,5 @@
 // 디렉토리 Props
-export interface directoryProps {
+export interface categoryProps {
   categoryId: number
   categoryName: string
   answerIds: number[]

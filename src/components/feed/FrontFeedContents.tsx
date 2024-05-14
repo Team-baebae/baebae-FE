@@ -1,31 +1,10 @@
 import styled from 'styled-components'
-import { colors } from '../../styles/colors'
-import QuotationMark from '../../assets/question/QuotationMark.svg'
+import { SelectedFeedProps } from '@/components/feed/types'
+import { colors } from '@/styles/colors'
+import QuotationMark from '@/assets/question/QuotationMark.svg'
 
-interface FeedProps {
-  answerId: number
-  questionId: number
-  questionContent: string
-  memberId: number
-  content: string
-  linkAttachments: string[]
-  musicName: string
-  musicSinger: string
-  musicAudioUrl: string
-  imageUrls: string[]
-  createdDate: string
-  heartCount: number
-  curiousCount: number
-  sadCount: number
-  fcmtoken: string
-}
-
-interface Props {
-  selectedFeed: FeedProps
-}
-
-const FrontFeedContents = (props: Props) => {
-  const writer = '추후수정'
+// 피드의 질문 컴포넌트
+const FrontFeedContents = (props: SelectedFeedProps) => {
   const selectedFeed = props.selectedFeed
   return (
     <FlipWrapper>
@@ -34,7 +13,7 @@ const FrontFeedContents = (props: Props) => {
         <FlipContent>{selectedFeed.questionContent}</FlipContent>
       </ContentWrapper>
       <WriterBlock>
-        FROM <WriterRegion>{writer}님</WriterRegion>
+        FROM <WriterRegion>추후수정님</WriterRegion>
       </WriterBlock>
     </FlipWrapper>
   )
@@ -49,11 +28,11 @@ const Icon = styled.img`
 `
 const FlipWrapper = styled.div`
   display: flex;
-  height: 100%;
-  padding: 30px;
   flex-direction: column;
   justify-content: space-between;
   align-items: flex-start;
+  height: 100%;
+  padding: 30px;
   background: ${colors.white};
   box-shadow: 0px 4.945px 8.655px 0px rgba(0, 0, 0, 0.32);
 `
@@ -64,7 +43,6 @@ const FlipContent = styled.div`
   color: ${colors.grey1};
   font-family: Pretendard;
   font-size: 20px;
-  font-style: normal;
   font-weight: 600;
   line-height: 30px;
   letter-spacing: -0.8px;
@@ -78,21 +56,19 @@ const WriterBlock = styled.div`
   color: ${colors.primary};
   font-family: Pretendard;
   font-size: 14px;
-  font-style: normal;
   font-weight: 500;
   line-height: 21px;
   letter-spacing: -0.28px;
 `
 
 const WriterRegion = styled.button`
-  color: ${colors.grey4};
-  font-family: Pretendard;
-  font-size: 14px;
-  font-style: normal;
-  font-weight: 500;
-  line-height: 21px;
-  letter-spacing: -0.28px;
   border: none;
   outline: none;
   background-color: transparent;
+  color: ${colors.grey4};
+  font-family: Pretendard;
+  font-size: 14px;
+  font-weight: 500;
+  line-height: 21px;
+  letter-spacing: -0.28px;
 `
