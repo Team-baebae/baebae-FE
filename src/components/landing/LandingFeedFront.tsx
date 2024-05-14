@@ -1,6 +1,6 @@
 import styled from 'styled-components'
-import { colors } from '../../styles/colors'
-import QuotationMark from '../../assets/question/QuotationMark.svg'
+import { colors } from '@/styles/colors'
+import QuotationMark from '@/assets/question/QuotationMark.svg'
 
 const LandingFeedFront = () => {
   const question = '승우야 너 네일 정말 잘 아는 것 같아! 추천 좀 해줘'
@@ -28,14 +28,14 @@ const Icon = styled.img`
 `
 const FlipWrapper = styled.div`
   display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  align-items: flex-start;
   width: 300px;
   height: 329.524px;
   padding: 28.571px;
   border-radius: 1.905px;
-  flex-direction: column;
-  justify-content: space-between;
-  align-items: flex-start;
-  background: ${colors.white};
+  background-color: ${colors.white};
   box-shadow: 0px 4.71px 8.242px 0px rgba(0, 0, 0, 0.18);
 `
 const ContentWrapper = styled.div``
@@ -64,6 +64,7 @@ const WriterBlock = styled.div`
 `
 
 const WriterRegion = styled.button`
+  background-color: transparent;
   color: ${colors.grey4};
   font-family: Pretendard;
   font-size: 15.476px;
@@ -72,5 +73,4 @@ const WriterRegion = styled.button`
   letter-spacing: -0.31px;
   border: none;
   outline: none;
-  background-color: transparent;
 `

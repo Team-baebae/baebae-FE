@@ -1,7 +1,7 @@
-import { colors } from '@/styles/colors'
 import styled from 'styled-components'
 import { motion } from 'framer-motion'
 import { useState } from 'react'
+import { colors } from '@/styles/colors'
 import LandingTelepathy from './LandingTelepathy'
 import LandingFeedBack from './LandingFeedBack'
 

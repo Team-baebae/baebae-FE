@@ -1,9 +1,9 @@
-import Phone from '@/assets/landing/PhoneAsk.png'
-import Phone2 from '@/assets/landing/PhoneAsk2.png'
-import { colors } from '@/styles/colors'
 import styled from 'styled-components'
 import { motion } from 'framer-motion'
 import { useEffect, useState } from 'react'
+import { colors } from '@/styles/colors'
+import Phone from '@/assets/landing/PhoneAsk.png'
+import Phone2 from '@/assets/landing/PhoneAsk2.png'
 
 const Landing3 = () => {
   const [imageIndex, setImageIndex] = useState<number>(0)

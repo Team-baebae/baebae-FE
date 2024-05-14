@@ -24,6 +24,7 @@ const Photo = styled.img`
 `
 const FlipWrapper = styled.div`
   display: flex;
+  flex-direction: column;
   width: 300px;
   height: 329.448px;
   padding: 18.4px;
