@@ -12,7 +12,7 @@ import ForwardArrow from '@/assets/setting/ForwardArrow.svg'
 const Settings = () => {
   const navigate = useNavigate()
 
-  // 리코일 유저정보
+  // 리코일 로그인한 유저정보
   const [userInfo, setUserInfo] = useRecoilState<UserInfoStateProps>(userInfoState)
   // 리코일 로그인 여부
   const setIsLoggedIn = useSetRecoilState(isLoggedInState)

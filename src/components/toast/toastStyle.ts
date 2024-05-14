@@ -2,6 +2,7 @@ import { ToastContainer } from 'react-toastify'
 import styled from 'styled-components'
 import { colors } from '@/styles/colors'
 
+// 토스트 컴포넌트
 export const StyledToastContainer = styled(ToastContainer)`
   .Toastify__toast {
     display: flex;

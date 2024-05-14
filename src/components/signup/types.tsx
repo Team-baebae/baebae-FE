@@ -1,3 +1,4 @@
+// 약관 props
 export interface TermsProps {
   isChecked: {
     isCheckedTotal: boolean
