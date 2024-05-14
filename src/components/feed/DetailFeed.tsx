@@ -19,7 +19,7 @@ import TelePathyMotion from './TelepathyMotion'
 import { useNavigate } from 'react-router-dom'
 import { deleteFeedApi } from '@/apis/AnswerApi'
 import { useRecoilState } from 'recoil'
-import { userInfoState } from '@/context/Atoms'
+import { isMineState, userInfoState } from '@/context/Atoms'
 
 interface FeedProps {
   answerId: number
@@ -60,7 +60,8 @@ const DetailFeed = (props: ModalProps) => {
 
   const navigate = useNavigate()
   const [userInfo, setUserInfo] = useRecoilState(userInfoState)
-
+  // 내 페이지인지 여부 확인
+  const [isMyPage, setIsMyPage] = useRecoilState(isMineState)
   const [isFlipped, setIsFlipped] = useState<boolean>(false)
 
   const backModal = () => {
@@ -190,7 +191,7 @@ const DetailFeed = (props: ModalProps) => {
                 </LinkButton>
               )}
             </Links>
-            <Icon src={MoreDots} width={24} height={24} onClick={MoreClick} />
+            {isMyPage && <Icon src={MoreDots} width={24} height={24} onClick={MoreClick} />}
           </TopContents>
           <ModalWrapper onClick={handleClick} transition={spring}>
             <CardWrapper
