@@ -1,7 +1,7 @@
-import LandingLogoGradient from '@/assets/landing/LandingLogoGradient.svg'
-import { colors } from '@/styles/colors'
 import styled from 'styled-components'
 import { motion } from 'framer-motion'
+import LandingLogoGradient from '@/assets/landing/LandingLogoGradient.svg'
+import { colors } from '@/styles/colors'
 
 const Landing2 = () => {
   const Variants = {
@@ -33,8 +33,8 @@ export default Landing2
 const Container = styled(motion.div)``
 const ContentWrapper = styled.div`
   gap: 12px;
-  text-align: center;
   margin: 120px 0px;
+  text-align: center;
 `
 const Logo = styled.img`
   width: 43px;
@@ -44,7 +44,6 @@ const TitleText = styled.h1`
   color: ${colors.white};
   font-family: Pretendard;
   font-size: 22px;
-  font-style: normal;
   font-weight: 500;
   line-height: 33px;
   letter-spacing: -1.1px;

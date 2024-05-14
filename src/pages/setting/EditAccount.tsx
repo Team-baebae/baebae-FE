@@ -1,16 +1,14 @@
 import styled from 'styled-components'
 import { useNavigate } from 'react-router-dom'
 import { useRecoilState } from 'recoil'
-import { Flip, toast } from 'react-toastify'
 import { ChangeEvent, useState } from 'react'
 import { BottomButton } from '@/components/common/Button'
 import Header from '@/components/common/Header'
 import IsValidNicknameText from '@/components/common/IsValidNicknameText'
-import { StyledToastContainer } from '@/components/toast/toastStyle'
 import { colors } from '@/styles/colors'
 import { UserInfoStateProps, userInfoState } from '@/context/Atoms'
 import { isExistingNicknameApi, updateUserNicknameApi, updateUserProfileApi } from '@/apis/UserApi'
-import DefaultImg from '@/assets/main/DefaultImage.svg'
+import DefaultImg from '@/assets/main/DefaultImage.png'
 
 // 계정 정보 수정 페이지
 const EditAccount = () => {
@@ -157,18 +155,7 @@ const EditAccount = () => {
         $positive={(isValid && isClickDuplicate && !isDuplicate) || startNickname === nickname ? true : false}
         text="수정하기"
         func={onClickModifyBtn}
-        func2={() => toast('올바른 아이디 형식을 입력하세요')}
-      />
-      <StyledToastContainer
-        position="bottom-center"
-        autoClose={1000}
-        hideProgressBar
-        pauseOnHover={false}
-        closeOnClick={false}
-        closeButton={false}
-        rtl={false}
-        theme="dark"
-        transition={Flip}
+        func2={() => console.log('잘못된 형식의 아이디')}
       />
     </Container>
   )
@@ -178,6 +165,9 @@ export default EditAccount
 
 const Container = styled.div`
   position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
   width: 100%;
   height: 100%;
 `
@@ -187,7 +177,7 @@ const ProfileImageWrapper = styled.div`
   display: flex;
   flex-direction: column;
   align-items: center;
-  margin: 40px 20px;
+  margin: 40px 20px 0px;
   gap: 12px;
 `
 const ProfileImage = styled.img`

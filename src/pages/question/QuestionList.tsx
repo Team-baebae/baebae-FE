@@ -124,8 +124,23 @@ const QuestionList = () => {
         ) : (
           <GridContainer>
             {questions.map((value) => (
-              <FlipWrapper key={value.questionId}>
-                <DeleteIcon src={CloseIcon} onClick={() => clickDeletion(value.questionId)} />
+              <FlipWrapper
+                onClick={() => {
+                  navigate(`/questions/${value.questionId}/answer`, {
+                    state: {
+                      question: value,
+                    },
+                  })
+                }}
+                key={value.questionId}
+              >
+                <DeleteIcon
+                  src={CloseIcon}
+                  onClick={(event) => {
+                    event.stopPropagation()
+                    clickDeletion(value.questionId)
+                  }}
+                />
                 <Icon src={QuotationMark} />
                 <FlipContent>{value.content}</FlipContent>
                 <WriterBlock>
@@ -195,6 +210,7 @@ const DeleteIcon = styled.img`
   right: 4px;
   width: 24px;
   height: 24px;
+  z-index: 5;
   cursor: pointer;
 `
 const Icon = styled.img`

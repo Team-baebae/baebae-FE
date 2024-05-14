@@ -6,6 +6,8 @@ import BackFeedContents from './BackFeedContents'
 import FrontFeedContents from './FrontFeedContents'
 import MusicIcon from '../../assets/MusicWhite.svg'
 import PlayIcon from '../../assets/PlayGray.svg'
+import PauseIcon from '../../assets/PauseGray.svg'
+
 import LinkIcon from '../../assets/LinkWhite.svg'
 import MoreDots from '../../assets/MoreDots.svg'
 import { colors } from '../../styles/colors'
@@ -14,14 +16,63 @@ import pencil from '../../assets/main/Pencil.svg'
 import trash from '../../assets/main/Trash.svg'
 import Download from '../../assets/Download.svg'
 import TelePathyMotion from './TelepathyMotion'
+import { useNavigate } from 'react-router-dom'
+import { deleteFeedApi } from '@/apis/AnswerApi'
+import { useRecoilState } from 'recoil'
+import { isMineState, userInfoState } from '@/context/Atoms'
+
+interface FeedProps {
+  answerId: number
+  questionId: number
+  questionContent: string
+  memberId: number
+  content: string
+  linkAttachments: string[]
+  musicName: string
+  musicSinger: string
+  musicAudioUrl: string
+  imageUrls: string[]
+  createdDate: string
+  heartCount: number
+  curiousCount: number
+  sadCount: number
+  fcmtoken: string
+}
 
 interface ModalProps {
-  clickModal: () => void
+  setShowModal: any
+  showModal: boolean
+  selectedFeed: FeedProps
+  selectedDirectoryId: number
+  selectedDirectoryImage: string
+  selectedDirectoryGroupName: string
+  selectedDirectoryAnswerIds: number[]
 }
 
 const DetailFeed = (props: ModalProps) => {
-  const backModal = props.clickModal
+  const setShowModal = props.setShowModal
+  const showModal = props.showModal
+  const selectedFeed = props.selectedFeed
+  const selectedDirectoryId = props.selectedDirectoryId
+  const selectedDirectoryImage = props.selectedDirectoryImage
+  const selectedDirectoryGroupName = props.selectedDirectoryGroupName
+  const selectedDirectoryAnswerIds = props.selectedDirectoryAnswerIds
+
+  const navigate = useNavigate()
+  const [userInfo, setUserInfo] = useRecoilState(userInfoState)
+  // 내 페이지인지 여부 확인
+  const [isMyPage, setIsMyPage] = useRecoilState(isMineState)
   const [isFlipped, setIsFlipped] = useState<boolean>(false)
+
+  const backModal = () => {
+    if (isPlaying) {
+      currentAudio?.pause()
+      setIsPlaying(false)
+      setShowModal(!showModal)
+    } else {
+      setShowModal(!showModal)
+    }
+  }
 
   const spring = {
     type: 'spring',
@@ -36,12 +87,12 @@ const DetailFeed = (props: ModalProps) => {
 
   const MusicClick = (e: React.MouseEvent<HTMLDivElement>) => {
     e.stopPropagation()
-    console.log('음악재생')
+    handlePreview(selectedFeed.musicAudioUrl)
   }
   const LinkClick = (e: React.MouseEvent<HTMLDivElement>) => {
     e.stopPropagation()
     // 링크 복사
-    navigator.clipboard.writeText(link)
+    navigator.clipboard.writeText(selectedFeed?.linkAttachments[0] || 'https://www.flipit.co.kr')
   }
 
   const [open, setOpen] = useState<boolean>(false)
@@ -52,12 +103,6 @@ const DetailFeed = (props: ModalProps) => {
   const handleDismiss = () => {
     setOpen(false)
   }
-
-  const music = 'Attention - NewJeans'
-  const link = 'https://www.flipit.co.kr'
-  const heartNum = 23
-  const seeNum = 20
-  const sadNum = 100
 
   const [giveHeart, setGiveHeart] = useState<boolean>(false)
   const [giveSee, setGiveSee] = useState<boolean>(false)
@@ -74,6 +119,46 @@ const DetailFeed = (props: ModalProps) => {
   }
 
   const [popLottie, setPopLottie] = useState<boolean>(false)
+
+  //현재 실행하고 있는 트랙 저장
+  const [currentAudio, setCurrentAudio] = useState<HTMLAudioElement | null>(null)
+  //현재 실행중인지 여부 확인
+  const [isPlaying, setIsPlaying] = useState<boolean>(false)
+  //   트랙 미리듣기
+  const handlePreview = (previewUrl: string) => {
+    if (currentAudio && currentAudio.src === previewUrl) {
+      // 이미 실행 중인 노래의 버튼을 다시 누르면 일시 중지/재생 토글
+      if (isPlaying) {
+        currentAudio.pause()
+      } else {
+        currentAudio.play()
+      }
+      setIsPlaying(!isPlaying)
+    } else {
+      // 다른 노래의 버튼을 누르면 기존 노래 중지 후 새로운 노래 재생
+      if (currentAudio) {
+        currentAudio.pause()
+      }
+      const audio = new Audio(previewUrl)
+      setCurrentAudio(audio)
+      audio.play()
+      setIsPlaying(true)
+    }
+  }
+
+  const deleteFeed = async () => {
+    try {
+      await deleteFeedApi(userInfo.accessToken, selectedFeed.answerId).then((res) => {
+        console.log(res)
+        if (res.status === 204) {
+          window.location.reload()
+        }
+      })
+    } catch (err) {
+      console.log(err)
+    }
+  }
+
   return (
     <>
       <AnimatePresence>
@@ -86,17 +171,27 @@ const DetailFeed = (props: ModalProps) => {
         >
           <TopContents>
             <Links>
-              <LinkButton onClick={MusicClick}>
-                <Icon src={MusicIcon} />
-                <OverflowText width="60px">{music}</OverflowText>
-                <Icon src={PlayIcon} />
-              </LinkButton>
-              <LinkButton onClick={LinkClick}>
-                <Icon src={LinkIcon} />
-                <OverflowText width="82px">{link}</OverflowText>
-              </LinkButton>
+              {selectedFeed?.musicName !== '' && (
+                <LinkButton onClick={MusicClick}>
+                  <Icon src={MusicIcon} />
+                  <OverflowText width="60px">
+                    {selectedFeed?.musicName} - {selectedFeed?.musicSinger}
+                  </OverflowText>
+                  {currentAudio && currentAudio.src === selectedFeed.musicAudioUrl && isPlaying ? (
+                    <Icon onClick={() => handlePreview(selectedFeed.musicAudioUrl)} src={PauseIcon} alt="pause" />
+                  ) : (
+                    <Icon onClick={() => handlePreview(selectedFeed.musicAudioUrl)} src={PlayIcon} alt="play" />
+                  )}
+                </LinkButton>
+              )}
+              {selectedFeed?.linkAttachments[0] !== '' && (
+                <LinkButton onClick={LinkClick}>
+                  <Icon src={LinkIcon} />
+                  <OverflowText width="82px">{selectedFeed?.linkAttachments[0]}</OverflowText>
+                </LinkButton>
+              )}
             </Links>
-            <Icon src={MoreDots} width={24} height={24} onClick={MoreClick} />
+            {isMyPage && <Icon src={MoreDots} width={24} height={24} onClick={MoreClick} />}
           </TopContents>
           <ModalWrapper onClick={handleClick} transition={spring}>
             <CardWrapper
@@ -104,7 +199,7 @@ const DetailFeed = (props: ModalProps) => {
               transition={spring}
               style={{ zIndex: isFlipped ? 0 : 1 }}
             >
-              <FrontFeedContents />
+              <FrontFeedContents selectedFeed={selectedFeed} />
             </CardWrapper>
             <CardWrapper
               initial={{ rotateY: 180 }}
@@ -115,7 +210,7 @@ const DetailFeed = (props: ModalProps) => {
               }}
             >
               {/* 뒷면 */}
-              <BackFeedContents />
+              <BackFeedContents selectedFeed={selectedFeed} />
             </CardWrapper>
           </ModalWrapper>
           <BottomContents>
@@ -127,7 +222,7 @@ const DetailFeed = (props: ModalProps) => {
               }}
             >
               <EmotionText>🖤</EmotionText>
-              <EmotionText>{heartNum}</EmotionText>
+              <EmotionText>{selectedFeed.heartCount}</EmotionText>
             </EmotionButton>
             <EmotionButton
               state={giveSee}
@@ -137,7 +232,7 @@ const DetailFeed = (props: ModalProps) => {
               }}
             >
               <EmotionText>👀</EmotionText>
-              <EmotionText>{seeNum}</EmotionText>
+              <EmotionText>{selectedFeed.curiousCount}</EmotionText>
             </EmotionButton>
             <EmotionButton
               state={giveSad}
@@ -147,7 +242,7 @@ const DetailFeed = (props: ModalProps) => {
               }}
             >
               <EmotionText>🥺</EmotionText>
-              <EmotionText>{sadNum}</EmotionText>
+              <EmotionText>{selectedFeed.sadCount}</EmotionText>
             </EmotionButton>
             <TelepathyButton state={giveTelepathy} onClick={clickTelepathy}>
               <EmotionText style={{ fontSize: 20 }}>👉🏻</EmotionText>
@@ -169,18 +264,33 @@ const DetailFeed = (props: ModalProps) => {
       {open && (
         <BottomSheet
           open={open}
-          snapPoints={() => [170]}
+          snapPoints={() => [231]}
           onDismiss={handleDismiss}
           blocking={true}
           style={{ zIndex: 100 }}
         >
           <BottomSheetEachWrapper>
             <BottomSheetEachIcon src={pencil} />
+            <BottomSheetEachText color={colors.grey1}>플립 수정하기</BottomSheetEachText>
+          </BottomSheetEachWrapper>
+          <BottomSheetEachWrapper
+            onClick={() => {
+              navigate(`/groups/${selectedDirectoryId}/edit`, {
+                state: {
+                  categoryId: selectedDirectoryId,
+                  categoryImage: selectedDirectoryImage,
+                  categoryName: selectedDirectoryGroupName,
+                  answerIds: selectedDirectoryAnswerIds,
+                },
+              })
+            }}
+          >
+            <BottomSheetEachIcon src={pencil} />
             <BottomSheetEachText color={colors.grey1}>그룹 수정하기</BottomSheetEachText>
           </BottomSheetEachWrapper>
-          <BottomSheetEachWrapper>
+          <BottomSheetEachWrapper onClick={deleteFeed}>
             <BottomSheetEachIcon src={trash} />
-            <BottomSheetEachText color="#f00">그룹 삭제하기</BottomSheetEachText>
+            <BottomSheetEachText color="#f00">플립 삭제하기</BottomSheetEachText>
           </BottomSheetEachWrapper>
         </BottomSheet>
       )}

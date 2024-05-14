@@ -1,7 +1,9 @@
 import styled from 'styled-components'
-import { useEffect, useRef, useState } from 'react'
+import { useCallback, useEffect, useRef, useState } from 'react'
 import Header from '@/components/common/Header'
 import { colors } from '@/styles/colors'
+import { Flip, toast } from 'react-toastify'
+
 import { Swiper, SwiperSlide } from 'swiper/react'
 import 'swiper/swiper-bundle.css'
 import 'swiper/css'
@@ -11,41 +13,56 @@ import 'react-spring-bottom-sheet/dist/style.css'
 import pencil from '@/assets/main/Pencil.svg'
 import trash from '@/assets/main/Trash.svg'
 import { useNavigate } from 'react-router-dom'
-import { useRecoilValue } from 'recoil'
-import { userInfoState } from '@/context/Atoms'
+import { useRecoilState, useRecoilValue } from 'recoil'
+import { isMineState, ownerUserData, userInfoState } from '@/context/Atoms'
 import { deleteDirectoryApi, getDirectoriesApi } from '@/apis/DirectoryApi'
 import plus from '@/assets/main/Plus.svg'
+import { getFeedsApi } from '@/apis/AnswerApi'
+import { StyledToastContainer } from '@/components/toast/toastStyle'
+import { directoryProps } from '@/components/main/types'
 
 const Groups = () => {
-  interface directory {
-    categoryId: number
-    categoryName: string
-    answerAnswers: number[]
-    categoryImage: string
+  interface FeedProps {
+    answerId: number
+    questionId: number
+    questionContent: string
+    memberId: number
+    content: string
+    linkAttachments: string[]
+    musicName: string
+    musicSinger: string
+    musicAudioUrl: string
+    imageUrls: string[]
+    createdDate: string
+    heartCount: number
+    curiousCount: number
+    sadCount: number
+    fcmtoken: string
   }
 
-  const getDirectories = async () => {
-    try {
-      await getDirectoriesApi(userInfo.accessToken, userInfo.memberId).then((res) => {
-        setDirectories(res.data.categories)
-      })
-    } catch (err) {
-      console.log(err)
-    }
-  }
+  // 리코일 계정주인의 userInfo
+  const [ownerUserInfo, setOwnerUserInfo] = useRecoilState(ownerUserData)
+  // 내 페이지인지 여부 확인
+  const [isMyPage, setIsMyPage] = useRecoilState(isMineState)
 
   const navigate = useNavigate()
 
   const userInfo = useRecoilValue(userInfoState)
 
-  const [selectedDirectoryId, setSelectedDirectoryId] = useState<number>(0) // 선택된 디렉토리 ID 상태
+  // 보여줄 선택된 디렉토리
+  const [selectedDirectoryId, setSelectedDirectoryId] = useState<number>(0)
+  const [selectedDirectoryGroupName, setSelectedDirectoryGroupName] = useState<string>('')
+  const [selectedDirectoryImage, setSelectedDirectoryImage] = useState<string>('')
+  const [selectedDirectoryAnswerIds, setSelectedDirectoryAnswerIds] = useState<number[]>([])
   const holdTimer = useRef<number | null>(null) // useRef에 타입 명시
 
   // open은 모달 열고 닫는 상태
   const [open, setOpen] = useState<boolean>(false)
-
-  const openModal = (directoryId: number) => {
-    setSelectedDirectoryId(directoryId) // 선택된 디렉토리 ID 설정
+  const openModal = (categoryId: number, categoryImage: string, categoryName: string, answerIds: number[]) => {
+    setSelectedDirectoryId(categoryId)
+    setSelectedDirectoryImage(categoryImage)
+    setSelectedDirectoryGroupName(categoryName)
+    setSelectedDirectoryAnswerIds(answerIds)
     setOpen(true)
   }
   // 모달 이전상태로 변화
@@ -56,9 +73,9 @@ const Groups = () => {
   // 꾹 누르기 기능
   const bind = useGesture({
     onPointerDown: ({ event, args }) => {
-      const directoryId = args[0] as number // args를 통해 directoryId 받기
+      const [categoryId, categoryImage, categoryName, answerIds] = args as [number, string, string, number[]]
       event.preventDefault()
-      holdTimer.current = window.setTimeout(() => openModal(directoryId), 500)
+      holdTimer.current = window.setTimeout(() => openModal(categoryId, categoryImage, categoryName, answerIds), 500)
     },
     onPointerUp: () => {
       if (holdTimer.current !== null) {
@@ -74,21 +91,31 @@ const Groups = () => {
     },
   })
 
+  // 디렉토리 삭제
   const deleteDirectory = async () => {
     try {
-      await deleteDirectoryApi(userInfo.accessToken, selectedDirectoryId).then(() => {
+      await deleteDirectoryApi(userInfo.accessToken, selectedDirectoryId).then((res) => {
         setOpen(false)
         getDirectories()
+        if (res.status === 204) {
+          toast('그룹이 삭제되었습니다')
+        }
       })
     } catch (err) {
       console.log(err)
+      setOpen(false)
+      toast('피드가 있는 그룹은 삭제가 불가능합니다')
     }
   }
 
+  // 디렉토리 수정페이지로 이동
   const moveModifyDirectory = () => {
     navigate(`/groups/${selectedDirectoryId}/edit`, {
       state: {
         categoryId: selectedDirectoryId,
+        categoryImage: selectedDirectoryImage,
+        categoryName: selectedDirectoryGroupName,
+        answerIds: selectedDirectoryAnswerIds,
       },
     })
   }
@@ -97,7 +124,40 @@ const Groups = () => {
     getDirectories()
   }, [])
 
-  const [directories, setDirectories] = useState<directory[]>([])
+  // 유저 디렉토리 조회
+  const getDirectories = async () => {
+    try {
+      await getDirectoriesApi(ownerUserInfo.memberId).then((res) => {
+        console.log(res)
+        setDirectories(res.data.categories)
+        if (res.data.categories.length !== 0) {
+          setSelectedDirectoryId(res.data.categories[0].categoryId)
+          setSelectedDirectoryImage(res.data.categories[0].categoryImage)
+          setSelectedDirectoryGroupName(res.data.categories[0].categoryName)
+          setSelectedDirectoryAnswerIds(res.data.categories[0].answerIds)
+        }
+      })
+    } catch (err) {
+      console.log(err)
+    }
+  }
+
+  const [directories, setDirectories] = useState<directoryProps[]>([])
+  const [feedList, setFeedList] = useState<FeedProps[]>([])
+  const getFeeds = useCallback(async () => {
+    try {
+      await getFeedsApi(ownerUserInfo.memberId, selectedDirectoryId).then((res) => {
+        console.log(res)
+        setFeedList(res.data.content)
+      })
+    } catch (err) {
+      console.log(err)
+    }
+  }, [selectedDirectoryId])
+
+  useEffect(() => {
+    getFeeds()
+  }, [getFeeds])
 
   return (
     <Container>
@@ -114,7 +174,14 @@ const Groups = () => {
               <SwiperSlide key={item.categoryId}>
                 <GroupWrapper>
                   <GroupImgWrapper
-                    {...bind(item.categoryId)}
+                    onClick={() => {
+                      setSelectedDirectoryId(item.categoryId)
+                      setSelectedDirectoryImage(item.categoryImage)
+                      setSelectedDirectoryGroupName(item.categoryName)
+                      setSelectedDirectoryAnswerIds(item.answerIds)
+                    }}
+                    selected={selectedDirectoryId === item.categoryId}
+                    {...bind(item.categoryId, item.categoryImage, item.categoryName, item.answerIds)}
                     onContextMenu={(e) => {
                       e.preventDefault()
                       e.stopPropagation()
@@ -128,17 +195,19 @@ const Groups = () => {
             )
           })}
 
-          <SwiperSlide>
-            <GroupWrapper>
-              <GroupPlusImg
-                onClick={() => {
-                  navigate('/groups/new')
-                }}
-                src={plus}
-              />
-              <GroupName>추가</GroupName>
-            </GroupWrapper>
-          </SwiperSlide>
+          {isMyPage && (
+            <SwiperSlide>
+              <GroupWrapper>
+                <GroupPlusImg
+                  onClick={() => {
+                    navigate('/groups/new')
+                  }}
+                  src={plus}
+                />
+                <GroupName>추가</GroupName>
+              </GroupWrapper>
+            </SwiperSlide>
+          )}
         </Swiper>
         {open && (
           <BottomSheet open={open} snapPoints={() => [170]} onDismiss={handleDismissPlusMusicModal} blocking={true}>
@@ -153,6 +222,17 @@ const Groups = () => {
           </BottomSheet>
         )}
       </TopComponent>
+      <StyledToastContainer
+        position="bottom-center"
+        autoClose={1000}
+        hideProgressBar
+        pauseOnHover={false}
+        closeOnClick={false}
+        closeButton={false}
+        rtl={false}
+        theme="dark"
+        transition={Flip}
+      />
     </Container>
   )
 }
@@ -185,16 +265,16 @@ const GroupWrapper = styled.div`
   width: 44px;
   height: 63px;
 `
-const GroupImgWrapper = styled.div`
+const GroupImgWrapper = styled.div<{ selected: boolean }>`
   display: flex;
+  justify-content: center;
+  align-items: center;
   width: 44px;
   height: 44px;
   padding: 3px;
-  justify-content: center;
-  align-items: center;
   border-radius: 12px;
-  border: 1px solid ${colors.grey5};
-  background: ${colors.white};
+  border: ${(props) => (props.selected ? `1px solid ${colors.grey1}` : `1px solid ${colors.grey5}`)};
+  background-color: ${colors.white};
   user-select: none;
 `
 

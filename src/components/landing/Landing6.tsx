@@ -1,9 +1,13 @@
+
+import Phone from '@/assets/landing/PhoneInsta.png'
+
 import { colors } from '@/styles/colors'
 import styled from 'styled-components'
 import { motion } from 'framer-motion'
 import { useState } from 'react'
 import LandingTelepathy from './LandingTelepathy'
 import LandingFeedBack from './LandingFeedBack'
+
 
 const Landing6 = () => {
   const heartNum = 23

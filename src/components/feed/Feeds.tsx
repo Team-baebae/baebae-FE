@@ -1,32 +1,96 @@
 import styled from 'styled-components'
 import { colors } from '../../styles/colors'
 import QuotationMark from '../../assets/question/QuotationMark.svg'
+import { useState } from 'react'
+import DetailFeed from './DetailFeed'
 
 interface FeedProps {
+  answerId: number
   questionId: number
   questionContent: string
-  writer: string
+  memberId: number
+  content: string
+  linkAttachments: string[]
+  musicName: string
+  musicSinger: string
+  musicAudioUrl: string
+  imageUrls: string[]
+  createdDate: string
+  heartCount: number
+  curiousCount: number
+  sadCount: number
+  fcmtoken: string
 }
 
 interface FeedsProps {
   data: FeedProps[]
+  selectedDirectoryId: number
+  selectedDirectoryImage: string
+  selectedDirectoryGroupName: string
+  selectedDirectoryAnswerIds: number[]
 }
 
-const Feeds = ({ data }: FeedsProps) => {
+const Feeds = ({
+  data,
+  selectedDirectoryId,
+  selectedDirectoryImage,
+  selectedDirectoryGroupName,
+  selectedDirectoryAnswerIds,
+}: FeedsProps) => {
+  const [selectedFeed, setSelectedFeed] = useState<FeedProps>({
+    answerId: -1,
+    questionId: -1,
+    questionContent: '',
+    memberId: -1,
+    content: '',
+    linkAttachments: [''],
+    musicName: '',
+    musicSinger: '',
+    musicAudioUrl: '',
+    imageUrls: [''],
+    createdDate: '',
+    heartCount: -1,
+    curiousCount: -1,
+    sadCount: -1,
+    fcmtoken: '',
+  })
+  // 모달 버튼 클릭 유무를 저장할 state
+  const [showModal, setShowModal] = useState<boolean>(false)
+  // 버튼 클릭시 모달 버튼 클릭 유무를 설정하는 state 함수
+  const clickFlip = (feed: FeedProps) => {
+    setSelectedFeed(feed)
+    clickModal()
+  }
+
+  const clickModal = () => {
+    setShowModal(!showModal)
+  }
+
   return (
     <>
       <GridContainer>
         {data.map((feed) => (
-          <FlipWrapper>
+          <FlipWrapper key={feed.answerId} onClick={() => clickFlip(feed)}>
             <Icon src={QuotationMark} />
             <FlipContent>{feed.questionContent}</FlipContent>
             <WriterBlock>
-              FROM <WriterRegion>{feed.writer}님</WriterRegion>
+              FROM<WriterRegion>추후수정님</WriterRegion>
             </WriterBlock>
           </FlipWrapper>
         ))}
       </GridContainer>
       <TotalFeedsBtn>전체 보기</TotalFeedsBtn>
+      {showModal && (
+        <DetailFeed
+          setShowModal={setShowModal}
+          showModal={showModal}
+          selectedFeed={selectedFeed}
+          selectedDirectoryId={selectedDirectoryId}
+          selectedDirectoryImage={selectedDirectoryImage}
+          selectedDirectoryGroupName={selectedDirectoryGroupName}
+          selectedDirectoryAnswerIds={selectedDirectoryAnswerIds}
+        />
+      )}
     </>
   )
 }
@@ -54,6 +118,7 @@ const FlipWrapper = styled.div`
   border-radius: 2px;
   background: ${colors.white};
   box-shadow: 0px 4px 4px 0px rgba(0, 0, 0, 0.08);
+  cursor: pointer;
 `
 const FlipContent = styled.div`
   display: flex;
@@ -82,6 +147,7 @@ const WriterBlock = styled.div`
 `
 
 const WriterRegion = styled.button`
+  margin: 0px 0px 0px 4px;
   color: ${colors.grey4};
   font-family: Pretendard;
   font-size: 10px;

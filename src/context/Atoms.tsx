@@ -39,3 +39,19 @@ export const isMineState = atom({
   default: false,
   effects: [persistAtom],
 })
+
+export interface ownerUserDataProps {
+  nickname: string
+  memberId: number
+  imageUrl: string
+}
+
+export const ownerUserData = atom({
+  key: 'ownerUserData',
+  default: {
+    nickname: '',
+    memberId: 0,
+    imageUrl: '',
+  },
+  effects: [persistAtom],
+})

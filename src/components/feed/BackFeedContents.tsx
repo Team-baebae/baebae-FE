@@ -2,13 +2,34 @@ import styled from 'styled-components'
 import { colors } from '@/styles/colors'
 import ExampleImage from '@/assets/main/DefaultImage.svg'
 
-const BackFeedContents = () => {
-  const answer = '나의 패션스타일은 답변답변답변답변 답변답변답변답변'
+interface FeedProps {
+  answerId: number
+  questionId: number
+  questionContent: string
+  memberId: number
+  content: string
+  linkAttachments: string[]
+  musicName: string
+  musicSinger: string
+  musicAudioUrl: string
+  imageUrls: string[]
+  createdDate: string
+  heartCount: number
+  curiousCount: number
+  sadCount: number
+  fcmtoken: string
+}
 
+interface Props {
+  selectedFeed: FeedProps
+}
+
+const BackFeedContents = (props: Props) => {
+  const selectedFeed = props.selectedFeed
   return (
     <FlipWrapper>
-      <Photo src={ExampleImage} />
-      <ContentWrapper>{answer}</ContentWrapper>
+      <Photo src={selectedFeed.imageUrls[0]} />
+      <ContentWrapper>{selectedFeed.content}</ContentWrapper>
     </FlipWrapper>
   )
 }

@@ -9,7 +9,7 @@ interface QuestionProps {
 // 닉네임 중복 여부 확인해서 해당 유저 존재하는지 체크하는 api
 export const isExistingNicknameApi = async (nickname: string) => {
   try {
-    let API = `/api/oauth/nickname/isExisting?nickname=${nickname}`
+    let API = `/api/auth/nickname/isExisting?nickname=${nickname}`
     const response = await flipitAxios.get(API, {
       params: nickname,
     })
@@ -25,6 +25,18 @@ export const getMemberIdApi = async (nickname: string) => {
     let API = `api/member/nickname/${nickname}`
     const response = await flipitAxios.get(API, {
       params: nickname,
+    })
+    return response.data
+  } catch (error) {
+    console.error(error)
+  }
+}
+
+export const getOwnerProfileApi = async (memberId: number) => {
+  try {
+    let API = `api/member/profile-image/${memberId}`
+    const response = await flipitAxios.get(API, {
+      params: memberId,
     })
     return response.data
   } catch (error) {

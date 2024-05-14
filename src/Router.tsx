@@ -1,25 +1,34 @@
 import { BrowserRouter, Routes, Route } from 'react-router-dom'
+//가장 바깥 틀
 import Outer from '@/pages/Outer'
+//랜딩
 import Landing from '@/pages/landing/Landing'
+//로그인 및 회원가입
 import Login from '@/pages/login/Login'
 import KakaoRedirection from '@/pages/signup/KakaoRedirection'
 import SignUpTerms from '@/pages/signup/SignUpTerms'
 import SignUpNickname from '@/pages/signup/SignUpNickname'
+import SignUpOnBoarding from '@/pages/signup/SignUpOnBoarding'
+//메인
+import Main from '@/pages/main/Main'
+//설정
 import Setting from '@/pages/setting/Setting'
 import EditProfile from '@/pages/setting/EditAccount'
-import SignUpOnBoarding from '@/pages/signup/SignUpOnBoarding'
-import Answer from '@/pages/answer/Answer'
-import Folder from '@/pages/answer/Folder'
-import AnswerComplete from '@/pages/answer/AnswerComplete'
-import Main from '@/pages/main/Main'
-import QuestionList from '@/pages/question/QuestionList'
-import GroupPlus from '@/pages/group/GroupPlus'
-import GroupModify from '@/pages/group/GroupModify'
 import PrivacyPolicy from '@/pages/setting/PrivacyPolicy'
 import Ask from '@/pages/setting/Support'
 import Tos from '@/pages/setting/Tos'
+//질문
+import QuestionList from '@/pages/question/QuestionList'
+//답변
+import Answer from '@/pages/answer/Answer'
+import Folder from '@/pages/answer/Folder'
+import AnswerComplete from '@/pages/answer/AnswerComplete'
+//카테고리
+import GroupPlus from '@/pages/group/GroupPlus'
+import GroupModify from '@/pages/group/GroupModify'
+import Groups from '@/pages/category/Groups'
+// 테스트
 import DetailTestPage from '@/pages/DetailTestPage'
-import Groups from './pages/category/Groups'
 
 const Router = () => {
   return (

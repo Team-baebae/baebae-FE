@@ -1,6 +1,6 @@
 import styled from 'styled-components'
 import { useState } from 'react'
-import { useNavigate } from 'react-router-dom'
+import { useLocation, useNavigate } from 'react-router-dom'
 import Question from '@/components/answer/Question'
 import { UnFixedButton } from '@/components/common/Button'
 import Music from '@/components/answer/Music'
@@ -9,17 +9,27 @@ import DelayModal from '@/components/common/DelayModal'
 import Modal from '@/components/common/Modal'
 import PersonalHeader from '@/components/answer/PersonalHeader'
 import { colors } from '@/styles/colors'
+import { answerApi } from '@/apis/AnswerApi'
+import { useRecoilState } from 'recoil'
+import { UserInfoStateProps, userInfoState } from '@/context/Atoms'
 
 const Answer = () => {
   const navigate = useNavigate()
+  // 넘겨 받은 카카오 어세스토큰 저장
+  const location = useLocation()
+  const question = location.state?.question
+
+  const [userInfo, setUserInfo] = useRecoilState<UserInfoStateProps>(userInfoState)
 
   // 이미지 파일 선택 핸들러
+  const [imageFile, setImageFile] = useState<File>()
   const [imageUrl, setImageUrl] = useState<string>('')
   const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files && e.target.files[0]
     // 이미지 파일을 보낼 시엔 formData로 file을 추가해야함(추후 추가)
     if (file) {
       setImageUrl(URL.createObjectURL(file)) // 미리보기를 위해 파일 URL 생성
+      setImageFile(file)
     }
   }
 
@@ -41,10 +51,33 @@ const Answer = () => {
   // 작성 중 뒤로가기를 누를 때
   const [isOpenBackWarningModal, setIsOpenBackWarningModal] = useState(false)
 
+  const onClickAnswerBtn = async () => {
+    try {
+      console.log(musicAudio)
+      await answerApi(userInfo.accessToken, userInfo.memberId, imageFile, {
+        questionId: question.questionId,
+        content: content,
+        linkAttachments: [linkAttachments],
+        musicName: musicName,
+        musicSinger: musicSinger,
+        musicAudioUrl: musicAudio,
+      }).then((res) => {
+        navigate(`/questions/${question.questionId}/group`, {
+          state: {
+            answerId: res.data.answerId,
+          },
+        })
+        console.log(res)
+      })
+    } catch (err) {
+      console.log(err)
+    }
+  }
+
   return (
     <Container>
       <PersonalHeader func={() => setIsOpenBackWarningModal(true)} text="답변하기" background={colors.grey7} />
-      <Question />
+      <Question question={question} />
       {/* 답변 이미지 */}
       <PolaroidContainer>
         <label htmlFor="file">
@@ -66,12 +99,13 @@ const Answer = () => {
         musicSinger={musicSinger}
         setMusicSinger={setMusicSinger}
       />
+
       {/* 답변 링크 */}
       <Link linkAttachments={linkAttachments} setLinkAttachments={setLinkAttachments} />
       <UnFixedButton
         $positive={imageUrl !== '' && content !== '' ? true : false}
         func={() => {
-          console.log('폴더 이동')
+          onClickAnswerBtn()
         }}
         func2={() => {
           {
