@@ -10,7 +10,7 @@ import DelayModal from '@/components/common/DelayModal'
 import Modal from '@/components/common/Modal'
 import AnswerHeader from '@/components/common/AnswerHeader'
 import { colors } from '@/styles/colors'
-import { answerApi, modifyFeedApi } from '@/apis/AnswerApi'
+import { answerApi } from '@/apis/AnswerApi'
 import { userInfoState } from '@/context/Atoms'
 
 // 질문에 대한 답변 페이지
@@ -19,12 +19,7 @@ const Answer = () => {
   // 넘겨 받은 질문 정보 저장
   const location = useLocation()
 
-  // condition==='answer' 질문에 대한 답변
-  // condition==='modify'는 피드에 대한 수정
   const question = location.state?.question
-  const selectedFeed = location.state?.selectedFeed
-  const condition = location.state?.condition
-
   // 리코일 로그인한 유저정보
   const userInfo = useRecoilValue(userInfoState)
 
@@ -82,35 +77,9 @@ const Answer = () => {
     }
   }
 
-  // 피드 수정 시 수정하기 버튼 누를 시
-  const onClickModifyFeedBtn = async () => {
-    try {
-      await modifyFeedApi(userInfo.accessToken, selectedFeed.answerId, imageFile, {
-        questionId: question.questionId,
-        nickname: question.nickname,
-        profileOnOff: question.profileOnOff,
-        content: content,
-        linkAttachments: linkAttachments,
-        musicName: musicName,
-        musicSinger: musicSinger,
-        musicAudioUrl: musicAudio,
-      }).then((res) => {
-        console.log(res)
-        console.log('피드 수정 성공')
-        navigate(`/juuuunny`)
-      })
-    } catch (err) {
-      console.log(err)
-    }
-  }
-
   return (
     <Container>
-      {condition === 'answer' ? (
-        <AnswerHeader func={() => setIsOpenBackWarningModal(true)} text="답변하기" background={colors.grey7} />
-      ) : (
-        <AnswerHeader func={() => setIsOpenBackWarningModal(true)} text="피드 수정" background={colors.grey7} />
-      )}
+      <AnswerHeader func={() => setIsOpenBackWarningModal(true)} text="답변하기" background={colors.grey7} />
       {/* 질문 */}
       <Question question={question} />
       {/* 답변 이미지 */}
@@ -140,14 +109,14 @@ const Answer = () => {
       <UnFixedButton
         $positive={imageUrl !== '' && content !== '' ? true : false}
         func={() => {
-          condition === 'answer' ? onClickAnswerBtn() : onClickModifyFeedBtn()
+          onClickAnswerBtn()
         }}
         func2={() => {
           {
             imageUrl === '' || content === '' ? setIsOpenDelayModal(true) : console.log('비활성화')
           }
         }}
-        text={condition === 'answer' ? '다음' : '수정하기'}
+        text="다음"
         margin="83px 20px 0px 20px"
       />
       {/* 사진 또는 텍스트 작성없이 답변하러 할 때 */}

@@ -65,7 +65,7 @@ const SignUpNickname = () => {
 
   const login = async (kakaoAccessToken: string, nickname: string) => {
     try {
-      await loginApi(kakaoAccessToken, nickname).then(async (res: LoginProps) => {
+      await loginApi(kakaoAccessToken, nickname, 'fcm').then(async (res: LoginProps) => {
         if (res.status === 200) {
           console.log(res)
           console.log(res.data.accessToken)

@@ -85,7 +85,11 @@ const Ask = () => {
     // 비로그인인 경우 모달창
     !isLoggedIn && setShowModal(true)
     // 로그인인 경우 질문 전송
-    isLoggedIn && postQuestionApi(receiverId, questionData, writerToken).then(() => toast('질문 완료!'))
+    isLoggedIn &&
+      postQuestionApi(receiverId, questionData, writerToken).then(() => {
+        toast('질문 완료!')
+        getQuestionLength()
+      })
   }
 
   return (
@@ -93,7 +97,6 @@ const Ask = () => {
       {/* 답변을 기다리는 질문은 계정 주인만 볼 수 있다 */}
       {isMyPage == true && (
         <AskNotification onClick={questionClick}>
-          {askCount && <Icon width={34.25} height={16} src={NewIcon} />}
           <TextWrapper ml={askCount ? '6px' : '0px'} color={colors.white}>
             답변을 기다리는 질문
             <TextWrapper ml="4px" color={askCount ? colors.primary : colors.grey4}>

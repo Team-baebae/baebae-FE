@@ -134,17 +134,6 @@ const QuestionList = () => {
                   navigate(`/questions/${value.questionId}/answer`, {
                     state: {
                       question: value,
-                      condition: 'answer',
-                      selectedFeed: {
-                        content: '',
-                        imageUrls: [''],
-                        linkAttachments: [''],
-                        musicAudioUrl: '',
-                        musicName: '',
-                        musicSinger: '',
-                        questionContent: '',
-                        questionId: -1,
-                      },
                     },
                   })
                 }}

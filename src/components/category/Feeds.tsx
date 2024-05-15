@@ -31,7 +31,7 @@ const Feeds = ({ data, selectedAnswerIds, setSelectedAnswerIds }: FeedsProps) =>
             <Icon src={QuotationMark} />
             <FlipContent>{feed.questionContent}</FlipContent>
             <WriterBlock>
-              FROM <WriterRegion>추후수정님</WriterRegion>
+              FROM <WriterRegion>{feed.nickname}</WriterRegion>
             </WriterBlock>
           </FlipWrapper>
         ))}

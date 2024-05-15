@@ -62,7 +62,7 @@ export const postQuestionApi = async (memberId: number, question: QuestionProps,
 
 export const getQuestionLengthApi = async (accessToken: string, memberId: number) => {
   try {
-    let API = `/api/questions/count/${memberId}`
+    let API = `/api/questions/unanswered/count/${memberId}`
     const response = await flipitAxios.get(API, {
       params: memberId,
       headers: {

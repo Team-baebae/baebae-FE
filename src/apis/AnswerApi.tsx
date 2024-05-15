@@ -19,14 +19,13 @@ export const answerApi = (accessToken: string, memberId: number, imageFile: File
 }
 
 export const getFeedsApi = (memberId: number, selectedDirectoryId: number) => {
-  // const recent = 'createdDate,desc'
-  // const sort = JSON.stringify(recent)
-
+  const recent = ['createdDate,desc']
+  const categoryRecent = ['answer.createdDate,desc']
   if (selectedDirectoryId === 0) {
-    let API = `/api/answers?memberId=${memberId}&page=0&size=30`
+    let API = `/api/answers?memberId=${memberId}&page=0&size=10&sort=${recent}`
     return flipitAxios.get(API)
   } else {
-    let API = `/api/answers?memberId=${memberId}&category=${selectedDirectoryId}&page=0&size=10`
+    let API = `/api/answers?memberId=${memberId}&categoryId=${selectedDirectoryId}&page=0&size=10&sort=${categoryRecent}`
     return flipitAxios.get(API)
   }
 }

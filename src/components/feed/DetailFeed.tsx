@@ -4,11 +4,14 @@ import styled from 'styled-components'
 import { useRecoilValue } from 'recoil'
 import { useNavigate } from 'react-router-dom'
 import { BottomSheet } from 'react-spring-bottom-sheet'
+import { toast, Flip } from 'react-toastify'
+import 'react-toastify/dist/ReactToastify.css'
 import { SearchModalBox } from '@/components/common/ModalStyle'
 import BackFeedContents from '@/components/feed/BackFeedContents'
 import FrontFeedContents from '@/components/feed/FrontFeedContents'
 import TelePathyMotion from '@/components/feed/TelepathyMotion'
 import { ModalProps } from '@/components/feed/types'
+import { StyledToastContainer } from '@/components/toast/toastStyle'
 import { colors } from '@/styles/colors'
 import { deleteFeedApi } from '@/apis/AnswerApi'
 import { isMineState, userInfoState } from '@/context/Atoms'
@@ -137,6 +140,7 @@ const DetailFeed = (props: ModalProps) => {
       await deleteFeedApi(userInfo.accessToken, selectedFeed.answerId).then((res) => {
         console.log(res)
         if (res.status === 204) {
+          toast('플립이 삭제되었어요!')
           backModal()
         }
       })
@@ -171,10 +175,10 @@ const DetailFeed = (props: ModalProps) => {
                   )}
                 </LinkButton>
               )}
-              {selectedFeed?.linkAttachments[0] !== '' && (
+              {selectedFeed?.linkAttachments !== '' && (
                 <LinkButton onClick={LinkClick}>
                   <Icon src={LinkIcon} />
-                  <OverflowText width="82px">{selectedFeed?.linkAttachments[0]}</OverflowText>
+                  <OverflowText width="82px">{selectedFeed?.linkAttachments}</OverflowText>
                 </LinkButton>
               )}
             </Links>
@@ -268,10 +272,9 @@ const DetailFeed = (props: ModalProps) => {
                   question: {
                     questionId: selectedFeed.questionId,
                     content: selectedFeed.questionContent,
-                    nickname: '추후수정',
+                    nickname: selectedFeed.nickname,
                   },
                   selectedFeed: selectedFeed,
-                  condition: 'modify',
                 },
               })
             }}
@@ -302,6 +305,17 @@ const DetailFeed = (props: ModalProps) => {
       )}
       {/* 통했당 누를 시 통했당 로띠 애니메이션 */}
       {popLottie && <TelePathyMotion />}
+      <StyledToastContainer
+        position="bottom-center"
+        autoClose={1000}
+        hideProgressBar
+        pauseOnHover={false}
+        closeOnClick={false}
+        closeButton={false}
+        rtl={false}
+        theme="dark"
+        transition={Flip}
+      />
     </>
   )
 }
