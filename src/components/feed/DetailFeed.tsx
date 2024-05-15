@@ -4,11 +4,14 @@ import styled from 'styled-components'
 import { useRecoilValue } from 'recoil'
 import { useNavigate } from 'react-router-dom'
 import { BottomSheet } from 'react-spring-bottom-sheet'
+import { toast, Flip } from 'react-toastify'
+import 'react-toastify/dist/ReactToastify.css'
 import { SearchModalBox } from '@/components/common/ModalStyle'
 import BackFeedContents from '@/components/feed/BackFeedContents'
 import FrontFeedContents from '@/components/feed/FrontFeedContents'
 import TelePathyMotion from '@/components/feed/TelepathyMotion'
 import { ModalProps } from '@/components/feed/types'
+import { StyledToastContainer } from '@/components/toast/toastStyle'
 import { colors } from '@/styles/colors'
 import { deleteFeedApi } from '@/apis/AnswerApi'
 import { isMineState, userInfoState } from '@/context/Atoms'
@@ -121,7 +124,9 @@ const DetailFeed = (props: ModalProps) => {
       // 다른 노래의 버튼을 누르면 기존 노래 중지 후 새로운 노래 재생
       if (currentAudio) {
         currentAudio.pause()
+        setIsPlaying(false)
       }
+
       const audio = new Audio(previewUrl)
       setCurrentAudio(audio)
       audio.play()
@@ -135,7 +140,8 @@ const DetailFeed = (props: ModalProps) => {
       await deleteFeedApi(userInfo.accessToken, selectedFeed.answerId).then((res) => {
         console.log(res)
         if (res.status === 204) {
-          window.location.reload()
+          toast('플립이 삭제되었어요!')
+          backModal()
         }
       })
     } catch (err) {
@@ -163,16 +169,16 @@ const DetailFeed = (props: ModalProps) => {
                     {selectedFeed?.musicName} - {selectedFeed?.musicSinger}
                   </OverflowText>
                   {currentAudio && currentAudio.src === selectedFeed.musicAudioUrl && isPlaying ? (
-                    <Icon onClick={() => handlePreview(selectedFeed.musicAudioUrl)} src={PauseIcon} alt="pause" />
+                    <Icon src={PauseIcon} alt="pause" />
                   ) : (
-                    <Icon onClick={() => handlePreview(selectedFeed.musicAudioUrl)} src={PlayIcon} alt="play" />
+                    <Icon src={PlayIcon} alt="play" />
                   )}
                 </LinkButton>
               )}
-              {selectedFeed?.linkAttachments[0] !== '' && (
+              {selectedFeed?.linkAttachments !== '' && (
                 <LinkButton onClick={LinkClick}>
                   <Icon src={LinkIcon} />
-                  <OverflowText width="82px">{selectedFeed?.linkAttachments[0]}</OverflowText>
+                  <OverflowText width="82px">{selectedFeed?.linkAttachments}</OverflowText>
                 </LinkButton>
               )}
             </Links>
@@ -259,7 +265,35 @@ const DetailFeed = (props: ModalProps) => {
           blocking={true}
           style={{ zIndex: 100 }}
         >
-          <BottomSheetEachWrapper>
+          <BottomSheetEachWrapper
+            onClick={() => {
+              navigate(`/questions/${selectedFeed.questionId}/answer`, {
+                state: {
+                  question: {
+                    questionId: selectedFeed.questionId,
+                    content: selectedFeed.questionContent,
+                    nickname: selectedFeed.nickname,
+                  },
+                  selectedFeed: selectedFeed,
+                },
+              })
+            }}
+          >
+            <BottomSheetEachIcon src={pencil} />
+            <BottomSheetEachText color={colors.grey1}>플립 수정하기</BottomSheetEachText>
+          </BottomSheetEachWrapper>
+          <BottomSheetEachWrapper
+            onClick={() => {
+              navigate(`/groups/${selectedCategoryId}/edit`, {
+                state: {
+                  categoryId: selectedCategoryId,
+                  categoryImage: selectedCategoryImage,
+                  categoryName: selectedCategoryGroupName,
+                  answerIds: selectedCategoryAnswerIds,
+                },
+              })
+            }}
+          >
             <BottomSheetEachIcon src={pencil} />
             <BottomSheetEachText color={colors.grey1}>플립 수정하기</BottomSheetEachText>
           </BottomSheetEachWrapper>
@@ -286,6 +320,17 @@ const DetailFeed = (props: ModalProps) => {
       )}
       {/* 통했당 누를 시 통했당 로띠 애니메이션 */}
       {popLottie && <TelePathyMotion />}
+      <StyledToastContainer
+        position="bottom-center"
+        autoClose={1000}
+        hideProgressBar
+        pauseOnHover={false}
+        closeOnClick={false}
+        closeButton={false}
+        rtl={false}
+        theme="dark"
+        transition={Flip}
+      />
     </>
   )
 }

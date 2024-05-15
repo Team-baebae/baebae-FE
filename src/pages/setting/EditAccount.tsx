@@ -38,7 +38,8 @@ const EditAccount = () => {
   // 유저 프로필 사진 업데이트
   const updateUserProfile = async (file: File) => {
     try {
-      await updateUserProfileApi(userInfo.accessToken, userInfo.memberId, file).then(() => {
+      await updateUserProfileApi(userInfo.accessToken, userInfo.memberId, file).then((res) => {
+        console.log(res)
         setUserInfo({
           ...userInfo,
           profileImage: URL.createObjectURL(file),
@@ -96,6 +97,7 @@ const EditAccount = () => {
             ...userInfo,
             nickname: nickname,
           })
+
           navigate('/settings')
         }
       })

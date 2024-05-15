@@ -28,7 +28,7 @@ import GroupPlus from '@/pages/category/GroupPlus'
 import GroupModify from '@/pages/category/GroupModify'
 import Groups from '@/pages/category/Groups'
 //알림
-import Alrams from './pages/alram/Alrams'
+import Alrams from '@/pages/alram/Alrams'
 //테스트
 import DetailTestPage from '@/pages/DetailTestPage'
 

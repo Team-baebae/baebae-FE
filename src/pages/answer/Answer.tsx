@@ -18,8 +18,8 @@ const Answer = () => {
   const navigate = useNavigate()
   // 넘겨 받은 질문 정보 저장
   const location = useLocation()
-  const question = location.state?.question
 
+  const question = location.state?.question
   // 리코일 로그인한 유저정보
   const userInfo = useRecoilValue(userInfoState)
 
@@ -35,7 +35,7 @@ const Answer = () => {
   }
 
   // 텍스트 저장
-  const [content, setContent] = useState<string>('')
+  const [content, setContent] = useState<string>()
   const onChangeContent = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
     const value = e.target.value
     setContent(value)
@@ -57,8 +57,10 @@ const Answer = () => {
     try {
       await answerApi(userInfo.accessToken, userInfo.memberId, imageFile, {
         questionId: question.questionId,
+        nickname: question.nickname,
+        profileOnOff: question.profileOnOff,
         content: content,
-        linkAttachments: [linkAttachments],
+        linkAttachments: linkAttachments,
         musicName: musicName,
         musicSinger: musicSinger,
         musicAudioUrl: musicAudio,

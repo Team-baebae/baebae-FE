@@ -6,11 +6,11 @@ import GroupHeader from '@/components/common/GroupHeader'
 import Feeds from '@/components/category/Feeds'
 import NoFlip from '@/components/main/NoFlip'
 import { UnFixedButton } from '@/components/common/Button'
+import { FeedProps } from '@/components/feed/types'
 import { UserInfoStateProps, userInfoState } from '@/context/Atoms'
 import { colors } from '@/styles/colors'
 import { modifyCategoryApi, updateCategoryImgApi } from '@/apis/CategoryApi'
 import { getFeedsApi } from '@/apis/AnswerApi'
-import { FeedProps } from '@/components/feed/types'
 
 // 그룹 수정페이지
 const GroupModify = () => {
@@ -69,7 +69,11 @@ const GroupModify = () => {
     try {
       await modifyCategoryApi(userInfo.accessToken, categoryId, groupName, selectedAnswerIds).then((res) => {
         console.log(res)
-        navigate(-1) // 현재 페이지에서 뒤로 이동
+        navigate(`/${userInfo.nickname}`, {
+          state: {
+            defaultCategory: 1,
+          },
+        }) // 현재 페이지에서 뒤로 이동
       })
     } catch (err) {
       console.log(err)
@@ -117,7 +121,7 @@ const GroupModify = () => {
       <FolderName value={groupName} onChange={onChangeFolderName} placeholder="그룹명을 입력해주세요" />
       <FolderNameConditionWrapper>
         <FolderNameConditionText color={colors.grey1} fontSize="12px">
-          2-8자로 입력해주세요.
+          2-4자로 입력해주세요.
         </FolderNameConditionText>
         <FolderNameLengthWrapper>
           {groupName.length > 0 ? (
@@ -149,7 +153,7 @@ const GroupModify = () => {
       )}
       {/* 카테고리 수정버튼 */}
       <UnFixedButton
-        $positive={groupName === '' ? false : true}
+        $positive={groupName.length >= 2 && groupName.length <= 4 ? true : false}
         func={onClickModifyBtn}
         func2={() => console.log('수정 실패')}
         text="그룹 수정하기"

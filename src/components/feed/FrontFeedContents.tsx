@@ -13,7 +13,7 @@ const FrontFeedContents = (props: SelectedFeedProps) => {
         <FlipContent>{selectedFeed.questionContent}</FlipContent>
       </ContentWrapper>
       <WriterBlock>
-        FROM <WriterRegion>추후수정님</WriterRegion>
+        FROM <WriterRegion>{selectedFeed.nickname}</WriterRegion>
       </WriterBlock>
     </FlipWrapper>
   )

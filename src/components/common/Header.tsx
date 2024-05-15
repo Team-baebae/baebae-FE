@@ -6,10 +6,11 @@ import BackArrow from '@/assets/answer/BackArrow.svg'
 interface HeaderProps {
   text: string
   background: string
+  route?: string
 }
 
 // 페이지들의 공통헤더 컴포넌트
-const Header = ({ text, background }: HeaderProps) => {
+const Header = ({ text, background, route }: HeaderProps) => {
   const navigate = useNavigate()
 
   return (
@@ -18,7 +19,11 @@ const Header = ({ text, background }: HeaderProps) => {
         src={BackArrow}
         alt="<"
         onClick={() => {
-          navigate(-1)
+          if (route) {
+            navigate(`/${route}`)
+          } else {
+            navigate(-1)
+          }
         }}
       />
       <HeaderText>{text}</HeaderText>

@@ -35,7 +35,7 @@ const SignUpTerms = () => {
 
   return (
     <Container>
-      <Header text="회원가입" background={colors.grey7} />
+      <Header route="login" text="회원가입" background={colors.grey7} />
       <TermsHeader>플리빗 이용약관에 동의해주세요</TermsHeader>
       {/* 약관리스트 */}
       <Terms isChecked={isChecked} setIsChecked={setIsChecked} />

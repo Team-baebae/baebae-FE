@@ -1,8 +1,9 @@
 import styled from 'styled-components'
-import { TotalPageFeedsProps } from '@/components/category/types'
-import TotalPageFeed from './TotalPageFeed'
 import { useState } from 'react'
+import { TotalPageFeedsProps } from '@/components/category/types'
+import TotalPageFeed from '@/components/category/TotalPageFeed'
 
+// 전체 페이지의 피드리스트
 const TotalPageFeeds = (props: TotalPageFeedsProps) => {
   const feedList = props.feedList
   const selectedCategoryId = props.selectedCategoryId

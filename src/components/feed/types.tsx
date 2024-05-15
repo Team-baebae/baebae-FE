@@ -1,20 +1,22 @@
 // 단일 피드 props
 export interface FeedProps {
-  answerId: number
   questionId: number
   questionContent: string
+  profileOnOff: boolean
+  memberNickname: string
+  nickname: string
   memberId: number
+  answerId: number
   content: string
-  linkAttachments: string[]
+  createdDate: string
+  linkAttachments: string
+  musicAudioUrl: string
   musicName: string
   musicSinger: string
-  musicAudioUrl: string
-  imageUrls: string[]
-  createdDate: string
-  heartCount: number
   curiousCount: number
+  heartCount: number
   sadCount: number
-  fcmtoken: string
+  imageUrl: string
 }
 
 // 피드리스트 컴포넌트 props

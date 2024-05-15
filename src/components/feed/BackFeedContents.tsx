@@ -7,7 +7,7 @@ const BackFeedContents = (props: SelectedFeedProps) => {
   const selectedFeed = props.selectedFeed
   return (
     <FlipWrapper>
-      <Photo src={selectedFeed.imageUrls[0]} />
+      <Photo src={selectedFeed.imageUrl} />
       <ContentWrapper>{selectedFeed.content}</ContentWrapper>
     </FlipWrapper>
   )

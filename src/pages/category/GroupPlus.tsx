@@ -6,12 +6,12 @@ import GroupHeader from '@/components/common/GroupHeader'
 import { UnFixedButton } from '@/components/common/Button'
 import Feeds from '@/components/category/Feeds'
 import NoFlip from '@/components/main/NoFlip'
+import { FeedProps } from '@/components/feed/types'
 import { makeCategoryApi } from '@/apis/CategoryApi'
 import { getFeedsApi } from '@/apis/AnswerApi'
 import { userInfoState } from '@/context/Atoms'
 import { colors } from '@/styles/colors'
 import DefaultImg from '@/assets/main/DefaultImage.png'
-import { FeedProps } from '@/components/feed/types'
 
 // 새 그룹 생성 페이지
 const GroupPlus = () => {
@@ -56,7 +56,7 @@ const GroupPlus = () => {
   }, [])
 
   // 카테고리 생성
-  const makecategory = async () => {
+  const makeCategory = async () => {
     try {
       await makeCategoryApi(
         userInfo.accessToken,
@@ -66,7 +66,11 @@ const GroupPlus = () => {
         selectedAnswerIds,
       ).then((res) => {
         console.log(res)
-        navigate(`/${userInfo.nickname}`)
+        navigate(`/${userInfo.nickname}`, {
+          state: {
+            defaultCategory: 1,
+          },
+        })
       })
     } catch (err) {
       console.log(err)
@@ -93,7 +97,7 @@ const GroupPlus = () => {
       <FolderName value={categoryName} onChange={onChangeFolderName} placeholder="그룹명을 입력해주세요" />
       <FolderNameConditionWrapper>
         <FolderNameConditionText color={colors.grey1} fontSize="12px">
-          2-8자로 입력해주세요.
+          2-4자로 입력해주세요.
         </FolderNameConditionText>
         <FolderNameLengthWrapper>
           {categoryName.length > 0 ? (
@@ -125,8 +129,8 @@ const GroupPlus = () => {
       )}
       {/* 카테고리 생성 버튼 */}
       <UnFixedButton
-        $positive={categoryName === '' ? false : true}
-        func={makecategory}
+        $positive={categoryName.length >= 2 && categoryName.length <= 4 ? true : false}
+        func={makeCategory}
         func2={() => console.log('그룹 생성 실패')}
         text="그룹 추가하기"
         margin="30px 20px 30px 20px"

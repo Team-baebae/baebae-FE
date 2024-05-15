@@ -60,6 +60,21 @@ export const postQuestionApi = async (memberId: number, question: QuestionProps,
   }
 }
 
+export const getQuestionLengthApi = async (accessToken: string, memberId: number) => {
+  try {
+    let API = `/api/questions/unanswered/count/${memberId}`
+    const response = await flipitAxios.get(API, {
+      params: memberId,
+      headers: {
+        Authorization: `Bearer ${accessToken}`,
+      },
+    })
+    return response.data
+  } catch (error) {
+    console.error(error)
+  }
+}
+
 // 답변하지 않은 질문 조회 api -> pageable param 추가 필요
 export const getQuestionsApi = async (memberId: number, page: number, accessToken: string) => {
   try {
