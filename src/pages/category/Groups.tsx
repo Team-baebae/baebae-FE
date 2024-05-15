@@ -176,7 +176,7 @@ const Groups = () => {
                   >
                     <GroupImg src={item.categoryImage} />
                   </GroupImgWrapper>
-                  <GroupName>{item.categoryName}</GroupName>
+                  <GroupName selected={selectedCategoryId === item.categoryId}>{item.categoryName}</GroupName>
                 </GroupWrapper>
               </SwiperSlide>
             )
@@ -285,8 +285,8 @@ const GroupImg = styled.img`
   pointer-events: none;
 `
 
-const GroupName = styled.div`
-  color: ${colors.grey3};
+const GroupName = styled.div<{ selected?: boolean }>`
+  color: ${(props) => (props.selected ? `${colors.grey1}` : `${colors.grey3}`)};
   font-family: Pretendard;
   font-size: 10px;
   font-style: normal;

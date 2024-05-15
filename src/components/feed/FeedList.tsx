@@ -19,20 +19,22 @@ const FeedList = ({
   // 선택된 필드 확대모달 띄워주기 위한 상태 저장
   const [selectedFeed, setSelectedFeed] = useState<FeedProps>({
     answerId: -1,
-    questionId: -1,
-    questionContent: '',
     memberId: -1,
+    memberNickname: '',
+    questionContent: '',
+    questionId: -1,
+    nickname: '',
+    profileOnOff: false,
     content: '',
-    linkAttachments: [''],
+    createdDate: '',
+    linkAttachments: '',
+    musicAudioUrl: '',
     musicName: '',
     musicSinger: '',
-    musicAudioUrl: '',
-    imageUrls: [''],
-    createdDate: '',
-    heartCount: -1,
-    curiousCount: -1,
-    sadCount: -1,
-    fcmtoken: '',
+    sadCount: 0,
+    heartCount: 0,
+    curiousCount: 0,
+    imageUrl: '',
   })
 
   // 모달 버튼 클릭 유무를 저장할 state (피드 확대)
@@ -55,7 +57,7 @@ const FeedList = ({
             <Icon src={QuotationMark} />
             <FlipContent>{feed.questionContent}</FlipContent>
             <WriterBlock>
-              FROM<WriterRegion>추후수정님</WriterRegion>
+              FROM<WriterRegion>{feed.nickname}</WriterRegion>
             </WriterBlock>
           </FlipWrapper>
         ))}

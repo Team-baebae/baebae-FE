@@ -5,7 +5,7 @@ import { useNavigate, useLocation } from 'react-router-dom'
 import Header from '@/components/common/Header'
 import { BottomButton } from '@/components/common/Button'
 import IsValidNicknameText from '@/components/common/IsValidNicknameText'
-import { LoginProps, GetUserInfoProps } from '@/pages/signup/types'
+import { LoginProps, GetUserInfoProps } from '@/components/signup/types'
 import { getUserInfoApi, isExistingNicknameApi, loginApi } from '@/apis/UserApi'
 import { colors } from '@/styles/colors'
 import { UserInfoStateProps, isLoggedInState, userInfoState } from '@/context/Atoms'
@@ -65,7 +65,7 @@ const SignUpNickname = () => {
 
   const login = async (kakaoAccessToken: string, nickname: string) => {
     try {
-      await loginApi(kakaoAccessToken, nickname).then(async (res: LoginProps) => {
+      await loginApi(kakaoAccessToken, nickname, 'fcm').then(async (res: LoginProps) => {
         if (res.status === 200) {
           console.log(res)
           console.log(res.data.accessToken)

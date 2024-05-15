@@ -61,7 +61,7 @@ const KakaoRedirection = () => {
   // 이미 존재하는 회원일 경우 바로 로그인 진행
   const login = async (kakaoAccessToken: string, nickname: string) => {
     try {
-      await loginApi(kakaoAccessToken, nickname).then(async (res: LoginProps) => {
+      await loginApi(kakaoAccessToken, nickname, 'fcm').then(async (res: LoginProps) => {
         if (res.status === 200) {
           console.log(res)
           console.log(res.data.accessToken)

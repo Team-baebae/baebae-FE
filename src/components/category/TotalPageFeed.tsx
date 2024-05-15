@@ -2,12 +2,14 @@ import { AnimatePresence, motion } from 'framer-motion'
 import { useState } from 'react'
 import styled from 'styled-components'
 import { useRecoilValue } from 'recoil'
+import { Flip, toast } from 'react-toastify'
 import { useNavigate } from 'react-router-dom'
 import { BottomSheet } from 'react-spring-bottom-sheet'
 import BackFeedContents from '@/components/feed/BackFeedContents'
 import FrontFeedContents from '@/components/feed/FrontFeedContents'
 import TelePathyMotion from '@/components/feed/TelepathyMotion'
 import { TotalPageFeedProps } from '@/components/category/types'
+import { StyledToastContainer } from '@/components/toast/toastStyle'
 import { colors } from '@/styles/colors'
 import { deleteFeedApi } from '@/apis/AnswerApi'
 import { isMineState, userInfoState } from '@/context/Atoms'
@@ -62,7 +64,7 @@ const TotalPageFeed = (props: TotalPageFeedProps) => {
   // 링크 클릭 시 링크 복사
   const LinkClick = (e: React.MouseEvent<HTMLDivElement>) => {
     e.stopPropagation()
-    navigator.clipboard.writeText(selectedFeed?.linkAttachments[0] || 'https://www.flipit.co.kr')
+    navigator.clipboard.writeText(selectedFeed?.linkAttachments || 'https://www.flipit.co.kr')
   }
 
   // 계정 주인일때 ...누를 시 bottom sheet 나오도록
@@ -120,7 +122,12 @@ const TotalPageFeed = (props: TotalPageFeedProps) => {
       await deleteFeedApi(userInfo.accessToken, selectedFeed.answerId).then((res) => {
         console.log(res)
         if (res.status === 204) {
+          // var categoryIdValue = 'yourCategoryId' // 여기에 categoryId 값을 할당합니다.
+          // var currentPageUrl = window.location.href
+          // var stateObject = { page: '/groups', categoryId: categoryIdValue }
+          // window.history.replaceState(stateObject, '', currentPageUrl)
           window.location.reload()
+          toast('플립이 삭제되었습니다!')
         }
       })
     } catch (err) {
@@ -141,16 +148,16 @@ const TotalPageFeed = (props: TotalPageFeedProps) => {
                   {selectedFeed?.musicName} - {selectedFeed?.musicSinger}
                 </OverflowText>
                 {props.currentAudio && props.currentAudio.src === selectedFeed.musicAudioUrl && isPlaying ? (
-                  <Icon onClick={() => handlePreview(selectedFeed.musicAudioUrl)} src={PauseIcon} alt="pause" />
+                  <Icon src={PauseIcon} alt="pause" />
                 ) : (
-                  <Icon onClick={() => handlePreview(selectedFeed.musicAudioUrl)} src={PlayIcon} alt="play" />
+                  <Icon src={PlayIcon} alt="play" />
                 )}
               </LinkButton>
             )}
-            {selectedFeed?.linkAttachments[0] !== '' && (
+            {selectedFeed?.linkAttachments !== '' && (
               <LinkButton onClick={LinkClick}>
                 <Icon src={LinkIcon} />
-                <OverflowText width="82px">{selectedFeed?.linkAttachments[0]}</OverflowText>
+                <OverflowText width="82px">{selectedFeed?.linkAttachments}</OverflowText>
               </LinkButton>
             )}
           </Links>
@@ -251,7 +258,20 @@ const TotalPageFeed = (props: TotalPageFeedProps) => {
             <BottomSheetEachText color={colors.grey1}>그룹 수정하기</BottomSheetEachText>
           </BottomSheetEachWrapper>
 
-          <BottomSheetEachWrapper>
+          <BottomSheetEachWrapper
+            onClick={() => {
+              navigate(`/questions/${selectedFeed.questionId}/answer`, {
+                state: {
+                  question: {
+                    questionId: selectedFeed.questionId,
+                    content: selectedFeed.questionContent,
+                    nickname: selectedFeed.nickname,
+                  },
+                  selectedFeed: selectedFeed,
+                },
+              })
+            }}
+          >
             <BottomSheetEachIcon src={pencil} />
             <BottomSheetEachText color={colors.grey1}>플립 수정하기</BottomSheetEachText>
           </BottomSheetEachWrapper>
@@ -264,6 +284,17 @@ const TotalPageFeed = (props: TotalPageFeedProps) => {
       )}
       {/* 통했당 누를 시 통했당 로띠 애니메이션 */}
       {popLottie && <TelePathyMotion />}
+      <StyledToastContainer
+        position="bottom-center"
+        autoClose={1000}
+        hideProgressBar
+        pauseOnHover={false}
+        closeOnClick={false}
+        closeButton={false}
+        rtl={false}
+        theme="dark"
+        transition={Flip}
+      />
     </Container>
   )
 }

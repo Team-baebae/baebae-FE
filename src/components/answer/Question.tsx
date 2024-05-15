@@ -10,7 +10,11 @@ const Question = ({ question }: QuestionProps) => {
     <>
       <SenderWrapper>
         <SenderText color={colors.primary}>FROM</SenderText>
-        <SenderText color={colors.grey4}>{question.nickname}님</SenderText>
+        {question.profileOnOff ? (
+          <SenderText color={colors.grey1}>{question.nickname}님</SenderText>
+        ) : (
+          <SenderText color={colors.grey4}>{question.nickname}님</SenderText>
+        )}
       </SenderWrapper>
       <QuestionWrapper>
         <QuestionQuotes src={QuotesOpen} />

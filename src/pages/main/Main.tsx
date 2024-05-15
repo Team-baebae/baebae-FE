@@ -1,5 +1,5 @@
 import styled from 'styled-components'
-import { useParams } from 'react-router-dom'
+import { useLocation, useParams } from 'react-router-dom'
 import { useEffect, useState } from 'react'
 import { useRecoilValue, useSetRecoilState } from 'recoil'
 import MainHeader from '@/components/common/MainHeader'
@@ -13,6 +13,10 @@ import { colors } from '@/styles/colors'
 
 // 로그인 성공 시 메인 페이지
 const Main = () => {
+  // 넘겨받은 값 저장 (메인페이지 질문인지 피드인지, 피드일경우 어느 디렉토리인지)
+  const location = useLocation()
+  const defaultCategory = location.state?.defaultCategory || 0
+
   // url의 username 뽑아내기
   const { username } = useParams<{ username: string }>()
 
@@ -22,6 +26,10 @@ const Main = () => {
   const setUserData = useSetRecoilState(ownerUserData)
   // 내 페이지인지 여부 확인
   const setIsMyPage = useSetRecoilState(isMineState)
+
+  // 리코일에서 받은 로그인한 사용자의 userInfo
+  const myInfo = useRecoilValue<UserInfoStateProps>(userInfoState)
+  const myMemberId = myInfo.memberId
 
   // 유저의 존재 여부 확인 및 계정주인의 memberId 조회
   const userCheck = (nickname: string) => {
@@ -35,10 +43,6 @@ const Main = () => {
     })
   }
 
-  // 리코일에서 받은 로그인한 사용자의 userInfo
-  const myInfo = useRecoilValue<UserInfoStateProps>(userInfoState)
-  const myMemberId = myInfo.memberId
-
   // url의 닉네임으로 실제 있는 계정인지 확인
   useEffect(() => {
     if (username) {
@@ -47,7 +51,7 @@ const Main = () => {
   }, [])
 
   // category=0은 질문, 1은 피드
-  const [category, setCategory] = useState<number>(0)
+  const [category, setCategory] = useState<number>(defaultCategory)
 
   return (
     <>
