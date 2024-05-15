@@ -25,11 +25,11 @@ export const isExistingNicknameApi = (nickname: string) => {
 }
 
 // 카카오 어세스토큰을 통하여 jwt토큰 받기
-export const loginApi = (accessToken: string, nickname: string) => {
+export const loginApi = (accessToken: string, nickname: string, fcmToken: string) => {
   let API = `/api/auth/login`
   return flipitAxios.post(
     API,
-    { memberType: 'KAKAO', nickname: nickname },
+    { memberType: 'KAKAO', nickname: nickname, fcmToken: fcmToken },
     {
       headers: { Authorization: `Bearer ${accessToken}` },
     },
@@ -80,11 +80,11 @@ export const updateUserNicknameApi = (accessToken: string, memberId: number, nic
 }
 
 // 로그아웃
-export const logoutApi = (accessToken: string) => {
+export const logoutApi = (fcmToken: string, accessToken: string) => {
   let API = `/api/auth/logout`
   return flipitAxios.post(
     API,
-    {},
+    { fcmToken: fcmToken },
     {
       headers: {
         Authorization: `Bearer ${accessToken}`,

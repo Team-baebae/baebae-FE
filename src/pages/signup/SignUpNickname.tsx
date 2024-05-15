@@ -5,10 +5,11 @@ import { useNavigate, useLocation } from 'react-router-dom'
 import Header from '@/components/common/Header'
 import { BottomButton } from '@/components/common/Button'
 import IsValidNicknameText from '@/components/common/IsValidNicknameText'
-import { LoginProps, GetUserInfoProps } from '@/pages/signup/types'
+import { LoginProps, GetUserInfoProps } from '@/components/signup/types'
 import { getUserInfoApi, isExistingNicknameApi, loginApi } from '@/apis/UserApi'
 import { colors } from '@/styles/colors'
 import { UserInfoStateProps, isLoggedInState, userInfoState } from '@/context/Atoms'
+import { registerServiceWorker, requestPermission } from '@/firebase-messaging-sw'
 
 //회원가입 닉네임 입력 페이지
 const SignUpNickname = () => {
@@ -65,11 +66,17 @@ const SignUpNickname = () => {
 
   const login = async (kakaoAccessToken: string, nickname: string) => {
     try {
-      await loginApi(kakaoAccessToken, nickname).then(async (res: LoginProps) => {
+      let fcmToken = await requestPermission()
+      await registerServiceWorker()
+      await loginApi(kakaoAccessToken, nickname, fcmToken).then(async (res: LoginProps) => {
         if (res.status === 200) {
           console.log(res)
           console.log(res.data.accessToken)
           console.log(res.data.id)
+          setUserInfo({
+            ...userInfo,
+            fcmToken: fcmToken,
+          })
           getUserInfo(res.data)
           setIsLoggedIn(true)
           navigate(`/signup/complete`, {

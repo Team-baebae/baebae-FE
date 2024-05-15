@@ -24,38 +24,42 @@ isSupported().then((supported) => {
   }
 })
 
-export function requestPermission() {
-  void Notification.requestPermission().then((permission) => {
-    if (permission === 'granted') {
-      getToken(messaging, {
-        vapidKey: import.meta.env.VITE_APP_FCM_VAPID_KEY,
-      })
-        .catch((err) => {
-          const error =
-            "AbortError: Failed to execute 'subscribe' on 'PushManager': Subscription failed - no active Service Worker"
-          if (err.toString() === error) {
-            return getToken(messaging, {
-              vapidKey: import.meta.env.VITE_APP_FCM_VAPID_KEY,
-            })
-          } else {
-            throw err
-          }
+export function requestPermission(): Promise<string> {
+  return new Promise((resolve, reject) => {
+    Notification.requestPermission().then((permission) => {
+      if (permission === 'granted') {
+        getToken(messaging, {
+          vapidKey: import.meta.env.VITE_APP_FCM_VAPID_KEY,
         })
-        .then((currentToken) => {
-          if (currentToken) {
-            console.log(currentToken)
-            return currentToken
-          } else {
-            console.log('No Instance ID token available. Request permission to generate one.')
-            return null
-          }
-        })
-        .catch((err) => {
-          console.error(err)
-        })
-    } else if (permission === 'denied') {
-      console.log('푸시 권한 차단')
-    }
+          .catch((err) => {
+            const error =
+              "AbortError: Failed to execute 'subscribe' on 'PushManager': Subscription failed - no active Service Worker"
+            if (err.toString() === error) {
+              return getToken(messaging, {
+                vapidKey: import.meta.env.VITE_APP_FCM_VAPID_KEY,
+              })
+            } else {
+              throw err
+            }
+          })
+          .then((currentToken) => {
+            if (currentToken) {
+              console.log(currentToken)
+              resolve(currentToken)
+            } else {
+              console.log('No Instance ID token available. Request permission to generate one.')
+              reject('')
+            }
+          })
+          .catch((err) => {
+            console.error(err)
+            reject(err)
+          })
+      } else if (permission === 'denied') {
+        console.log('푸시 권한 차단')
+        resolve('')
+      }
+    })
   })
 }
 

@@ -30,11 +30,12 @@ const Settings = () => {
   // 로그아웃
   const logout = async () => {
     try {
-      await logoutApi(userInfo.accessToken).then((res) => {
+      await logoutApi(userInfo.fcmToken, userInfo.accessToken).then((res) => {
         if (res.status === 200) {
           setUserInfo({
             accessToken: '',
             refreshToken: '',
+            fcmToken: '',
             memberId: 0,
             email: '',
             nickname: '',
@@ -57,6 +58,7 @@ const Settings = () => {
           setUserInfo({
             accessToken: '',
             refreshToken: '',
+            fcmToken: '',
             memberId: 0,
             email: '',
             nickname: '',
