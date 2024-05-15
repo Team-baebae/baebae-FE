@@ -261,7 +261,7 @@ const TotalPageFeed = (props: TotalPageFeedProps) => {
                     nickname: '추후수정',
                   },
                   selectedFeed: selectedFeed,
-                  condition: '수정',
+                  condition: 'modify',
                 },
               })
             }}

@@ -23,6 +23,10 @@ const Main = () => {
   // 내 페이지인지 여부 확인
   const setIsMyPage = useSetRecoilState(isMineState)
 
+  // 리코일에서 받은 로그인한 사용자의 userInfo
+  const myInfo = useRecoilValue<UserInfoStateProps>(userInfoState)
+  const myMemberId = myInfo.memberId
+
   // 유저의 존재 여부 확인 및 계정주인의 memberId 조회
   const userCheck = (nickname: string) => {
     isExistingNicknameApi(nickname).then((result) => {
@@ -34,10 +38,6 @@ const Main = () => {
         })
     })
   }
-
-  // 리코일에서 받은 로그인한 사용자의 userInfo
-  const myInfo = useRecoilValue<UserInfoStateProps>(userInfoState)
-  const myMemberId = myInfo.memberId
 
   // url의 닉네임으로 실제 있는 계정인지 확인
   useEffect(() => {

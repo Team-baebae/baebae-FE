@@ -18,10 +18,12 @@ const Answer = () => {
   const navigate = useNavigate()
   // 넘겨 받은 질문 정보 저장
   const location = useLocation()
-  // question만 받으면 질문리스트에서 온 것
-  // selectedFeed까지 모두 받으면 피드 수정에서 온 것
+
+  // condition==='answer' 질문에 대한 답변
+  // condition==='modify'는 피드에 대한 수정
   const question = location.state?.question
   const selectedFeed = location.state?.selectedFeed
+  const condition = location.state?.condition
 
   // 리코일 로그인한 유저정보
   const userInfo = useRecoilValue(userInfoState)
@@ -83,7 +85,7 @@ const Answer = () => {
     console.log(musicAudio)
     try {
       await modifyFeedApi(userInfo.accessToken, selectedFeed.answerId, imageFile, {
-        questionId: selectedFeed.questionId,
+        questionId: question.questionId,
         content: content,
         linkAttachments: [linkAttachments],
         musicName: musicName,
@@ -101,10 +103,10 @@ const Answer = () => {
 
   return (
     <Container>
-      {selectedFeed ? (
-        <AnswerHeader func={() => setIsOpenBackWarningModal(true)} text="피드 수정" background={colors.grey7} />
-      ) : (
+      {condition === 'answer' ? (
         <AnswerHeader func={() => setIsOpenBackWarningModal(true)} text="답변하기" background={colors.grey7} />
+      ) : (
+        <AnswerHeader func={() => setIsOpenBackWarningModal(true)} text="피드 수정" background={colors.grey7} />
       )}
       {/* 질문 */}
       <Question question={question} />
@@ -135,14 +137,14 @@ const Answer = () => {
       <UnFixedButton
         $positive={imageUrl !== '' && content !== '' ? true : false}
         func={() => {
-          selectedFeed ? onClickModifyFeedBtn() : onClickAnswerBtn()
+          condition === 'answer' ? onClickAnswerBtn() : onClickModifyFeedBtn()
         }}
         func2={() => {
           {
             imageUrl === '' || content === '' ? setIsOpenDelayModal(true) : console.log('비활성화')
           }
         }}
-        text={selectedFeed ? '수정하기' : '다음'}
+        text={condition === 'answer' ? '다음' : '수정하기'}
         margin="83px 20px 0px 20px"
       />
       {/* 사진 또는 텍스트 작성없이 답변하러 할 때 */}

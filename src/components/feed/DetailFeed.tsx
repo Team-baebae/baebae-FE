@@ -271,7 +271,7 @@ const DetailFeed = (props: ModalProps) => {
                     nickname: '추후수정',
                   },
                   selectedFeed: selectedFeed,
-                  condition: '수정',
+                  condition: 'modify',
                 },
               })
             }}
