@@ -29,7 +29,11 @@ const AnswerComplete = () => {
         </Btn>
         <Btn
           onClick={() => {
-            navigate(`/${userInfo.nickname}`)
+            navigate(`/${userInfo.nickname}`, {
+              state: {
+                defaultCategory: 1,
+              },
+            })
           }}
           color={colors.grey1}
           backgroundColor={colors.primary}

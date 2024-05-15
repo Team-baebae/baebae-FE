@@ -1,5 +1,5 @@
 import styled from 'styled-components'
-import { useParams } from 'react-router-dom'
+import { useLocation, useParams } from 'react-router-dom'
 import { useEffect, useState } from 'react'
 import { useRecoilValue, useSetRecoilState } from 'recoil'
 import MainHeader from '@/components/common/MainHeader'
@@ -13,6 +13,10 @@ import { colors } from '@/styles/colors'
 
 // 로그인 성공 시 메인 페이지
 const Main = () => {
+  // 넘겨받은 값 저장 (메인페이지 질문인지 피드인지, 피드일경우 어느 디렉토리인지)
+  const location = useLocation()
+  const defaultCategory = location.state?.defaultCategory || 0
+
   // url의 username 뽑아내기
   const { username } = useParams<{ username: string }>()
 
@@ -47,7 +51,7 @@ const Main = () => {
   }, [])
 
   // category=0은 질문, 1은 피드
-  const [category, setCategory] = useState<number>(0)
+  const [category, setCategory] = useState<number>(defaultCategory)
 
   return (
     <>

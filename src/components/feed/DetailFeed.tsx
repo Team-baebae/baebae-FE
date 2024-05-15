@@ -137,7 +137,7 @@ const DetailFeed = (props: ModalProps) => {
       await deleteFeedApi(userInfo.accessToken, selectedFeed.answerId).then((res) => {
         console.log(res)
         if (res.status === 204) {
-          window.location.reload()
+          backModal()
         }
       })
     } catch (err) {

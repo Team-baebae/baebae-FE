@@ -30,7 +30,7 @@ const Answer = () => {
 
   // 이미지 파일 선택 핸들러
   const [imageFile, setImageFile] = useState<File>()
-  const [imageUrl, setImageUrl] = useState<string>(selectedFeed.imageUrls[0])
+  const [imageUrl, setImageUrl] = useState<string>('')
   const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files && e.target.files[0]
     if (file) {
@@ -40,17 +40,17 @@ const Answer = () => {
   }
 
   // 텍스트 저장
-  const [content, setContent] = useState<string>(selectedFeed.content)
+  const [content, setContent] = useState<string>()
   const onChangeContent = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
     const value = e.target.value
     setContent(value)
   }
 
   // 모달창에서 선택받은 음악 관련 정보, 링크 저장
-  const [musicName, setMusicName] = useState<string>(selectedFeed.musicName)
-  const [musicAudio, setMusicAudio] = useState<string>(selectedFeed.musicAudioUrl)
-  const [musicSinger, setMusicSinger] = useState<string>(selectedFeed.musicSinger)
-  const [linkAttachments, setLinkAttachments] = useState<string>(selectedFeed.linkAttachments[0])
+  const [musicName, setMusicName] = useState<string>('')
+  const [musicAudio, setMusicAudio] = useState<string>('')
+  const [musicSinger, setMusicSinger] = useState<string>('')
+  const [linkAttachments, setLinkAttachments] = useState<string>('')
 
   // 사진 또는 텍스트 작성없이 답변하려할 때
   const [isOpenDelayModal, setIsOpenDelayModal] = useState(false)
@@ -62,8 +62,10 @@ const Answer = () => {
     try {
       await answerApi(userInfo.accessToken, userInfo.memberId, imageFile, {
         questionId: question.questionId,
+        nickname: question.nickname,
+        profileOnOff: question.profileOnOff,
         content: content,
-        linkAttachments: [linkAttachments],
+        linkAttachments: linkAttachments,
         musicName: musicName,
         musicSinger: musicSinger,
         musicAudioUrl: musicAudio,
@@ -82,12 +84,13 @@ const Answer = () => {
 
   // 피드 수정 시 수정하기 버튼 누를 시
   const onClickModifyFeedBtn = async () => {
-    console.log(musicAudio)
     try {
       await modifyFeedApi(userInfo.accessToken, selectedFeed.answerId, imageFile, {
         questionId: question.questionId,
+        nickname: question.nickname,
+        profileOnOff: question.profileOnOff,
         content: content,
-        linkAttachments: [linkAttachments],
+        linkAttachments: linkAttachments,
         musicName: musicName,
         musicSinger: musicSinger,
         musicAudioUrl: musicAudio,

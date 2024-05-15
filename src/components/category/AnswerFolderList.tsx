@@ -115,7 +115,7 @@ const AnswerFolderList = ({ selectedCategoryId, setSelectedCategoryId }: FolderL
         <FolderName value={categoryName} onChange={onChangeCategoryName} placeholder="그룹명을 입력해주세요" />
         <FolderNameConditionWrapper>
           <FolderNameConditionText color={colors.grey1} fontSize="12px">
-            2-8자로 입력해주세요.
+            2-4자로 입력해주세요.
           </FolderNameConditionText>
           <FolderNameLengthWrapper>
             {categoryName.length > 0 ? (
@@ -138,7 +138,7 @@ const AnswerFolderList = ({ selectedCategoryId, setSelectedCategoryId }: FolderL
         </FolderNameConditionWrapper>
         {/* 새 카테고리 생성 버튼 */}
         <UnFixedButton
-          $positive={categoryName === '' ? false : true}
+          $positive={categoryName.length >= 2 && categoryName.length <= 4 ? true : false}
           func={makeCategory}
           func2={() => {
             console.log('그룹 추가 실패')

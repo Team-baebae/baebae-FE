@@ -3,15 +3,19 @@ import { useNavigate } from 'react-router-dom'
 import { colors } from '@/styles/colors'
 import BackArrow from '@/assets/answer/BackArrow.svg'
 import xIcon from '@/assets/feed/XIcon.svg'
+import { useRecoilValue } from 'recoil'
+import { userInfoState } from '@/context/Atoms'
 
 interface HeaderProps {
+  categoryId?: number
   text: string
   background: string
 }
 
 // 그룹페이지 헤더 컴포넌트
-const GroupHeader = ({ text, background }: HeaderProps) => {
+const GroupHeader = ({ categoryId, text, background }: HeaderProps) => {
   const navigate = useNavigate()
+  const userInfo = useRecoilValue(userInfoState)
 
   return (
     <HeaderTotalComponent background={background}>
@@ -19,7 +23,12 @@ const GroupHeader = ({ text, background }: HeaderProps) => {
         src={BackArrow}
         alt="<"
         onClick={() => {
-          navigate(-1)
+          navigate(`/${userInfo.nickname}`, {
+            state: {
+              defaultCategory: 1,
+              categoryId: categoryId,
+            },
+          })
         }}
       />
 
@@ -28,7 +37,12 @@ const GroupHeader = ({ text, background }: HeaderProps) => {
         src={xIcon}
         alt="X"
         onClick={() => {
-          navigate(-1)
+          navigate(`/${userInfo.nickname}`, {
+            state: {
+              defaultCategory: 1,
+              categoryId: categoryId,
+            },
+          })
         }}
       />
     </HeaderTotalComponent>

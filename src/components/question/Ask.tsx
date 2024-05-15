@@ -11,7 +11,7 @@ import LoginModal from '@/components/question/LoginModal'
 import Tooltip from '@/components/question/Tooltip'
 import { colors } from '@/styles/colors'
 import { isLoggedInState, isMineState, ownerUserData, userInfoState } from '@/context/Atoms'
-import { postQuestionApi } from '@/apis/MainInfoApi'
+import { getQuestionLengthApi, postQuestionApi } from '@/apis/MainInfoApi'
 import NewIcon from '@/assets/main/NewIcon.svg'
 import ForwardArrow from '@/assets/setting/ForwardArrow.svg'
 import Info from '@/assets/main/Info.svg'
@@ -19,7 +19,8 @@ import Info from '@/assets/main/Info.svg'
 // 질문하기 컴포넌트
 const Ask = () => {
   const navigate = useNavigate()
-
+  // 로그인한 사람의 데이터 정보
+  const loginUserInfo = useRecoilValue(userInfoState)
   // 리코일 계정주인 데이터 정보
   const userInfo = useRecoilValue(ownerUserData)
   //계정 주인의 memberId
@@ -40,10 +41,15 @@ const Ask = () => {
     navigate(`/questions`)
   }
 
-  // 답변 개수 입력 받기
+  // 질문 개수 받기
+  const getQuestionLength = async () => {
+    await getQuestionLengthApi(loginUserInfo.accessToken, loginUserInfo.memberId).then((res) => {
+      setAskCount(res)
+    })
+  }
+
   useEffect(() => {
-    // api 연동
-    setAskCount(3)
+    getQuestionLength()
     console.log(`나의 페이지인가? : ${isMine}`)
   }, [])
 
