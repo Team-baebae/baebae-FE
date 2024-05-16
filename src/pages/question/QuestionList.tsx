@@ -8,7 +8,7 @@ import { QuestionProps } from '@/components/question/types'
 import Loading from '@/components/common/Loading'
 import Modal from '@/components/common/Modal'
 import { colors } from '@/styles/colors'
-import { deleteQuestionsApi, getQuestionsApi } from '@/apis/MainInfoApi'
+import { deleteQuestionsApi, getQuestionLengthApi, getQuestionsApi } from '@/apis/MainInfoApi'
 import { userInfoState } from '@/context/Atoms'
 import CloseIcon from '@/assets/main/Close.svg'
 import QuotationMark from '@/assets/question/QuotationMark.svg'
@@ -43,7 +43,6 @@ const QuestionList = () => {
           // 첫 페이지가 아닐 경우 기존 데이터에 추가
           setQuestions((prevData) => [...prevData, ...result])
         }
-        setAskCount(questions.length + result.length)
         setCurrentPage(page + 1)
         console.log(result)
         if (result.length < 8) {
@@ -57,8 +56,16 @@ const QuestionList = () => {
       setScrollLoading(false)
     })
   }
+  // 질문 총 개수 받기 (무한 스크롤 때문에 따로 받음)
+  const getQuestionNumber = () => {
+    getQuestionLengthApi(accessToken, myMemberId).then((result) => {
+      console.log(result)
+      setAskCount(result)
+    })
+  }
 
   useEffect(() => {
+    getQuestionNumber()
     getQuestionList(currentPage)
   }, [])
 

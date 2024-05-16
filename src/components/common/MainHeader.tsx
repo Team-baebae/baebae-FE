@@ -3,6 +3,11 @@ import styled from 'styled-components'
 import NavLogo from '@/assets/nav/NavLogo.svg'
 import Alram from '@/assets/nav/Alarm.svg'
 import Setting from '@/assets/nav/Setting.svg'
+import { useRecoilValue } from 'recoil'
+import { isLoggedInState, isMineState, userInfoState, UserInfoStateProps } from '@/context/Atoms'
+import { useState } from 'react'
+import LoginModal from '../question/LoginModal'
+import { colors } from '@/styles/colors'
 
 interface HeaderProps {
   background: string
@@ -11,6 +16,27 @@ interface HeaderProps {
 // 메인페이지의 헤더 컴포넌트
 const MainHeader = ({ background }: HeaderProps) => {
   const navigate = useNavigate()
+
+  // 내 페이지인지 여부 확인
+  const isMyPage = useRecoilValue(isMineState)
+  const isMine = JSON.stringify(isMyPage)
+
+  // 로그인 된 상태인지 확인
+  const isLoggedIn = useRecoilValue(isLoggedInState)
+
+  // 리코일에서 받은 로그인한 사용자의 userInfo
+  const myInfo = useRecoilValue<UserInfoStateProps>(userInfoState)
+  const myNickname = myInfo.nickname
+
+  // 아이콘 누르면 실행되는 함수
+  const clickIcon = (route: string) => {
+    isLoggedIn ? navigate(`/${route}`) : setShowModal(true)
+  }
+
+  // 모달 버튼 클릭 유무를 저장할 state (로그인 안했을 시 나오는 모달)
+  const [showModal, setShowModal] = useState<boolean>(false)
+  // 버튼 클릭시 모달 버튼 클릭 유무를 설정하는 state 함수
+  const clickModal = () => setShowModal(!showModal)
 
   return (
     <HeaderTotalComponent background={background}>
@@ -22,15 +48,20 @@ const MainHeader = ({ background }: HeaderProps) => {
         }}
       />
       <HeaderRight>
-        <HeaderRightIcon src={Alram} alt="alram" onClick={() => navigate('/alrams')} />
+        {isMine != 'true' && (
+          <HeaderRightText onClick={() => clickIcon(myNickname)}>내 플리빗으로 이동</HeaderRightText>
+        )}
+        <HeaderRightIcon src={Alram} alt="alram" onClick={() => clickIcon('alrams')} />
         <HeaderRightIcon
           src={Setting}
           alt="setting"
           onClick={() => {
-            navigate('/settings')
+            clickIcon('settings')
           }}
         />
       </HeaderRight>
+      {/* 로그인 안하고 질문 시 나오는 모달 */}
+      {showModal && <LoginModal content={`앗!\n로그인을 해야 접근할 수 있어요😥`} clickModal={clickModal} />}
     </HeaderTotalComponent>
   )
 }
@@ -63,5 +94,19 @@ const HeaderRight = styled.div`
 const HeaderRightIcon = styled.img`
   width: 24px;
   height: 24px;
+  cursor: pointer;
+`
+const HeaderRightText = styled.button`
+  display: flex;
+  align-items: center;
+  outline: none;
+  border: none;
+  background-color: transparent;
+  color: ${colors.grey4};
+  font-family: Pretendard;
+  font-size: 14px;
+  font-weight: 500;
+  line-height: 21px;
+  letter-spacing: -0.28px;
   cursor: pointer;
 `
