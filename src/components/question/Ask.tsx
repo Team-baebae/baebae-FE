@@ -49,7 +49,7 @@ const Ask = () => {
   }
 
   useEffect(() => {
-    getQuestionLength()
+    isMine == 'true' && getQuestionLength()
     console.log(`나의 페이지인가? : ${isMine}`)
   }, [])
 
