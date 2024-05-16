@@ -66,17 +66,18 @@ const SignUpNickname = () => {
 
   const login = async (kakaoAccessToken: string, nickname: string) => {
     try {
+      registerServiceWorker()
       let fcmToken = await requestPermission()
-      await registerServiceWorker()
+      setUserInfo({
+        ...userInfo,
+        fcmToken: fcmToken,
+      })
+      console.log('fcmToken' + fcmToken)
       await loginApi(kakaoAccessToken, nickname, fcmToken).then(async (res: LoginProps) => {
         if (res.status === 200) {
           console.log(res)
           console.log(res.data.accessToken)
           console.log(res.data.id)
-          setUserInfo({
-            ...userInfo,
-            fcmToken: fcmToken,
-          })
           getUserInfo(res.data)
           setIsLoggedIn(true)
           navigate(`/signup/complete`, {
