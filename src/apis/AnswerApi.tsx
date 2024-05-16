@@ -69,3 +69,27 @@ export const modifyFeedApi = (accessToken: string, answerId: number, imageFile: 
     },
   })
 }
+
+export const getIsReactedApi = (accessToken: string, answerId: number, memberId: number) => {
+  let API = `/api/answers/${answerId}/reacted?memberId=${memberId}`
+  return flipitAxios.get(API, {
+    headers: {
+      Authorization: `Bearer ${accessToken}`,
+    },
+  })
+}
+
+export const postReactApi = (accessToken: string, answerId: number, memberId: number, reaction: string) => {
+  let API = `/api/reactions/${memberId}/${answerId}`
+  return flipitAxios.post(
+    API,
+    {
+      reaction: reaction,
+    },
+    {
+      headers: {
+        Authorization: `Bearer ${accessToken}`,
+      },
+    },
+  )
+}

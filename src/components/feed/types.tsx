@@ -16,6 +16,7 @@ export interface FeedProps {
   curiousCount: number
   heartCount: number
   sadCount: number
+  connectCount: number
   imageUrl: string
 }
 

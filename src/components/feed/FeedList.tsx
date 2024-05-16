@@ -34,6 +34,7 @@ const FeedList = ({
     sadCount: 0,
     heartCount: 0,
     curiousCount: 0,
+    connectCount: 0,
     imageUrl: '',
   })
 
