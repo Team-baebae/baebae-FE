@@ -4,9 +4,10 @@ import { colors } from '@/styles/colors'
 import Intro from '@/assets/landing/Intro.png'
 import IntroBack from '@/assets/landing/IntroBack.png'
 import DownMark from '@/assets/landing/DownMark.svg'
+import { useNavigate } from 'react-router-dom'
 
 const Landing1 = () => {
-  const INSTA_URL = 'https://www.instagram.com/flipit.co.kr?igsh=aXpzcGRnaGVncHNq&utm_source=qr'
+  const navigate = useNavigate()
   const Variants = {
     default: {
       scale: 1,
@@ -37,7 +38,7 @@ const Landing1 = () => {
         <SubText>타인을 알아가고 본인을 표현하는</SubText>
         <TitleText>가장 단순한 방법, 플리빗.</TitleText>
       </TextWrapper>
-      <Button href={INSTA_URL} initial="default" whileHover="scaleUp" variants={Variants}>
+      <Button initial="default" whileHover="scaleUp" variants={Variants} onClick={() => navigate('/login')}>
         지금 시작하기
       </Button>
       <PhoneImage src={Intro} />
