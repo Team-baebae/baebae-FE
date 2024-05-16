@@ -7,6 +7,7 @@ const { persistAtom } = recoilPersist()
 export interface UserInfoStateProps {
   accessToken: string
   refreshToken: string
+  fcmToken: string
   memberId: number
   email: string
   nickname: string
@@ -18,6 +19,7 @@ export const userInfoState = atom<UserInfoStateProps>({
   default: {
     accessToken: '',
     refreshToken: '',
+    fcmToken: '',
     memberId: 0,
     email: '',
     nickname: '',

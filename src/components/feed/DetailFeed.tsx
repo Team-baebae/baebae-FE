@@ -295,6 +295,21 @@ const DetailFeed = (props: ModalProps) => {
             }}
           >
             <BottomSheetEachIcon src={pencil} />
+            <BottomSheetEachText color={colors.grey1}>플립 수정하기</BottomSheetEachText>
+          </BottomSheetEachWrapper>
+          <BottomSheetEachWrapper
+            onClick={() => {
+              navigate(`/groups/${selectedCategoryId}/edit`, {
+                state: {
+                  categoryId: selectedCategoryId,
+                  categoryImage: selectedCategoryImage,
+                  categoryName: selectedCategoryGroupName,
+                  answerIds: selectedCategoryAnswerIds,
+                },
+              })
+            }}
+          >
+            <BottomSheetEachIcon src={pencil} />
             <BottomSheetEachText color={colors.grey1}>그룹 수정하기</BottomSheetEachText>
           </BottomSheetEachWrapper>
           <BottomSheetEachWrapper onClick={deleteFeed}>

@@ -10,6 +10,7 @@ import {
 import { getKakaoUserInfoApi, getUserInfoApi, isExistingAccountApi, loginApi } from '@/apis/UserApi'
 import { UserInfoStateProps, isLoggedInState, userInfoState } from '@/context/Atoms'
 import Loading from '@/components/common/Loading'
+import { registerServiceWorker, requestPermission } from '@/firebase-messaging-sw'
 
 // 카카오 로그인 후 리다이렉션 페이지
 const KakaoRedirection = () => {
@@ -61,11 +62,17 @@ const KakaoRedirection = () => {
   // 이미 존재하는 회원일 경우 바로 로그인 진행
   const login = async (kakaoAccessToken: string, nickname: string) => {
     try {
-      await loginApi(kakaoAccessToken, nickname, 'fcm').then(async (res: LoginProps) => {
+      let fcmToken = await requestPermission()
+      await registerServiceWorker()
+      await loginApi(kakaoAccessToken, nickname, fcmToken).then(async (res: LoginProps) => {
         if (res.status === 200) {
           console.log(res)
           console.log(res.data.accessToken)
           console.log(res.data.id)
+          setUserInfo({
+            ...userInfo,
+            fcmToken: fcmToken,
+          })
           getUserInfo(res.data)
           setIsLoggedIn(true)
           navigate(`/${res.data.nickname}`)

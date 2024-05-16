@@ -97,6 +97,7 @@ const Ask = () => {
       {/* 답변을 기다리는 질문은 계정 주인만 볼 수 있다 */}
       {isMyPage == true && (
         <AskNotification onClick={questionClick}>
+          {askCount && <Icon width={34.25} height={16} src={NewIcon} />}
           <TextWrapper ml={askCount ? '6px' : '0px'} color={colors.white}>
             답변을 기다리는 질문
             <TextWrapper ml="4px" color={askCount ? colors.primary : colors.grey4}>

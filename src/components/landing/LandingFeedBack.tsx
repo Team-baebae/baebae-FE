@@ -25,7 +25,6 @@ const Photo = styled.img`
 const FlipWrapper = styled.div`
   display: flex;
   flex-direction: column;
-  flex-direction: column;
   justify-content: space-between;
   width: 300px;
   height: 329.448px;

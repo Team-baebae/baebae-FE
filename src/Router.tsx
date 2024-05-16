@@ -27,7 +27,9 @@ import AnswerComplete from '@/pages/answer/AnswerComplete'
 import GroupPlus from '@/pages/category/GroupPlus'
 import GroupModify from '@/pages/category/GroupModify'
 import Groups from '@/pages/category/Groups'
-// 테스트
+//알림
+import Alrams from '@/pages/alram/Alrams'
+//테스트
 import DetailTestPage from '@/pages/DetailTestPage'
 
 const Router = () => {
@@ -69,6 +71,9 @@ const Router = () => {
             <Route path=":groupId">
               <Route path="edit" element={<GroupModify />} />
             </Route>
+          </Route>
+          <Route path="alrams">
+            <Route index element={<Alrams />} />
           </Route>
           <Route path="detailTest" element={<DetailTestPage />} />
         </Route>
