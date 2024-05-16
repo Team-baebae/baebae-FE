@@ -3,7 +3,7 @@ import { useEffect } from 'react'
 import { useRecoilState, useRecoilValue } from 'recoil'
 import { getOwnerProfileApi } from '@/apis/MainInfoApi'
 import { colors } from '@/styles/colors'
-import { UserInfoStateProps, ownerUserData, userInfoState } from '@/context/Atoms'
+import { isMineState, ownerUserData } from '@/context/Atoms'
 import DefaultImage from '@/assets/main/DefaultImage.png'
 
 declare global {
@@ -16,6 +16,10 @@ declare global {
 const MainProfile = () => {
   // 리코일 계정 주인의 데이터 정보
   const [ownerUserInfo, setOwnerUserInfo] = useRecoilState(ownerUserData)
+
+  // 내 페이지인지 여부 확인
+  const isMyPage = useRecoilValue(isMineState)
+  const isMine = JSON.stringify(isMyPage)
 
   // 공유
   const { Kakao } = window
@@ -82,7 +86,7 @@ const MainProfile = () => {
     <Container>
       <ProfileContents>
         <Nickname>{ownerUserInfo.nickname}</Nickname>
-        <ShareButton onClick={sharing}>내 플리빗 초대</ShareButton>
+        <ShareButton onClick={sharing}>{isMine == 'true' ? '내 플리빗 초대' : '이 플리빗 공유'}</ShareButton>
       </ProfileContents>
       {ownerUserInfo.imageUrl === '' ? (
         <ProfileImage src={DefaultImage} />
