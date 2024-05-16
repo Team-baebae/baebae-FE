@@ -31,7 +31,7 @@ const Feed = () => {
   // 리코일 계정주인의 userInfo
   const ownerUserInfo = useRecoilValue(ownerUserData)
   // 내 페이지인지 여부 확인
-  const isMyPage = useRecoilState(isMineState)
+  const isMyPage = useRecoilValue(isMineState)
 
   // 계정주인 카테고리 리스트 저장
   const [categories, setCategories] = useState<categoryProps[]>([])
