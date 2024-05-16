@@ -132,7 +132,7 @@ const AnswerFolderList = ({ selectedCategoryId, setSelectedCategoryId }: FolderL
               /
             </FolderNameConditionText>
             <FolderNameConditionText color={colors.grey4} fontSize="10px">
-              8
+              4
             </FolderNameConditionText>
           </FolderNameLengthWrapper>
         </FolderNameConditionWrapper>

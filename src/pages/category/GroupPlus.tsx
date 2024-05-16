@@ -98,7 +98,7 @@ const GroupPlus = () => {
 
   return (
     <Container>
-      <GroupHeader redirectRoute="feedTotal" text="새 그룹 추가" background={colors.grey7} />
+      <GroupHeader text="새 그룹 추가" background={colors.grey7} />
       {/* 카테고리 이미지 */}
       <FolderImgWrapper>
         {categoryImgUrl === '' ? <FolderImg src={DefaultImg} /> : <FolderImg src={categoryImgUrl} />}
@@ -129,7 +129,7 @@ const GroupPlus = () => {
             /
           </FolderNameConditionText>
           <FolderNameConditionText color={colors.grey4} fontSize="10px">
-            8
+            4
           </FolderNameConditionText>
         </FolderNameLengthWrapper>
       </FolderNameConditionWrapper>
