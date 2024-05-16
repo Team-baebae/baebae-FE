@@ -112,7 +112,12 @@ const AnswerFolderList = ({ selectedCategoryId, setSelectedCategoryId }: FolderL
         </label>
         <input type="file" name="file" id="file" style={{ display: 'none' }} onChange={handleImageChange} />
         {/* 새 카테고리 이름 */}
-        <FolderName value={categoryName} onChange={onChangeCategoryName} placeholder="그룹명을 입력해주세요" />
+        <FolderName
+          value={categoryName}
+          onChange={onChangeCategoryName}
+          placeholder="그룹명을 입력해주세요"
+          maxLength={4}
+        />
         <FolderNameConditionWrapper>
           <FolderNameConditionText color={colors.grey1} fontSize="12px">
             2-4자로 입력해주세요.
@@ -155,11 +160,12 @@ export default AnswerFolderList
 const Container = styled.div`
   display: grid;
   justify-items: stretch;
-  grid-template-columns: repeat(4, 1fr);
+  grid-template-columns: 1fr 1fr 1fr auto;
   gap: 20px 23px;
-  width: 335px;
-  margin: 0px 20px 0px 20px;
+  width: 375px;
+  /* margin: 0px 20px 0px 20px; */
   padding: 20px 0px 20px 0px;
+  /* width: calc(100% - 40px); */
   max-height: calc(100vh - 330px);
   overflow-y: scroll;
 `

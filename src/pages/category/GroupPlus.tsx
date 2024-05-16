@@ -109,7 +109,12 @@ const GroupPlus = () => {
       <input type="file" name="file" id="file" style={{ display: 'none' }} onChange={handleImageChange} />
       {/* 카테고리 이름 */}
       <FolderNameLabel>그룹명</FolderNameLabel>
-      <FolderName value={categoryName} onChange={onChangeFolderName} placeholder="그룹명을 입력해주세요" />
+      <FolderName
+        value={categoryName}
+        onChange={onChangeFolderName}
+        placeholder="그룹명을 입력해주세요"
+        maxLength={4}
+      />
       <FolderNameConditionWrapper>
         <FolderNameConditionText color={colors.grey1} fontSize="12px">
           2-4자로 입력해주세요.
