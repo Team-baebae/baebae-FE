@@ -25,6 +25,7 @@ const GroupModify = () => {
   const categoryImage = location.state?.categoryImage
   const categoryName = location.state?.categoryName
   const [selectedAnswerIds, setSelectedAnswerIds] = useState<number[]>(location.state?.answerIds)
+  const redirectRoute = location.state?.redirectRoute
 
   // 사진 수정했는지 여부 확인
   const [isEditGroupImg, setIsEditGroupImg] = useState(false)
@@ -69,11 +70,22 @@ const GroupModify = () => {
     try {
       await modifyCategoryApi(userInfo.accessToken, categoryId, groupName, selectedAnswerIds).then((res) => {
         console.log(res)
-        navigate(`/${userInfo.nickname}`, {
-          state: {
-            defaultCategory: 1,
-          },
-        }) // 현재 페이지에서 뒤로 이동
+        if (redirectRoute === 'feedTotal') {
+          navigate('/groups', {
+            state: {
+              selectedCategoryId: categoryId,
+              selectedCategoryGroupName: categoryName,
+              selectedCategoryImage: categoryImage,
+              selectedCategoryAnswerIds: selectedAnswerIds,
+            },
+          })
+        } else {
+          navigate(`/${userInfo.nickname}`, {
+            state: {
+              defaultCategory: 1,
+            },
+          }) // 현재 페이지에서 뒤로 이동
+        }
       })
     } catch (err) {
       console.log(err)

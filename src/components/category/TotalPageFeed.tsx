@@ -250,6 +250,7 @@ const TotalPageFeed = (props: TotalPageFeedProps) => {
                   categoryImage: selectedCategoryImage,
                   categoryName: selectedCategoryGroupName,
                   answerIds: selectedCategoryAnswerIds,
+                  redirectRoute: 'feedTotal',
                 },
               })
             }}
@@ -260,12 +261,13 @@ const TotalPageFeed = (props: TotalPageFeedProps) => {
 
           <BottomSheetEachWrapper
             onClick={() => {
-              navigate(`/questions/${selectedFeed.questionId}/answer`, {
+              navigate(`/questions/${selectedFeed.questionId}/edit`, {
                 state: {
                   question: {
                     questionId: selectedFeed.questionId,
                     content: selectedFeed.questionContent,
                     nickname: selectedFeed.nickname,
+                    profileOnOff: selectedFeed.profileOnOff,
                   },
                   selectedFeed: selectedFeed,
                 },

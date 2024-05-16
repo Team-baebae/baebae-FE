@@ -309,12 +309,13 @@ const DetailFeed = (props: ModalProps) => {
         >
           <BottomSheetEachWrapper
             onClick={() => {
-              navigate(`/questions/${selectedFeed.questionId}/answer`, {
+              navigate(`/questions/${selectedFeed.questionId}/edit`, {
                 state: {
                   question: {
                     questionId: selectedFeed.questionId,
                     content: selectedFeed.questionContent,
                     nickname: selectedFeed.nickname,
+                    profileOnOff: selectedFeed.profileOnOff,
                   },
                   selectedFeed: selectedFeed,
                 },
@@ -324,21 +325,7 @@ const DetailFeed = (props: ModalProps) => {
             <BottomSheetEachIcon src={pencil} />
             <BottomSheetEachText color={colors.grey1}>플립 수정하기</BottomSheetEachText>
           </BottomSheetEachWrapper>
-          <BottomSheetEachWrapper
-            onClick={() => {
-              navigate(`/groups/${selectedCategoryId}/edit`, {
-                state: {
-                  categoryId: selectedCategoryId,
-                  categoryImage: selectedCategoryImage,
-                  categoryName: selectedCategoryGroupName,
-                  answerIds: selectedCategoryAnswerIds,
-                },
-              })
-            }}
-          >
-            <BottomSheetEachIcon src={pencil} />
-            <BottomSheetEachText color={colors.grey1}>플립 수정하기</BottomSheetEachText>
-          </BottomSheetEachWrapper>
+
           <BottomSheetEachWrapper
             onClick={() => {
               navigate(`/groups/${selectedCategoryId}/edit`, {

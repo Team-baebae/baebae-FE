@@ -187,7 +187,11 @@ const Groups = () => {
               <GroupWrapper>
                 <GroupPlusImg
                   onClick={() => {
-                    navigate('/groups/new')
+                    navigate('/groups/new', {
+                      state: {
+                        redirectRoute: 'feedTotal',
+                      },
+                    })
                   }}
                   src={plus}
                 />

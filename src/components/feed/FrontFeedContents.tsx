@@ -13,7 +13,12 @@ const FrontFeedContents = (props: SelectedFeedProps) => {
         <FlipContent>{selectedFeed.questionContent}</FlipContent>
       </ContentWrapper>
       <WriterBlock>
-        FROM <WriterRegion>{selectedFeed.nickname}</WriterRegion>
+        FROM
+        {selectedFeed.profileOnOff ? (
+          <WriterRegion color={colors.grey1}>{selectedFeed.nickname}</WriterRegion>
+        ) : (
+          <WriterRegion color={colors.grey4}>{selectedFeed.nickname}</WriterRegion>
+        )}
       </WriterBlock>
     </FlipWrapper>
   )
@@ -61,11 +66,11 @@ const WriterBlock = styled.div`
   letter-spacing: -0.28px;
 `
 
-const WriterRegion = styled.button`
+const WriterRegion = styled.button<{ color: string }>`
   border: none;
   outline: none;
   background-color: transparent;
-  color: ${colors.grey4};
+  color: ${(props) => props.color};
   font-family: Pretendard;
   font-size: 14px;
   font-weight: 500;
