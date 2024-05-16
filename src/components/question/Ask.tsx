@@ -97,7 +97,7 @@ const Ask = () => {
       {/* 답변을 기다리는 질문은 계정 주인만 볼 수 있다 */}
       {isMyPage == true && (
         <AskNotification onClick={questionClick}>
-          {askCount && <Icon width={34.25} height={16} src={NewIcon} />}
+          {askCount > 0 && <Icon width={34.25} height={16} src={NewIcon} />}
           <TextWrapper ml={askCount ? '6px' : '0px'} color={colors.white}>
             답변을 기다리는 질문
             <TextWrapper ml="4px" color={askCount ? colors.primary : colors.grey4}>
@@ -114,6 +114,9 @@ const Ask = () => {
           value={text}
           onChange={onChangeText}
         />
+        <WarnText
+          isShow={text == '' ? true : false}
+        >{`* 사칭으로 인한 신고 접수시\n플리빗 이용에 제한이 있을 수 있어요.`}</WarnText>
         <WriterBlock>
           FROM{' '}
           <WriterRegion
@@ -137,7 +140,7 @@ const Ask = () => {
         <Tooltip show={showTooltip} clickIcon={clickIcon} />
       </OpenProfileWrapper>
       {/* 최하단 버튼 */}
-      <Button $positive={true} func={submitHandler} text="질문하기" />
+      <Button $positive={text == '' || writer == '' ? false : true} func={submitHandler} text="질문하기" />
       <StyledToastContainer
         position="bottom-center"
         autoClose={1000}
@@ -185,6 +188,7 @@ const TextWrapper = styled.div<{ ml: string; color: string }>`
 const Icon = styled.img``
 
 const AskContainer = styled.div`
+  position: relative;
   display: flex;
   flex-direction: column;
   justify-content: space-between;
@@ -201,7 +205,6 @@ const TextRegion = styled.textarea`
   width: 100%;
   height: 346px;
   flex: 1 0 0;
-  flex-shrink: 0;
   border: none;
   resize: none;
   outline: none;
@@ -214,6 +217,18 @@ const TextRegion = styled.textarea`
   &::placeholder {
     color: ${colors.grey5};
   }
+`
+const WarnText = styled.span<{ isShow: boolean }>`
+  visibility: ${(props) => (props.isShow ? 'visible' : 'hidden')};
+  position: absolute;
+  top: 127px;
+  white-space: pre-wrap;
+  color: #e1e1e1;
+  font-family: Pretendard;
+  font-size: 12px;
+  font-weight: 500;
+  line-height: 18px;
+  letter-spacing: -0.48px;
 `
 const WriterBlock = styled.div`
   display: flex;
