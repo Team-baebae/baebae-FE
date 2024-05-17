@@ -13,7 +13,7 @@ import TelePathyMotion from '@/components/feed/TelepathyMotion'
 import { ModalProps } from '@/components/feed/types'
 import { StyledToastContainer } from '@/components/toast/toastStyle'
 import { colors } from '@/styles/colors'
-import { deleteFeedApi, getIsReactedApi, postReactApi } from '@/apis/AnswerApi'
+import { deleteFeedApi, getIsReactedApi, getReactCountApi, postReactApi } from '@/apis/AnswerApi'
 import { isMineState, userInfoState } from '@/context/Atoms'
 import MusicIcon from '@/assets/MusicWhite.svg'
 import PlayIcon from '@/assets/PlayGray.svg'
@@ -133,10 +133,10 @@ const DetailFeed = (props: ModalProps) => {
   }
 
   // 반응 count
-  const [heartCount, setHeartCount] = useState<number>(selectedFeed.heartCount)
-  const [curiousCount, setCuriousCount] = useState<number>(selectedFeed.curiousCount)
-  const [sadCount, setSadCount] = useState<number>(selectedFeed.sadCount)
-  const [connectCount, setConnectCount] = useState<number>(selectedFeed.connectCount)
+  const [heartCount, setHeartCount] = useState<number>(0)
+  const [curiousCount, setCuriousCount] = useState<number>(0)
+  const [sadCount, setSadCount] = useState<number>(0)
+  const [connectCount, setConnectCount] = useState<number>(0)
 
   // 공감 누른지 여부
   const [giveHeart, setGiveHeart] = useState<boolean>(false)
@@ -163,12 +163,27 @@ const DetailFeed = (props: ModalProps) => {
         setGiveCurious(res.data.CURIOUS)
         setGiveSad(res.data.SAD)
         setGiveTelepathy(res.data.CONNECT)
+        console.log(res)
       })
     } catch (err) {
       console.log(err)
     }
   }, [])
 
+  // 해당 피드의 반응 개수 받기
+  const getReactCount = useCallback(async () => {
+    try {
+      await getReactCountApi(selectedFeed.answerId).then((res) => {
+        console.log(res)
+        setHeartCount(res.data.heartCount)
+        setCuriousCount(res.data.curiousCount)
+        setSadCount(res.data.sadCount)
+        setConnectCount(res.data.connectCount)
+      })
+    } catch (err) {
+      console.log(err)
+    }
+  }, [])
   // 해당피드에 반응 남기기
   const postReact = async (reaction: string) => {
     try {
@@ -189,7 +204,8 @@ const DetailFeed = (props: ModalProps) => {
 
   useEffect(() => {
     getIsReacted()
-  }, [getIsReacted])
+    getReactCount()
+  }, [getIsReacted, getReactCount])
 
   return (
     <>

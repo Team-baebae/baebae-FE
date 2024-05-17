@@ -162,10 +162,10 @@ const Container = styled.div`
   justify-items: stretch;
   grid-template-columns: 1fr 1fr 1fr auto;
   gap: 20px 23px;
-  width: 375px;
-  /* margin: 0px 20px 0px 20px; */
+  /* width: 335px; */
+  margin: 0px 20px 0px 20px;
   padding: 20px 0px 20px 0px;
-  /* width: calc(100% - 40px); */
+  width: calc(100% - 40px);
   max-height: calc(100vh - 330px);
   overflow-y: scroll;
 `

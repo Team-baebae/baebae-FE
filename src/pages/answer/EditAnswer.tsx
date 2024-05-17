@@ -25,7 +25,7 @@ const EditAnswer = () => {
   const userInfo = useRecoilValue(userInfoState)
 
   // 이미지 파일 선택 핸들러
-  const [imageFile, setImageFile] = useState<File>()
+  const [imageFile, setImageFile] = useState<File | undefined>(undefined)
   const [imageUrl, setImageUrl] = useState<string>(selectedFeed.imageUrl)
   const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files && e.target.files[0]
@@ -44,7 +44,7 @@ const EditAnswer = () => {
 
   // 모달창에서 선택받은 음악 관련 정보, 링크 저장
   const [musicName, setMusicName] = useState<string>(selectedFeed.musicName)
-  const [musicAudio, setMusicAudio] = useState<string>(selectedFeed.musicAuidoUrl)
+  const [musicAudio, setMusicAudio] = useState<string>(selectedFeed.musicAudioUrl)
   const [musicSinger, setMusicSinger] = useState<string>(selectedFeed.musicSinger)
   const [linkAttachments, setLinkAttachments] = useState<string>(selectedFeed.linkAttachments)
 
@@ -66,6 +66,7 @@ const EditAnswer = () => {
         musicSinger: musicSinger,
         musicAudioUrl: musicAudio,
         imageUrl: imageUrl,
+        updateImage: false,
       }).then((res) => {
         navigate(`/${userInfo.nickname}`, {
           state: {
