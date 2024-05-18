@@ -9,6 +9,8 @@ import KakaoRedirection from '@/pages/signup/KakaoRedirection'
 import SignUpTerms from '@/pages/signup/SignUpTerms'
 import SignUpNickname from '@/pages/signup/SignUpNickname'
 import SignUpOnBoarding from '@/pages/signup/SignUpOnBoarding'
+//튜토리얼
+import Tutorial from '@/pages/tutorial/Tutorial'
 //메인
 import Main from '@/pages/main/Main'
 //설정
@@ -45,6 +47,9 @@ const Router = () => {
             <Route path="terms" element={<SignUpTerms />} />
             <Route path="nickname" element={<SignUpNickname />} />
             <Route path="complete" element={<SignUpOnBoarding />} />
+          </Route>
+          <Route path="tutorial">
+            <Route index element={<Tutorial />} />
           </Route>
           <Route path="settings">
             <Route index element={<Setting />} />
