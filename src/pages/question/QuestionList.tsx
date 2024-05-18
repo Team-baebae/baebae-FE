@@ -96,8 +96,8 @@ const QuestionList = () => {
   }, [scrollLoading, hasMore]) // 스크롤 이벤트 리스너 등록 및 해제
 
   // 닉네임 값으로 이동 경로 설정 필요
-  const clickName = (active: boolean) => {
-    active && navigate(`/joohee`)
+  const clickName = (active: boolean, nickname: string) => {
+    active && navigate(`/${nickname}`)
     !active && toast('질문자가 피드 공개를 설정하지 않았어요!')
   }
 
@@ -161,9 +161,19 @@ const QuestionList = () => {
                 <FlipContent>{value.content}</FlipContent>
                 <WriterBlock>
                   FROM{' '}
-                  <WriterRegion public={value.profileOnOff ? 1 : 0} onClick={() => clickName(value.profileOnOff)}>
-                    {value.nickname}님
-                  </WriterRegion>
+                  {value.profileOnOff ? (
+                    <WriterRegion
+                      public={value.profileOnOff ? 1 : 0}
+                      onClick={(e) => {
+                        e.stopPropagation()
+                        navigate(`/${value.memberNickname}`)
+                      }}
+                    >
+                      {value.nickname}님
+                    </WriterRegion>
+                  ) : (
+                    <WriterRegion public={value.profileOnOff ? 1 : 0}>{value.nickname}님</WriterRegion>
+                  )}
                 </WriterBlock>
               </FlipWrapper>
             ))}
