@@ -24,6 +24,7 @@ const fetchAccessToken = async () => {
   tokenExpiresAt = Date.now() + response.data.expires_in * 1000
 }
 
+// 토큰 없거나, 만료시간 지나면 재발급
 export const getAccessToken = async () => {
   if (!accessToken || Date.now() >= tokenExpiresAt) {
     await fetchAccessToken()
