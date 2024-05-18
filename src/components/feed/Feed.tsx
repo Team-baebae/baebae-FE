@@ -199,7 +199,8 @@ const Feed = () => {
         </Swiper>
       </TopComponent>
       {/* 해당 카테고리 피드 리스트 부분 */}
-      {feedList.length > 0 ? (
+      {/* {feedList.length > 0 ? ( */}
+      {feedList.length === 0 ? (
         <FeedList
           data={feedList}
           selectedCategoryId={selectedCategoryId}
