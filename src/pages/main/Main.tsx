@@ -78,7 +78,7 @@ const Main = () => {
       {isExisting ? (
         <Container>
           <MainHeader background={colors.white} />
-          <MainProfile />
+          {username && <MainProfile nickname={username} />}
           <CategoryBox>
             <Category category={category} num={0} onClick={() => setCategory(0)}>
               질문
