@@ -68,14 +68,12 @@ const SignUpNickname = () => {
     try {
       registerServiceWorker()
       let fcmToken = await requestPermission()
-      setUserInfo({
-        ...userInfo,
+      setUserInfo((prevUserInfo) => ({
+        ...prevUserInfo,
         fcmToken: fcmToken,
-      })
-      console.log('fcmToken' + fcmToken)
+      }))
       await loginApi(kakaoAccessToken, nickname, fcmToken).then(async (res: LoginProps) => {
         if (res.status === 200) {
-          console.log(res)
           console.log(res.data.accessToken)
           console.log(res.data.id)
           getUserInfo(res.data)
@@ -100,15 +98,15 @@ const SignUpNickname = () => {
     try {
       await getUserInfoApi(data.accessToken, data.id).then((res) => {
         console.log(res)
-        setUserInfo({
-          ...userInfo,
+        setUserInfo((prevUserInfo) => ({
+          ...prevUserInfo,
           memberId: data.id,
           nickname: data.nickname,
           email: data.email,
           accessToken: data.accessToken,
           refreshToken: data.refreshToken,
           profileImage: res.data.profileImage,
-        })
+        }))
       })
     } catch (err) {
       console.log(err)
