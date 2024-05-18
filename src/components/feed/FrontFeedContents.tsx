@@ -2,9 +2,12 @@ import styled from 'styled-components'
 import { SelectedFeedProps } from '@/components/feed/types'
 import { colors } from '@/styles/colors'
 import QuotationMark from '@/assets/question/QuotationMark.svg'
+import { useNavigate } from 'react-router-dom'
 
 // 피드의 질문 컴포넌트
 const FrontFeedContents = (props: SelectedFeedProps) => {
+  const navigate = useNavigate()
+
   const selectedFeed = props.selectedFeed
   return (
     <FlipWrapper>
@@ -15,7 +18,9 @@ const FrontFeedContents = (props: SelectedFeedProps) => {
       <WriterBlock>
         FROM
         {selectedFeed.profileOnOff ? (
-          <WriterRegion color={colors.grey1}>{selectedFeed.nickname}</WriterRegion>
+          <WriterRegion onClick={() => navigate(`/${selectedFeed.memberNickname}`)} color={colors.grey1}>
+            {selectedFeed.nickname}
+          </WriterRegion>
         ) : (
           <WriterRegion color={colors.grey4}>{selectedFeed.nickname}</WriterRegion>
         )}

@@ -76,7 +76,9 @@ const FeedList = ({
               <WriterBlock>
                 FROM
                 {feed.profileOnOff ? (
-                  <WriterRegion color={colors.grey1}>{feed.nickname}</WriterRegion>
+                  <WriterRegion onClick={() => navigate(`/${feed.memberNickname}`)} color={colors.grey1}>
+                    {feed.nickname}
+                  </WriterRegion>
                 ) : (
                   <WriterRegion color={colors.grey4}>{feed.nickname}</WriterRegion>
                 )}
