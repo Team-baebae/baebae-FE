@@ -293,8 +293,8 @@ const DetailFeed = (props: ModalProps) => {
         Kakao.Share.sendDefault({
           objectType: 'feed',
           content: {
-            title: '타인을 알아가고 본인을 표현하는 가장 단순한 방법, 플리빗',
-            description: '플리빗은 세상과 SNS로 대화하는 현세대의 소통 방법을 개선하고자 하는 Q&A 플랫폼입니다.',
+            title: `${ownerUserInfo.nickname}님의 플립을 공유했어요!`,
+            description: `플립을 뒤집어 ${ownerUserInfo.nickname}님의 답변을 확인해 보세요!`,
             imageUrl: response.infos.original.url,
             link: {
               mobileWebUrl: `${realUrl}/${ownerUserInfo.nickname}`,
