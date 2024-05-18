@@ -25,7 +25,7 @@ const GroupModify = () => {
   const categoryImage = location.state?.categoryImage
   const categoryName = location.state?.categoryName
   const [selectedAnswerIds, setSelectedAnswerIds] = useState<number[]>(location.state?.answerIds)
-
+  const redirectRoute = location.state?.redirectRoute
   // 사진 수정했는지 여부 확인
   const [isEditGroupImg, setIsEditGroupImg] = useState(false)
 
@@ -69,11 +69,23 @@ const GroupModify = () => {
     try {
       await modifyCategoryApi(userInfo.accessToken, categoryId, groupName, selectedAnswerIds).then((res) => {
         console.log(res)
-        navigate(`/${userInfo.nickname}`, {
-          state: {
-            defaultCategory: 1,
-          },
-        }) // 현재 페이지에서 뒤로 이동
+        console.log(redirectRoute)
+        if (redirectRoute === 'feedTotal') {
+          navigate('/groups', {
+            state: {
+              selectedCategoryId: res.data.categoryId,
+              selectedCategoryGroupName: res.data.categoryName,
+              selectedCategoryImage: res.data.categoryImage,
+              selectedCategoryAnswerIds: res.data.answerIds,
+            },
+          })
+        } else {
+          navigate(`/${userInfo.nickname}`, {
+            state: {
+              defaultCategory: 1,
+            },
+          }) // 현재 페이지에서 뒤로 이동
+        }
       })
     } catch (err) {
       console.log(err)
@@ -118,7 +130,7 @@ const GroupModify = () => {
       <input type="file" name="file" id="file" style={{ display: 'none' }} onChange={handleImageChange} />
       {/* 카테고리 이름 */}
       <FolderNameLabel>그룹명</FolderNameLabel>
-      <FolderName value={groupName} onChange={onChangeFolderName} placeholder="그룹명을 입력해주세요" />
+      <FolderName value={groupName} onChange={onChangeFolderName} placeholder="그룹명을 입력해주세요" maxLength={4} />
       <FolderNameConditionWrapper>
         <FolderNameConditionText color={colors.grey1} fontSize="12px">
           2-4자로 입력해주세요.
@@ -138,7 +150,7 @@ const GroupModify = () => {
             /
           </FolderNameConditionText>
           <FolderNameConditionText color={colors.grey4} fontSize="10px">
-            8
+            4
           </FolderNameConditionText>
         </FolderNameLengthWrapper>
       </FolderNameConditionWrapper>

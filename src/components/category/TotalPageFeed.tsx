@@ -1,5 +1,5 @@
 import { AnimatePresence, motion } from 'framer-motion'
-import { useState } from 'react'
+import { useCallback, useEffect, useState } from 'react'
 import styled from 'styled-components'
 import { useRecoilValue } from 'recoil'
 import { Flip, toast } from 'react-toastify'
@@ -11,7 +11,7 @@ import TelePathyMotion from '@/components/feed/TelepathyMotion'
 import { TotalPageFeedProps } from '@/components/category/types'
 import { StyledToastContainer } from '@/components/toast/toastStyle'
 import { colors } from '@/styles/colors'
-import { deleteFeedApi } from '@/apis/AnswerApi'
+import { deleteFeedApi, getIsReactedApi, getReactCountApi, postReactApi } from '@/apis/AnswerApi'
 import { isMineState, userInfoState } from '@/context/Atoms'
 import MusicIcon from '@/assets/MusicWhite.svg'
 import PlayIcon from '@/assets/PlayGray.svg'
@@ -79,7 +79,7 @@ const TotalPageFeed = (props: TotalPageFeedProps) => {
 
   // 공감 누른지 여부
   const [giveHeart, setGiveHeart] = useState<boolean>(false)
-  const [giveSee, setGiveSee] = useState<boolean>(false)
+  const [giveCurious, setGiveCurious] = useState<boolean>(false)
   const [giveSad, setGiveSad] = useState<boolean>(false)
   const [giveTelepathy, setGiveTelepathy] = useState<boolean>(false)
 
@@ -134,6 +134,65 @@ const TotalPageFeed = (props: TotalPageFeedProps) => {
       console.log(err)
     }
   }
+
+  // 반응 count
+  const [heartCount, setHeartCount] = useState<number>(0)
+  const [curiousCount, setCuriousCount] = useState<number>(0)
+  const [sadCount, setSadCount] = useState<number>(0)
+  const [connectCount, setConnectCount] = useState<number>(0)
+
+  // 해당 피드에 대한 반응 여부 확인
+  const getIsReacted = useCallback(async () => {
+    try {
+      await getIsReactedApi(userInfo.accessToken, selectedFeed.answerId, userInfo.memberId).then((res) => {
+        setGiveHeart(res.data.HEART)
+        setGiveCurious(res.data.CURIOUS)
+        setGiveSad(res.data.SAD)
+        setGiveTelepathy(res.data.CONNECT)
+        console.log(res)
+      })
+    } catch (err) {
+      console.log(err)
+    }
+  }, [])
+
+  // 해당 피드의 반응 개수 받기
+  const getReactCount = useCallback(async () => {
+    try {
+      await getReactCountApi(selectedFeed.answerId).then((res) => {
+        console.log(res)
+        setHeartCount(res.data.heartCount)
+        setCuriousCount(res.data.curiousCount)
+        setSadCount(res.data.sadCount)
+        setConnectCount(res.data.connectCount)
+      })
+    } catch (err) {
+      console.log(err)
+    }
+  }, [])
+
+  // 해당피드에 반응 남기기
+  const postReact = async (reaction: string) => {
+    try {
+      await postReactApi(userInfo.accessToken, selectedFeed.answerId, userInfo.memberId, reaction).then((res) => {
+        setHeartCount(res.data.heartCount)
+        setCuriousCount(res.data.curiousCount)
+        setSadCount(res.data.sadCount)
+        setConnectCount(res.data.connectCount)
+        if (reaction === 'HEART') setGiveHeart(res.data.clicked)
+        else if (reaction === 'CURIOUS') setGiveCurious(res.data.clicked)
+        else if (reaction === 'SAD') setGiveSad(res.data.clicked)
+        else if (reaction === 'CONNECT') setGiveTelepathy(res.data.clicked)
+      })
+    } catch (err) {
+      console.log(err)
+    }
+  }
+
+  useEffect(() => {
+    getIsReacted()
+    getReactCount()
+  }, [getIsReacted, getReactCount])
 
   return (
     <Container>
@@ -191,31 +250,31 @@ const TotalPageFeed = (props: TotalPageFeedProps) => {
             state={giveHeart}
             onClick={(e) => {
               e.stopPropagation()
-              setGiveHeart(!giveHeart)
+              postReact('HEART')
             }}
           >
             <EmotionText>🖤</EmotionText>
-            <EmotionText>{selectedFeed.heartCount}</EmotionText>
+            <EmotionText>{heartCount}</EmotionText>
           </EmotionButton>
           <EmotionButton
-            state={giveSee}
+            state={giveCurious}
             onClick={(e) => {
               e.stopPropagation()
-              setGiveSee(!giveSee)
+              postReact('CURIOUS')
             }}
           >
             <EmotionText>👀</EmotionText>
-            <EmotionText>{selectedFeed.curiousCount}</EmotionText>
+            <EmotionText>{curiousCount}</EmotionText>
           </EmotionButton>
           <EmotionButton
             state={giveSad}
             onClick={(e) => {
               e.stopPropagation()
-              setGiveSad(!giveSad)
+              postReact('SAD')
             }}
           >
             <EmotionText>🥺</EmotionText>
-            <EmotionText>{selectedFeed.sadCount}</EmotionText>
+            <EmotionText>{sadCount}</EmotionText>
           </EmotionButton>
           <TelepathyButton state={giveTelepathy} onClick={clickTelepathy}>
             <EmotionText style={{ fontSize: 20 }}>👉🏻</EmotionText>
@@ -250,6 +309,7 @@ const TotalPageFeed = (props: TotalPageFeedProps) => {
                   categoryImage: selectedCategoryImage,
                   categoryName: selectedCategoryGroupName,
                   answerIds: selectedCategoryAnswerIds,
+                  redirectRoute: 'feedTotal',
                 },
               })
             }}
@@ -260,12 +320,13 @@ const TotalPageFeed = (props: TotalPageFeedProps) => {
 
           <BottomSheetEachWrapper
             onClick={() => {
-              navigate(`/questions/${selectedFeed.questionId}/answer`, {
+              navigate(`/questions/${selectedFeed.questionId}/edit`, {
                 state: {
                   question: {
                     questionId: selectedFeed.questionId,
                     content: selectedFeed.questionContent,
                     nickname: selectedFeed.nickname,
+                    profileOnOff: selectedFeed.profileOnOff,
                   },
                   selectedFeed: selectedFeed,
                 },

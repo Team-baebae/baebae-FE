@@ -31,9 +31,6 @@ const FeedList = ({
     musicAudioUrl: '',
     musicName: '',
     musicSinger: '',
-    sadCount: 0,
-    heartCount: 0,
-    curiousCount: 0,
     imageUrl: '',
   })
 
@@ -57,7 +54,12 @@ const FeedList = ({
             <Icon src={QuotationMark} />
             <FlipContent>{feed.questionContent}</FlipContent>
             <WriterBlock>
-              FROM<WriterRegion>{feed.nickname}</WriterRegion>
+              FROM
+              {feed.profileOnOff ? (
+                <WriterRegion color={colors.grey1}>{feed.nickname}</WriterRegion>
+              ) : (
+                <WriterRegion color={colors.grey4}>{feed.nickname}</WriterRegion>
+              )}
             </WriterBlock>
           </FlipWrapper>
         ))}
@@ -144,9 +146,9 @@ const WriterBlock = styled.div`
   letter-spacing: -0.2px;
 `
 
-const WriterRegion = styled.button`
+const WriterRegion = styled.button<{ color: string }>`
   margin: 0px 0px 0px 4px;
-  color: ${colors.grey4};
+  color: ${(porps) => porps.color};
   font-family: Pretendard;
   font-size: 10px;
   font-style: normal;

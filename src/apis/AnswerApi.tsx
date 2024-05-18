@@ -58,14 +58,50 @@ export const modifyFeedApi = (accessToken: string, answerId: number, imageFile: 
   // FormData 객체 생성
   const formData = new FormData()
   // categoryImage가 undefined가 아니면 FormData에 추가
-  if (imageFile) {
+  if (imageFile !== undefined) {
     formData.append('imageFile', imageFile)
   }
 
-  formData.append('request', JSON.stringify(request))
+  formData.append(
+    'request',
+    JSON.stringify({
+      ...request,
+      updateImage: imageFile === undefined ? false : true,
+    }),
+  )
   return flipitAxios.put(API, formData, {
+    headers: {
+      Authorization: `Bearer ${accessToken}`,
+      'Content-Type': 'multipart/form-data', // 컨텐츠 타입을 multipart/form-data로 지정
+    },
+  })
+}
+
+export const getReactCountApi = (answerId: number) => {
+  let API = `/api/answers/${answerId}/reactionsCount`
+  return flipitAxios.get(API)
+}
+
+export const getIsReactedApi = (accessToken: string, answerId: number, memberId: number) => {
+  let API = `/api/answers/${answerId}/reacted?memberId=${memberId}`
+  return flipitAxios.get(API, {
     headers: {
       Authorization: `Bearer ${accessToken}`,
     },
   })
+}
+
+export const postReactApi = (accessToken: string, answerId: number, memberId: number, reaction: string) => {
+  let API = `/api/reactions/${memberId}/${answerId}`
+  return flipitAxios.post(
+    API,
+    {
+      reaction: reaction,
+    },
+    {
+      headers: {
+        Authorization: `Bearer ${accessToken}`,
+      },
+    },
+  )
 }

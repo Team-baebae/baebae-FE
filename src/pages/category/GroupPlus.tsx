@@ -1,7 +1,7 @@
 import { useCallback, useEffect, useState } from 'react'
 import styled from 'styled-components'
 import { useRecoilValue } from 'recoil'
-import { useNavigate } from 'react-router-dom'
+import { useLocation, useNavigate } from 'react-router-dom'
 import GroupHeader from '@/components/common/GroupHeader'
 import { UnFixedButton } from '@/components/common/Button'
 import Feeds from '@/components/category/Feeds'
@@ -16,6 +16,10 @@ import DefaultImg from '@/assets/main/DefaultImage.png'
 // 새 그룹 생성 페이지
 const GroupPlus = () => {
   const navigate = useNavigate()
+
+  // 넘겨받은 category 정보 저장
+  const location = useLocation()
+  const redirectRoute = location.state?.redirectRoute
 
   // 리코일 로그인한 userInfo
   const userInfo = useRecoilValue(userInfoState)
@@ -66,11 +70,22 @@ const GroupPlus = () => {
         selectedAnswerIds,
       ).then((res) => {
         console.log(res)
-        navigate(`/${userInfo.nickname}`, {
-          state: {
-            defaultCategory: 1,
-          },
-        })
+        if (redirectRoute === 'feedTotal') {
+          navigate('/groups', {
+            state: {
+              selectedCategoryId: res.data.categoryId,
+              selectedCategoryGroupName: res.data.categoryName,
+              selectedCategoryImage: res.data.categoryImage,
+              selectedCategoryAnswerIds: res.data.answerIds,
+            },
+          })
+        } else {
+          navigate(`/${userInfo.nickname}`, {
+            state: {
+              defaultCategory: 1,
+            },
+          }) // 현재 페이지에서 뒤로 이동
+        }
       })
     } catch (err) {
       console.log(err)
@@ -94,7 +109,12 @@ const GroupPlus = () => {
       <input type="file" name="file" id="file" style={{ display: 'none' }} onChange={handleImageChange} />
       {/* 카테고리 이름 */}
       <FolderNameLabel>그룹명</FolderNameLabel>
-      <FolderName value={categoryName} onChange={onChangeFolderName} placeholder="그룹명을 입력해주세요" />
+      <FolderName
+        value={categoryName}
+        onChange={onChangeFolderName}
+        placeholder="그룹명을 입력해주세요"
+        maxLength={4}
+      />
       <FolderNameConditionWrapper>
         <FolderNameConditionText color={colors.grey1} fontSize="12px">
           2-4자로 입력해주세요.
@@ -114,7 +134,7 @@ const GroupPlus = () => {
             /
           </FolderNameConditionText>
           <FolderNameConditionText color={colors.grey4} fontSize="10px">
-            8
+            4
           </FolderNameConditionText>
         </FolderNameLengthWrapper>
       </FolderNameConditionWrapper>

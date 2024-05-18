@@ -132,6 +132,7 @@ const SignUpNickname = () => {
           value={nickname}
           onChange={onChangeNickname}
           placeholder="사용자 아이디를 입력해주세요."
+          maxLength={25}
         />
         <DuplicationCheckBtn onClick={checkDuplicateNickname}>중복 확인</DuplicationCheckBtn>
       </SignUpInputWrapper>

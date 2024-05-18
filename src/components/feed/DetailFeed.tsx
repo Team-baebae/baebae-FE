@@ -1,5 +1,5 @@
 import { AnimatePresence, motion } from 'framer-motion'
-import { useState } from 'react'
+import { useCallback, useEffect, useState } from 'react'
 import styled from 'styled-components'
 import { useRecoilValue } from 'recoil'
 import { useNavigate } from 'react-router-dom'
@@ -13,7 +13,7 @@ import TelePathyMotion from '@/components/feed/TelepathyMotion'
 import { ModalProps } from '@/components/feed/types'
 import { StyledToastContainer } from '@/components/toast/toastStyle'
 import { colors } from '@/styles/colors'
-import { deleteFeedApi } from '@/apis/AnswerApi'
+import { deleteFeedApi, getIsReactedApi, getReactCountApi, postReactApi } from '@/apis/AnswerApi'
 import { isMineState, userInfoState } from '@/context/Atoms'
 import MusicIcon from '@/assets/MusicWhite.svg'
 import PlayIcon from '@/assets/PlayGray.svg'
@@ -89,23 +89,6 @@ const DetailFeed = (props: ModalProps) => {
     setOpen(false)
   }
 
-  // 공감 누른지 여부
-  const [giveHeart, setGiveHeart] = useState<boolean>(false)
-  const [giveSee, setGiveSee] = useState<boolean>(false)
-  const [giveSad, setGiveSad] = useState<boolean>(false)
-  const [giveTelepathy, setGiveTelepathy] = useState<boolean>(false)
-
-  // 통했당 활성화 시 애니메이션
-  const clickTelepathy = (e: React.MouseEvent<HTMLDivElement>) => {
-    e.stopPropagation()
-    !giveTelepathy && setPopLottie(true)
-    setGiveTelepathy(!giveTelepathy)
-    setTimeout(() => {
-      setPopLottie(false)
-    }, 2350)
-  }
-  const [popLottie, setPopLottie] = useState<boolean>(false)
-
   //현재 실행하고 있는 트랙 저장
   const [currentAudio, setCurrentAudio] = useState<HTMLAudioElement | null>(null)
   //현재 실행중인지 여부 확인
@@ -148,6 +131,81 @@ const DetailFeed = (props: ModalProps) => {
       console.log(err)
     }
   }
+
+  // 반응 count
+  const [heartCount, setHeartCount] = useState<number>(0)
+  const [curiousCount, setCuriousCount] = useState<number>(0)
+  const [sadCount, setSadCount] = useState<number>(0)
+  const [connectCount, setConnectCount] = useState<number>(0)
+
+  // 공감 누른지 여부
+  const [giveHeart, setGiveHeart] = useState<boolean>(false)
+  const [giveCurious, setGiveCurious] = useState<boolean>(false)
+  const [giveSad, setGiveSad] = useState<boolean>(false)
+  const [giveTelepathy, setGiveTelepathy] = useState<boolean>(false)
+
+  // 통했당 활성화 시 애니메이션
+  const clickTelepathy = (e: React.MouseEvent<HTMLDivElement>) => {
+    e.stopPropagation()
+    !giveTelepathy && setPopLottie(true)
+    setGiveTelepathy(!giveTelepathy)
+    setTimeout(() => {
+      setPopLottie(false)
+    }, 2350)
+  }
+  const [popLottie, setPopLottie] = useState<boolean>(false)
+
+  // 해당 피드에 대한 반응 여부 확인
+  const getIsReacted = useCallback(async () => {
+    try {
+      await getIsReactedApi(userInfo.accessToken, selectedFeed.answerId, userInfo.memberId).then((res) => {
+        setGiveHeart(res.data.HEART)
+        setGiveCurious(res.data.CURIOUS)
+        setGiveSad(res.data.SAD)
+        setGiveTelepathy(res.data.CONNECT)
+        console.log(res)
+      })
+    } catch (err) {
+      console.log(err)
+    }
+  }, [])
+
+  // 해당 피드의 반응 개수 받기
+  const getReactCount = useCallback(async () => {
+    try {
+      await getReactCountApi(selectedFeed.answerId).then((res) => {
+        console.log(res)
+        setHeartCount(res.data.heartCount)
+        setCuriousCount(res.data.curiousCount)
+        setSadCount(res.data.sadCount)
+        setConnectCount(res.data.connectCount)
+      })
+    } catch (err) {
+      console.log(err)
+    }
+  }, [])
+  // 해당피드에 반응 남기기
+  const postReact = async (reaction: string) => {
+    try {
+      await postReactApi(userInfo.accessToken, selectedFeed.answerId, userInfo.memberId, reaction).then((res) => {
+        setHeartCount(res.data.heartCount)
+        setCuriousCount(res.data.curiousCount)
+        setSadCount(res.data.sadCount)
+        setConnectCount(res.data.connectCount)
+        if (reaction === 'HEART') setGiveHeart(res.data.clicked)
+        else if (reaction === 'CURIOUS') setGiveCurious(res.data.clicked)
+        else if (reaction === 'SAD') setGiveSad(res.data.clicked)
+        else if (reaction === 'CONNECT') setGiveTelepathy(res.data.clicked)
+      })
+    } catch (err) {
+      console.log(err)
+    }
+  }
+
+  useEffect(() => {
+    getIsReacted()
+    getReactCount()
+  }, [getIsReacted, getReactCount])
 
   return (
     <>
@@ -212,31 +270,31 @@ const DetailFeed = (props: ModalProps) => {
               state={giveHeart}
               onClick={(e) => {
                 e.stopPropagation()
-                setGiveHeart(!giveHeart)
+                postReact('HEART')
               }}
             >
               <EmotionText>🖤</EmotionText>
-              <EmotionText>{selectedFeed.heartCount}</EmotionText>
+              <EmotionText>{heartCount}</EmotionText>
             </EmotionButton>
             <EmotionButton
-              state={giveSee}
+              state={giveCurious}
               onClick={(e) => {
                 e.stopPropagation()
-                setGiveSee(!giveSee)
+                postReact('CURIOUS')
               }}
             >
               <EmotionText>👀</EmotionText>
-              <EmotionText>{selectedFeed.curiousCount}</EmotionText>
+              <EmotionText>{curiousCount}</EmotionText>
             </EmotionButton>
             <EmotionButton
               state={giveSad}
               onClick={(e) => {
                 e.stopPropagation()
-                setGiveSad(!giveSad)
+                postReact('SAD')
               }}
             >
               <EmotionText>🥺</EmotionText>
-              <EmotionText>{selectedFeed.sadCount}</EmotionText>
+              <EmotionText>{sadCount}</EmotionText>
             </EmotionButton>
             <TelepathyButton state={giveTelepathy} onClick={clickTelepathy}>
               <EmotionText style={{ fontSize: 20 }}>👉🏻</EmotionText>
@@ -267,12 +325,13 @@ const DetailFeed = (props: ModalProps) => {
         >
           <BottomSheetEachWrapper
             onClick={() => {
-              navigate(`/questions/${selectedFeed.questionId}/answer`, {
+              navigate(`/questions/${selectedFeed.questionId}/edit`, {
                 state: {
                   question: {
                     questionId: selectedFeed.questionId,
                     content: selectedFeed.questionContent,
                     nickname: selectedFeed.nickname,
+                    profileOnOff: selectedFeed.profileOnOff,
                   },
                   selectedFeed: selectedFeed,
                 },
@@ -282,21 +341,7 @@ const DetailFeed = (props: ModalProps) => {
             <BottomSheetEachIcon src={pencil} />
             <BottomSheetEachText color={colors.grey1}>플립 수정하기</BottomSheetEachText>
           </BottomSheetEachWrapper>
-          <BottomSheetEachWrapper
-            onClick={() => {
-              navigate(`/groups/${selectedCategoryId}/edit`, {
-                state: {
-                  categoryId: selectedCategoryId,
-                  categoryImage: selectedCategoryImage,
-                  categoryName: selectedCategoryGroupName,
-                  answerIds: selectedCategoryAnswerIds,
-                },
-              })
-            }}
-          >
-            <BottomSheetEachIcon src={pencil} />
-            <BottomSheetEachText color={colors.grey1}>플립 수정하기</BottomSheetEachText>
-          </BottomSheetEachWrapper>
+
           <BottomSheetEachWrapper
             onClick={() => {
               navigate(`/groups/${selectedCategoryId}/edit`, {

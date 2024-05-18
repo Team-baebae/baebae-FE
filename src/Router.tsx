@@ -31,6 +31,7 @@ import Groups from '@/pages/category/Groups'
 import Alrams from '@/pages/alram/Alrams'
 //테스트
 import DetailTestPage from '@/pages/DetailTestPage'
+import EditAnswer from './pages/answer/EditAnswer'
 
 const Router = () => {
   return (
@@ -63,6 +64,7 @@ const Router = () => {
               <Route path="answer" element={<Answer />} />
               <Route path="group" element={<Folder />} />
               <Route path="complete" element={<AnswerComplete />} />
+              <Route path="edit" element={<EditAnswer />} />
             </Route>
           </Route>
           <Route path="groups">

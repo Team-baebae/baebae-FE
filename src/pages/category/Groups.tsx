@@ -103,6 +103,7 @@ const Groups = () => {
   const moveModifyCategory = () => {
     navigate(`/groups/${selectedCategoryId}/edit`, {
       state: {
+        redirectRoute: 'feedTotal',
         categoryId: selectedCategoryId,
         categoryImage: selectedCategoryImage,
         categoryName: selectedCategoryGroupName,
@@ -147,7 +148,7 @@ const Groups = () => {
 
   return (
     <Container>
-      <Header text="전체보기" background={colors.grey7} />
+      <Header route={ownerUserInfo.nickname} text="전체보기" background={colors.grey7} />
       {/* 카테고리 리스트 */}
       <TopComponent>
         <Swiper
@@ -187,7 +188,11 @@ const Groups = () => {
               <GroupWrapper>
                 <GroupPlusImg
                   onClick={() => {
-                    navigate('/groups/new')
+                    navigate('/groups/new', {
+                      state: {
+                        redirectRoute: 'feedTotal',
+                      },
+                    })
                   }}
                   src={plus}
                 />

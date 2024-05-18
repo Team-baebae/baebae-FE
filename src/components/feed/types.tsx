@@ -13,9 +13,6 @@ export interface FeedProps {
   musicAudioUrl: string
   musicName: string
   musicSinger: string
-  curiousCount: number
-  heartCount: number
-  sadCount: number
   imageUrl: string
 }
 
@@ -42,4 +39,12 @@ export interface ModalProps {
 // 선택된 피드 정보 props
 export interface SelectedFeedProps {
   selectedFeed: FeedProps
+}
+
+// 반응 정보들 props
+export interface ReactionProps {
+  curiousCount: number
+  heartCount: number
+  sadCount: number
+  connectCount: number
 }
