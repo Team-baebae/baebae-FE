@@ -19,7 +19,7 @@ const SignUpOnBoarding = () => {
       <BottomButton
         $positive={true}
         func={() => {
-          navigate('/tutorial/1')
+          navigate('/tutorial')
         }}
         text="시작하기"
       />

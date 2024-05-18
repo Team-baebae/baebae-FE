@@ -1,27 +1,23 @@
-import { useState } from 'react'
-import styled from 'styled-components'
 import { colors } from '@/styles/colors'
+import styled from 'styled-components'
+import { useState } from 'react'
 import Plus from '@/assets/main/Plus.svg'
-import TutorialFeedList from '@/components/tutorial/TutorialFeedList'
 import MovieIcon from '@/assets/tutorial/MovieGroup.png'
 import FoodIcon from '@/assets/tutorial/FoodGroup.png'
 import MusicIcon from '@/assets/tutorial/MusicGroup.png'
+import TutorialTooltip from './TutorialTooltip'
 
-// 메인페이지 피드 컴포넌트
-const TutorialFeed = () => {
+const HighLight7 = () => {
   const categories = [
     { categoryId: 0, categoryName: '전체', categoryImage: MovieIcon },
     { categoryId: 1, categoryName: '음식', categoryImage: FoodIcon },
     { categoryId: 2, categoryName: '노래', categoryImage: MusicIcon },
   ]
-
   // 클릭하여 선택된 카테고리의 정보 저장
   const [selectedCategoryId] = useState<number>(0)
-
   return (
-    <>
-      <Container>
-        {/* 카테고리 부분 */}
+    <Container>
+      <Wrapper>
         <TopComponent>
           {categories.map((item) => (
             <GroupWrapper key={item.categoryId}>
@@ -36,20 +32,28 @@ const TutorialFeed = () => {
             <GroupName>추가</GroupName>
           </GroupWrapper>
         </TopComponent>
-        <TutorialFeedList />
-      </Container>
-    </>
+      </Wrapper>
+      <TutorialTooltip text="그룹을 추가하거나 수정해보세요!" triangleCenter={true} />
+    </Container>
   )
 }
 
-export default TutorialFeed
+export default HighLight7
 
 const Container = styled.div`
-  display: flex;
-  flex-direction: column;
-  height: calc(100vh - 280px);
-  margin: 20px;
-  gap: 14px;
+  position: absolute;
+  top: 204px;
+  width: 375px;
+  @media screen and (max-width: 768px) {
+    width: 100%;
+  }
+  padding: 0 12px;
+  z-index: 100;
+`
+const Wrapper = styled.div`
+  background-color: ${colors.white};
+  padding: 8px;
+  border-radius: 12px;
 `
 const TopComponent = styled.div`
   display: flex;

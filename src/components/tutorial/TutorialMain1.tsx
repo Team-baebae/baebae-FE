@@ -1,5 +1,5 @@
 import styled from 'styled-components'
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { useLocation, useNavigate } from 'react-router-dom'
 import { colors } from '@/styles/colors'
 import MainHeader from '@/components/common/MainHeader'
@@ -8,6 +8,12 @@ import TutorialAsk from '@/components/tutorial/TutorialAsk'
 import Pagination from '@/components/tutorial/Pagination'
 import HighLight1 from '@/components/tutorial/HighLight1'
 import TutorialFeed from './TutorialFeed'
+import HighLight2 from './HighLight2'
+import HighLight3 from './HighLight3'
+import HighLight4 from './HighLight4'
+import HighLight5 from './HighLight5'
+import HighLight6 from './HighLight6'
+import HighLight7 from './HighLight7'
 
 const TutorialMain1 = () => {
   const navigate = useNavigate()
@@ -39,8 +45,14 @@ const TutorialMain1 = () => {
         </CategoryBox>
         {category ? <TutorialFeed /> : <TutorialAsk />}
         <ClickWrapper onClick={ClickPage} />
-        <Pagination total={totalPages} current={currentPage} />
+        <Pagination total={totalPages} current={currentPage} setPage={setCurrentPage} setCategory={setCategory} />
         {currentPage == 0 && <HighLight1 />}
+        {currentPage == 1 && <HighLight2 />}
+        {currentPage == 2 && <HighLight3 />}
+        {currentPage == 3 && <HighLight4 />}
+        {currentPage == 4 && <HighLight5 />}
+        {currentPage == 5 && <HighLight6 />}
+        {currentPage == 6 && <HighLight7 />}
       </Container>
     </>
   )
@@ -51,6 +63,7 @@ export default TutorialMain1
 const Container = styled.div`
   position: relative;
   top: 0;
+  height: 100vh;
   display: flex;
   flex-direction: column;
   overflow-y: hidden;
@@ -59,7 +72,10 @@ const ClickWrapper = styled.div`
   position: absolute;
   top: 0;
   display: flex;
-  width: 100vw;
+  width: 375px;
+  @media screen and (max-width: 768px) {
+    width: 100%;
+  }
   height: 100vh;
   z-index: 2;
   background-color: rgba(0, 0, 0, 0.7);
@@ -68,7 +84,7 @@ const CategoryBox = styled.div`
   display: flex;
   align-items: flex-end;
   height: 44px;
-  flex: 1 0 0;
+  //flex: 1 0 0;
   gap: 18.5px;
   padding: 0px 21.25px;
   background-color: ${colors.white};
@@ -78,8 +94,9 @@ const Category = styled.div<{ category: number; num: number }>`
   display: flex;
   flex-direction: column;
   align-items: center;
+  justify-content: center;
   flex: 1 0 0;
-  height: 33px;
+  height: 44px;
   gap: 9px;
   border-bottom: 2px solid ${(props) => (props.category == props.num ? colors.grey1 : colors.white)};
   color: ${(props) => (props.category == props.num ? colors.grey1 : colors.grey3)};

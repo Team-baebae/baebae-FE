@@ -4,12 +4,18 @@ import styled from 'styled-components'
 interface PaginationProps {
   total: number
   current: number
+  setPage: React.Dispatch<React.SetStateAction<number>>
+  setCategory: React.Dispatch<React.SetStateAction<number>>
 }
-const Pagination = ({ total, current }: PaginationProps) => {
+const Pagination = ({ total, current, setPage, setCategory }: PaginationProps) => {
+  const changePage = (index: number) => {
+    setPage(index)
+    index > 3 ? setCategory(1) : setCategory(0)
+  }
   return (
     <DotsWrapper>
       {Array.from({ length: total }).map((_, index) => (
-        <Dot key={index} active={index === current} />
+        <Dot key={index} active={index === current} onClick={() => changePage(index)} />
       ))}
     </DotsWrapper>
   )

@@ -19,21 +19,22 @@ export default TutorialProfile
 const Container = styled.div`
   display: flex;
   flex-direction: row;
+  height: 100px;
   align-items: center;
   justify-content: space-between;
-  padding: 20px;
+  padding: 12px 20px;
   background-color: ${colors.white};
 `
 const ProfileImage = styled.img`
-  width: 80px;
-  height: 80px;
+  width: 70px;
+  height: 70px;
   border-radius: 100px;
   background: lightgray 50% / cover no-repeat;
 `
 const ProfileContents = styled.div`
   display: flex;
   flex-direction: column;
-  gap: 8px;
+  gap: 12px;
 `
 const Nickname = styled.div`
   color: ${colors.grey1};
@@ -47,7 +48,7 @@ const ShareButton = styled.button`
   display: flex;
   justify-content: center;
   align-items: center;
-  padding: 8px 24px;
+  padding: 11px 24px;
   border-radius: 8px;
   border: 0;
   background-color: ${colors.grey7};

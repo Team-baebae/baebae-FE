@@ -1,37 +1,51 @@
-import styled from 'styled-components'
 import { colors } from '@/styles/colors'
+import styled from 'styled-components'
 import QuotationMark from '@/assets/question/QuotationMark.svg'
+import TutorialTooltip from './TutorialTooltip'
 
-// 해당 카테고리에 속한 피드들 보여주는 컴포넌트
-const TutorialFeedList = () => {
-  const data = [
-    { id: 1, questionContent: '가은아 넌 양식이 좋아, 한식이 좋아?', nickname: '유자인' },
-    { id: 2, questionContent: '요즘 꽂힌 노래 알려줘!', nickname: '배승우' },
-    { id: 3, questionContent: '좋아하는 옷 브랜드가 뭐야?', nickname: '권예인' },
-    { id: 4, questionContent: '이번 주말에 뭐해?', nickname: '김승은' },
-    { id: 5, questionContent: '여행갔던 곳 중에 어디가 가장 좋았어?', nickname: '김예찬' },
-    { id: 6, questionContent: '무슨 영화 좋아해?', nickname: '장지효' },
-  ]
-
+const HighLight5 = () => {
   return (
-    <>
-      <GridContainer>
-        {data.map((feed) => (
-          <FlipWrapper key={feed.id}>
+    <Container>
+      <Wrapper>
+        <GridContainer>
+          <FlipWrapper key={1}>
             <Icon src={QuotationMark} />
-            <FlipContent>{feed.questionContent}</FlipContent>
+            <FlipContent>가은아 넌 양식이 좋아 한식이 좋아?</FlipContent>
             <WriterBlock>
-              FROM<WriterRegion>{feed.nickname}</WriterRegion>
+              FROM<WriterRegion>유자인님</WriterRegion>
             </WriterBlock>
           </FlipWrapper>
-        ))}
-      </GridContainer>
-    </>
+          <FlipWrapper key={2}>
+            <Icon src={QuotationMark} />
+            <FlipContent>요즘 꽂힌 노래 알려줘!</FlipContent>
+            <WriterBlock>
+              FROM<WriterRegion>배승우님</WriterRegion>
+            </WriterBlock>
+          </FlipWrapper>
+        </GridContainer>
+      </Wrapper>
+      <TutorialTooltip text="질문에 대한 답변이 궁금하다면 뒤집어 보세요!" triangleCenter={true} />
+    </Container>
   )
 }
 
-export default TutorialFeedList
+export default HighLight5
 
+const Container = styled.div`
+  position: absolute;
+  top: 280px;
+  width: 375px;
+  @media screen and (max-width: 768px) {
+    width: 100%;
+  }
+  padding: 0 12px;
+  z-index: 100;
+`
+const Wrapper = styled.div`
+  background-color: ${colors.grey7};
+  padding: 8px;
+  border-radius: 12px;
+`
 const GridContainer = styled.div`
   display: grid;
   grid-template-columns: repeat(2, 1fr);
