@@ -45,11 +45,16 @@ export const getOwnerProfileApi = async (memberId: number) => {
 }
 
 // 질문 보내는 api
-export const postQuestionApi = async (memberId: number, question: QuestionProps, accessToken: string) => {
+export const postQuestionApi = async (
+  senderId: number,
+  receiverId: number,
+  question: QuestionProps,
+  accessToken: string,
+) => {
   try {
-    let API = `/api/questions/member/${memberId}`
+    let API = `/api/questions/sender/${senderId}/receiver/${receiverId}`
     const response = await flipitAxios.post(API, question, {
-      params: memberId,
+      params: { senderId: senderId, receiverId: receiverId },
       headers: {
         Authorization: `Bearer ${accessToken}`,
       },
