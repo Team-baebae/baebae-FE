@@ -93,11 +93,6 @@ const QuestionList = () => {
     return () => window.removeEventListener('scroll', handleScroll)
   }, [scrollLoading, hasMore]) // 스크롤 이벤트 리스너 등록 및 해제
 
-  // 닉네임 값으로 이동 경로 설정 필요
-  const clickName = (active: boolean) => {
-    active && navigate(`/joohee`)
-  }
-
   // 삭제 관련 함수
   // 모달 버튼 클릭 유무를 저장할 state
   const [showModal, setShowModal] = useState<boolean>(false)
@@ -157,9 +152,19 @@ const QuestionList = () => {
                 <FlipContent>{value.content}</FlipContent>
                 <WriterBlock>
                   FROM{' '}
-                  <WriterRegion public={value.profileOnOff ? 1 : 0} onClick={() => clickName(value.profileOnOff)}>
-                    {value.nickname}님
-                  </WriterRegion>
+                  {value.profileOnOff ? (
+                    <WriterRegion
+                      public={value.profileOnOff ? 1 : 0}
+                      onClick={(e) => {
+                        e.stopPropagation()
+                        navigate(`/${value.memberNickname}`)
+                      }}
+                    >
+                      {value.nickname}님
+                    </WriterRegion>
+                  ) : (
+                    <WriterRegion public={value.profileOnOff ? 1 : 0}>{value.nickname}님</WriterRegion>
+                  )}
                 </WriterBlock>
               </FlipWrapper>
             ))}
