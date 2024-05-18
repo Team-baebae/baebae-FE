@@ -54,7 +54,7 @@ export const postQuestionApi = async (
   try {
     let API = `/api/questions/sender/${senderId}/receiver/${receiverId}`
     const response = await flipitAxios.post(API, question, {
-      params: { senderId: senderId, receiverId: receiverId },
+      params: { senderId, receiverId },
       headers: {
         Authorization: `Bearer ${accessToken}`,
       },
