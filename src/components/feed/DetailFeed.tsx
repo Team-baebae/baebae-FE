@@ -216,8 +216,10 @@ const DetailFeed = (props: ModalProps) => {
 
   // 캡쳐된 이미지 저장
   const [capturedImageData, setCapturedImageData] = useState<string>('')
+  // 캡쳐된 이미지 파일으로 저장
   const [imageFile, setImageFile] = useState<File | null>(null)
 
+  // 화면캡쳐하기
   const captureElement = async (elementId: string): Promise<string> => {
     const element = document.getElementById(elementId)
     if (!element) throw new Error('Element not found')
@@ -228,12 +230,21 @@ const DetailFeed = (props: ModalProps) => {
     return dataUrl
   }
 
-  const handleCaptureClick = async () => {
+  // 공유하기 누를 시
+  const handleShareCapturedImage = async () => {
     const dataUrl = await captureElement('captureTarget')
     setCapturedImageData(dataUrl)
     convertDataURLToFile(dataUrl, 'captured-image.png')
   }
 
+  // 저장하기 누를시
+  const handleDownloadCapturedImage = async () => {
+    const dataUrl = await captureElement('captureTarget')
+    setCapturedImageData(dataUrl)
+    onSaveAs(dataUrl, 'image-download.png')
+  }
+
+  // 카카오 공유 시 captureElement로 만든 이미지 url은 사용 불가 -> 해당 url다시 파일로 바꿔줘서 카카오 서버에 올리기 -> 카카오 서버 url가져와서 공유
   const convertDataURLToFile = (dataUrl: string, filename: string): void => {
     const arr = dataUrl.split(',')
     const match = arr[0].match(/:(.*?);/)
@@ -254,10 +265,12 @@ const DetailFeed = (props: ModalProps) => {
     const file = new File([blob], filename, { type: mime })
     setImageFile(file) // 파일 객체 상태 업데이트
     console.log(file)
+    if (file) sharing(file)
   }
 
   // 리코일 계정 주인의 데이터 정보
   const [ownerUserInfo, setOwnerUserInfo] = useRecoilState(ownerUserData)
+
   // 공유
   const { Kakao } = window
   const javascriptKey: string = import.meta.env.VITE_KAKAO_JAVASCRIPT_KEY
@@ -271,40 +284,38 @@ const DetailFeed = (props: ModalProps) => {
     console.log(Kakao.isInitialized())
   }, [])
 
-  const shareKakao = () => {
+  // 카카오로 공유
+  const shareKakao = (file: File) => {
     Kakao.Share.uploadImage({
-      file: [imageFile],
+      file: [file],
     })
       .then(function (response: any) {
-        setCapturedImageData(response.infos.original.url)
-        // console.log(response.infos.original.url)
+        Kakao.Share.sendDefault({
+          objectType: 'feed',
+          content: {
+            title: '타인을 알아가고 본인을 표현하는 가장 단순한 방법, 플리빗',
+            description: '플리빗은 세상과 SNS로 대화하는 현세대의 소통 방법을 개선하고자 하는 Q&A 플랫폼입니다.',
+            imageUrl: response.infos.original.url,
+            link: {
+              mobileWebUrl: `${realUrl}/${ownerUserInfo.nickname}`,
+            },
+          },
+          buttons: [
+            {
+              title: '플리빗 보러가기',
+              link: {
+                mobileWebUrl: `${realUrl}/${ownerUserInfo.nickname}`,
+              },
+            },
+          ],
+        })
       })
       .catch(function (error: any) {
         console.log(error)
       })
-
-    Kakao.Share.sendDefault({
-      objectType: 'feed',
-      content: {
-        title: '타인을 알아가고 본인을 표현하는 가장 단순한 방법, 플리빗',
-        description: '플리빗은 세상과 SNS로 대화하는 현세대의 소통 방법을 개선하고자 하는 Q&A 플랫폼입니다.',
-        imageUrl: capturedImageData,
-        link: {
-          mobileWebUrl: `${realUrl}/${ownerUserInfo.nickname}`,
-        },
-      },
-      buttons: [
-        {
-          title: '플리빗 보러가기',
-          link: {
-            mobileWebUrl: `${realUrl}/${ownerUserInfo.nickname}`,
-          },
-        },
-      ],
-    })
   }
-
-  const sharing = async () => {
+  // 모바일뷰인지 웹뷰인지 확인
+  const sharing = async (file: File) => {
     if (navigator?.share) {
       try {
         await navigator.share({
@@ -316,8 +327,19 @@ const DetailFeed = (props: ModalProps) => {
         console.log('에러')
       }
     } else {
-      shareKakao()
+      shareKakao(file)
     }
+  }
+
+  // 저장하기
+  const onSaveAs = (uri: string, filename: string) => {
+    console.log('onSaveAs')
+    var link = document.createElement('a')
+    document.body.appendChild(link)
+    link.href = uri
+    link.download = filename
+    link.click()
+    document.body.removeChild(link)
   }
 
   return (
@@ -418,15 +440,14 @@ const DetailFeed = (props: ModalProps) => {
             </BottomContents>
             {/* 화면 캡쳐,공유 */}
             <ButtonComponent onClick={(e) => e.stopPropagation()}>
-              <ShareButton onClick={handleCaptureClick} background={colors.grey1} color={colors.white}>
+              <ShareButton onClick={handleDownloadCapturedImage} background={colors.grey1} color={colors.white}>
                 <Icon src={Download} />
                 저장하기
               </ShareButton>
-              <ShareButton onClick={sharing} background={colors.primary} color={colors.grey1}>
+              <ShareButton onClick={handleShareCapturedImage} background={colors.primary} color={colors.grey1}>
                 공유하기
               </ShareButton>
             </ButtonComponent>
-            {capturedImageData && <TestImgWrapper src={capturedImageData} alt="Captured" />}
           </div>
         </SearchModalBox>
       </AnimatePresence>
