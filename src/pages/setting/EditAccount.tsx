@@ -40,9 +40,17 @@ const EditAccount = () => {
     try {
       await updateUserProfileApi(userInfo.accessToken, userInfo.memberId, file).then((res) => {
         console.log(res)
-        setUserInfo({
-          ...userInfo,
-          profileImage: URL.createObjectURL(file),
+
+        updateUserNicknameApi(userInfo.accessToken, userInfo.memberId, nickname).then((response) => {
+          if (res.status === 200) {
+            setUserInfo({
+              ...userInfo,
+              nickname: nickname,
+              profileImage: URL.createObjectURL(file),
+            })
+
+            navigate('/settings')
+          }
         })
       })
     } catch (err) {
@@ -110,7 +118,6 @@ const EditAccount = () => {
   const onClickModifyBtn = () => {
     if (isEditProfileImg && profileFile) {
       updateUserProfile(profileFile)
-      updateUserNickname()
     } else {
       updateUserNickname() // profileFile이 없으면 닉네임만 업데이트
     }
