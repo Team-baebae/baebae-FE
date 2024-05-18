@@ -13,10 +13,11 @@ declare global {
 
 interface MainProfileProps {
   nickname: string
+  imageUrl: string
 }
 
 // 메인프로필 컴포넌트
-const MainProfile = ({ nickname }: MainProfileProps) => {
+const MainProfile = ({ nickname, imageUrl }: MainProfileProps) => {
   // 리코일 계정 주인의 데이터 정보
   const [ownerUserInfo, setOwnerUserInfo] = useRecoilState(ownerUserData)
   // 내 페이지인지 여부 확인
@@ -28,19 +29,7 @@ const MainProfile = ({ nickname }: MainProfileProps) => {
   const javascriptKey: string = import.meta.env.VITE_KAKAO_JAVASCRIPT_KEY
   const realUrl: string = import.meta.env.VITE_CLIENT_URL
 
-  const getOwnerProfile = () => {
-    getMemberIdApi(nickname).then((result) => {
-      getOwnerProfileApi(result.memberId).then((res) => {
-        setOwnerUserInfo({
-          ...ownerUserInfo,
-          imageUrl: res.imageUrl,
-        })
-      })
-    })
-  }
-
   useEffect(() => {
-    getOwnerProfile()
     // init 해주기 전에 clean up 을 해준다.
     Kakao.cleanup()
     Kakao.init(javascriptKey)
@@ -101,10 +90,10 @@ const MainProfile = ({ nickname }: MainProfileProps) => {
   return (
     <Container>
       <ProfileContents>
-        <Nickname>{ownerUserInfo.nickname}</Nickname>
+        <Nickname>{nickname}</Nickname>
         <ShareButton onClick={sharing}>{isMine == 'true' ? '내 플리빗 초대' : '이 플리빗 공유'}</ShareButton>
       </ProfileContents>
-      <ProfileImage src={ownerUserInfo.imageUrl} />
+      <ProfileImage src={imageUrl} />
     </Container>
   )
 }
