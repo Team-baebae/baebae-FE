@@ -3,15 +3,16 @@ import styled from 'styled-components'
 import { useRecoilValue } from 'recoil'
 import Lottie from 'lottie-react'
 import { SearchModalBox } from '@/components/common/ModalStyle'
-import { userInfoState } from '@/context/Atoms'
+import { ownerUserData, userInfoState } from '@/context/Atoms'
 import { colors } from '@/styles/colors'
 import TelepathyMotion from '@/assets/lottie/Telepathy.json'
 
 // 통했당 텔레파시 컴포넌트
 const TelePathyMotion = () => {
   const userInfo = useRecoilValue(userInfoState)
+  const ownerInfo = useRecoilValue(ownerUserData)
   const nickname1 = userInfo.nickname
-  const nickname2 = 'HEEEEEE'
+  const nickname2 = ownerInfo.nickname
   return (
     <>
       <AnimatePresence>
