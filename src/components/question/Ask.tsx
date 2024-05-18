@@ -91,10 +91,9 @@ const Ask = () => {
     !isLoggedIn && setShowModal(true)
     // 로그인인 경우 질문 전송
     isLoggedIn &&
-      postQuestionApi(receiverId, questionData, writerToken).then((status) => {
-        status == 200 ? toast('질문 완료!') : toast('[전송 오류] 잠시 후 다시 시도해 주세요')
+      postQuestionApi(loginUserInfo.memberId, receiverId, questionData, writerToken).then((status) => {
+        status == 201 ? toast('질문 완료!') && getQuestionLength() : toast('[전송 오류] 잠시 후 다시 시도해 주세요')
       })
-    getQuestionLength()
   }
 
   return (
