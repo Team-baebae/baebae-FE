@@ -98,6 +98,7 @@ const QuestionList = () => {
   // 닉네임 값으로 이동 경로 설정 필요
   const clickName = (active: boolean) => {
     active && navigate(`/joohee`)
+    !active && toast('질문자가 피드 공개를 설정하지 않았어요!')
   }
 
   // 삭제 관련 함수
