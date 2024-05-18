@@ -1,8 +1,9 @@
 import { AnimatePresence, motion } from 'framer-motion'
 import { useCallback, useEffect, useState } from 'react'
 import styled from 'styled-components'
-import { useRecoilValue } from 'recoil'
+import { useRecoilState, useRecoilValue } from 'recoil'
 import { useNavigate } from 'react-router-dom'
+import html2canvas from 'html2canvas'
 import { BottomSheet } from 'react-spring-bottom-sheet'
 import { toast, Flip } from 'react-toastify'
 import 'react-toastify/dist/ReactToastify.css'
@@ -14,7 +15,7 @@ import { ModalProps } from '@/components/feed/types'
 import { StyledToastContainer } from '@/components/toast/toastStyle'
 import { colors } from '@/styles/colors'
 import { deleteFeedApi, getIsReactedApi, getReactCountApi, postReactApi } from '@/apis/AnswerApi'
-import { isMineState, userInfoState } from '@/context/Atoms'
+import { isMineState, ownerUserData, userInfoState } from '@/context/Atoms'
 import MusicIcon from '@/assets/MusicWhite.svg'
 import PlayIcon from '@/assets/PlayGray.svg'
 import PauseIcon from '@/assets/PauseGray.svg'
@@ -23,6 +24,12 @@ import MoreDots from '@/assets/MoreDots.svg'
 import pencil from '@/assets/main/Pencil.svg'
 import trash from '@/assets/main/Trash.svg'
 import Download from '@/assets/Download.svg'
+
+declare global {
+  interface Window {
+    Kakao: any
+  }
+}
 
 // 피드 누를 시 피드 확대 컴포넌트
 const DetailFeed = (props: ModalProps) => {
@@ -207,6 +214,112 @@ const DetailFeed = (props: ModalProps) => {
     getReactCount()
   }, [getIsReacted, getReactCount])
 
+  // 캡쳐된 이미지 저장
+  const [capturedImageData, setCapturedImageData] = useState<string>('')
+  const [imageFile, setImageFile] = useState<File | null>(null)
+
+  const captureElement = async (elementId: string): Promise<string> => {
+    const element = document.getElementById(elementId)
+    if (!element) throw new Error('Element not found')
+    const canvas = await html2canvas(element, {
+      backgroundColor: 'rgba(0,0,0,0.1)',
+    })
+    const dataUrl = canvas.toDataURL('image/png')
+    return dataUrl
+  }
+
+  const handleCaptureClick = async () => {
+    const dataUrl = await captureElement('captureTarget')
+    setCapturedImageData(dataUrl)
+    convertDataURLToFile(dataUrl, 'captured-image.png')
+  }
+
+  const convertDataURLToFile = (dataUrl: string, filename: string): void => {
+    const arr = dataUrl.split(',')
+    const match = arr[0].match(/:(.*?);/)
+    if (!match) {
+      console.error('Failed to extract MIME type from data URL.')
+      return
+    }
+    const mime = match[1]
+    const bstr = atob(arr[1])
+    let n = bstr.length
+    const u8arr = new Uint8Array(n)
+
+    while (n--) {
+      u8arr[n] = bstr.charCodeAt(n)
+    }
+
+    const blob = new Blob([u8arr], { type: mime })
+    const file = new File([blob], filename, { type: mime })
+    setImageFile(file) // 파일 객체 상태 업데이트
+    console.log(file)
+  }
+
+  // 리코일 계정 주인의 데이터 정보
+  const [ownerUserInfo, setOwnerUserInfo] = useRecoilState(ownerUserData)
+  // 공유
+  const { Kakao } = window
+  const javascriptKey: string = import.meta.env.VITE_KAKAO_JAVASCRIPT_KEY
+  const realUrl: string = import.meta.env.VITE_CLIENT_URL
+
+  useEffect(() => {
+    // init 해주기 전에 clean up 을 해준다.
+    Kakao.cleanup()
+    Kakao.init(javascriptKey)
+    // 잘 적용되면 true
+    console.log(Kakao.isInitialized())
+  }, [])
+
+  const shareKakao = () => {
+    Kakao.Share.uploadImage({
+      file: [imageFile],
+    })
+      .then(function (response: any) {
+        setCapturedImageData(response.infos.original.url)
+        // console.log(response.infos.original.url)
+      })
+      .catch(function (error: any) {
+        console.log(error)
+      })
+
+    Kakao.Share.sendDefault({
+      objectType: 'feed',
+      content: {
+        title: '타인을 알아가고 본인을 표현하는 가장 단순한 방법, 플리빗',
+        description: '플리빗은 세상과 SNS로 대화하는 현세대의 소통 방법을 개선하고자 하는 Q&A 플랫폼입니다.',
+        imageUrl: capturedImageData,
+        link: {
+          mobileWebUrl: `${realUrl}/${ownerUserInfo.nickname}`,
+        },
+      },
+      buttons: [
+        {
+          title: '플리빗 보러가기',
+          link: {
+            mobileWebUrl: `${realUrl}/${ownerUserInfo.nickname}`,
+          },
+        },
+      ],
+    })
+  }
+
+  const sharing = async () => {
+    if (navigator?.share) {
+      try {
+        await navigator.share({
+          title: '타인을 알아가고 본인을 표현하는 가장 단순한 방법, 플리빗',
+          text: '플리빗은 세상과 SNS로 대화하는 현세대의 소통 방법을 개선하고자 하는 Q&A 플랫폼입니다.',
+          url: `https://www.flipit.co.kr/${ownerUserInfo.nickname}`,
+        })
+      } catch (err) {
+        console.log('에러')
+      }
+    } else {
+      shareKakao()
+    }
+  }
+
   return (
     <>
       <AnimatePresence>
@@ -217,101 +330,104 @@ const DetailFeed = (props: ModalProps) => {
           style={{ zIndex: 0 }}
           onClick={backModal}
         >
-          {/* 음악,링크,설정 */}
-          <TopContents>
-            <Links>
-              {selectedFeed?.musicName !== '' && (
-                <LinkButton onClick={MusicClick}>
-                  <Icon src={MusicIcon} />
-                  <OverflowText width="60px">
-                    {selectedFeed?.musicName} - {selectedFeed?.musicSinger}
-                  </OverflowText>
-                  {currentAudio && currentAudio.src === selectedFeed.musicAudioUrl && isPlaying ? (
-                    <Icon src={PauseIcon} alt="pause" />
-                  ) : (
-                    <Icon src={PlayIcon} alt="play" />
-                  )}
-                </LinkButton>
-              )}
-              {selectedFeed?.linkAttachments !== '' && (
-                <LinkButton onClick={LinkClick}>
-                  <Icon src={LinkIcon} />
-                  <OverflowText width="82px">{selectedFeed?.linkAttachments}</OverflowText>
-                </LinkButton>
-              )}
-            </Links>
-            {isMyPage && <Icon src={MoreDots} width={24} height={24} onClick={MoreClick} />}
-          </TopContents>
-          {/* 피드 */}
-          <ModalWrapper onClick={handleClick} transition={spring}>
-            <CardWrapper
-              animate={{ rotateY: isFlipped ? -180 : 0 }}
-              transition={spring}
-              style={{ zIndex: isFlipped ? 0 : 1 }}
-            >
-              {/* 앞면 질문 */}
-              <FrontFeedContents selectedFeed={selectedFeed} />
-            </CardWrapper>
-            <CardWrapper
-              initial={{ rotateY: 180 }}
-              animate={{ rotateY: isFlipped ? 0 : 180 }}
-              transition={spring}
-              style={{
-                zIndex: isFlipped ? 1 : 0,
-              }}
-            >
-              {/* 뒷면 답변*/}
-              <BackFeedContents selectedFeed={selectedFeed} />
-            </CardWrapper>
-          </ModalWrapper>
-          {/* 반응 */}
-          <BottomContents>
-            <EmotionButton
-              state={giveHeart}
-              onClick={(e) => {
-                e.stopPropagation()
-                postReact('HEART')
-              }}
-            >
-              <EmotionText>🖤</EmotionText>
-              <EmotionText>{heartCount}</EmotionText>
-            </EmotionButton>
-            <EmotionButton
-              state={giveCurious}
-              onClick={(e) => {
-                e.stopPropagation()
-                postReact('CURIOUS')
-              }}
-            >
-              <EmotionText>👀</EmotionText>
-              <EmotionText>{curiousCount}</EmotionText>
-            </EmotionButton>
-            <EmotionButton
-              state={giveSad}
-              onClick={(e) => {
-                e.stopPropagation()
-                postReact('SAD')
-              }}
-            >
-              <EmotionText>🥺</EmotionText>
-              <EmotionText>{sadCount}</EmotionText>
-            </EmotionButton>
-            <TelepathyButton state={giveTelepathy} onClick={clickTelepathy}>
-              <EmotionText style={{ fontSize: 20 }}>👉🏻</EmotionText>
-              <EmotionText style={{ fontSize: 20 }}>👈🏻</EmotionText>
-              <EmotionText>통했당!</EmotionText>
-            </TelepathyButton>
-          </BottomContents>
-          {/* 화면 캡쳐,공유 */}
-          <ButtonComponent>
-            <ShareButton background={colors.grey1} color={colors.white}>
-              <Icon src={Download} />
-              저장하기
-            </ShareButton>
-            <ShareButton background={colors.primary} color={colors.grey1}>
-              공유하기
-            </ShareButton>
-          </ButtonComponent>
+          <div id="captureTarget">
+            {/* 음악,링크,설정 */}
+            <TopContents>
+              <Links>
+                {selectedFeed?.musicName !== '' && (
+                  <LinkButton onClick={MusicClick}>
+                    <Icon src={MusicIcon} />
+                    <OverflowText width="60px">
+                      {selectedFeed?.musicName} - {selectedFeed?.musicSinger}
+                    </OverflowText>
+                    {currentAudio && currentAudio.src === selectedFeed.musicAudioUrl && isPlaying ? (
+                      <Icon src={PauseIcon} alt="pause" />
+                    ) : (
+                      <Icon src={PlayIcon} alt="play" />
+                    )}
+                  </LinkButton>
+                )}
+                {selectedFeed?.linkAttachments !== '' && (
+                  <LinkButton onClick={LinkClick}>
+                    <Icon src={LinkIcon} />
+                    <OverflowText width="82px">{selectedFeed?.linkAttachments}</OverflowText>
+                  </LinkButton>
+                )}
+              </Links>
+              {isMyPage && <Icon src={MoreDots} width={24} height={24} onClick={MoreClick} />}
+            </TopContents>
+            {/* 피드 */}
+            <ModalWrapper onClick={handleClick} transition={spring}>
+              <CardWrapper
+                animate={{ rotateY: isFlipped ? -180 : 0 }}
+                transition={spring}
+                style={{ zIndex: isFlipped ? 0 : 1 }}
+              >
+                {/* 앞면 질문 */}
+                <FrontFeedContents selectedFeed={selectedFeed} />
+              </CardWrapper>
+              <CardWrapper
+                initial={{ rotateY: 180 }}
+                animate={{ rotateY: isFlipped ? 0 : 180 }}
+                transition={spring}
+                style={{
+                  zIndex: isFlipped ? 1 : 0,
+                }}
+              >
+                {/* 뒷면 답변*/}
+                <BackFeedContents selectedFeed={selectedFeed} />
+              </CardWrapper>
+            </ModalWrapper>
+            {/* 반응 */}
+            <BottomContents>
+              <EmotionButton
+                state={giveHeart}
+                onClick={(e) => {
+                  e.stopPropagation()
+                  postReact('HEART')
+                }}
+              >
+                <EmotionText>🖤</EmotionText>
+                <EmotionText>{heartCount}</EmotionText>
+              </EmotionButton>
+              <EmotionButton
+                state={giveCurious}
+                onClick={(e) => {
+                  e.stopPropagation()
+                  postReact('CURIOUS')
+                }}
+              >
+                <EmotionText>👀</EmotionText>
+                <EmotionText>{curiousCount}</EmotionText>
+              </EmotionButton>
+              <EmotionButton
+                state={giveSad}
+                onClick={(e) => {
+                  e.stopPropagation()
+                  postReact('SAD')
+                }}
+              >
+                <EmotionText>🥺</EmotionText>
+                <EmotionText>{sadCount}</EmotionText>
+              </EmotionButton>
+              <TelepathyButton state={giveTelepathy} onClick={clickTelepathy}>
+                <EmotionText style={{ fontSize: 20 }}>👉🏻</EmotionText>
+                <EmotionText style={{ fontSize: 20 }}>👈🏻</EmotionText>
+                <EmotionText>통했당!</EmotionText>
+              </TelepathyButton>
+            </BottomContents>
+            {/* 화면 캡쳐,공유 */}
+            <ButtonComponent onClick={(e) => e.stopPropagation()}>
+              <ShareButton onClick={handleCaptureClick} background={colors.grey1} color={colors.white}>
+                <Icon src={Download} />
+                저장하기
+              </ShareButton>
+              <ShareButton onClick={sharing} background={colors.primary} color={colors.grey1}>
+                공유하기
+              </ShareButton>
+            </ButtonComponent>
+            {capturedImageData && <TestImgWrapper src={capturedImageData} alt="Captured" />}
+          </div>
         </SearchModalBox>
       </AnimatePresence>
       {/* ...누를 시 나오는 설정 모달 */}
@@ -507,6 +623,8 @@ const ShareButton = styled.div<{ background: string; color: string }>`
   font-weight: 600;
   line-height: 21px;
   letter-spacing: -0.28px;
+  z-index: 200;
+  cursor: pointer;
 `
 const ButtonComponent = styled.div`
   display: flex;
@@ -515,4 +633,14 @@ const ButtonComponent = styled.div`
   bottom: 30px;
   width: 315px;
   gap: 10px;
+`
+
+const TestImgWrapper = styled.img`
+  position: fixed;
+  top: 30%;
+  left: 0;
+  background-color: none;
+  width: 300px;
+  height: 400px;
+  object-fit: cover;
 `

@@ -78,7 +78,7 @@ export const modifyFeedApi = (accessToken: string, answerId: number, imageFile: 
 }
 
 export const getReactCountApi = (answerId: number) => {
-  let API = `/api/answers/${answerId}/reactionsCount`
+  let API = `/api/reactionsCount/${answerId}/reactionsCount`
   return flipitAxios.get(API)
 }
 
