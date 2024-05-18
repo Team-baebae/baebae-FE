@@ -30,7 +30,6 @@ const Ask = ({ isMine }: AskProps) => {
   const userInfo = useRecoilValue(ownerUserData)
   //계정 주인의 memberId
   const receiverId = userInfo.memberId
-
   // const isMine = JSON.stringify(isMyPage)
 
   // 로그인 된 상태인지 확인
@@ -94,7 +93,9 @@ const Ask = ({ isMine }: AskProps) => {
     // 로그인인 경우 질문 전송
     isLoggedIn &&
       postQuestionApi(loginUserInfo.memberId, receiverId, questionData, writerToken).then((status) => {
-        status == 201 ? toast('질문 완료!') && getQuestionLength() : toast('[전송 오류] 잠시 후 다시 시도해 주세요')
+        status == 201
+          ? toast('질문 완료!') && getQuestionLength()
+          : toast('[전송 오류] 잠시 후 다시 시도해 주세요') && getQuestionLength()
       })
   }
 
