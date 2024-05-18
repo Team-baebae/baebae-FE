@@ -38,20 +38,20 @@ const Main = () => {
       result.isExisting == true && setIsExisting(true)
       result.isExisting == true &&
         getMemberIdApi(nickname).then((result) => {
-          getOwnerProfileApi(result.memberId).then((result) => {
+          getOwnerProfileApi(result.memberId).then((response) => {
             setUserData({
               nickname: nickname,
               memberId: result.memberId,
-              imageUrl: result.imageUrl,
+              imageUrl: response.imageUrl,
             })
           })
-          myMemberId === result.memberId ? (setIsMine(true), setIsMyPage(true)) : (setIsMine(false), setIsMyPage(false))
         })
     })
   }
   // url의 닉네임으로 실제 있는 계정인지 확인
   useEffect(() => {
     if (username) {
+      username === myInfo.nickname ? setIsMyPage(true) : setIsMyPage(false)
       userCheck(username)
     }
   }, [])
