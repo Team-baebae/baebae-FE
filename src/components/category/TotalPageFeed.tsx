@@ -418,89 +418,90 @@ const TotalPageFeed = (props: TotalPageFeedProps) => {
               <EmotionText>통했당!</EmotionText>
             </TelepathyButton>
           </BottomContents>
+          {open && isMyPage && (
+            <BottomSheet
+              open={open}
+              snapPoints={() => [353]}
+              onDismiss={handleDismiss}
+              blocking={true}
+              style={{ zIndex: 100 }}
+            >
+              <BottomSheetEachWrapper onClick={handleShareCapturedImage}>
+                <BottomSheetEachIcon src={Share} />
+                <BottomSheetEachText color={colors.grey1}>공유하기</BottomSheetEachText>
+              </BottomSheetEachWrapper>
+              <BottomSheetEachWrapper onClick={handleDownloadCapturedImage}>
+                <BottomSheetEachIcon src={Download} />
+                <BottomSheetEachText color={colors.grey1}>저장하기</BottomSheetEachText>
+              </BottomSheetEachWrapper>
+
+              <BottomSheetEachWrapper
+                onClick={() => {
+                  navigate(`/groups/${selectedCategoryId}/edit`, {
+                    state: {
+                      categoryId: selectedCategoryId,
+                      categoryImage: selectedCategoryImage,
+                      categoryName: selectedCategoryGroupName,
+                      answerIds: selectedCategoryAnswerIds,
+                      redirectRoute: 'feedTotal',
+                    },
+                  })
+                }}
+              >
+                <BottomSheetEachIcon src={pencil} />
+                <BottomSheetEachText color={colors.grey1}>그룹 수정하기</BottomSheetEachText>
+              </BottomSheetEachWrapper>
+
+              <BottomSheetEachWrapper
+                onClick={() => {
+                  navigate(`/questions/${selectedFeed.questionId}/edit`, {
+                    state: {
+                      question: {
+                        questionId: selectedFeed.questionId,
+                        content: selectedFeed.questionContent,
+                        nickname: selectedFeed.nickname,
+                        profileOnOff: selectedFeed.profileOnOff,
+                      },
+                      selectedFeed: selectedFeed,
+                    },
+                  })
+                }}
+              >
+                <BottomSheetEachIcon src={pencil} />
+                <BottomSheetEachText color={colors.grey1}>플립 수정하기</BottomSheetEachText>
+              </BottomSheetEachWrapper>
+
+              <BottomSheetEachWrapper onClick={deleteFeed}>
+                <BottomSheetEachIcon src={trash} />
+                <BottomSheetEachText color="#f00">플립 삭제하기</BottomSheetEachText>
+              </BottomSheetEachWrapper>
+            </BottomSheet>
+          )}
+          {open && !isMyPage && (
+            <BottomSheet
+              open={open}
+              snapPoints={() => [170]}
+              onDismiss={handleDismiss}
+              blocking={true}
+              style={{ zIndex: 100 }}
+            >
+              <BottomSheetEachWrapper onClick={handleShareCapturedImage}>
+                <BottomSheetEachIcon src={Share} />
+                <BottomSheetEachText color={colors.grey1}>공유하기</BottomSheetEachText>
+              </BottomSheetEachWrapper>
+              <BottomSheetEachWrapper onClick={handleDownloadCapturedImage}>
+                <BottomSheetEachIcon src={Download} />
+                <BottomSheetEachText color={colors.grey1}>저장하기</BottomSheetEachText>
+              </BottomSheetEachWrapper>
+            </BottomSheet>
+          )}
         </div>
       </AnimatePresence>
       {/* ...누를 시 나오는 설정 모달 */}
-      {open && isMyPage && (
-        <BottomSheet
-          open={open}
-          snapPoints={() => [353]}
-          onDismiss={handleDismiss}
-          blocking={true}
-          style={{ zIndex: 100 }}
-        >
-          <BottomSheetEachWrapper onClick={handleShareCapturedImage}>
-            <BottomSheetEachIcon src={Share} />
-            <BottomSheetEachText color={colors.grey1}>공유하기</BottomSheetEachText>
-          </BottomSheetEachWrapper>
-          <BottomSheetEachWrapper onClick={handleDownloadCapturedImage}>
-            <BottomSheetEachIcon src={Download} />
-            <BottomSheetEachText color={colors.grey1}>저장하기</BottomSheetEachText>
-          </BottomSheetEachWrapper>
-
-          <BottomSheetEachWrapper
-            onClick={() => {
-              navigate(`/groups/${selectedCategoryId}/edit`, {
-                state: {
-                  categoryId: selectedCategoryId,
-                  categoryImage: selectedCategoryImage,
-                  categoryName: selectedCategoryGroupName,
-                  answerIds: selectedCategoryAnswerIds,
-                  redirectRoute: 'feedTotal',
-                },
-              })
-            }}
-          >
-            <BottomSheetEachIcon src={pencil} />
-            <BottomSheetEachText color={colors.grey1}>그룹 수정하기</BottomSheetEachText>
-          </BottomSheetEachWrapper>
-
-          <BottomSheetEachWrapper
-            onClick={() => {
-              navigate(`/questions/${selectedFeed.questionId}/edit`, {
-                state: {
-                  question: {
-                    questionId: selectedFeed.questionId,
-                    content: selectedFeed.questionContent,
-                    nickname: selectedFeed.nickname,
-                    profileOnOff: selectedFeed.profileOnOff,
-                  },
-                  selectedFeed: selectedFeed,
-                },
-              })
-            }}
-          >
-            <BottomSheetEachIcon src={pencil} />
-            <BottomSheetEachText color={colors.grey1}>플립 수정하기</BottomSheetEachText>
-          </BottomSheetEachWrapper>
-
-          <BottomSheetEachWrapper onClick={deleteFeed}>
-            <BottomSheetEachIcon src={trash} />
-            <BottomSheetEachText color="#f00">플립 삭제하기</BottomSheetEachText>
-          </BottomSheetEachWrapper>
-        </BottomSheet>
-      )}
-      {open && !isMyPage && (
-        <BottomSheet
-          open={open}
-          snapPoints={() => [170]}
-          onDismiss={handleDismiss}
-          blocking={true}
-          style={{ zIndex: 100 }}
-        >
-          <BottomSheetEachWrapper onClick={handleShareCapturedImage}>
-            <BottomSheetEachIcon src={Share} />
-            <BottomSheetEachText color={colors.grey1}>공유하기</BottomSheetEachText>
-          </BottomSheetEachWrapper>
-          <BottomSheetEachWrapper onClick={handleDownloadCapturedImage}>
-            <BottomSheetEachIcon src={Download} />
-            <BottomSheetEachText color={colors.grey1}>저장하기</BottomSheetEachText>
-          </BottomSheetEachWrapper>
-        </BottomSheet>
-      )}
 
       {/* 통했당 누를 시 통했당 로띠 애니메이션 */}
       {popLottie && <TelePathyMotion />}
+
       <StyledToastContainer
         position="bottom-center"
         autoClose={1000}
