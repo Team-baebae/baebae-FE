@@ -11,6 +11,7 @@ import { selectedQuestionState } from '@/context/Atoms'
 // 해당 카테고리에 속한 피드들 보여주는 컴포넌트
 const FeedList = ({
   data,
+  setFeedList,
   selectedCategoryId,
   selectedCategoryImage,
   selectedCategoryGroupName,
@@ -114,6 +115,8 @@ const FeedList = ({
           setShowModal={setShowModal}
           showModal={showModal}
           selectedFeed={selectedFeed}
+          feedList={data}
+          setFeedList={setFeedList}
           selectedCategoryId={selectedCategoryId}
           selectedCategoryImage={selectedCategoryImage}
           selectedCategoryGroupName={selectedCategoryGroupName}

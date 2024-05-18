@@ -40,6 +40,10 @@ const DetailFeed = (props: ModalProps) => {
   const showModal = props.showModal
   // 선택된 피드
   const selectedFeed = props.selectedFeed
+
+  const feedList = props.feedList
+  const setFeedList = props.setFeedList
+
   // 선택된 카테고리
   const selectedCategoryId = props.selectedCategoryId
   const selectedCategoryImage = props.selectedCategoryImage
@@ -130,6 +134,7 @@ const DetailFeed = (props: ModalProps) => {
       await deleteFeedApi(userInfo.accessToken, selectedFeed.answerId).then((res) => {
         console.log(res)
         if (res.status === 204) {
+          setFeedList(feedList.filter((item) => item.answerId !== selectedFeed.answerId))
           toast('플립이 삭제되었어요!')
           backModal()
         }

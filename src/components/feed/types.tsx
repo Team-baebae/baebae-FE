@@ -19,6 +19,7 @@ export interface FeedProps {
 // 피드리스트 컴포넌트 props
 export interface FeedListProps {
   data: FeedProps[]
+  setFeedList: any
   selectedCategoryId: number
   selectedCategoryImage: string
   selectedCategoryGroupName: string
@@ -30,6 +31,8 @@ export interface ModalProps {
   setShowModal: any
   showModal: boolean
   selectedFeed: FeedProps
+  feedList: FeedProps[]
+  setFeedList: any
   selectedCategoryId: number
   selectedCategoryImage: string
   selectedCategoryGroupName: string

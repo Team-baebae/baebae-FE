@@ -34,6 +34,7 @@ const QuestionList = () => {
   // 질문리스트 받기
   const getQuestionList = async (page: number) => {
     await getQuestionsApi(myMemberId, page, accessToken).then((result) => {
+      console.log(result)
       if (result.length > 0) {
         // 새로운 데이터가 있을 경우
         if (currentPage === 0) {
@@ -157,7 +158,7 @@ const QuestionList = () => {
                       public={value.profileOnOff ? 1 : 0}
                       onClick={(e) => {
                         e.stopPropagation()
-                        navigate(`/${value.memberNickname}`)
+                        navigate(`/${value.senderNickname}`)
                       }}
                     >
                       {value.nickname}님
