@@ -1,15 +1,21 @@
 import styled from 'styled-components'
 import { colors } from '@/styles/colors'
 import NoFeed from '@/assets/main/NoneFeed.svg'
+import { useRecoilValue } from 'recoil'
+import { ownerUserData } from '@/context/Atoms'
+import { useNavigate } from 'react-router-dom'
 
 // 해당 디렉토리의 피드가 없을 때 컴포넌트
 const NoFlip = () => {
+  const navigate = useNavigate()
+  const ownerUserInfo = useRecoilValue(ownerUserData)
+
   return (
     <Container>
       <Image src={NoFeed} width={150} height={146} />
       <WarnWrapper>
         <WarnText>플립이 아직 없어요!</WarnText>
-        <QBtn>질문하러 가기</QBtn>
+        <QBtn onClick={() => navigate(`/${ownerUserInfo.nickname}`)}>질문하러 가기</QBtn>
       </WarnWrapper>
     </Container>
   )
