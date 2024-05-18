@@ -12,11 +12,11 @@ export interface ModalProps {
 
 // 질문 props
 export interface QuestionProps {
-  questionId: number
   content: string
-  nickname: string
-  profileOnOff: boolean
   createdDate: string
   isAnswered: boolean
-  fcmtoken: string
+  memberNickname: string
+  nickname: string
+  profileOnOff: boolean
+  questionId: number
 }

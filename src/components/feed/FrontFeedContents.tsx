@@ -18,7 +18,13 @@ const FrontFeedContents = (props: SelectedFeedProps) => {
       <WriterBlock>
         FROM
         {selectedFeed.profileOnOff ? (
-          <WriterRegion onClick={() => navigate(`/${selectedFeed.memberNickname}`)} color={colors.grey1}>
+          <WriterRegion
+            onClick={(e) => {
+              e.stopPropagation()
+              navigate(`/${selectedFeed.memberNickname}`)
+            }}
+            color={colors.grey1}
+          >
             {selectedFeed.nickname}
           </WriterRegion>
         ) : (
