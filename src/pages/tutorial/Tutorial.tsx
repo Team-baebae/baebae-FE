@@ -4,7 +4,7 @@ import TutorialMain from '@/components/tutorial/TutorialMain'
 const Tutorial = () => {
   return (
     <>
-      <Container onClick={() => console.log('튜토')}>
+      <Container>
         <TutorialMain />
       </Container>
     </>
