@@ -1,4 +1,5 @@
 import { getNotificationList } from '@/apis/NotificationApi'
+import NoAlram from '@/components/alram/NoAlram'
 import Notification from '@/components/alram/Notification'
 import { NotificationProps } from '@/components/alram/types'
 import Header from '@/components/common/Header'
@@ -26,9 +27,15 @@ const Alrams = () => {
   return (
     <Container>
       <Header text="알림" background={colors.white} />
-      {notifications.map((value) => (
-        <Notification title={value.notificationContent} content={value.questionContent} isChecked={value.isChecked} />
-      ))}
+      {notifications.length == 0 ? (
+        <>
+          <NoAlram />
+        </>
+      ) : (
+        notifications.map((value) => (
+          <Notification title={value.notificationContent} content={value.questionContent} isChecked={value.isChecked} />
+        ))
+      )}
     </Container>
   )
 }
