@@ -38,10 +38,10 @@ const Main = () => {
       result.isExisting == true && setIsExisting(true)
       result.isExisting == true &&
         getMemberIdApi(nickname).then((result) => {
-          setUserData({ ...userData, nickname: nickname, memberId: result.memberId })
           getOwnerProfileApi(result.memberId).then((result) => {
             setUserData({
-              ...userData,
+              nickname: nickname,
+              memberId: result.memberId,
               imageUrl: result.imageUrl,
             })
           })
@@ -63,7 +63,7 @@ const Main = () => {
     <>
       {isExisting ? (
         <Container>
-          <MainHeader background={colors.white} isMine={isMine} />
+          <MainHeader background={colors.white} isMine={username === myInfo.nickname} />
           {username && <MainProfile nickname={username} imageUrl={userData.imageUrl} />}
           <CategoryBox>
             <Category category={category} num={0} onClick={() => setCategory(0)}>
@@ -73,7 +73,7 @@ const Main = () => {
               피드
             </Category>
           </CategoryBox>
-          {category ? <Feed /> : <Ask />}
+          {category ? <Feed /> : <Ask isMine={username === myInfo.nickname} />}
         </Container>
       ) : (
         <NoUser />
