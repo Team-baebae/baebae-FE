@@ -1,13 +1,13 @@
 import styled from 'styled-components'
 import { useLocation, useParams } from 'react-router-dom'
 import { useEffect, useState } from 'react'
-import { useRecoilValue, useSetRecoilState } from 'recoil'
+import { useRecoilState, useRecoilValue, useSetRecoilState } from 'recoil'
 import MainHeader from '@/components/common/MainHeader'
 import MainProfile from '@/components/main/MainProfile'
 import Feed from '@/components/feed/Feed'
 import Ask from '@/components/question/Ask'
 import NoUser from '@/components/main/NoUser'
-import { getMemberIdApi, isExistingNicknameApi } from '@/apis/MainInfoApi'
+import { getMemberIdApi, getOwnerProfileApi, isExistingNicknameApi } from '@/apis/MainInfoApi'
 import { UserInfoStateProps, isMineState, ownerUserData, userInfoState } from '@/context/Atoms'
 import { colors } from '@/styles/colors'
 
@@ -23,7 +23,7 @@ const Main = () => {
   // 유저 존재 여부
   const [isExisting, setIsExisting] = useState<boolean>(false)
   // 리코일 계정주인 데이터 정보
-  const setUserData = useSetRecoilState(ownerUserData)
+  const [userData, setUserData] = useRecoilState(ownerUserData)
   // 내 페이지인지 여부 확인
   const setIsMyPage = useSetRecoilState(isMineState)
 
@@ -37,9 +37,23 @@ const Main = () => {
       result.isExisting == true && setIsExisting(true)
       result.isExisting == true &&
         getMemberIdApi(nickname).then((result) => {
-          setUserData({ nickname: nickname, memberId: result.memberId })
+          setUserData({ ...userData, nickname: nickname, memberId: result.memberId })
+          console.log(userData)
           myMemberId === result.memberId ? setIsMyPage(true) : setIsMyPage(false)
         })
+    })
+  }
+  const updateUser = (nickname: string) => {
+    getMemberIdApi(nickname).then((result) => {
+      setUserData({ ...userData, nickname: nickname, memberId: result.memberId })
+      getOwnerProfileApi(result.memberId).then((result) => {
+        setUserData({
+          ...userData,
+          imageUrl: result.imageUrl,
+        })
+      })
+      console.log(userData)
+      myMemberId === result.memberId ? setIsMyPage(true) : setIsMyPage(false)
     })
   }
 
@@ -49,6 +63,12 @@ const Main = () => {
       userCheck(username)
     }
   }, [])
+
+  useEffect(() => {
+    if (username) {
+      updateUser(username)
+    }
+  }, [username])
 
   // category=0은 질문, 1은 피드
   const [category, setCategory] = useState<number>(defaultCategory)
