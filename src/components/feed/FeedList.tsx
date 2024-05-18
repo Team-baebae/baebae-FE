@@ -23,7 +23,7 @@ const FeedList = ({
   const [selectedFeed, setSelectedFeed] = useState<FeedProps>({
     answerId: -1,
     memberId: -1,
-    memberNickname: '',
+    senderNickname: '',
     questionContent: '',
     questionId: -1,
     nickname: '',
@@ -80,7 +80,8 @@ const FeedList = ({
                   <WriterRegion
                     onClick={(e) => {
                       e.stopPropagation()
-                      navigate(`/${feed.memberNickname}`)
+                      navigate(`/${feed.senderNickname}`)
+                      window.location.reload()
                     }}
                     color={colors.grey1}
                   >
@@ -190,6 +191,7 @@ const WriterRegion = styled.button<{ color: string }>`
   border: none;
   outline: none;
   background-color: transparent;
+  cursor: pointer;
 `
 
 const TotalFeedsBtn = styled.div`

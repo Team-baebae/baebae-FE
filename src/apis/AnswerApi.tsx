@@ -58,7 +58,7 @@ export const modifyFeedApi = (accessToken: string, answerId: number, imageFile: 
   // FormData 객체 생성
   const formData = new FormData()
   // categoryImage가 undefined가 아니면 FormData에 추가
-  if (imageFile !== undefined) {
+  if (imageFile && imageFile !== undefined) {
     formData.append('imageFile', imageFile)
   }
 

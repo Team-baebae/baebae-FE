@@ -3,7 +3,7 @@ export interface FeedProps {
   questionId: number
   questionContent: string
   profileOnOff: boolean
-  memberNickname: string
+  senderNickname: string
   nickname: string
   memberId: number
   answerId: number
