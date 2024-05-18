@@ -17,10 +17,9 @@ interface HeaderProps {
 // 메인페이지의 헤더 컴포넌트
 const MainHeader = ({ background, isMine }: HeaderProps) => {
   const navigate = useNavigate()
-
   // 로그인 된 상태인지 확인
   const isLoggedIn = useRecoilValue(isLoggedInState)
-
+  console.log(isMine)
   // 리코일에서 받은 로그인한 사용자의 userInfo
   const myInfo = useRecoilValue<UserInfoStateProps>(userInfoState)
   const myNickname = myInfo.nickname
@@ -45,7 +44,7 @@ const MainHeader = ({ background, isMine }: HeaderProps) => {
         }}
       />
       <HeaderRight>
-        {isMine == false && <HeaderRightText onClick={() => clickIcon(myNickname)}>내 플리빗으로 이동</HeaderRightText>}
+        {!isMine && <HeaderRightText onClick={() => clickIcon(myNickname)}>내 플리빗으로 이동</HeaderRightText>}
         <HeaderRightIcon src={Alram} alt="alram" onClick={() => clickIcon('alrams')} />
         <HeaderRightIcon
           src={Setting}

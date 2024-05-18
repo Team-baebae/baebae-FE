@@ -17,8 +17,12 @@ import NewIcon from '@/assets/main/NewIcon.svg'
 import ForwardArrow from '@/assets/setting/ForwardArrow.svg'
 import Info from '@/assets/main/Info.svg'
 
+interface AskProps {
+  isMine: boolean
+}
+
 // 질문하기 컴포넌트
-const Ask = () => {
+const Ask = ({ isMine }: AskProps) => {
   const navigate = useNavigate()
   // 로그인한 사람의 데이터 정보
   const loginUserInfo = useRecoilValue(userInfoState)
@@ -27,9 +31,7 @@ const Ask = () => {
   //계정 주인의 memberId
   const receiverId = userInfo.memberId
 
-  // 내 페이지인지 여부 확인
-  const isMyPage = useRecoilValue(isMineState)
-  const isMine = JSON.stringify(isMyPage)
+  // const isMine = JSON.stringify(isMyPage)
 
   // 로그인 된 상태인지 확인
   const isLoggedIn = useRecoilValue(isLoggedInState)
@@ -50,7 +52,7 @@ const Ask = () => {
   }
 
   useEffect(() => {
-    isMine == 'true' && getQuestionLength()
+    isMine === true && getQuestionLength()
     console.log(`나의 페이지인가? : ${isMine}`)
   }, [])
 
@@ -99,7 +101,7 @@ const Ask = () => {
   return (
     <Container>
       {/* 답변을 기다리는 질문은 계정 주인만 볼 수 있다 */}
-      {isMyPage == true && (
+      {isMine && (
         <AskNotification onClick={questionClick}>
           {askCount > 0 && <Icon width={34.25} height={16} src={NewIcon} />}
           <TextWrapper ml={askCount ? '6px' : '0px'} color={colors.white}>
@@ -133,7 +135,7 @@ const Ask = () => {
         </WriterBlock>
       </AskContainer>
       {/* 프로필 공개여부 */}
-      <OpenProfileWrapper margin={isMyPage ? '30px' : '82px'}>
+      <OpenProfileWrapper margin={isMine ? '30px' : '82px'}>
         <OpenProfile>
           <MiniToggle isActive={isProfileOn} setIsActive={setIsProfileOn} />
           <OpenProfileText>
