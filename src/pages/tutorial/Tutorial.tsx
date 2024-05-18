@@ -1,11 +1,11 @@
 import styled from 'styled-components'
-import TutorialMain1 from '@/components/tutorial/TutorialMain1'
+import TutorialMain from '@/components/tutorial/TutorialMain'
 
 const Tutorial = () => {
   return (
     <>
       <Container onClick={() => console.log('튜토')}>
-        <TutorialMain1 />
+        <TutorialMain />
       </Container>
     </>
   )

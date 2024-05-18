@@ -1,6 +1,6 @@
 import styled from 'styled-components'
-import { useEffect, useState } from 'react'
-import { useLocation, useNavigate } from 'react-router-dom'
+import { useState } from 'react'
+import { useNavigate } from 'react-router-dom'
 import { colors } from '@/styles/colors'
 import MainHeader from '@/components/common/MainHeader'
 import TutorialProfile from '@/components/tutorial/TutorialProfile'
@@ -14,20 +14,21 @@ import HighLight4 from './HighLight4'
 import HighLight5 from './HighLight5'
 import HighLight6 from './HighLight6'
 import HighLight7 from './HighLight7'
+import { useRecoilValue } from 'recoil'
+import { userInfoState } from '@/context/Atoms'
 
-const TutorialMain1 = () => {
+const TutorialMain = () => {
   const navigate = useNavigate()
   const [category, setCategory] = useState<number>(0)
   const [currentPage, setCurrentPage] = useState(0)
   const totalPages = 7
-  const location = useLocation()
-  const nickname = location.state?.nickname
+  const userNickname = useRecoilValue(userInfoState).nickname
 
   const ClickPage = () => {
     currentPage == 3
       ? (setCategory(1), setCurrentPage((prev) => prev + 1))
       : currentPage == 6
-        ? navigate(`/${nickname}`)
+        ? navigate(`/${userNickname}`)
         : setCurrentPage((prev) => prev + 1)
   }
   return (
@@ -58,7 +59,7 @@ const TutorialMain1 = () => {
   )
 }
 
-export default TutorialMain1
+export default TutorialMain
 
 const Container = styled.div`
   position: relative;

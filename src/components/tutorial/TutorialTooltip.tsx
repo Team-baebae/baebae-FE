@@ -26,6 +26,7 @@ const Container = styled.div<{ center: boolean }>`
 const Triangle = styled.div<{ center: boolean }>`
   width: 0;
   height: 0;
+  margin-left: ${(props) => (props.center ? 0 : '5px')};
   margin-top: 5px;
   border-bottom: 6px solid #fff;
   border-left: 5px solid transparent;
