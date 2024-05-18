@@ -86,8 +86,9 @@ const Ask = () => {
     !isLoggedIn && setShowModal(true)
     // 로그인인 경우 질문 전송
     isLoggedIn &&
-      postQuestionApi(receiverId, questionData, writerToken).then(() => {
-        toast('질문 완료!')
+      postQuestionApi(receiverId, questionData, writerToken).then((result) => {
+        console.log(result.status)
+        result.status == 200 && toast('질문 완료!')
         getQuestionLength()
       })
   }
