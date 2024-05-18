@@ -19,7 +19,7 @@ export const isExistingNicknameApi = async (nickname: string) => {
   }
 }
 
-// // 회원 닉네임으로 id 조회하는 api
+// 회원 닉네임으로 id 조회하는 api
 export const getMemberIdApi = async (nickname: string) => {
   try {
     let API = `api/member/nickname/${nickname}`

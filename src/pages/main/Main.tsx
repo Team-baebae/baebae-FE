@@ -25,6 +25,7 @@ const Main = () => {
   // 리코일 계정주인 데이터 정보
   const [userData, setUserData] = useRecoilState(ownerUserData)
   // 내 페이지인지 여부 확인
+  const [isMine, setIsMine] = useState<boolean>(false)
   const setIsMyPage = useSetRecoilState(isMineState)
 
   // 리코일에서 받은 로그인한 사용자의 userInfo
@@ -38,37 +39,22 @@ const Main = () => {
       result.isExisting == true &&
         getMemberIdApi(nickname).then((result) => {
           setUserData({ ...userData, nickname: nickname, memberId: result.memberId })
-          console.log(userData)
-          myMemberId === result.memberId ? setIsMyPage(true) : setIsMyPage(false)
+          getOwnerProfileApi(result.memberId).then((result) => {
+            setUserData({
+              ...userData,
+              imageUrl: result.imageUrl,
+            })
+          })
+          myMemberId === result.memberId ? (setIsMine(true), setIsMyPage(true)) : (setIsMine(false), setIsMyPage(false))
         })
     })
   }
-  const updateUser = (nickname: string) => {
-    getMemberIdApi(nickname).then((result) => {
-      setUserData({ ...userData, nickname: nickname, memberId: result.memberId })
-      getOwnerProfileApi(result.memberId).then((result) => {
-        setUserData({
-          ...userData,
-          imageUrl: result.imageUrl,
-        })
-      })
-      console.log(userData)
-      myMemberId === result.memberId ? setIsMyPage(true) : setIsMyPage(false)
-    })
-  }
-
   // url의 닉네임으로 실제 있는 계정인지 확인
   useEffect(() => {
     if (username) {
       userCheck(username)
     }
   }, [])
-
-  useEffect(() => {
-    if (username) {
-      updateUser(username)
-    }
-  }, [username])
 
   // category=0은 질문, 1은 피드
   const [category, setCategory] = useState<number>(defaultCategory)
@@ -77,8 +63,8 @@ const Main = () => {
     <>
       {isExisting ? (
         <Container>
-          <MainHeader background={colors.white} />
-          {username && <MainProfile nickname={username} />}
+          <MainHeader background={colors.white} isMine={isMine} />
+          {username && <MainProfile nickname={username} imageUrl={userData.imageUrl} />}
           <CategoryBox>
             <Category category={category} num={0} onClick={() => setCategory(0)}>
               질문

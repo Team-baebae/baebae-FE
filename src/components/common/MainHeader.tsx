@@ -4,22 +4,19 @@ import NavLogo from '@/assets/nav/NavLogo.svg'
 import Alram from '@/assets/nav/Alarm.svg'
 import Setting from '@/assets/nav/Setting.svg'
 import { useRecoilValue } from 'recoil'
-import { isLoggedInState, isMineState, userInfoState, UserInfoStateProps } from '@/context/Atoms'
+import { isLoggedInState, userInfoState, UserInfoStateProps } from '@/context/Atoms'
 import { useState } from 'react'
 import LoginModal from '../question/LoginModal'
 import { colors } from '@/styles/colors'
 
 interface HeaderProps {
   background: string
+  isMine: boolean
 }
 
 // 메인페이지의 헤더 컴포넌트
-const MainHeader = ({ background }: HeaderProps) => {
+const MainHeader = ({ background, isMine }: HeaderProps) => {
   const navigate = useNavigate()
-
-  // 내 페이지인지 여부 확인
-  const isMyPage = useRecoilValue(isMineState)
-  const isMine = JSON.stringify(isMyPage)
 
   // 로그인 된 상태인지 확인
   const isLoggedIn = useRecoilValue(isLoggedInState)
@@ -48,9 +45,7 @@ const MainHeader = ({ background }: HeaderProps) => {
         }}
       />
       <HeaderRight>
-        {isMine != 'true' && (
-          <HeaderRightText onClick={() => clickIcon(myNickname)}>내 플리빗으로 이동</HeaderRightText>
-        )}
+        {isMine == false && <HeaderRightText onClick={() => clickIcon(myNickname)}>내 플리빗으로 이동</HeaderRightText>}
         <HeaderRightIcon src={Alram} alt="alram" onClick={() => clickIcon('alrams')} />
         <HeaderRightIcon
           src={Setting}
