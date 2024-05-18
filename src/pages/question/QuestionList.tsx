@@ -12,6 +12,8 @@ import { deleteQuestionsApi, getQuestionLengthApi, getQuestionsApi } from '@/api
 import { userInfoState } from '@/context/Atoms'
 import CloseIcon from '@/assets/main/Close.svg'
 import QuotationMark from '@/assets/question/QuotationMark.svg'
+import { Flip, toast } from 'react-toastify'
+import { StyledToastContainer } from '@/components/toast/toastStyle'
 
 // 답변을 기다리는 질문 리스트 페이지
 const QuestionList = () => {
@@ -112,6 +114,7 @@ const QuestionList = () => {
       setQuestions(updatedQuestions)
       setAskCount(updatedQuestions.length)
       setShowModal(false)
+      toast('질문이 삭제되었어요!')
     })
   }
   const clickDeletion = (questionId: number) => {
@@ -165,8 +168,20 @@ const QuestionList = () => {
             ))}
           </GridContainer>
         )}
+        <StyledToastContainer
+          position="bottom-center"
+          autoClose={1000}
+          hideProgressBar
+          pauseOnHover={false}
+          closeOnClick={false}
+          closeButton={false}
+          rtl={false}
+          theme="dark"
+          transition={Flip}
+        />
         {scrollLoading && <div>loading...</div>}
       </ContentWrapper>
+
       {/* 삭제 누를 시 나오는 모달 */}
       {showModal && (
         <Modal
