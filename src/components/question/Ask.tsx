@@ -2,6 +2,7 @@ import styled from 'styled-components'
 import { ChangeEvent, MouseEvent, useEffect, useState } from 'react'
 import { useRecoilValue } from 'recoil'
 import { useNavigate } from 'react-router-dom'
+import Filter from 'badwords-ko'
 import { toast, Flip } from 'react-toastify'
 import 'react-toastify/dist/ReactToastify.css'
 import MiniToggle from '@/components/common/MiniToggle'
@@ -74,10 +75,14 @@ const Ask = () => {
     setWriter(e.target.value)
   }
 
+  // 비속어 필터링
+  const filter = new Filter()
+
   // 질문 전송
   const submitHandler = (e: MouseEvent<HTMLButtonElement>) => {
     e.preventDefault()
-    const questionData = { content: text, nickname: writer, profileOnOff: isProfileOn }
+    const filteredText = filter.clean(text)
+    const questionData = { content: filteredText, nickname: writer, profileOnOff: isProfileOn }
     console.log(questionData)
     setText('')
     setWriter('')

@@ -57,3 +57,8 @@ export const ownerUserData = atom({
   },
   effects: [persistAtom],
 })
+
+export const selectedQuestionState = atom<number[]>({
+  key: 'selectedQuestionState',
+  default: [],
+})

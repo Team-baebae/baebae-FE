@@ -1,10 +1,11 @@
 import { AnimatePresence, motion } from 'framer-motion'
 import { useCallback, useEffect, useState } from 'react'
 import styled from 'styled-components'
-import { useRecoilValue } from 'recoil'
+import { useRecoilState, useRecoilValue } from 'recoil'
 import { Flip, toast } from 'react-toastify'
 import { useNavigate } from 'react-router-dom'
 import { BottomSheet } from 'react-spring-bottom-sheet'
+import html2canvas from 'html2canvas'
 import BackFeedContents from '@/components/feed/BackFeedContents'
 import FrontFeedContents from '@/components/feed/FrontFeedContents'
 import TelePathyMotion from '@/components/feed/TelepathyMotion'
@@ -12,7 +13,7 @@ import { TotalPageFeedProps } from '@/components/category/types'
 import { StyledToastContainer } from '@/components/toast/toastStyle'
 import { colors } from '@/styles/colors'
 import { deleteFeedApi, getIsReactedApi, getReactCountApi, postReactApi } from '@/apis/AnswerApi'
-import { isMineState, userInfoState } from '@/context/Atoms'
+import { isMineState, ownerUserData, userInfoState } from '@/context/Atoms'
 import MusicIcon from '@/assets/MusicWhite.svg'
 import PlayIcon from '@/assets/PlayGray.svg'
 import PauseIcon from '@/assets/PauseGray.svg'
@@ -22,6 +23,12 @@ import trash from '@/assets/main/Trash.svg'
 import Download from '@/assets/category/Download.svg'
 import Share from '@/assets/category/Share.svg'
 import MoreDot from '@/assets/category/Dot.svg'
+
+declare global {
+  interface Window {
+    Kakao: any
+  }
+}
 
 // 피드 누를 시 피드 확대 컴포넌트
 const TotalPageFeed = (props: TotalPageFeedProps) => {
@@ -194,157 +201,307 @@ const TotalPageFeed = (props: TotalPageFeedProps) => {
     getReactCount()
   }, [getIsReacted, getReactCount])
 
+  // 캡쳐된 이미지 저장
+  const [capturedImageData, setCapturedImageData] = useState<string>('')
+  // 캡쳐된 이미지 파일으로 저장
+  const [imageFile, setImageFile] = useState<File | null>(null)
+
+  // 화면캡쳐하기
+  const captureElement = async (elementId: string): Promise<string> => {
+    const element = document.getElementById(elementId)
+    if (!element) throw new Error('Element not found')
+    const canvas = await html2canvas(element, {
+      backgroundColor: 'rgba(0,0,0,0.1)',
+    })
+    const dataUrl = canvas.toDataURL('image/png')
+    return dataUrl
+  }
+
+  // 공유하기 누를 시
+  const handleShareCapturedImage = async () => {
+    const dataUrl = await captureElement('captureTarget')
+    setCapturedImageData(dataUrl)
+    convertDataURLToFile(dataUrl, 'captured-image.png')
+  }
+
+  // 저장하기 누를시
+  const handleDownloadCapturedImage = async () => {
+    const dataUrl = await captureElement('captureTarget')
+    setCapturedImageData(dataUrl)
+    onSaveAs(dataUrl, 'image-download2.png')
+  }
+
+  // 카카오 공유 시 captureElement로 만든 이미지 url은 사용 불가 -> 해당 url다시 파일로 바꿔줘서 카카오 서버에 올리기 -> 카카오 서버 url가져와서 공유
+  const convertDataURLToFile = (dataUrl: string, filename: string): void => {
+    const arr = dataUrl.split(',')
+    const match = arr[0].match(/:(.*?);/)
+    if (!match) {
+      console.error('Failed to extract MIME type from data URL.')
+      return
+    }
+    const mime = match[1]
+    const bstr = atob(arr[1])
+    let n = bstr.length
+    const u8arr = new Uint8Array(n)
+
+    while (n--) {
+      u8arr[n] = bstr.charCodeAt(n)
+    }
+
+    const blob = new Blob([u8arr], { type: mime })
+    const file = new File([blob], filename, { type: mime })
+    setImageFile(file) // 파일 객체 상태 업데이트
+    console.log(file)
+    if (file) sharing(file)
+  }
+
+  // 리코일 계정 주인의 데이터 정보
+  const [ownerUserInfo, setOwnerUserInfo] = useRecoilState(ownerUserData)
+
+  // 공유
+  const { Kakao } = window
+  const javascriptKey: string = import.meta.env.VITE_KAKAO_JAVASCRIPT_KEY
+  const realUrl: string = import.meta.env.VITE_CLIENT_URL
+
+  useEffect(() => {
+    // init 해주기 전에 clean up 을 해준다.
+    Kakao.cleanup()
+    Kakao.init(javascriptKey)
+    // 잘 적용되면 true
+    console.log(Kakao.isInitialized())
+  }, [])
+
+  // 카카오로 공유
+  const shareKakao = (file: File) => {
+    Kakao.Share.uploadImage({
+      file: [file],
+    })
+      .then(function (response: any) {
+        Kakao.Share.sendDefault({
+          objectType: 'feed',
+          content: {
+            title: `${ownerUserInfo.nickname}님의 플립을 공유했어요!`,
+            description: `플립을 뒤집어 ${ownerUserInfo.nickname}님의 답변을 확인해 보세요!`,
+            imageUrl: response.infos.original.url,
+            link: {
+              mobileWebUrl: `${realUrl}/${ownerUserInfo.nickname}`,
+            },
+          },
+          buttons: [
+            {
+              title: '플리빗 보러가기',
+              link: {
+                mobileWebUrl: `${realUrl}/${ownerUserInfo.nickname}`,
+              },
+            },
+          ],
+        })
+      })
+      .catch(function (error: any) {
+        console.log(error)
+      })
+  }
+  // 모바일뷰인지 웹뷰인지 확인
+  const sharing = async (file: File) => {
+    if (navigator?.share) {
+      try {
+        await navigator.share({
+          title: '타인을 알아가고 본인을 표현하는 가장 단순한 방법, 플리빗',
+          text: '플리빗은 세상과 SNS로 대화하는 현세대의 소통 방법을 개선하고자 하는 Q&A 플랫폼입니다.',
+          url: `https://www.flipit.co.kr/${ownerUserInfo.nickname}`,
+        })
+      } catch (err) {
+        console.log('에러')
+      }
+    } else {
+      shareKakao(file)
+    }
+  }
+
+  // 저장하기
+  const onSaveAs = (uri: string, filename: string) => {
+    console.log('onSaveAs')
+    var link = document.createElement('a')
+    document.body.appendChild(link)
+    link.href = uri
+    link.download = filename
+    link.click()
+    document.body.removeChild(link)
+  }
+
   return (
     <Container>
       <AnimatePresence>
-        {/* 음악,링크,설정 */}
-        <TopContents>
-          <Links>
-            {selectedFeed?.musicName !== '' && (
-              <LinkButton onClick={MusicClick}>
-                <Icon src={MusicIcon} />
-                <OverflowText width="60px">
-                  {selectedFeed?.musicName} - {selectedFeed?.musicSinger}
-                </OverflowText>
-                {props.currentAudio && props.currentAudio.src === selectedFeed.musicAudioUrl && isPlaying ? (
-                  <Icon src={PauseIcon} alt="pause" />
-                ) : (
-                  <Icon src={PlayIcon} alt="play" />
-                )}
-              </LinkButton>
-            )}
-            {selectedFeed?.linkAttachments !== '' && (
-              <LinkButton onClick={LinkClick}>
-                <Icon src={LinkIcon} />
-                <OverflowText width="82px">{selectedFeed?.linkAttachments}</OverflowText>
-              </LinkButton>
-            )}
-          </Links>
-          {isMyPage && <Icon src={MoreDot} width={24} height={24} onClick={MoreClick} />}
-        </TopContents>
-        {/* 피드 */}
-        <ModalWrapper onClick={handleClick} transition={spring}>
-          <CardWrapper
-            animate={{ rotateY: isFlipped ? -180 : 0 }}
-            transition={spring}
-            style={{ zIndex: isFlipped ? 0 : 1 }}
-          >
-            {/* 앞면 질문 */}
-            <FrontFeedContents selectedFeed={selectedFeed} />
-          </CardWrapper>
-          <CardWrapper
-            initial={{ rotateY: 180 }}
-            animate={{ rotateY: isFlipped ? 0 : 180 }}
-            transition={spring}
-            style={{
-              zIndex: isFlipped ? 1 : 0,
-            }}
-          >
-            {/* 뒷면 답변*/}
-            <BackFeedContents selectedFeed={selectedFeed} />
-          </CardWrapper>
-        </ModalWrapper>
-        {/* 반응 */}
-        <BottomContents>
-          <EmotionButton
-            state={giveHeart}
-            onClick={(e) => {
-              e.stopPropagation()
-              postReact('HEART')
-            }}
-          >
-            <EmotionText>🖤</EmotionText>
-            <EmotionText>{heartCount}</EmotionText>
-          </EmotionButton>
-          <EmotionButton
-            state={giveCurious}
-            onClick={(e) => {
-              e.stopPropagation()
-              postReact('CURIOUS')
-            }}
-          >
-            <EmotionText>👀</EmotionText>
-            <EmotionText>{curiousCount}</EmotionText>
-          </EmotionButton>
-          <EmotionButton
-            state={giveSad}
-            onClick={(e) => {
-              e.stopPropagation()
-              postReact('SAD')
-            }}
-          >
-            <EmotionText>🥺</EmotionText>
-            <EmotionText>{sadCount}</EmotionText>
-          </EmotionButton>
-          <TelepathyButton state={giveTelepathy} onClick={clickTelepathy}>
-            <EmotionText style={{ fontSize: 20 }}>👉🏻</EmotionText>
-            <EmotionText style={{ fontSize: 20 }}>👈🏻</EmotionText>
-            <EmotionText>통했당!</EmotionText>
-          </TelepathyButton>
-        </BottomContents>
+        <div id="captureTarget">
+          {/* 음악,링크,설정 */}
+          <TopContents>
+            <Links>
+              {selectedFeed?.musicName !== '' && (
+                <LinkButton onClick={MusicClick}>
+                  <Icon src={MusicIcon} />
+                  <OverflowText width="60px">
+                    {selectedFeed?.musicName} - {selectedFeed?.musicSinger}
+                  </OverflowText>
+                  {props.currentAudio && props.currentAudio.src === selectedFeed.musicAudioUrl && isPlaying ? (
+                    <Icon src={PauseIcon} alt="pause" />
+                  ) : (
+                    <Icon src={PlayIcon} alt="play" />
+                  )}
+                </LinkButton>
+              )}
+              {selectedFeed?.linkAttachments !== '' && (
+                <LinkButton onClick={LinkClick}>
+                  <Icon src={LinkIcon} />
+                  <OverflowText width="82px">{selectedFeed?.linkAttachments}</OverflowText>
+                </LinkButton>
+              )}
+            </Links>
+            <Icon src={MoreDot} width={24} height={24} onClick={MoreClick} />
+          </TopContents>
+          {/* 피드 */}
+          <ModalWrapper onClick={handleClick} transition={spring}>
+            <CardWrapper
+              animate={{ rotateY: isFlipped ? -180 : 0 }}
+              transition={spring}
+              style={{ zIndex: isFlipped ? 0 : 1 }}
+            >
+              {/* 앞면 질문 */}
+              <FrontFeedContents selectedFeed={selectedFeed} />
+            </CardWrapper>
+            <CardWrapper
+              initial={{ rotateY: 180 }}
+              animate={{ rotateY: isFlipped ? 0 : 180 }}
+              transition={spring}
+              style={{
+                zIndex: isFlipped ? 1 : 0,
+              }}
+            >
+              {/* 뒷면 답변*/}
+              <BackFeedContents selectedFeed={selectedFeed} />
+            </CardWrapper>
+          </ModalWrapper>
+          {/* 반응 */}
+          <BottomContents>
+            <EmotionButton
+              state={giveHeart}
+              onClick={(e) => {
+                e.stopPropagation()
+                postReact('HEART')
+              }}
+            >
+              <EmotionText>🖤</EmotionText>
+              <EmotionText>{heartCount}</EmotionText>
+            </EmotionButton>
+            <EmotionButton
+              state={giveCurious}
+              onClick={(e) => {
+                e.stopPropagation()
+                postReact('CURIOUS')
+              }}
+            >
+              <EmotionText>👀</EmotionText>
+              <EmotionText>{curiousCount}</EmotionText>
+            </EmotionButton>
+            <EmotionButton
+              state={giveSad}
+              onClick={(e) => {
+                e.stopPropagation()
+                postReact('SAD')
+              }}
+            >
+              <EmotionText>🥺</EmotionText>
+              <EmotionText>{sadCount}</EmotionText>
+            </EmotionButton>
+            <TelepathyButton state={giveTelepathy} onClick={clickTelepathy}>
+              <EmotionText style={{ fontSize: 20 }}>👉🏻</EmotionText>
+              <EmotionText style={{ fontSize: 20 }}>👈🏻</EmotionText>
+              <EmotionText>통했당!</EmotionText>
+            </TelepathyButton>
+          </BottomContents>
+          {open && isMyPage && (
+            <BottomSheet
+              open={open}
+              snapPoints={() => [353]}
+              onDismiss={handleDismiss}
+              blocking={true}
+              style={{ zIndex: 100 }}
+            >
+              <BottomSheetEachWrapper onClick={handleShareCapturedImage}>
+                <BottomSheetEachIcon src={Share} />
+                <BottomSheetEachText color={colors.grey1}>공유하기</BottomSheetEachText>
+              </BottomSheetEachWrapper>
+              <BottomSheetEachWrapper onClick={handleDownloadCapturedImage}>
+                <BottomSheetEachIcon src={Download} />
+                <BottomSheetEachText color={colors.grey1}>저장하기</BottomSheetEachText>
+              </BottomSheetEachWrapper>
+
+              <BottomSheetEachWrapper
+                onClick={() => {
+                  navigate(`/groups/${selectedCategoryId}/edit`, {
+                    state: {
+                      categoryId: selectedCategoryId,
+                      categoryImage: selectedCategoryImage,
+                      categoryName: selectedCategoryGroupName,
+                      answerIds: selectedCategoryAnswerIds,
+                      redirectRoute: 'feedTotal',
+                    },
+                  })
+                }}
+              >
+                <BottomSheetEachIcon src={pencil} />
+                <BottomSheetEachText color={colors.grey1}>그룹 수정하기</BottomSheetEachText>
+              </BottomSheetEachWrapper>
+
+              <BottomSheetEachWrapper
+                onClick={() => {
+                  navigate(`/questions/${selectedFeed.questionId}/edit`, {
+                    state: {
+                      question: {
+                        questionId: selectedFeed.questionId,
+                        content: selectedFeed.questionContent,
+                        nickname: selectedFeed.nickname,
+                        profileOnOff: selectedFeed.profileOnOff,
+                      },
+                      selectedFeed: selectedFeed,
+                    },
+                  })
+                }}
+              >
+                <BottomSheetEachIcon src={pencil} />
+                <BottomSheetEachText color={colors.grey1}>플립 수정하기</BottomSheetEachText>
+              </BottomSheetEachWrapper>
+
+              <BottomSheetEachWrapper onClick={deleteFeed}>
+                <BottomSheetEachIcon src={trash} />
+                <BottomSheetEachText color="#f00">플립 삭제하기</BottomSheetEachText>
+              </BottomSheetEachWrapper>
+            </BottomSheet>
+          )}
+          {open && !isMyPage && (
+            <BottomSheet
+              open={open}
+              snapPoints={() => [170]}
+              onDismiss={handleDismiss}
+              blocking={true}
+              style={{ zIndex: 100 }}
+            >
+              <BottomSheetEachWrapper onClick={handleShareCapturedImage}>
+                <BottomSheetEachIcon src={Share} />
+                <BottomSheetEachText color={colors.grey1}>공유하기</BottomSheetEachText>
+              </BottomSheetEachWrapper>
+              <BottomSheetEachWrapper onClick={handleDownloadCapturedImage}>
+                <BottomSheetEachIcon src={Download} />
+                <BottomSheetEachText color={colors.grey1}>저장하기</BottomSheetEachText>
+              </BottomSheetEachWrapper>
+            </BottomSheet>
+          )}
+        </div>
       </AnimatePresence>
       {/* ...누를 시 나오는 설정 모달 */}
-      {open && (
-        <BottomSheet
-          open={open}
-          snapPoints={() => [353]}
-          onDismiss={handleDismiss}
-          blocking={true}
-          style={{ zIndex: 100 }}
-        >
-          <BottomSheetEachWrapper>
-            <BottomSheetEachIcon src={Share} />
-            <BottomSheetEachText color={colors.grey1}>공유하기</BottomSheetEachText>
-          </BottomSheetEachWrapper>
-          <BottomSheetEachWrapper>
-            <BottomSheetEachIcon src={Download} />
-            <BottomSheetEachText color={colors.grey1}>저장하기</BottomSheetEachText>
-          </BottomSheetEachWrapper>
 
-          <BottomSheetEachWrapper
-            onClick={() => {
-              navigate(`/groups/${selectedCategoryId}/edit`, {
-                state: {
-                  categoryId: selectedCategoryId,
-                  categoryImage: selectedCategoryImage,
-                  categoryName: selectedCategoryGroupName,
-                  answerIds: selectedCategoryAnswerIds,
-                  redirectRoute: 'feedTotal',
-                },
-              })
-            }}
-          >
-            <BottomSheetEachIcon src={pencil} />
-            <BottomSheetEachText color={colors.grey1}>그룹 수정하기</BottomSheetEachText>
-          </BottomSheetEachWrapper>
-
-          <BottomSheetEachWrapper
-            onClick={() => {
-              navigate(`/questions/${selectedFeed.questionId}/edit`, {
-                state: {
-                  question: {
-                    questionId: selectedFeed.questionId,
-                    content: selectedFeed.questionContent,
-                    nickname: selectedFeed.nickname,
-                    profileOnOff: selectedFeed.profileOnOff,
-                  },
-                  selectedFeed: selectedFeed,
-                },
-              })
-            }}
-          >
-            <BottomSheetEachIcon src={pencil} />
-            <BottomSheetEachText color={colors.grey1}>플립 수정하기</BottomSheetEachText>
-          </BottomSheetEachWrapper>
-
-          <BottomSheetEachWrapper onClick={deleteFeed}>
-            <BottomSheetEachIcon src={trash} />
-            <BottomSheetEachText color="#f00">플립 삭제하기</BottomSheetEachText>
-          </BottomSheetEachWrapper>
-        </BottomSheet>
-      )}
       {/* 통했당 누를 시 통했당 로띠 애니메이션 */}
       {popLottie && <TelePathyMotion />}
+
       <StyledToastContainer
         position="bottom-center"
         autoClose={1000}

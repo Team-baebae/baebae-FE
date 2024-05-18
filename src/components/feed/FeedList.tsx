@@ -5,6 +5,8 @@ import DetailFeed from '@/components/feed/DetailFeed'
 import { FeedProps, FeedListProps } from '@/components/feed/types'
 import { colors } from '@/styles/colors'
 import QuotationMark from '@/assets/question/QuotationMark.svg'
+import { useRecoilState } from 'recoil'
+import { selectedQuestionState } from '@/context/Atoms'
 
 // 해당 카테고리에 속한 피드들 보여주는 컴포넌트
 const FeedList = ({
@@ -40,29 +42,50 @@ const FeedList = ({
   const clickFlip = (feed: FeedProps) => {
     setSelectedFeed(feed)
     clickModal()
+    handleOnClick(feed.questionId)
   }
   // 모달창 열고 닫는 state 함수
   const clickModal = () => {
     setShowModal(!showModal)
   }
 
+  // 한번 뒤집은 피드는 뒤집힌 채로 유지하기 위한 선택한 questionId 저장
+  const [questionIds, setQuestionIds] = useRecoilState<number[]>(selectedQuestionState)
+
+  // 클릭 이벤트 핸들러
+  const handleOnClick = (questionId: number) => {
+    if (!questionIds.includes(questionId)) {
+      // questionId가 배열에 없으면 추가
+      setQuestionIds([...questionIds, questionId])
+    }
+  }
+
   return (
     <>
       <GridContainer>
-        {data.map((feed) => (
-          <FlipWrapper key={feed.answerId} onClick={() => clickFlip(feed)}>
-            <Icon src={QuotationMark} />
-            <FlipContent>{feed.questionContent}</FlipContent>
-            <WriterBlock>
-              FROM
-              {feed.profileOnOff ? (
-                <WriterRegion color={colors.grey1}>{feed.nickname}</WriterRegion>
-              ) : (
-                <WriterRegion color={colors.grey4}>{feed.nickname}</WriterRegion>
-              )}
-            </WriterBlock>
-          </FlipWrapper>
-        ))}
+        {data.map((feed) =>
+          questionIds.includes(feed.questionId) ? (
+            <SelectedFlipWrapper key={feed.answerId} onClick={() => clickFlip(feed)}>
+              <SelectedFeedAnswerImg src={feed.imageUrl} />
+              <SelectedContentWrapper>{feed.content}</SelectedContentWrapper>
+            </SelectedFlipWrapper>
+          ) : (
+            <FlipWrapper key={feed.answerId} onClick={() => clickFlip(feed)}>
+              <Icon src={QuotationMark} />
+              <FlipContent>{feed.questionContent}</FlipContent>
+              <WriterBlock>
+                FROM
+                {feed.profileOnOff ? (
+                  <WriterRegion onClick={() => navigate(`/${feed.memberNickname}`)} color={colors.grey1}>
+                    {feed.nickname}
+                  </WriterRegion>
+                ) : (
+                  <WriterRegion color={colors.grey4}>{feed.nickname}</WriterRegion>
+                )}
+              </WriterBlock>
+            </FlipWrapper>
+          ),
+        )}
       </GridContainer>
       {/* 해당 카테고리 피드리스트 전체보기 */}
       <TotalFeedsBtn
@@ -179,3 +202,18 @@ const TotalFeedsBtn = styled.div`
   letter-spacing: -0.28px;
   margin: 14px 0px 20px 0px;
 `
+
+const SelectedFlipWrapper = styled(FlipWrapper)`
+  padding: 9.31436px;
+`
+
+const SelectedFeedAnswerImg = styled.img`
+  width: 144.372575px;
+  height: 129.366px;
+`
+
+const SelectedContentWrapper = styled.div`
+  height: 21.7335px;
+  overflow: hidden;
+`
+2
