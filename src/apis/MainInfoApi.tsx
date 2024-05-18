@@ -54,7 +54,7 @@ export const postQuestionApi = async (memberId: number, question: QuestionProps,
         Authorization: `Bearer ${accessToken}`,
       },
     })
-    return response.data
+    return response.status
   } catch (error) {
     console.error(error)
   }

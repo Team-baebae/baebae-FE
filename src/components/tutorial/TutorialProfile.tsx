@@ -29,7 +29,6 @@ const ProfileImage = styled.img`
   width: 70px;
   height: 70px;
   border-radius: 100px;
-  background: lightgray 50% / cover no-repeat;
 `
 const ProfileContents = styled.div`
   display: flex;

@@ -58,7 +58,7 @@ export const Button = ({ $positive, func, text }: Buttonprops) => {
       {text}
     </CommonBtn>
   ) : (
-    <CommonBtn onClick={func} $positive={false}>
+    <CommonBtn onClick={func} $positive={false} disabled={true}>
       {text}
     </CommonBtn>
   )

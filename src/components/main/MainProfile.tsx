@@ -4,7 +4,6 @@ import { useRecoilState, useRecoilValue } from 'recoil'
 import { getOwnerProfileApi } from '@/apis/MainInfoApi'
 import { colors } from '@/styles/colors'
 import { isMineState, ownerUserData } from '@/context/Atoms'
-import DefaultImage from '@/assets/main/DefaultImage.png'
 
 declare global {
   interface Window {
@@ -45,21 +44,33 @@ const MainProfile = () => {
   }, [])
 
   const shareKakao = () => {
+    if (!Kakao.isInitialized()) {
+      Kakao.init(javascriptKey)
+    }
     Kakao.Share.sendDefault({
       objectType: 'feed',
       content: {
-        title: '타인을 알아가고 본인을 표현하는 가장 단순한 방법, 플리빗',
-        description: '플리빗은 세상과 SNS로 대화하는 현세대의 소통 방법을 개선하고자 하는 Q&A 플랫폼입니다.',
-        imageUrl: 'https://images.velog.io/images/sdb016/post/5d955cc9-06d0-433d-a059-a352e6f93d39/test.png',
+        title: `${ownerUserInfo.nickname}님의 플리빗 페이지를 공유했어요!`,
+        description: `${ownerUserInfo.nickname}님께 질문하고, 취향이 담긴 답변을 확인하세요!`,
+        imageUrl: 'https://kr.object.ncloudstorage.com/baebae-bucket/Flip-it.png',
         link: {
+          webUrl: `${realUrl}/${ownerUserInfo.nickname}`,
           mobileWebUrl: `${realUrl}/${ownerUserInfo.nickname}`,
         },
       },
       buttons: [
         {
-          title: '플리빗 보러가기',
+          title: '보러가기',
           link: {
-            mobileWebUrl: `${realUrl}/${ownerUserInfo.nickname}`,
+            webUrl: `https://www.flipit.co.kr/${ownerUserInfo.nickname}`,
+            mobileWebUrl: `https://www.flipit.co.kr/${ownerUserInfo.nickname}`,
+          },
+        },
+        {
+          title: '플리빗이 뭐예요?',
+          link: {
+            webUrl: 'https://www.flipit.co.kr',
+            mobileWebUrl: 'https://www.flipit.co.kr/',
           },
         },
       ],
@@ -70,9 +81,9 @@ const MainProfile = () => {
     if (navigator?.share) {
       try {
         await navigator.share({
-          title: '타인을 알아가고 본인을 표현하는 가장 단순한 방법, 플리빗',
-          text: '플리빗은 세상과 SNS로 대화하는 현세대의 소통 방법을 개선하고자 하는 Q&A 플랫폼입니다.',
-          url: `https://www.flipit.co.kr/${ownerUserInfo.nickname}`,
+          title: `${ownerUserInfo.nickname}님의 플리빗 페이지를 공유했어요!`,
+          text: `${ownerUserInfo.nickname}님께 질문하고, 취향이 담긴 답변을 확인하세요!`,
+          url: `${realUrl}/${ownerUserInfo.nickname}`,
         })
       } catch (err) {
         console.log('에러')
@@ -88,11 +99,7 @@ const MainProfile = () => {
         <Nickname>{ownerUserInfo.nickname}</Nickname>
         <ShareButton onClick={sharing}>{isMine == 'true' ? '내 플리빗 초대' : '이 플리빗 공유'}</ShareButton>
       </ProfileContents>
-      {ownerUserInfo.imageUrl === '' ? (
-        <ProfileImage src={DefaultImage} />
-      ) : (
-        <ProfileImage src={ownerUserInfo.imageUrl} />
-      )}
+      <ProfileImage src={ownerUserInfo.imageUrl} />
     </Container>
   )
 }
@@ -104,19 +111,18 @@ const Container = styled.div`
   flex-direction: row;
   align-items: center;
   justify-content: space-between;
-  padding: 20px;
+  padding: 12px 20px;
   background-color: ${colors.white};
 `
 const ProfileImage = styled.img`
-  width: 80px;
-  height: 80px;
+  width: 70px;
+  height: 70px;
   border-radius: 100px;
-  background: lightgray 50% / cover no-repeat;
 `
 const ProfileContents = styled.div`
   display: flex;
   flex-direction: column;
-  gap: 8px;
+  gap: 12px;
 `
 const Nickname = styled.div`
   color: ${colors.grey1};
@@ -130,7 +136,7 @@ const ShareButton = styled.button`
   display: flex;
   justify-content: center;
   align-items: center;
-  padding: 8px 24px;
+  padding: 11px 24px;
   border-radius: 8px;
   border: 0;
   background-color: ${colors.grey7};
