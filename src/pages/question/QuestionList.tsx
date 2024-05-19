@@ -95,7 +95,7 @@ const QuestionList = () => {
     return () => window.removeEventListener('scroll', handleScroll)
   }, [scrollLoading, hasMore]) // 스크롤 이벤트 리스너 등록 및 해제
 
-  // 닉네임 값으로 이동 경로 설정 필요
+  // 질문자 이름 누르면 실행되는 함수
   const clickName = (active: boolean, nickname: string) => {
     active && navigate(`/${nickname}`)
     !active && toast('질문자가 피드 공개를 설정하지 않았어요!')
