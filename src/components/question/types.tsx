@@ -15,7 +15,7 @@ export interface QuestionProps {
   content: string
   createdDate: string
   isAnswered: boolean
-  memberNickname: string
+  senderNickname: string
   nickname: string
   profileOnOff: boolean
   questionId: number
