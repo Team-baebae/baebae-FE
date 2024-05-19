@@ -284,13 +284,15 @@ const TotalPageFeed = (props: TotalPageFeedProps) => {
             description: `플립을 뒤집어 ${ownerUserInfo.nickname}님의 답변을 확인해 보세요!`,
             imageUrl: response.infos.original.url,
             link: {
+              webUrl: `${realUrl}/${ownerUserInfo.nickname}`,
               mobileWebUrl: `${realUrl}/${ownerUserInfo.nickname}`,
             },
           },
           buttons: [
             {
-              title: '플리빗 보러가기',
+              title: '플립 보러가기',
               link: {
+                webUrl: `${realUrl}/${ownerUserInfo.nickname}`,
                 mobileWebUrl: `${realUrl}/${ownerUserInfo.nickname}`,
               },
             },
@@ -305,15 +307,18 @@ const TotalPageFeed = (props: TotalPageFeedProps) => {
   const sharing = async (file: File) => {
     if (navigator?.share) {
       try {
-        await navigator.share({
-          title: '타인을 알아가고 본인을 표현하는 가장 단순한 방법, 플리빗',
-          text: '플리빗은 세상과 SNS로 대화하는 현세대의 소통 방법을 개선하고자 하는 Q&A 플랫폼입니다.',
-          url: `https://www.flipit.co.kr/${ownerUserInfo.nickname}`,
-        })
+        if (imageFile) {
+          await navigator.share({
+            title: `타인을 알아가고 본인을 표현하는 가장 단순한 방법, 플리빗`,
+            text: `${ownerUserInfo.nickname}님의 플립을 공유했어요!`,
+            files: [imageFile],
+          })
+        }
       } catch (err) {
         console.log('에러')
       }
     } else {
+      console.log(imageFile)
       shareKakao(file)
     }
   }

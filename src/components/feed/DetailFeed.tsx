@@ -50,6 +50,7 @@ const DetailFeed = (props: ModalProps) => {
   const userInfo = useRecoilValue(userInfoState)
   // 리코일 내 페이지인지 여부 확인
   const isMyPage = useRecoilValue(isMineState)
+
   // 어느면을 바라볼지 state
   const [isFlipped, setIsFlipped] = useState<boolean>(false)
 
@@ -83,7 +84,7 @@ const DetailFeed = (props: ModalProps) => {
   // 링크 클릭 시 링크 복사
   const LinkClick = (e: React.MouseEvent<HTMLDivElement>) => {
     e.stopPropagation()
-    navigator.clipboard.writeText(selectedFeed?.linkAttachments[0] || 'https://www.flipit.co.kr')
+    navigator.clipboard.writeText(selectedFeed?.linkAttachments || 'https://www.flipit.co.kr')
   }
 
   // 계정 주인일때 ...누를 시 bottom sheet 나오도록
@@ -154,6 +155,7 @@ const DetailFeed = (props: ModalProps) => {
   // 통했당 활성화 시 애니메이션
   const clickTelepathy = (e: React.MouseEvent<HTMLDivElement>) => {
     e.stopPropagation()
+    postReact('CONNECT')
     !giveTelepathy && setPopLottie(true)
     setGiveTelepathy(!giveTelepathy)
     setTimeout(() => {
@@ -297,13 +299,15 @@ const DetailFeed = (props: ModalProps) => {
             description: `플립을 뒤집어 ${ownerUserInfo.nickname}님의 답변을 확인해 보세요!`,
             imageUrl: response.infos.original.url,
             link: {
+              webUrl: `${realUrl}/${ownerUserInfo.nickname}`,
               mobileWebUrl: `${realUrl}/${ownerUserInfo.nickname}`,
             },
           },
           buttons: [
             {
-              title: '플리빗 보러가기',
+              title: '플립 보러가기',
               link: {
+                webUrl: `${realUrl}/${ownerUserInfo.nickname}`,
                 mobileWebUrl: `${realUrl}/${ownerUserInfo.nickname}`,
               },
             },
@@ -318,11 +322,13 @@ const DetailFeed = (props: ModalProps) => {
   const sharing = async (file: File) => {
     if (navigator?.share) {
       try {
-        await navigator.share({
-          title: '타인을 알아가고 본인을 표현하는 가장 단순한 방법, 플리빗',
-          text: '플리빗은 세상과 SNS로 대화하는 현세대의 소통 방법을 개선하고자 하는 Q&A 플랫폼입니다.',
-          url: `https://www.flipit.co.kr/${ownerUserInfo.nickname}`,
-        })
+        if (imageFile) {
+          await navigator.share({
+            title: `타인을 알아가고 본인을 표현하는 가장 단순한 방법, 플리빗`,
+            text: `${ownerUserInfo.nickname}님의 플립을 공유했어요!`,
+            files: [imageFile],
+          })
+        }
       } catch (err) {
         console.log('에러')
       }
@@ -435,7 +441,7 @@ const DetailFeed = (props: ModalProps) => {
               <TelepathyButton state={giveTelepathy} onClick={clickTelepathy}>
                 <EmotionText style={{ fontSize: 20 }}>👉🏻</EmotionText>
                 <EmotionText style={{ fontSize: 20 }}>👈🏻</EmotionText>
-                <EmotionText>통했당!</EmotionText>
+                <EmotionText>{isMyPage ? connectCount : '통했당!'}</EmotionText>
               </TelepathyButton>
             </BottomContents>
             {/* 화면 캡쳐,공유 */}
