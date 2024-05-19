@@ -454,6 +454,7 @@ const DetailFeed = (props: ModalProps) => {
               </ShareButton>
             </ButtonComponent>
           </div>
+          {/* <img src={capturedImageData} style={{ position: 'absolute', left: '0', width: '300px', height: '400px' }} /> */}
         </SearchModalBox>
       </AnimatePresence>
       {/* ...누를 시 나오는 설정 모달 */}

@@ -36,6 +36,8 @@ const TotalPageFeed = (props: TotalPageFeedProps) => {
 
   // 선택된 피드
   const selectedFeed = props.selectedFeed
+  // 화면캡쳐위한
+  const selectedFeedId = `captureTarget${selectedFeed.answerId}`
   // 선택된 카테고리
   const selectedCategoryId = props.selectedCategoryId
   const selectedCategoryImage = props.selectedCategoryImage
@@ -217,18 +219,28 @@ const TotalPageFeed = (props: TotalPageFeedProps) => {
     return dataUrl
   }
 
+  const downloadElement = async (elementId: string) => {
+    const element = document.getElementById(elementId)
+    if (!element) throw new Error('Element not found')
+    const canvas = await html2canvas(element, {
+      backgroundColor: 'rgba(0,0,0,0.1)',
+    })
+    const link = document.createElement('a')
+    link.download = 'capture.png'
+    link.href = canvas.toDataURL()
+    link.click()
+  }
+
   // 공유하기 누를 시
   const handleShareCapturedImage = async () => {
-    const dataUrl = await captureElement('captureTarget')
+    const dataUrl = await captureElement(selectedFeedId)
     setCapturedImageData(dataUrl)
     convertDataURLToFile(dataUrl, 'captured-image.png')
   }
 
   // 저장하기 누를시
   const handleDownloadCapturedImage = async () => {
-    const dataUrl = await captureElement('captureTarget')
-    setCapturedImageData(dataUrl)
-    onSaveAs(dataUrl, 'image-download2.png')
+    downloadElement(selectedFeedId)
   }
 
   // 카카오 공유 시 captureElement로 만든 이미지 url은 사용 불가 -> 해당 url다시 파일로 바꿔줘서 카카오 서버에 올리기 -> 카카오 서버 url가져와서 공유
@@ -332,7 +344,7 @@ const TotalPageFeed = (props: TotalPageFeedProps) => {
   return (
     <Container>
       <AnimatePresence>
-        <div id="captureTarget">
+        <div id={selectedFeedId}>
           {/* 음악,링크,설정 */}
           <TopContents>
             <Links>
