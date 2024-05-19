@@ -478,6 +478,7 @@ const DetailFeed = (props: ModalProps) => {
                   selectedFeed: selectedFeed,
                 },
               })
+              backModal()
             }}
           >
             <BottomSheetEachIcon src={pencil} />
@@ -494,6 +495,7 @@ const DetailFeed = (props: ModalProps) => {
                   answerIds: selectedCategoryAnswerIds,
                 },
               })
+              backModal()
             }}
           >
             <BottomSheetEachIcon src={pencil} />
