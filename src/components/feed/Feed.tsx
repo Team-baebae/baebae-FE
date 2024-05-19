@@ -128,8 +128,9 @@ const Feed = () => {
   }
   // 해당카테고리에 해당하는 피드리스트 받기
   const getFeeds = useCallback(async () => {
+    const page = 0
     try {
-      await getFeedsApi(ownerUserInfo.memberId, selectedCategoryId).then((res) => {
+      await getFeedsApi(ownerUserInfo.memberId, selectedCategoryId, page).then((res) => {
         console.log(res)
         setFeedList(res.data.content)
       })

@@ -21,6 +21,7 @@ import { isMineState, ownerUserData, userInfoState } from '@/context/Atoms'
 import plus from '@/assets/main/Plus.svg'
 import pencil from '@/assets/main/Pencil.svg'
 import trash from '@/assets/main/Trash.svg'
+import Loading from '@/components/common/Loading'
 
 // 해당 카테고리 피드 전체보기 페이지
 const Groups = () => {
@@ -129,22 +130,76 @@ const Groups = () => {
     getCategories()
   }, [])
 
+  // 무한스크롤 상태관리
+  const [currentPage, setCurrentPage] = useState<number>(0)
+  const [hasMore, setHasMore] = useState<boolean>(true)
+  const [loading, setLoading] = useState<boolean>(true) // 첫 데이터 로딩 상태
+  const [scrollLoading, setScrollLoading] = useState<boolean>(true) // 무한스크롤 로딩 상태
+
   // 해당 카테고리 피드리스트 조회
   const [feedList, setFeedList] = useState<FeedProps[]>([])
-  const getFeeds = useCallback(async () => {
-    try {
-      await getFeedsApi(ownerUserInfo.memberId, selectedCategoryId).then((res) => {
-        console.log(res)
-        setFeedList(res.data.content)
-      })
-    } catch (err) {
-      console.log(err)
-    }
-  }, [selectedCategoryId])
+  const getFeeds = useCallback(
+    async (page: number) => {
+      try {
+        await getFeedsApi(ownerUserInfo.memberId, selectedCategoryId, page).then((res) => {
+          console.log(res)
+          const result = res.data.content
+          if (result.length > 0) {
+            if (page === 0) {
+              setFeedList(result)
+            } else {
+              setFeedList((prevData) => [...prevData, ...result])
+            }
+            setCurrentPage(page)
+            console.log(result)
+            if (result.length < 6) {
+              // 더 이상 데이터가 없을 경우
+              setHasMore(false) // 무한 스크롤 중단
+            }
+          } else {
+            setHasMore(false)
+          }
+          setLoading(false)
+          setScrollLoading(false)
+        })
+      } catch (err) {
+        console.log(err)
+      }
+    },
+    [selectedCategoryId],
+  )
 
   useEffect(() => {
-    getFeeds()
+    getFeeds(currentPage)
   }, [getFeeds])
+
+  // 무한스크롤
+  const handleScroll = () => {
+    const windowHeight = 'innerHeight' in window ? window.innerHeight : document.documentElement.offsetHeight
+    const body = document.body
+    const html = document.documentElement
+    const docHeight = Math.max(
+      body.scrollHeight,
+      body.offsetHeight,
+      html.clientHeight,
+      html.scrollHeight,
+      html.offsetHeight,
+    )
+    const windowBottom = windowHeight + window.pageYOffset
+    if (windowBottom >= docHeight && !loading && hasMore && !scrollLoading) {
+      setScrollLoading(true)
+      getFeeds(currentPage + 1)
+    }
+  }
+
+  useEffect(() => {
+    window.addEventListener('scroll', handleScroll)
+    return () => window.removeEventListener('scroll', handleScroll)
+  }, [scrollLoading, hasMore]) // 스크롤 이벤트 리스너 등록 및 해제
+
+  if (loading) {
+    return <Loading /> // 데이터 로딩 중일 때 로딩 표시
+  }
 
   return (
     <Container>
@@ -167,6 +222,7 @@ const Groups = () => {
                       setSelectedCategoryImage(item.categoryImage)
                       setSelectedCategoryGroupName(item.categoryName)
                       setSelectedCategoryAnswerIds(item.answerIds)
+                      setCurrentPage(0)
                     }}
                     selected={selectedCategoryId === item.categoryId}
                     {...bind(item.categoryId, item.categoryImage, item.categoryName, item.answerIds)}
@@ -210,6 +266,7 @@ const Groups = () => {
         selectedCategoryGroupName={selectedCategoryGroupName}
         selectedCategoryAnswerIds={selectedCategoryAnswerIds}
       />
+      {scrollLoading && <div>loading...</div>}
       <StyledToastContainer
         position="bottom-center"
         autoClose={1000}

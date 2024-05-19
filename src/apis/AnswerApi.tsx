@@ -18,14 +18,14 @@ export const answerApi = (accessToken: string, memberId: number, imageFile: File
   })
 }
 
-export const getFeedsApi = (memberId: number, selectedDirectoryId: number) => {
+export const getFeedsApi = (memberId: number, selectedDirectoryId: number, page: number) => {
   const recent = ['createdDate,desc']
   const categoryRecent = ['answer.createdDate,desc']
   if (selectedDirectoryId === 0) {
-    let API = `/api/answers?memberId=${memberId}&page=0&size=10&sort=${recent}`
+    let API = `/api/answers?memberId=${memberId}&page=${page}&size=6&sort=${recent}`
     return flipitAxios.get(API)
   } else {
-    let API = `/api/answers?memberId=${memberId}&categoryId=${selectedDirectoryId}&page=0&size=10&sort=${categoryRecent}`
+    let API = `/api/answers?memberId=${memberId}&categoryId=${selectedDirectoryId}&page=${page}&size=6&sort=${categoryRecent}`
     return flipitAxios.get(API)
   }
 }
