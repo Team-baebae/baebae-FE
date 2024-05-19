@@ -125,9 +125,6 @@ const Terms = ({ isChecked, setIsChecked }: TermsProps) => {
         <TermText fontWeight="500" color={colors.grey3}>
           [필수] 만 14세 이상입니다
         </TermText>
-        <UnderlinedTermText fontWeight="500" color={colors.grey3}>
-          보기
-        </UnderlinedTermText>
       </TermWrapper>
       {/* 선택 약관 동의 */}
       <TermWrapper margin="24px 0px 0px 0px">
@@ -164,9 +161,6 @@ const Terms = ({ isChecked, setIsChecked }: TermsProps) => {
         <TermText fontWeight="500" color={colors.grey3}>
           [선택] 광고성 정보 수신 동의
         </TermText>
-        <UnderlinedTermText fontWeight="500" color={colors.grey3}>
-          보기
-        </UnderlinedTermText>
       </TermWrapper>
     </Container>
   )
