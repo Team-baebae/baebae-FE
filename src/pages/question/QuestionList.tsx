@@ -12,6 +12,8 @@ import { deleteQuestionsApi, getQuestionLengthApi, getQuestionsApi } from '@/api
 import { userInfoState } from '@/context/Atoms'
 import CloseIcon from '@/assets/main/Close.svg'
 import QuotationMark from '@/assets/question/QuotationMark.svg'
+import { Flip, toast } from 'react-toastify'
+import { StyledToastContainer } from '@/components/toast/toastStyle'
 
 // 답변을 기다리는 질문 리스트 페이지
 const QuestionList = () => {
@@ -93,6 +95,12 @@ const QuestionList = () => {
     return () => window.removeEventListener('scroll', handleScroll)
   }, [scrollLoading, hasMore]) // 스크롤 이벤트 리스너 등록 및 해제
 
+  // 질문자 이름 누르면 실행되는 함수
+  const clickName = (active: boolean, nickname: string) => {
+    active && navigate(`/${nickname}`)
+    !active && toast('질문자가 피드 공개를 설정하지 않았어요!')
+  }
+
   // 삭제 관련 함수
   // 모달 버튼 클릭 유무를 저장할 state
   const [showModal, setShowModal] = useState<boolean>(false)
@@ -107,6 +115,7 @@ const QuestionList = () => {
       setQuestions(updatedQuestions)
       setAskCount(updatedQuestions.length)
       setShowModal(false)
+      toast('질문이 삭제되었어요!')
     })
   }
   const clickDeletion = (questionId: number) => {
@@ -157,7 +166,7 @@ const QuestionList = () => {
                       public={value.profileOnOff ? 1 : 0}
                       onClick={(e) => {
                         e.stopPropagation()
-                        navigate(`/${value.memberNickname}`)
+                        clickName(value.profileOnOff, value.senderNickname)
                       }}
                     >
                       {value.nickname}님
@@ -170,8 +179,20 @@ const QuestionList = () => {
             ))}
           </GridContainer>
         )}
+        <StyledToastContainer
+          position="bottom-center"
+          autoClose={1000}
+          hideProgressBar
+          pauseOnHover={false}
+          closeOnClick={false}
+          closeButton={false}
+          rtl={false}
+          theme="dark"
+          transition={Flip}
+        />
         {scrollLoading && <div>loading...</div>}
       </ContentWrapper>
+
       {/* 삭제 누를 시 나오는 모달 */}
       {showModal && (
         <Modal

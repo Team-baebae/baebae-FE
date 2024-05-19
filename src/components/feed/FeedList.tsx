@@ -214,7 +214,7 @@ const SelectedFlipWrapper = styled(FlipWrapper)`
 `
 
 const SelectedFeedAnswerImg = styled.img`
-  width: 144.372575px;
+  width: 100%;
   height: 129.366px;
 `
 

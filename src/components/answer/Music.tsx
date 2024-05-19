@@ -5,7 +5,7 @@ import styled from 'styled-components'
 import { colors } from '@/styles/colors'
 import { UnFixedButton } from '@/components/common/Button'
 import { MusicProps, TrackProps } from '@/components/answer/types'
-import { getSpotifyAccessTokenApi, searchTermSpotifyApi } from '@/apis/SpotifyApi'
+import { searchTermSpotifyApi } from '@/apis/SpotifyApi'
 import MusicImg from '@/assets/Music.svg'
 import Glasses from '@/assets/Glasses.svg'
 import MusicGray from '@/assets/MusicGray.svg'
@@ -63,27 +63,10 @@ const Music = ({ musicName, setMusicName, musicAudio, setMusicAudio, musicSinger
     handleSearch(newSearchTerm)
   }
 
-  //   스포티파이 accessToken 받기 함수
-  const getSpotifyAccessToken = useCallback(async () => {
+  const handleSearch = async (searchTerm: string) => {
     try {
-      await getSpotifyAccessTokenApi().then((res) => {
-        setSpotifyAccessToken(res.data.access_token)
-      })
-    } catch (err) {
-      console.log(err)
-    }
-  }, [])
-
-  //   스포티파이 api를 통해 검색어에 해당하는 트랙, 앨범, 가수 리스트 받기
-  const handleSearch = async (searchTerm: any) => {
-    if (!spotifyAccessToken) {
-      await getSpotifyAccessToken()
-    }
-    try {
-      await searchTermSpotifyApi(searchTerm, spotifyAccessToken).then((res) => {
-        // 실제론 트랙, 앨범, 가수 다 받음
-        setSearchResults(res.data.tracks.items)
-      })
+      const res = await searchTermSpotifyApi(searchTerm)
+      setSearchResults(res.data.tracks.items)
     } catch (err) {
       console.error('API 호출 오류:', err)
     }
@@ -110,10 +93,6 @@ const Music = ({ musicName, setMusicName, musicAudio, setMusicAudio, musicSinger
       setIsPlaying(true)
     }
   }
-
-  useEffect(() => {
-    getSpotifyAccessToken()
-  }, [getSpotifyAccessToken])
 
   return (
     <>
