@@ -8,7 +8,7 @@ import Feeds from '@/components/category/Feeds'
 import NoFlip from '@/components/main/NoFlip'
 import { FeedProps } from '@/components/feed/types'
 import { makeCategoryApi } from '@/apis/CategoryApi'
-import { getFeedsApi } from '@/apis/AnswerApi'
+import { getFeedsApi, getTotalFeedsApi } from '@/apis/AnswerApi'
 import { userInfoState } from '@/context/Atoms'
 import { colors } from '@/styles/colors'
 import DefaultImg from '@/assets/main/DefaultImage.png'
@@ -47,10 +47,9 @@ const GroupPlus = () => {
 
   //전체 피드리스트 조회
   const [feedList, setFeedList] = useState<FeedProps[]>([])
-  const selectedCategoryId = 0
   const getFeeds = useCallback(async () => {
     try {
-      await getFeedsApi(userInfo.memberId, selectedCategoryId).then((res) => {
+      await getTotalFeedsApi(userInfo.memberId).then((res) => {
         console.log(res)
         setFeedList(res.data.content)
       })

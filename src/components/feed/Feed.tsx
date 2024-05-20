@@ -306,6 +306,7 @@ const BottomSheetEachWrapper = styled.div`
   padding: 20px;
   gap: 12px;
   background-color: ${colors.white};
+  cursor: pointer;
 `
 const BottomSheetEachIcon = styled.img`
   width: 20px;

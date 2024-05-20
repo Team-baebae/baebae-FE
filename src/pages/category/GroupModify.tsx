@@ -10,7 +10,7 @@ import { FeedProps } from '@/components/feed/types'
 import { UserInfoStateProps, userInfoState } from '@/context/Atoms'
 import { colors } from '@/styles/colors'
 import { modifyCategoryApi, updateCategoryImgApi } from '@/apis/CategoryApi'
-import { getFeedsApi } from '@/apis/AnswerApi'
+import { getFeedsApi, getTotalFeedsApi } from '@/apis/AnswerApi'
 
 // 그룹 수정페이지
 const GroupModify = () => {
@@ -52,10 +52,9 @@ const GroupModify = () => {
 
   // 전체피드리스트 조회
   const [feedList, setFeedList] = useState<FeedProps[]>([])
-  const selectedDirectoryId = 0
   const getFeeds = useCallback(async () => {
     try {
-      await getFeedsApi(userInfo.memberId, selectedDirectoryId).then((res) => {
+      await getTotalFeedsApi(userInfo.memberId).then((res) => {
         console.log(res)
         setFeedList(res.data.content)
       })

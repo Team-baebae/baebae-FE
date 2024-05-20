@@ -260,15 +260,14 @@ const Groups = () => {
         </Swiper>
       </TopComponent>
       {/* 해당 카테고리 피드 부분 */}
-      {feedList.length > 0 && (
-        <TotalPageFeeds
-          feedList={feedList}
-          selectedCategoryId={selectedCategoryId}
-          selectedCategoryImage={selectedCategoryImage}
-          selectedCategoryGroupName={selectedCategoryGroupName}
-          selectedCategoryAnswerIds={selectedCategoryAnswerIds}
-        />
-      )}
+
+      <TotalPageFeeds
+        feedList={feedList}
+        selectedCategoryId={selectedCategoryId}
+        selectedCategoryImage={selectedCategoryImage}
+        selectedCategoryGroupName={selectedCategoryGroupName}
+        selectedCategoryAnswerIds={selectedCategoryAnswerIds}
+      />
 
       {scrollLoading && <div>loading...</div>}
       <StyledToastContainer
@@ -326,6 +325,7 @@ const GroupWrapper = styled.div`
   gap: 4px;
   width: 44px;
   height: 63px;
+  cursor: pointer;
 `
 const GroupImgWrapper = styled.div<{ selected: boolean }>`
   display: flex;
