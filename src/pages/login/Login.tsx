@@ -11,7 +11,7 @@ const Login = () => {
   const navigate = useNavigate()
 
   // 카카오 로그인 버튼 누를 시 link로 이동
-  // const clientId = import.meta.env.VITE_KAKAO_CLIENT_ID
+  const clientId = import.meta.env.VITE_KAKAO_CLIENT_ID
   const redirectUri = import.meta.env.VITE_KAKAO_REDIRECT_URI
   // const link = `http://kauth.kakao.com/oauth/authorize?client_id=${clientId}&redirect_uri=${redirectUri}&response_type=code`
   const KAKAO_JS_KEY = import.meta.env.VITE_KAKAO_JAVASCRIPT_KEY
