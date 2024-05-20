@@ -1,9 +1,12 @@
-import { isLoggedInState, userInfoState, UserInfoStateProps } from '@/context/Atoms'
+import { userInfoState, UserInfoStateProps } from '@/context/Atoms'
+import { useLogout } from '@/context/utils'
 import axios, { AxiosError, AxiosRequestConfig } from 'axios'
 import { stringify } from 'qs'
-import { useRecoilState, useSetRecoilState } from 'recoil'
+import { useEffect } from 'react'
+import { useRecoilState } from 'recoil'
+
 interface MyErrorResponse {
-  message: string
+  errorMessage: string
 }
 
 const baseURL = import.meta.env.VITE_NEW_SERVER_URL
@@ -15,70 +18,73 @@ export const flipitAxios = axios.create({
   },
 })
 
-flipitAxios.interceptors.response.use(
-  (response) => {
-    return response
-  },
-  (error) => {
-    const originalConfig = error.config
-    const message = error.response.data.message
-    const status = error.response.status
-
-    if (status === 401 && message === '해당 토큰이 만료되었습니다.') {
-      refreshTokenAndRetry(originalConfig, () => logout())
-    }
-    return Promise.reject(error)
-  },
-)
-
-// accessToken 만료
-const refreshTokenAndRetry = async (originalConfig: AxiosRequestConfig, errorCallback: () => void) => {
-  const [userInfo, setUserInfo] = useRecoilState<UserInfoStateProps>(userInfoState)
+// 어세스토큰 만료시 토큰 재발급하는 함수
+const refreshTokenAndRetry = async (
+  originalConfig: AxiosRequestConfig,
+  userInfo: UserInfoStateProps,
+  setUserInfo: (userInfo: UserInfoStateProps) => void,
+  logout: () => void,
+) => {
   try {
+    // 어세스토큰 재발급 요청
     const response = await axios({
       url: `${baseURL}/api/auth/token/refresh`,
-      method: 'Post',
+      method: 'POST',
       headers: {
         Authorization: `Bearer ${userInfo.refreshToken}`,
       },
     })
+
+    // 어세스토큰 업데이트
     const newAccessToken = response.data.accessToken
-    // 토큰을 업데이트 후, 이전 요청 다시 시도
-    setUserInfo({
+    const updatedUserInfo = {
       ...userInfo,
       accessToken: newAccessToken,
-    })
+    }
+    setUserInfo(updatedUserInfo)
+
     if (originalConfig.headers) {
-      originalConfig.headers['Authorization'] = 'Bearer ' + newAccessToken
+      originalConfig.headers['Authorization'] = `Bearer ${newAccessToken}`
     }
     return flipitAxios(originalConfig)
   } catch (refreshError) {
+    // 리프레시 토큰 에러 발생 시
     const error = refreshError as AxiosError<MyErrorResponse>
-    const errorMessage = error.response?.data?.message
-    // 리프레시 토큰 만료된 경우
+    const errorMessage = error.response?.data?.errorMessage
+    // 리프레시 토큰 만료 시
     if (errorMessage === '해당 토큰이 만료되었습니다.') {
-      // errorCallback(logout 함수)을 호출하여 처리
-      errorCallback()
+      // 로그아웃 요청
+      logout()
     }
     return Promise.reject(refreshError)
   }
 }
 
-// refreshToken 만료될 때 호출되는 로그아웃 함수
-const logout = () => {
-  const setUserInfo = useSetRecoilState<UserInfoStateProps>(userInfoState)
-  const setIsLoggedIn = useSetRecoilState<boolean>(isLoggedInState)
+// axios에서 error 발생
+export const useAxiosInterceptors = () => {
+  const [userInfo, setUserInfo] = useRecoilState(userInfoState)
+  const { logout } = useLogout()
 
-  setUserInfo({
-    accessToken: '',
-    refreshToken: '',
-    fcmToken: '',
-    memberId: 0,
-    email: '',
-    nickname: '',
-    profileImage: '',
-  })
-  setIsLoggedIn(false)
-  window.location.href = '/login'
-  console.log('토큰이 만료되어 자동으로 로그아웃 되었습니다.')
+  useEffect(() => {
+    flipitAxios.interceptors.response.use(
+      (response) => {
+        return response
+      },
+      async (error) => {
+        const originalConfig = error.config
+        const message = error.response?.data?.errorMessage
+        const status = error.response?.status
+        // 어세스토큰 만료된 경우
+        if (status === 401 && message === '해당 토큰이 만료되었습니다.') {
+          try {
+            // 토큰 재발급 함수 실행
+            await refreshTokenAndRetry(originalConfig, userInfo, setUserInfo, logout)
+          } catch (retryError) {
+            console.error(retryError)
+          }
+        }
+        return Promise.reject(error)
+      },
+    )
+  }, [userInfo, setUserInfo, logout])
 }
