@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useState } from 'react'
+import React, { useState } from 'react'
 import { BottomSheet } from 'react-spring-bottom-sheet'
 import 'react-spring-bottom-sheet/dist/style.css'
 import styled from 'styled-components'
@@ -49,8 +49,6 @@ const Music = ({ musicName, setMusicName, musicAudio, setMusicAudio, musicSinger
   const [searchTerm, setSearchTerm] = useState<string>('')
   //받은 response중 트랙리스트를 저장함
   const [searchResults, setSearchResults] = useState<TrackProps[]>([])
-  //스포티파이 api 어세스토큰 저장
-  const [spotifyAccessToken, setSpotifyAccessToken] = useState<string>('')
   //현재 실행하고 있는 트랙 저장
   const [currentAudio, setCurrentAudio] = useState<HTMLAudioElement | null>(null)
   //현재 실행중인지 여부 확인

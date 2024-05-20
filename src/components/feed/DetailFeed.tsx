@@ -222,9 +222,9 @@ const DetailFeed = (props: ModalProps) => {
   }, [getIsReacted, getReactCount])
 
   // 캡쳐된 이미지 저장
-  const [capturedImageData, setCapturedImageData] = useState<string>('')
+  const [, setCapturedImageData] = useState<string>('')
   // 캡쳐된 이미지 파일으로 저장
-  const [imageFile, setImageFile] = useState<File | null>(null)
+  const [, setImageFile] = useState<File | null>(null)
 
   // 화면캡쳐하기
   const captureElement = async (elementId: string): Promise<string> => {
@@ -276,7 +276,7 @@ const DetailFeed = (props: ModalProps) => {
   }
 
   // 리코일 계정 주인의 데이터 정보
-  const [ownerUserInfo, setOwnerUserInfo] = useRecoilState(ownerUserData)
+  const [ownerUserInfo] = useRecoilState(ownerUserData)
 
   // 공유
   const { Kakao } = window
@@ -669,14 +669,4 @@ const ButtonComponent = styled.div`
   bottom: 30px;
   width: 315px;
   gap: 10px;
-`
-
-const TestImgWrapper = styled.img`
-  position: fixed;
-  top: 30%;
-  left: 0;
-  background-color: none;
-  width: 300px;
-  height: 400px;
-  object-fit: cover;
 `
