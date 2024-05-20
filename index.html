@@ -17,9 +17,6 @@
       integrity="sha384-kDljxUXHaJ9xAb2AzRd59KxjrFjzHa5TAoFQ6GbYTCAG0bjM55XohjjDT7tDDC01"
       crossorigin="anonymous"
     ></script>
-    <script>
-      Kakao.init('16d20187e9efaf5c2267f677cfe32dc8')
-    </script>
   </head>
   <body>
     <div id="root"></div>
@@ -31,6 +28,9 @@
       height="300"
     />
     <script type="module" src="/src/main.tsx"></script>
+    <script>
+      Kakao.init('16d20187e9efaf5c2267f677cfe32dc8')
+    </script>
     <script>
       if ('serviceWorker' in navigator) {
         window.addEventListener('load', function () {
