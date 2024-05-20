@@ -5,61 +5,44 @@ import Logo from '@/assets/login/Logo.svg'
 import LoginBackground from '@/assets/login/LoginBack.svg'
 import KakaoIcon from '@/assets/login/KakaoIcon.svg'
 import { useEffect } from 'react'
+import axios from 'axios'
 
 // 로그인 페이지
 const Login = () => {
   const navigate = useNavigate()
 
-  // 카카오 로그인 버튼 누를 시 link로 이동
+  // const restApiKey = import.meta.env.VITE_KAKAO_REST_API_KEY
+  // // 카카오 로그인 버튼 누를 시 link로 이동
   const clientId = import.meta.env.VITE_KAKAO_CLIENT_ID
   const redirectUri = import.meta.env.VITE_KAKAO_REDIRECT_URI
   const link = `http://kauth.kakao.com/oauth/authorize?client_id=${clientId}&redirect_uri=${redirectUri}&response_type=code`
-  const KAKAO_JS_KEY = import.meta.env.VITE_KAKAO_JAVASCRIPT_KEY
   const loginHandler = () => {
-    window.location.href = link
+    window.open(link, '_self')
   }
 
-  useEffect(() => {
-    // 카카오 SDK 초기화
-    if (!window.Kakao.isInitialized()) {
-      window.Kakao.init(KAKAO_JS_KEY)
-    }
-  }, [])
-
-  const loginWithKakao = () => {
-    const isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent)
-
-    if (isMobile) {
-      // 모바일 환경에서는 카카오톡 앱을 통해 로그인 유도
-      window.location.href = `kakao${KAKAO_JS_KEY}://authorize?client_id=${clientId}&redirect_uri=${redirectUri}&response_type=code`
-    } else {
-      // 데스크탑 환경에서는 카카오 로그인 창 팝업
-      window.Kakao.Auth.authorize({
-        redirectUri: redirectUri,
-      })
-    }
-
-    // window.Kakao.Auth.authorize({
-    //   redirectUri: redirectUri,
-    // })
-  }
-
-  // const kakaoSDKLogin = () => {
-  //   const kakao = (window as any)?.Kakao
-
-  //   kakao?.Auth?.authorize({
-  //     redirectUri, // 리다이렉트 URI만 넘겨주고, 해당 주소에서 인가 코드를 받아서 처리
-  //   })
+  // const AUTHORIZATION_CODE = new URL(window.location.href).searchParams.get('code')
+  // const getToken = async () => {
+  //   const res = axios.post(
+  //     'https://kauth.kakao.com/oauth/token',
+  //     {
+  //       grant_type: 'authorization_code',
+  //       client_id: clientId,
+  //       redirect_uri: redirectUri,
+  //       code: AUTHORIZATION_CODE,
+  //     },
+  //     {
+  //       headers: {
+  //         'Content-Type': 'application/x-www-form-urlencoded',
+  //       },
+  //     },
+  //   )
+  //   console.log(res)
+  //   return res
   // }
 
   // useEffect(() => {
-  //   const kakao = (window as any)?.Kakao
-
-  //   // 카카오 객체를 초기화 (필수)
-  //   if (!kakao?.isInitialized()) {
-  //     kakao?.init(KAKAO_JS_KEY)
-  //   }
-  // }, [])
+  //   getToken()
+  // })
 
   return (
     <Container>
@@ -67,7 +50,7 @@ const Login = () => {
       <FlipItLogo onClick={() => navigate('/')} src={Logo} />
       <ContentTextTop>타인을 알아가고 본인을 표현하는</ContentTextTop>
       <ContentTextBottom>가장 단순한 방법, 플리빗.</ContentTextBottom>
-      <KakaoLoginBtn onClick={loginWithKakao}>
+      <KakaoLoginBtn onClick={loginHandler}>
         <KakaoLoginBtnIcon src={KakaoIcon} />
         <KakaoLoginBtnText>카카오로 로그인하기</KakaoLoginBtnText>
       </KakaoLoginBtn>
