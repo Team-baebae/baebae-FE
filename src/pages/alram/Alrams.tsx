@@ -1,13 +1,13 @@
+import styled from 'styled-components'
+import { useEffect, useState } from 'react'
+import { useRecoilValue } from 'recoil'
+import { userInfoState } from '@/context/Atoms'
 import { getNotificationList } from '@/apis/NotificationApi'
 import NoAlram from '@/components/alram/NoAlram'
 import Notification from '@/components/alram/Notification'
 import { NotificationProps } from '@/components/alram/types'
 import Header from '@/components/common/Header'
-import { userInfoState } from '@/context/Atoms'
 import { colors } from '@/styles/colors'
-import { useEffect, useState } from 'react'
-import { useRecoilValue } from 'recoil'
-import styled from 'styled-components'
 
 const Alrams = () => {
   const userInfo = useRecoilValue(userInfoState)
