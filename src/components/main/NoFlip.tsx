@@ -3,19 +3,28 @@ import { colors } from '@/styles/colors'
 import NoFeed from '@/assets/main/NoneFeed.svg'
 import { useRecoilValue } from 'recoil'
 import { ownerUserData } from '@/context/Atoms'
-import { useNavigate } from 'react-router-dom'
+import { useLocation, useNavigate } from 'react-router-dom'
 
 // 해당 디렉토리의 피드가 없을 때 컴포넌트
 const NoFlip = () => {
+  // flip에서 질문하러 가기를 눌렀을 때 현재위치에서 현재위치로 갈 때는 reload하게 하기 위해
+  const location = useLocation()
+  const pathname = location.pathname
+
   const navigate = useNavigate()
   const ownerUserInfo = useRecoilValue(ownerUserData)
+  const ownerNicknamePathname = `/${ownerUserInfo.nickname}`
 
   return (
     <Container>
       <Image src={NoFeed} width={150} height={146} />
       <WarnWrapper>
         <WarnText>플립이 아직 없어요!</WarnText>
-        <QBtn onClick={() => navigate(`/${ownerUserInfo.nickname}`)}>질문하러 가기</QBtn>
+        {pathname === ownerNicknamePathname ? (
+          <QBtn onClick={() => window.location.reload()}>질문하러 가기</QBtn>
+        ) : (
+          <QBtn onClick={() => navigate(`/${ownerUserInfo.nickname}`)}>질문하러 가기</QBtn>
+        )}
       </WarnWrapper>
     </Container>
   )

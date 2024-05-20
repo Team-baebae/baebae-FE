@@ -2,6 +2,7 @@ import styled from 'styled-components'
 import { useState } from 'react'
 import { TotalPageFeedsProps } from '@/components/category/types'
 import TotalPageFeed from '@/components/category/TotalPageFeed'
+import NoFlip from '@/components/main/NoFlip'
 
 // 전체 페이지의 피드리스트
 const TotalPageFeeds = (props: TotalPageFeedsProps) => {
@@ -18,23 +19,27 @@ const TotalPageFeeds = (props: TotalPageFeedsProps) => {
 
   return (
     <Container>
-      {feedList.map((feed) => {
-        return (
-          <div key={feed.answerId}>
-            <TotalPageFeed
-              selectedFeed={feed}
-              selectedCategoryId={selectedCategoryId}
-              selectedCategoryImage={selectedCategoryImage}
-              selectedCategoryGroupName={selectedCategoryGroupName}
-              selectedCategoryAnswerIds={selectedCategoryAnswerIds}
-              currentAudio={currentAudio}
-              setCurrentAudio={setCurrentAudio}
-              isPlaying={isPlaying}
-              setIsPlaying={setIsPlaying}
-            />
-          </div>
-        )
-      })}
+      {feedList.length > 0 ? (
+        feedList.map((feed) => {
+          return (
+            <div key={feed.answerId}>
+              <TotalPageFeed
+                selectedFeed={feed}
+                selectedCategoryId={selectedCategoryId}
+                selectedCategoryImage={selectedCategoryImage}
+                selectedCategoryGroupName={selectedCategoryGroupName}
+                selectedCategoryAnswerIds={selectedCategoryAnswerIds}
+                currentAudio={currentAudio}
+                setCurrentAudio={setCurrentAudio}
+                isPlaying={isPlaying}
+                setIsPlaying={setIsPlaying}
+              />
+            </div>
+          )
+        })
+      ) : (
+        <NoFlip />
+      )}
     </Container>
   )
 }
