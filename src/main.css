@@ -1,0 +1,17 @@
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  padding: 0;
+}
+
+:root {
+  --rsbs-max-w: 375px;
+  --rsbs-ml: calc((100vw - 375px) / 2);
+  @media screen and (max-width: 768px) {
+    --rsbs-max-w: auto;
+    --rsbs-ml: 0%;
+  }
+}

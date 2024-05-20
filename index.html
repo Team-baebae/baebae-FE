@@ -2,12 +2,37 @@
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
-    <link rel="icon" type="image/svg+xml" href="/vite.svg" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Vite + React + TS</title>
+    <meta name="theme-color" content="#1D1D1D" />
+    <link rel="icon" type="image/svg+xml" href="/icons/favicon.svg" />
+    <link rel="alternate icon" href="icons/favicon.ico" type="ico" sizes="32x32" />
+    <link rel="apple-touch-icon" href="icons/icon-152x152.png" sizes="152x152" />
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" />
+    <link rel="manifest" href="manifest.json" />
+    <title>Flip-it</title>
+    <meta name="description" content="타인을 알아가고 본인을 표현하는 가장 단순한 방법, 플리빗" />
+    <script
+      src="https://t1.kakaocdn.net/kakao_js_sdk/2.7.1/kakao.min.js"
+      integrity="sha384-kDljxUXHaJ9xAb2AzRd59KxjrFjzHa5TAoFQ6GbYTCAG0bjM55XohjjDT7tDDC01"
+      crossorigin="anonymous"
+    ></script>
   </head>
   <body>
     <div id="root"></div>
     <script type="module" src="/src/main.tsx"></script>
+    <script>
+      if ('serviceWorker' in navigator) {
+        window.addEventListener('load', function () {
+          navigator.serviceWorker
+            .register('firebase-messaging-sw.js')
+            .then(function (registration) {
+              console.log('Service Worker가 scope에 등록되었습니다.:', registration.scope)
+            })
+            .catch(function (err) {
+              console.log('Service Worker 등록 실패:', err)
+            })
+        })
+      }
+    </script>
   </body>
 </html>
