@@ -4,50 +4,19 @@ import { colors } from '@/styles/colors'
 import Logo from '@/assets/login/Logo.svg'
 import LoginBackground from '@/assets/login/LoginBack.svg'
 import KakaoIcon from '@/assets/login/KakaoIcon.svg'
-import { useEffect } from 'react'
 
 // 로그인 페이지
 const Login = () => {
   const navigate = useNavigate()
 
   // 카카오 로그인 버튼 누를 시 link로 이동
-  // const clientId = import.meta.env.VITE_KAKAO_CLIENT_ID
+  const restApiKey = import.meta.env.VITE_KAKAO_REST_API_KEY
   const redirectUri = import.meta.env.VITE_KAKAO_REDIRECT_URI
-  // const link = `http://kauth.kakao.com/oauth/authorize?client_id=${clientId}&redirect_uri=${redirectUri}&response_type=code`
-  const KAKAO_JS_KEY = import.meta.env.VITE_KAKAO_JAVASCRIPT_KEY
-  // const loginHandler = () => {
-  //   window.location.href = link
-  // }
+  const link = `http://kauth.kakao.com/oauth/authorize?client_id=${restApiKey}&redirect_uri=${redirectUri}&response_type=code`
 
-  useEffect(() => {
-    // 카카오 SDK 초기화
-    if (!window.Kakao.isInitialized()) {
-      window.Kakao.init(KAKAO_JS_KEY)
-    }
-  }, [])
-
-  const loginWithKakao = () => {
-    window.Kakao.Auth.authorize({
-      redirectUri: redirectUri,
-    })
+  const loginHandler = () => {
+    window.location.href = link
   }
-
-  // const kakaoSDKLogin = () => {
-  //   const kakao = (window as any)?.Kakao
-
-  //   kakao?.Auth?.authorize({
-  //     redirectUri, // 리다이렉트 URI만 넘겨주고, 해당 주소에서 인가 코드를 받아서 처리
-  //   })
-  // }
-
-  // useEffect(() => {
-  //   const kakao = (window as any)?.Kakao
-
-  //   // 카카오 객체를 초기화 (필수)
-  //   if (!kakao?.isInitialized()) {
-  //     kakao?.init(KAKAO_JS_KEY)
-  //   }
-  // }, [])
 
   return (
     <Container>
@@ -55,7 +24,7 @@ const Login = () => {
       <FlipItLogo onClick={() => navigate('/')} src={Logo} />
       <ContentTextTop>타인을 알아가고 본인을 표현하는</ContentTextTop>
       <ContentTextBottom>가장 단순한 방법, 플리빗.</ContentTextBottom>
-      <KakaoLoginBtn onClick={loginWithKakao}>
+      <KakaoLoginBtn onClick={loginHandler}>
         <KakaoLoginBtnIcon src={KakaoIcon} />
         <KakaoLoginBtnText>카카오로 로그인하기</KakaoLoginBtnText>
       </KakaoLoginBtn>
