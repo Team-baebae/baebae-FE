@@ -27,9 +27,21 @@ const Login = () => {
   }, [])
 
   const loginWithKakao = () => {
-    window.Kakao.Auth.authorize({
-      redirectUri: redirectUri,
-    })
+    const isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent)
+
+    if (isMobile) {
+      // 모바일 환경에서는 카카오톡 앱을 통해 로그인 유도
+      window.location.href = `kakao${KAKAO_JS_KEY}://authorize?client_id=${clientId}&redirect_uri=${redirectUri}&response_type=code`
+    } else {
+      // 데스크탑 환경에서는 카카오 로그인 창 팝업
+      window.Kakao.Auth.authorize({
+        redirectUri: redirectUri,
+      })
+    }
+
+    // window.Kakao.Auth.authorize({
+    //   redirectUri: redirectUri,
+    // })
   }
 
   // const kakaoSDKLogin = () => {
