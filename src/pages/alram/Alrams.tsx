@@ -33,7 +33,7 @@ const Alrams = () => {
         </>
       ) : (
         notifications.map((value) => (
-          <Notification title={value.notificationContent} content={value.questionContent} isChecked={value.isChecked} />
+          <Notification title={value.notificationContent} content={value.questionContent} isChecked={value.checked} />
         ))
       )}
     </Container>

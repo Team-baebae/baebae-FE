@@ -3,5 +3,5 @@ export interface NotificationProps {
   notificationContent: string
   questionContent: string
   notificationTime: string
-  isChecked: boolean
+  checked: boolean
 }
