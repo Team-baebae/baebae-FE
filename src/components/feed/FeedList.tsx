@@ -212,6 +212,7 @@ const TotalFeedsBtn = styled.div`
   line-height: normal;
   letter-spacing: -0.28px;
   margin: 14px 0px 20px 0px;
+  cursor: pointer;
 `
 
 const SelectedFlipWrapper = styled(FlipWrapper)`
