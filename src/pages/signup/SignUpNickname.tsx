@@ -20,7 +20,7 @@ const SignUpNickname = () => {
   const kakaoAccessToken = location.state?.kakaoAccessToken
 
   // 리코일로 받은 유저 정보
-  const [userInfo, setUserInfo] = useRecoilState<UserInfoStateProps>(userInfoState)
+  const [, setUserInfo] = useRecoilState<UserInfoStateProps>(userInfoState)
   // 리코일 로그인 여부
   const setIsLoggedIn = useSetRecoilState(isLoggedInState)
 

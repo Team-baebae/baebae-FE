@@ -19,7 +19,7 @@ const KakaoRedirection = () => {
   //카카오 인가코드
   const code = new URL(document.location.toString()).searchParams.get('code')
   // 리코일 userInfo
-  const [userInfo, setUserInfo] = useRecoilState<UserInfoStateProps>(userInfoState)
+  const [, setUserInfo] = useRecoilState<UserInfoStateProps>(userInfoState)
   // 리코일 로그인 여부
   const setIsLoggedIn = useSetRecoilState(isLoggedInState)
 

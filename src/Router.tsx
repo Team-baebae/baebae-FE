@@ -25,15 +25,13 @@ import QuestionList from '@/pages/question/QuestionList'
 import Answer from '@/pages/answer/Answer'
 import Folder from '@/pages/category/SelectCategory'
 import AnswerComplete from '@/pages/answer/AnswerComplete'
+import EditAnswer from '@/pages/answer/EditAnswer'
 //카테고리
 import GroupPlus from '@/pages/category/GroupPlus'
 import GroupModify from '@/pages/category/GroupModify'
 import Groups from '@/pages/category/Groups'
 //알림
 import Alrams from '@/pages/alram/Alrams'
-//테스트
-import DetailTestPage from '@/pages/DetailTestPage'
-import EditAnswer from './pages/answer/EditAnswer'
 
 const Router = () => {
   return (
@@ -82,7 +80,6 @@ const Router = () => {
           <Route path="alrams">
             <Route index element={<Alrams />} />
           </Route>
-          <Route path="detailTest" element={<DetailTestPage />} />
         </Route>
       </Routes>
     </BrowserRouter>

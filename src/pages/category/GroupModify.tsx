@@ -10,7 +10,7 @@ import { FeedProps } from '@/components/feed/types'
 import { UserInfoStateProps, userInfoState } from '@/context/Atoms'
 import { colors } from '@/styles/colors'
 import { modifyCategoryApi, updateCategoryImgApi } from '@/apis/CategoryApi'
-import { getFeedsApi, getTotalFeedsApi } from '@/apis/AnswerApi'
+import { getTotalFeedsApi } from '@/apis/AnswerApi'
 
 // 그룹 수정페이지
 const GroupModify = () => {

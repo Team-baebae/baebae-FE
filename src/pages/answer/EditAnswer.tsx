@@ -10,7 +10,7 @@ import DelayModal from '@/components/common/DelayModal'
 import Modal from '@/components/common/Modal'
 import AnswerHeader from '@/components/common/AnswerHeader'
 import { colors } from '@/styles/colors'
-import { answerApi, modifyFeedApi } from '@/apis/AnswerApi'
+import { modifyFeedApi } from '@/apis/AnswerApi'
 import { userInfoState } from '@/context/Atoms'
 
 // 질문에 대한 답변 페이지

@@ -41,7 +41,7 @@ const EditAccount = () => {
       await updateUserProfileApi(userInfo.accessToken, userInfo.memberId, file).then((res) => {
         console.log(res)
 
-        updateUserNicknameApi(userInfo.accessToken, userInfo.memberId, nickname).then((response) => {
+        updateUserNicknameApi(userInfo.accessToken, userInfo.memberId, nickname).then(() => {
           if (res.status === 200) {
             setUserInfo({
               ...userInfo,
