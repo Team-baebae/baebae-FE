@@ -79,7 +79,7 @@ const TitleText = styled.h1`
   font-weight: 600;
   letter-spacing: -1.6px;
 `
-const Button = styled(motion.a)`
+const Button = styled(motion.button)`
   display: flex;
   flex-direction: column;
   align-items: flex-start;
@@ -87,8 +87,9 @@ const Button = styled(motion.a)`
   gap: 10px;
   border-radius: 100px;
   z-index: 10;
+  border: none;
+  outline: none;
   background-color: ${colors.primary};
-  text-decoration: none;
   color: ${colors.grey1};
   font-family: Pretendard;
   font-size: 16px;

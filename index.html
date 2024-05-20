@@ -3,6 +3,7 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="theme-color" content="#1D1D1D" />
+    <meta name="background-color" content="#1D1D1D" />
     <link rel="icon" type="image/svg+xml" href="/icons/favicon.svg" />
     <link rel="alternate icon" href="icons/favicon.ico" type="ico" sizes="32x32" />
     <link rel="apple-touch-icon" href="icons/icon-152x152.png" sizes="152x152" />
@@ -16,14 +17,16 @@
       integrity="sha384-kDljxUXHaJ9xAb2AzRd59KxjrFjzHa5TAoFQ6GbYTCAG0bjM55XohjjDT7tDDC01"
       crossorigin="anonymous"
     ></script>
-    <script src="https://developers.kakao.com/sdk/js/kakao.js"></script>
-    <!-- <script>
-      Kakao.init('16d20187e9efaf5c2267f677cfe32dc8')
-      Kakao.isInitialized()
-    </script> -->
   </head>
   <body>
     <div id="root"></div>
+    <img
+      id="fallback"
+      src="https://kr.object.ncloudstorage.com/baebae-bucket/Flip-it.png"
+      alt="flipit"
+      width="300"
+      height="300"
+    />
     <script type="module" src="/src/main.tsx"></script>
     <script>
       if ('serviceWorker' in navigator) {
@@ -32,11 +35,15 @@
             .register('firebase-messaging-sw.js')
             .then(function (registration) {
               console.log('Service Worker가 scope에 등록되었습니다.:', registration.scope)
+              // PWA가 성공적으로 로드된 경우 fallback 이미지를 숨깁니다.
+              document.getElementById('fallback').style.display = 'none'
             })
             .catch(function (err) {
               console.log('Service Worker 등록 실패:', err)
             })
         })
+      } else {
+        document.getElementById('fallback').style.display = 'none'
       }
     </script>
   </body>

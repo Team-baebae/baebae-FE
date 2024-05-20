@@ -3,7 +3,7 @@
   "short_name": "Flipit",
   "start_url": "",
   "display": "standalone",
-  "background_color": "#FFF",
+  "background_color": "#1D1D1D",
   "theme_color": "#1D1D1D",
   "description": "타인을 알아가고 본인을 표현하는 가장 단순한 방법, 플리빗",
   "icons": [
