@@ -4,6 +4,7 @@ import { colors } from '@/styles/colors'
 import Logo from '@/assets/login/Logo.svg'
 import LoginBackground from '@/assets/login/LoginBack.svg'
 import KakaoIcon from '@/assets/login/KakaoIcon.svg'
+import { useEffect } from 'react'
 
 // 로그인 페이지
 const Login = () => {
@@ -13,10 +14,27 @@ const Login = () => {
   const clientId = import.meta.env.VITE_KAKAO_CLIENT_ID
   const redirectUri = import.meta.env.VITE_KAKAO_REDIRECT_URI
   const link = `http://kauth.kakao.com/oauth/authorize?client_id=${clientId}&redirect_uri=${redirectUri}&response_type=code`
-
+  const KAKAO_JS_KEY = import.meta.env.VITE_KAKAO_JAVASCRIPT_KEY
   const loginHandler = () => {
     window.location.href = link
   }
+
+  const kakaoSDKLogin = () => {
+    const kakao = (window as any)?.Kakao
+
+    kakao?.Auth?.authorize({
+      redirectUri, // 리다이렉트 URI만 넘겨주고, 해당 주소에서 인가 코드를 받아서 처리
+    })
+  }
+
+  useEffect(() => {
+    const kakao = (window as any)?.Kakao
+
+    // 카카오 객체를 초기화 (필수)
+    if (!kakao?.isInitialized()) {
+      kakao?.init(KAKAO_JS_KEY)
+    }
+  }, [])
 
   return (
     <Container>
@@ -24,7 +42,7 @@ const Login = () => {
       <FlipItLogo onClick={() => navigate('/')} src={Logo} />
       <ContentTextTop>타인을 알아가고 본인을 표현하는</ContentTextTop>
       <ContentTextBottom>가장 단순한 방법, 플리빗.</ContentTextBottom>
-      <KakaoLoginBtn onClick={loginHandler}>
+      <KakaoLoginBtn onClick={kakaoSDKLogin}>
         <KakaoLoginBtnIcon src={KakaoIcon} />
         <KakaoLoginBtnText>카카오로 로그인하기</KakaoLoginBtnText>
       </KakaoLoginBtn>
