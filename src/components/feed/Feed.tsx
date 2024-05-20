@@ -58,7 +58,7 @@ const Feed = () => {
   const [feedList, setFeedList] = useState<FeedProps[]>([])
 
   // 클릭하여 선택된 카테고리의 정보 저장
-  const [selectedCategoryId, setSelectedCategoryId] = useState<number>(0)
+  const [selectedCategoryId, setSelectedCategoryId] = useState<number>(-1)
   const [selectedCategoryGroupName, setSelectedCategoryGroupName] = useState<string>('')
   const [selectedCategoryImage, setSelectedCategoryImage] = useState<string>('')
   const [selectedCategoryAnswerIds, setSelectedCategoryAnswerIds] = useState<number[]>([])
@@ -128,8 +128,9 @@ const Feed = () => {
   }
   // 해당카테고리에 해당하는 피드리스트 받기
   const getFeeds = useCallback(async () => {
+    const page = 0
     try {
-      await getFeedsApi(ownerUserInfo.memberId, selectedCategoryId).then((res) => {
+      await getFeedsApi(ownerUserInfo.memberId, selectedCategoryId, page).then((res) => {
         console.log(res)
         setFeedList(res.data.content)
       })
@@ -202,6 +203,7 @@ const Feed = () => {
       {feedList.length > 0 ? (
         <FeedList
           data={feedList}
+          setFeedList={setFeedList}
           selectedCategoryId={selectedCategoryId}
           selectedCategoryImage={selectedCategoryImage}
           selectedCategoryGroupName={selectedCategoryGroupName}

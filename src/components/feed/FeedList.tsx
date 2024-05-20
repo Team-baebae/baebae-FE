@@ -11,6 +11,7 @@ import { selectedQuestionState } from '@/context/Atoms'
 // 해당 카테고리에 속한 피드들 보여주는 컴포넌트
 const FeedList = ({
   data,
+  setFeedList,
   selectedCategoryId,
   selectedCategoryImage,
   selectedCategoryGroupName,
@@ -22,7 +23,7 @@ const FeedList = ({
   const [selectedFeed, setSelectedFeed] = useState<FeedProps>({
     answerId: -1,
     memberId: -1,
-    memberNickname: '',
+    senderNickname: '',
     questionContent: '',
     questionId: -1,
     nickname: '',
@@ -79,7 +80,8 @@ const FeedList = ({
                   <WriterRegion
                     onClick={(e) => {
                       e.stopPropagation()
-                      navigate(`/${feed.memberNickname}`)
+                      navigate(`/${feed.senderNickname}`)
+                      window.location.reload()
                     }}
                     color={colors.grey1}
                   >
@@ -114,6 +116,8 @@ const FeedList = ({
           setShowModal={setShowModal}
           showModal={showModal}
           selectedFeed={selectedFeed}
+          feedList={data}
+          setFeedList={setFeedList}
           selectedCategoryId={selectedCategoryId}
           selectedCategoryImage={selectedCategoryImage}
           selectedCategoryGroupName={selectedCategoryGroupName}
@@ -187,6 +191,7 @@ const WriterRegion = styled.button<{ color: string }>`
   border: none;
   outline: none;
   background-color: transparent;
+  cursor: pointer;
 `
 
 const TotalFeedsBtn = styled.div`

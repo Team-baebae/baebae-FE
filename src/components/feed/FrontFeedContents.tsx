@@ -21,7 +21,8 @@ const FrontFeedContents = (props: SelectedFeedProps) => {
           <WriterRegion
             onClick={(e) => {
               e.stopPropagation()
-              navigate(`/${selectedFeed.memberNickname}`)
+              navigate(`/${selectedFeed.senderNickname}`)
+              window.location.reload()
             }}
             color={colors.grey1}
           >

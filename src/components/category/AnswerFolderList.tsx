@@ -160,14 +160,14 @@ export default AnswerFolderList
 const Container = styled.div`
   display: grid;
   justify-items: stretch;
-  grid-template-columns: 1fr 1fr 1fr auto;
+  grid-template-columns: repeat(4, 1fr);
   gap: 20px 23px;
-  /* width: 335px; */
+  width: 335px;
   margin: 0px 20px 0px 20px;
   padding: 20px 0px 20px 0px;
   width: calc(100% - 40px);
   max-height: calc(100vh - 330px);
-  overflow-y: scroll;
+  overflow-y: auto;
 `
 
 const PlusLinkText = styled.div`
