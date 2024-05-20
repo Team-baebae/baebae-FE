@@ -67,7 +67,7 @@ self.addEventListener('push', function (e) {
   const notificationTitle = resultData.title
   const notificationOptions = {
     body: resultData.body,
-    icon: resultData.image, // 웹 푸시 이미지는 icon
+    icon: 'https://kr.object.ncloudstorage.com/baebae-bucket/flipit.png',
     tag: resultData.tag,
   }
 
