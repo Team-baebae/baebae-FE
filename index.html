@@ -42,6 +42,8 @@
               console.log('Service Worker 등록 실패:', err)
             })
         })
+      } else {
+        document.getElementById('fallback').style.display = 'none'
       }
     </script>
   </body>
