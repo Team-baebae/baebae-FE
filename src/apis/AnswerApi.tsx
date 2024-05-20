@@ -22,18 +22,17 @@ export const getFeedsApi = (memberId: number, selectedDirectoryId: number, page:
   const recent = ['createdDate,desc']
   const categoryRecent = ['answer.createdDate,desc']
   if (selectedDirectoryId === 0) {
-    let API = `/api/answers?memberId=${memberId}&page=${page}&size=6&sort=${recent}`
+    let API = `/api/answers/member/${memberId}?page=${page}&size=6&sort=${recent}`
     return flipitAxios.get(API)
   } else {
-    let API = `/api/answers?memberId=${memberId}&categoryId=${selectedDirectoryId}&page=${page}&size=6&sort=${categoryRecent}`
+    let API = `/api/answers/member/${memberId}?categoryId=${selectedDirectoryId}&page=${page}&size=6&sort=${categoryRecent}`
     return flipitAxios.get(API)
   }
 }
 
 export const getTotalFeedsApi = (memberId: number) => {
   const recent = ['createdDate,desc']
-
-  let API = `/api/answers?memberId=${memberId}&sort=${recent}`
+  let API = `/api/answers/member/${memberId}?sort=${recent}`
   return flipitAxios.get(API)
 }
 
@@ -113,7 +112,7 @@ export const postReactApi = (accessToken: string, answerId: number, memberId: nu
   )
 }
 
-export const extractImage = (accessToken: string, url: string) => {
+export const extractImageApi = (accessToken: string, url: string) => {
   let API = `/api/image?url=${url}`
   return flipitAxios.get(API, {
     headers: {
