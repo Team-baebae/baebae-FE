@@ -327,11 +327,11 @@ const DetailFeed = (props: ModalProps) => {
   const sharing = async (file: File) => {
     if (navigator?.share) {
       try {
-        if (imageFile) {
+        if (file) {
           await navigator.share({
             title: `타인을 알아가고 본인을 표현하는 가장 단순한 방법, 플리빗`,
             text: `${ownerUserInfo.nickname}님의 플립을 공유했어요!`,
-            files: [imageFile],
+            files: [file],
           })
         }
       } catch (err) {
@@ -339,6 +339,7 @@ const DetailFeed = (props: ModalProps) => {
       }
     } else {
       shareKakao(file)
+      console.log(file)
     }
   }
 
