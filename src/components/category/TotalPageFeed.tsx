@@ -55,6 +55,18 @@ const TotalPageFeed = (props: TotalPageFeedProps) => {
   // 어느면을 바라볼지 state
   const [isFlipped, setIsFlipped] = useState<boolean>(false)
 
+  // 모달 밖 클릭 시
+  const backModal = () => {
+    // 모달 내릴 때 오디오 끄기
+    if (isPlaying) {
+      currentAudio?.pause()
+      setIsPlaying(false)
+      setOpen(false)
+    } else {
+      setOpen(false)
+    }
+  }
+
   const spring = {
     type: 'spring',
     stiffness: 300,
@@ -335,17 +347,6 @@ const TotalPageFeed = (props: TotalPageFeedProps) => {
     }
   }
 
-  // 저장하기
-  const onSaveAs = (uri: string, filename: string) => {
-    console.log('onSaveAs')
-    var link = document.createElement('a')
-    document.body.appendChild(link)
-    link.href = uri
-    link.download = filename
-    link.click()
-    document.body.removeChild(link)
-  }
-
   return (
     <Container>
       <AnimatePresence>
@@ -463,6 +464,7 @@ const TotalPageFeed = (props: TotalPageFeedProps) => {
                       redirectRoute: 'feedTotal',
                     },
                   })
+                  backModal()
                 }}
               >
                 <BottomSheetEachIcon src={pencil} />
@@ -482,6 +484,7 @@ const TotalPageFeed = (props: TotalPageFeedProps) => {
                       selectedFeed: selectedFeed,
                     },
                   })
+                  backModal()
                 }}
               >
                 <BottomSheetEachIcon src={pencil} />

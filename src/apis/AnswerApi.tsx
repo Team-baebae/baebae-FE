@@ -112,3 +112,12 @@ export const postReactApi = (accessToken: string, answerId: number, memberId: nu
     },
   )
 }
+
+export const extractImage = (accessToken: string, url: string) => {
+  let API = `/api/image?url=${url}`
+  return flipitAxios.get(API, {
+    headers: {
+      Authorization: `Bearer ${accessToken}`,
+    },
+  })
+}
