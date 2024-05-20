@@ -30,6 +30,13 @@ export const getFeedsApi = (memberId: number, selectedDirectoryId: number, page:
   }
 }
 
+export const getTotalFeedsApi = (memberId: number) => {
+  const recent = ['createdDate,desc']
+
+  let API = `/api/answers?memberId=${memberId}&sort=${recent}`
+  return flipitAxios.get(API)
+}
+
 export const connectGroupApi = (accessToken: string, categoryId: number, answerId: number) => {
   let API = `/api/category/${categoryId}/answers/${answerId}`
   return flipitAxios.post(
