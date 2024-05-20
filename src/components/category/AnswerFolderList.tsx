@@ -1,5 +1,4 @@
 import styled from 'styled-components'
-import { useNavigate } from 'react-router-dom'
 import { useRecoilValue } from 'recoil'
 import { useEffect, useState } from 'react'
 import { BottomSheet } from 'react-spring-bottom-sheet'
@@ -14,8 +13,6 @@ import DefaultImg from '@/assets/main/DefaultImage.png'
 
 // 답변 입력 후 카테고리 선택페이지의 카테고리리스트 컴포넌트
 const AnswerFolderList = ({ selectedCategoryId, setSelectedCategoryId }: FolderListProps) => {
-  const navigate = useNavigate()
-
   // 리코일 로그인한 userInfo
   const userInfo = useRecoilValue<UserInfoStateProps>(userInfoState)
 
@@ -47,7 +44,7 @@ const AnswerFolderList = ({ selectedCategoryId, setSelectedCategoryId }: FolderL
   // 카테고리 생성시 카테고리 정보 저장
   const [categoryImgUrl, setCategoryImgUrl] = useState<string>('')
   const [categoryImgFile, setCategoryImgFile] = useState<File>()
-  const [selectedAnswerIds, setSelectedAnswerIds] = useState<number[]>([])
+  const [selectedAnswerIds] = useState<number[]>([])
   // 이미지 파일 선택 핸들러
   const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files && e.target.files[0]

@@ -1,5 +1,4 @@
 import { initializeApp } from 'firebase/app'
-import { getAnalytics } from 'firebase/analytics'
 import { getMessaging, getToken, isSupported } from 'firebase/messaging'
 
 const firebaseConfig = {
@@ -12,7 +11,6 @@ const firebaseConfig = {
   measurementId: import.meta.env.VITE_APP_FCM_MEASUREMENT_ID,
 }
 export const app = initializeApp(firebaseConfig)
-const analytics = getAnalytics(app)
 const messaging = getMessaging(app)
 
 isSupported().then((supported) => {

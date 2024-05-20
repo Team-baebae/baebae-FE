@@ -1,7 +1,6 @@
 import styled from 'styled-components'
 import { useEffect } from 'react'
 import { useRecoilState, useRecoilValue } from 'recoil'
-import { getMemberIdApi, getOwnerProfileApi } from '@/apis/MainInfoApi'
 import { colors } from '@/styles/colors'
 import { isMineState, ownerUserData } from '@/context/Atoms'
 
@@ -19,7 +18,7 @@ interface MainProfileProps {
 // 메인프로필 컴포넌트
 const MainProfile = ({ nickname, imageUrl }: MainProfileProps) => {
   // 리코일 계정 주인의 데이터 정보
-  const [ownerUserInfo, setOwnerUserInfo] = useRecoilState(ownerUserData)
+  const [ownerUserInfo] = useRecoilState(ownerUserData)
   // 내 페이지인지 여부 확인
   const isMyPage = useRecoilValue(isMineState)
   const isMine = JSON.stringify(isMyPage)

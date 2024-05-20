@@ -160,7 +160,7 @@ const TotalPageFeed = (props: TotalPageFeedProps) => {
   const [heartCount, setHeartCount] = useState<number>(0)
   const [curiousCount, setCuriousCount] = useState<number>(0)
   const [sadCount, setSadCount] = useState<number>(0)
-  const [connectCount, setConnectCount] = useState<number>(0)
+  const [, setConnectCount] = useState<number>(0)
 
   // 해당 피드에 대한 반응 여부 확인
   const getIsReacted = useCallback(async () => {
@@ -216,9 +216,9 @@ const TotalPageFeed = (props: TotalPageFeedProps) => {
   }, [getIsReacted, getReactCount])
 
   // 캡쳐된 이미지 저장
-  const [capturedImageData, setCapturedImageData] = useState<string>('')
+  const [, setCapturedImageData] = useState<string>('')
   // 캡쳐된 이미지 파일으로 저장
-  const [imageFile, setImageFile] = useState<File | null>(null)
+  const [, setImageFile] = useState<File | null>(null)
 
   // 화면캡쳐하기
   const captureElement = async (elementId: string): Promise<string> => {
@@ -280,7 +280,7 @@ const TotalPageFeed = (props: TotalPageFeedProps) => {
   }
 
   // 리코일 계정 주인의 데이터 정보
-  const [ownerUserInfo, setOwnerUserInfo] = useRecoilState(ownerUserData)
+  const [ownerUserInfo] = useRecoilState(ownerUserData)
 
   // 공유
   const { Kakao } = window

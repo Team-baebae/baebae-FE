@@ -24,13 +24,11 @@ const Main = () => {
   const [isExisting, setIsExisting] = useState<boolean>(false)
   // 리코일 계정주인 데이터 정보
   const [userData, setUserData] = useRecoilState(ownerUserData)
-  // 내 페이지인지 여부 확인
-  const [isMine, setIsMine] = useState<boolean>(false)
+  // 내 페이지인지 여부 전역 변수에 저장
   const setIsMyPage = useSetRecoilState(isMineState)
 
   // 리코일에서 받은 로그인한 사용자의 userInfo
   const myInfo = useRecoilValue<UserInfoStateProps>(userInfoState)
-  const myMemberId = myInfo.memberId
 
   // 유저의 존재 여부 확인 및 계정주인의 memberId 조회
   const userCheck = (nickname: string) => {
