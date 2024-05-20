@@ -157,6 +157,7 @@ const Groups = () => {
               setHasMore(false) // 무한 스크롤 중단
             }
           } else {
+            setFeedList(result)
             setHasMore(false)
           }
           setLoading(false)
@@ -218,11 +219,11 @@ const Groups = () => {
                 <GroupWrapper>
                   <GroupImgWrapper
                     onClick={() => {
+                      setCurrentPage(0)
                       setSelectedCategoryId(item.categoryId)
                       setSelectedCategoryImage(item.categoryImage)
                       setSelectedCategoryGroupName(item.categoryName)
                       setSelectedCategoryAnswerIds(item.answerIds)
-                      setCurrentPage(0)
                     }}
                     selected={selectedCategoryId === item.categoryId}
                     {...bind(item.categoryId, item.categoryImage, item.categoryName, item.answerIds)}
@@ -259,13 +260,16 @@ const Groups = () => {
         </Swiper>
       </TopComponent>
       {/* 해당 카테고리 피드 부분 */}
-      <TotalPageFeeds
-        feedList={feedList}
-        selectedCategoryId={selectedCategoryId}
-        selectedCategoryImage={selectedCategoryImage}
-        selectedCategoryGroupName={selectedCategoryGroupName}
-        selectedCategoryAnswerIds={selectedCategoryAnswerIds}
-      />
+      {feedList.length > 0 && (
+        <TotalPageFeeds
+          feedList={feedList}
+          selectedCategoryId={selectedCategoryId}
+          selectedCategoryImage={selectedCategoryImage}
+          selectedCategoryGroupName={selectedCategoryGroupName}
+          selectedCategoryAnswerIds={selectedCategoryAnswerIds}
+        />
+      )}
+
       {scrollLoading && <div>loading...</div>}
       <StyledToastContainer
         position="bottom-center"
