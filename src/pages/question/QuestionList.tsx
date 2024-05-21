@@ -171,14 +171,21 @@ const QuestionList = () => {
                       public={value.profileOnOff ? 1 : 0}
                       onClick={(e) => {
                         e.stopPropagation()
-
                         clickName(value.profileOnOff, value.senderNickname)
                       }}
                     >
                       {value.nickname}님
                     </WriterRegion>
                   ) : (
-                    <WriterRegion public={value.profileOnOff ? 1 : 0}>{value.nickname}님</WriterRegion>
+                    <WriterRegion
+                      public={value.profileOnOff ? 1 : 0}
+                      onClick={(e) => {
+                        e.stopPropagation()
+                        toast('질문자가 피드 공개를 설정하지 않았어요!')
+                      }}
+                    >
+                      {value.nickname}님
+                    </WriterRegion>
                   )}
                 </WriterBlock>
               </FlipWrapper>
@@ -309,5 +316,5 @@ const WriterRegion = styled.button<{ public: number }>`
   font-weight: 500;
   line-height: 15px;
   letter-spacing: -0.2px;
-  cursor: ${(props) => props.public && 'pointer'};
+  cursor: 'pointer';
 `

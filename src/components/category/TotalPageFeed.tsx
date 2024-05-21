@@ -3,7 +3,7 @@ import { useCallback, useEffect, useState } from 'react'
 import styled from 'styled-components'
 import { useRecoilState, useRecoilValue } from 'recoil'
 import { Flip, toast } from 'react-toastify'
-import { useNavigate } from 'react-router-dom'
+import { Link, useNavigate } from 'react-router-dom'
 import { BottomSheet } from 'react-spring-bottom-sheet'
 import html2canvas from 'html2canvas'
 import BackFeedContents from '@/components/feed/BackFeedContents'
@@ -90,12 +90,6 @@ const TotalPageFeed = (props: TotalPageFeedProps) => {
     e.stopPropagation()
     handlePreview(selectedFeed.musicAudioUrl)
   }
-  // 링크 클릭 시 링크 복사
-  const LinkClick = (e: React.MouseEvent<HTMLDivElement>) => {
-    e.stopPropagation()
-    navigator.clipboard.writeText(selectedFeed?.linkAttachments || 'https://www.flipit.co.kr')
-    toast('링크가 복사되었습니다.')
-  }
 
   // 계정 주인일때 ...누를 시 bottom sheet 나오도록
   const [open, setOpen] = useState<boolean>(false)
@@ -173,7 +167,7 @@ const TotalPageFeed = (props: TotalPageFeedProps) => {
   const [heartCount, setHeartCount] = useState<number>(0)
   const [curiousCount, setCuriousCount] = useState<number>(0)
   const [sadCount, setSadCount] = useState<number>(0)
-  const [, setConnectCount] = useState<number>(0)
+  const [connectCount, setConnectCount] = useState<number>(0)
 
   // 해당 피드에 대한 반응 여부 확인
   const getIsReacted = useCallback(async () => {
@@ -289,7 +283,7 @@ const TotalPageFeed = (props: TotalPageFeedProps) => {
     const file = new File([blob], filename, { type: mime })
     setImageFile(file) // 파일 객체 상태 업데이트
     console.log(file)
-    if (file) sharing(file)
+    if (file) shareKakao(file)
   }
 
   // 리코일 계정 주인의 데이터 정보
@@ -340,25 +334,6 @@ const TotalPageFeed = (props: TotalPageFeedProps) => {
         console.log(error)
       })
   }
-  // 모바일뷰인지 웹뷰인지 확인
-  const sharing = async (file: File) => {
-    if (navigator?.share) {
-      try {
-        if (file) {
-          await navigator.share({
-            title: `타인을 알아가고 본인을 표현하는 가장 단순한 방법, 플리빗`,
-            text: `${ownerUserInfo.nickname}님의 플립을 공유했어요!`,
-            files: [file],
-          })
-        }
-      } catch (err) {
-        console.log('에러')
-      }
-    } else {
-      console.log(file)
-      shareKakao(file)
-    }
-  }
 
   return (
     <Container>
@@ -381,10 +356,12 @@ const TotalPageFeed = (props: TotalPageFeedProps) => {
                 </LinkButton>
               )}
               {selectedFeed?.linkAttachments !== '' && (
-                <LinkButton onClick={LinkClick}>
-                  <Icon src={LinkIcon} />
-                  <OverflowText width="82px">{selectedFeed?.linkAttachments}</OverflowText>
-                </LinkButton>
+                <Link to={selectedFeed?.linkAttachments} style={{ textDecoration: 'none' }}>
+                  <LinkButton>
+                    <Icon src={LinkIcon} />
+                    <OverflowText width="82px">{selectedFeed?.linkAttachments}</OverflowText>
+                  </LinkButton>
+                </Link>
               )}
             </Links>
             <Icon src={MoreDot} width={24} height={24} onClick={MoreClick} />
@@ -445,8 +422,8 @@ const TotalPageFeed = (props: TotalPageFeedProps) => {
             </EmotionButton>
             <TelepathyButton state={giveTelepathy} onClick={clickTelepathy}>
               <EmotionText style={{ fontSize: 20 }}>👉🏻</EmotionText>
-              <EmotionText style={{ fontSize: 20 }}>👈🏻</EmotionText>
-              <EmotionText>통했당!</EmotionText>
+              <EmotionText style={{ fontSize: 20, opacity: giveTelepathy ? 1 : 0.3 }}>👈🏻</EmotionText>
+              <EmotionText>{isMyPage ? connectCount : '통했당!'}</EmotionText>
             </TelepathyButton>
           </BottomContents>
           {open && isMyPage && (

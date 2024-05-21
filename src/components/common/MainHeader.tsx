@@ -33,9 +33,7 @@ const MainHeader = ({ background, isMine }: HeaderProps) => {
   }
 
   const moveMyFeed = (route: string) => {
-    if (route === 'settings') {
-      navigate('/settings')
-    } else {
+    if (route === myNickname) {
       getMemberIdApi(route).then((result) => {
         getOwnerProfileApi(result.memberId).then((response) => {
           // console.log(response)
@@ -51,6 +49,8 @@ const MainHeader = ({ background, isMine }: HeaderProps) => {
           })
         })
       })
+    } else {
+      navigate(route)
     }
   }
 
@@ -70,12 +70,12 @@ const MainHeader = ({ background, isMine }: HeaderProps) => {
       />
       <HeaderRight>
         {!isMine && <HeaderRightText onClick={() => clickIcon(myNickname)}>내 플리빗으로 이동</HeaderRightText>}
-        <HeaderRightIcon src={Alram} alt="alram" onClick={() => clickIcon('alrams')} />
+        <HeaderRightIcon src={Alram} alt="alram" onClick={() => clickIcon('/alrams')} />
         <HeaderRightIcon
           src={Setting}
           alt="setting"
           onClick={() => {
-            clickIcon('settings')
+            clickIcon('/settings')
           }}
         />
       </HeaderRight>
