@@ -1,10 +1,12 @@
 import styled from 'styled-components'
 import { useRecoilValue } from 'recoil'
 import { useEffect, useState } from 'react'
+import { Flip, toast } from 'react-toastify'
 import { BottomSheet } from 'react-spring-bottom-sheet'
 import 'react-spring-bottom-sheet/dist/style.css'
 import AnswerEachFolder from '@/components/category/AnswerEachFolder'
 import { UnFixedButton } from '@/components/common/Button'
+import { StyledToastContainer } from '@/components/toast/toastStyle'
 import { FolderListProps, categoryProps } from '@/components/category/types'
 import { colors } from '@/styles/colors'
 import { UserInfoStateProps, userInfoState } from '@/context/Atoms'
@@ -90,6 +92,7 @@ const AnswerFolderList = ({ selectedCategoryId, setSelectedCategoryId }: FolderL
         setCategoryImgUrl('')
         setCategoryImgFile(undefined)
         setCategoryName('')
+        toast(`'${categoryName}' 그룹 생성`)
       })
     } catch (err) {
       console.log(err)
@@ -169,6 +172,17 @@ const AnswerFolderList = ({ selectedCategoryId, setSelectedCategoryId }: FolderL
           margin="20px 20px 0px 20px"
         />
       </BottomSheet>
+      <StyledToastContainer
+        position="bottom-center"
+        autoClose={1000}
+        hideProgressBar
+        pauseOnHover={false}
+        closeOnClick={false}
+        closeButton={false}
+        rtl={false}
+        theme="dark"
+        transition={Flip}
+      />
     </Container>
   )
 }
