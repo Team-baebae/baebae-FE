@@ -61,7 +61,7 @@ const Link = ({ linkAttachments, setLinkAttachments }: LinkProps) => {
             handleDismissPlusMusicModal()
           }}
           func2={() => {
-            console.log('링크 추가하기')
+            console.log('링크를 추가하세요!')
           }}
           text="추가하기"
           margin="20px 20px 0px 20px"

@@ -6,17 +6,29 @@ import LoginBackground from '@/assets/login/LoginBack.svg'
 import KakaoIcon from '@/assets/login/KakaoIcon.svg'
 import { useEffect } from 'react'
 
+import { registerServiceWorker } from '@/firebase-messaging-sw'
+
+
 // 로그인 페이지
 const Login = () => {
   const navigate = useNavigate()
 
-  // 카카오 로그인 버튼 누를 시 link로 이동
+
+  // // 카카오 로그인 버튼 누를 시 link로 이동
   const clientId = import.meta.env.VITE_KAKAO_CLIENT_ID
   const redirectUri = import.meta.env.VITE_KAKAO_REDIRECT_URI
   const link = `https://kauth.kakao.com/oauth/authorize?client_id=${clientId}&redirect_uri=${redirectUri}&response_type=code`
+
+
   const loginHandler = () => {
     window.location.href = link
   }
+
+
+  useEffect(() => {
+    registerServiceWorker()
+  }, [])
+
 
   return (
     <Container>

@@ -149,7 +149,7 @@ const Music = ({ musicName, setMusicName, musicAudio, setMusicAudio, musicSinger
               handleDismissPlusMusicModal()
             }}
             func2={() => {
-              console.log('추가해주세요')
+              console.log('음악을 추가하세요!')
             }}
             text="추가하기"
             margin="20px 20px 0px 20px"
