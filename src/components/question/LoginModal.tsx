@@ -13,7 +13,7 @@ const LoginModal = (props: ModalProps) => {
   // 카카오 로그인
   const clientId = import.meta.env.VITE_KAKAO_CLIENT_ID
   const redirectUri = import.meta.env.VITE_KAKAO_REDIRECT_URI
-  const link = `http://kauth.kakao.com/oauth/authorize?client_id=${clientId}&redirect_uri=${redirectUri}&response_type=code`
+  const link = `https://kauth.kakao.com/oauth/authorize?client_id=${clientId}&redirect_uri=${redirectUri}&response_type=code`
 
   const loginHandler = () => {
     window.location.href = link
