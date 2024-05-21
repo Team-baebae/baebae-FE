@@ -79,7 +79,7 @@ const SignUpNickname = () => {
               getUserInfo(res.data)
               setIsLoggedIn(true)
               console.log(userInfo)
-              navigate(`/${res.data.nickname}`)
+              navigate(`/signup/complete`)
             } else {
               alert('로그인 실패')
               navigate('/login')
@@ -92,7 +92,7 @@ const SignUpNickname = () => {
               getUserInfo(res.data)
               setIsLoggedIn(true)
               console.log(userInfo)
-              navigate(`/${res.data.nickname}`)
+              navigate(`/signup/complete`)
             } else {
               alert('로그인 실패')
               navigate('/login')
