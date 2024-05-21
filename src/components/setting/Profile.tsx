@@ -4,8 +4,11 @@ import { useRecoilValue } from 'recoil'
 import { colors } from '@/styles/colors'
 import { UserInfoStateProps, userInfoState } from '@/context/Atoms'
 
+interface ProfileProps {
+  imageUrl: string
+}
 // 회원 프로필 컴포넌트
-const Profile = () => {
+const Profile = ({ imageUrl }: ProfileProps) => {
   const navigate = useNavigate()
 
   //리코일 로그인한 유저정보
@@ -14,7 +17,7 @@ const Profile = () => {
   return (
     <Container>
       <ImageWrapper>
-        <ProfileImage src={userInfo.profileImage} />
+        <ProfileImage src={imageUrl} />
       </ImageWrapper>
       <ProfileContents>
         <Nickname>{userInfo.nickname}</Nickname>

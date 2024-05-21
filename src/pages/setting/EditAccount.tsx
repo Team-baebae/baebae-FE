@@ -55,19 +55,18 @@ const EditAccount = () => {
   const updateUserProfile = async (file: File) => {
     try {
       await updateUserProfileApi(userInfo.accessToken, userInfo.memberId, file).then((res) => {
-        console.log(res)
-
-        updateUserNicknameApi(userInfo.accessToken, userInfo.memberId, nickname).then(() => {
-          if (res.status === 200) {
-            setUserInfo({
-              ...userInfo,
-              nickname: nickname,
-              profileImage: URL.createObjectURL(file),
-            })
-
-            navigate('/settings')
-          }
-        })
+        if (res.status === 200) {
+          updateUserNicknameApi(userInfo.accessToken, userInfo.memberId, nickname).then(() => {
+            if (res.status === 200) {
+              setUserInfo({
+                ...userInfo,
+                nickname: nickname,
+                profileImage: res.data.imageUrl,
+              })
+              navigate('/settings')
+            }
+          })
+        }
       })
     } catch (err) {
       console.log(err)
@@ -117,10 +116,10 @@ const EditAccount = () => {
     try {
       await updateUserNicknameApi(userInfo.accessToken, userInfo.memberId, nickname).then((res) => {
         if (res.status === 200) {
-          setUserInfo({
-            ...userInfo,
+          setUserInfo((prevUserInfo) => ({
+            ...prevUserInfo,
             nickname: nickname,
-          })
+          }))
 
           navigate('/settings')
         }
