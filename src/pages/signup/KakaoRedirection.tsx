@@ -14,6 +14,7 @@ import { registerServiceWorker, requestPermission } from '@/firebase-messaging-s
 
 // 카카오 로그인 후 리다이렉션 페이지
 const KakaoRedirection = () => {
+  const isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent)
   const navigate = useNavigate()
 
   //카카오 인가코드
@@ -60,41 +61,57 @@ const KakaoRedirection = () => {
 
   // 이미 존재하는 회원일 경우 바로 로그인 진행
   const login = async (kakaoAccessToken: string, nickname: string) => {
-    try {
-      let fcmToken = await requestPermission()
-      setUserInfo((prevUserInfo) => ({
-        ...prevUserInfo,
-        fcmToken: fcmToken,
-      }))
-      fcmToken.length > 0
-        ? loginApi(kakaoAccessToken, nickname, fcmToken).then(async (res: LoginProps) => {
-            if (res.status === 200) {
-              console.log(res.data.accessToken)
-              console.log(res.data.id)
-              getUserInfo(res.data)
-              setIsLoggedIn(true)
-              console.log(userInfo)
-              navigate(`/${res.data.nickname}`)
-            } else {
-              alert('로그인 실패')
-              navigate('/login')
-            }
-          })
-        : loginWithoutFCMApi(kakaoAccessToken, nickname).then(async (res: LoginProps) => {
-            if (res.status === 200) {
-              console.log(res.data.accessToken)
-              console.log(res.data.id)
-              getUserInfo(res.data)
-              setIsLoggedIn(true)
-              console.log(userInfo)
-              navigate(`/${res.data.nickname}`)
-            } else {
-              alert('로그인 실패')
-              navigate('/login')
-            }
-          })
-    } catch (err) {
-      console.log(err)
+    if (isMobile) {
+      loginWithoutFCMApi(kakaoAccessToken, nickname).then(async (res: LoginProps) => {
+        if (res.status === 200) {
+          console.log(res.data.accessToken)
+          console.log(res.data.id)
+          getUserInfo(res.data)
+          setIsLoggedIn(true)
+          console.log(userInfo)
+          navigate(`/${res.data.nickname}`)
+        } else {
+          alert('로그인 실패')
+          navigate('/login')
+        }
+      })
+    } else {
+      try {
+        let fcmToken = await requestPermission()
+        setUserInfo((prevUserInfo) => ({
+          ...prevUserInfo,
+          fcmToken: fcmToken,
+        }))
+        fcmToken.length > 0
+          ? loginApi(kakaoAccessToken, nickname, fcmToken).then(async (res: LoginProps) => {
+              if (res.status === 200) {
+                console.log(res.data.accessToken)
+                console.log(res.data.id)
+                getUserInfo(res.data)
+                setIsLoggedIn(true)
+                console.log(userInfo)
+                navigate(`/${res.data.nickname}`)
+              } else {
+                alert('로그인 실패')
+                navigate('/login')
+              }
+            })
+          : loginWithoutFCMApi(kakaoAccessToken, nickname).then(async (res: LoginProps) => {
+              if (res.status === 200) {
+                console.log(res.data.accessToken)
+                console.log(res.data.id)
+                getUserInfo(res.data)
+                setIsLoggedIn(true)
+                console.log(userInfo)
+                navigate(`/${res.data.nickname}`)
+              } else {
+                alert('로그인 실패')
+                navigate('/login')
+              }
+            })
+      } catch (err) {
+        console.log(err)
+      }
     }
   }
 
