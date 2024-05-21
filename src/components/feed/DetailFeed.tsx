@@ -169,11 +169,7 @@ const DetailFeed = (props: ModalProps) => {
   const clickTelepathy = (e: React.MouseEvent<HTMLDivElement>) => {
     e.stopPropagation()
     if (isLoggedIn) {
-      !giveTelepathy && setPopLottie(true)
-      setGiveTelepathy(!giveTelepathy)
-      setTimeout(() => {
-        setPopLottie(false)
-      }, 2350)
+      postReact('CONNECT')
     } else {
       setShowLoginModal(true)
     }
@@ -220,7 +216,14 @@ const DetailFeed = (props: ModalProps) => {
         if (reaction === 'HEART') setGiveHeart(res.data.clicked)
         else if (reaction === 'CURIOUS') setGiveCurious(res.data.clicked)
         else if (reaction === 'SAD') setGiveSad(res.data.clicked)
-        else if (reaction === 'CONNECT') setGiveTelepathy(res.data.clicked)
+        else if (reaction === 'CONNECT') {
+          !giveTelepathy && setPopLottie(true)
+          setGiveTelepathy(!giveTelepathy)
+          setTimeout(() => {
+            setPopLottie(false)
+          }, 2350)
+          setGiveTelepathy(res.data.clicked)
+        }
       })
     } catch (err) {
       console.log(err)
