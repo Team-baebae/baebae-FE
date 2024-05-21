@@ -7,6 +7,8 @@ import { colors } from '@/styles/colors'
 import QuotationMark from '@/assets/question/QuotationMark.svg'
 import { useRecoilState } from 'recoil'
 import { selectedQuestionState } from '@/context/Atoms'
+import { Flip, toast } from 'react-toastify'
+import { StyledToastContainer } from '../toast/toastStyle'
 
 // 해당 카테고리에 속한 피드들 보여주는 컴포넌트
 const FeedList = ({
@@ -90,7 +92,15 @@ const FeedList = ({
                     {feed.nickname}
                   </WriterRegion>
                 ) : (
-                  <WriterRegion color={colors.grey4}>{feed.nickname}</WriterRegion>
+                  <WriterRegion
+                    color={colors.grey4}
+                    onClick={(e) => {
+                      e.stopPropagation()
+                      toast('질문자가 피드 공개를 설정하지 않았어요!')
+                    }}
+                  >
+                    {feed.nickname}
+                  </WriterRegion>
                 )}
               </WriterBlock>
             </FlipWrapper>
@@ -112,6 +122,17 @@ const FeedList = ({
       >
         전체 보기
       </TotalFeedsBtn>
+      <StyledToastContainer
+        position="bottom-center"
+        autoClose={1000}
+        hideProgressBar
+        pauseOnHover={false}
+        closeOnClick={false}
+        closeButton={false}
+        rtl={false}
+        theme="dark"
+        transition={Flip}
+      />
       {/* 피드 누를시 피드 확대 */}
       {showModal && (
         <DetailFeed
