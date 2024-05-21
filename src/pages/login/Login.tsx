@@ -4,8 +4,10 @@ import { colors } from '@/styles/colors'
 import Logo from '@/assets/login/Logo.svg'
 import LoginBackground from '@/assets/login/LoginBack.svg'
 import KakaoIcon from '@/assets/login/KakaoIcon.svg'
+
 import { useEffect } from 'react'
 import { registerServiceWorker } from '@/firebase-messaging-sw'
+
 
 // 로그인 페이지
 const Login = () => {
@@ -16,13 +18,16 @@ const Login = () => {
   const redirectUri = import.meta.env.VITE_KAKAO_REDIRECT_URI
   const link = `https://kauth.kakao.com/oauth/authorize?client_id=${clientId}&redirect_uri=${redirectUri}&response_type=code`
 
+
   const loginHandler = () => {
     window.location.href = link
   }
 
+
   useEffect(() => {
     registerServiceWorker()
   }, [])
+
 
   return (
     <Container>
