@@ -1,6 +1,6 @@
 import { useNavigate } from 'react-router-dom'
 import { useEffect } from 'react'
-import { useRecoilState, useSetRecoilState } from 'recoil'
+import { useRecoilState, useRecoilValue, useSetRecoilState } from 'recoil'
 import {
   KakaoUserInfoResponseProps,
   IsExistingAccountResponseProps,
@@ -8,7 +8,7 @@ import {
   GetUserInfoProps,
 } from '@/components/signup/types'
 import { getKakaoUserInfoApi, getUserInfoApi, isExistingAccountApi, loginApi, loginWithoutFCMApi } from '@/apis/UserApi'
-import { UserInfoStateProps, isLoggedInState, userInfoState } from '@/context/Atoms'
+import { UserInfoStateProps, isLoggedInState, ownerUserData, userInfoState } from '@/context/Atoms'
 import Loading from '@/components/common/Loading'
 import { registerServiceWorker, requestPermission } from '@/firebase-messaging-sw'
 
@@ -23,6 +23,8 @@ const KakaoRedirection = () => {
   const [userInfo, setUserInfo] = useRecoilState<UserInfoStateProps>(userInfoState)
   // 리코일 로그인 여부
   const setIsLoggedIn = useSetRecoilState(isLoggedInState)
+
+  const ownerUserInfo = useRecoilValue(ownerUserData)
 
   // 카카오에서 유저정보 받아오기
   const getKakaoUserInfo = async (code: string) => {
@@ -90,7 +92,13 @@ const KakaoRedirection = () => {
                 getUserInfo(res.data)
                 setIsLoggedIn(true)
                 console.log(userInfo)
-                navigate(`/${res.data.nickname}`)
+                // 계정주인페이지에서 상세로그인 시는 계정주인 페이지로 유지
+                // 첫 로그인페이지에서 로그인 시 내 페이지로
+                {
+                  ownerUserInfo.nickname === ''
+                    ? navigate(`/${res.data.nickname}`)
+                    : navigate(`/${ownerUserInfo.nickname}`)
+                }
               } else {
                 alert('로그인 실패')
                 navigate('/login')
