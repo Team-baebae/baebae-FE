@@ -158,14 +158,18 @@ const GridContainer = styled.div`
   grid-template-columns: repeat(2, 1fr);
   gap: 9px;
   justify-content: center;
+  align-items: stretch;
 `
 const Icon = styled.img`
+  position: absolute;
+  top: 30px;
+  left: 10px;
   width: 7.72px;
   height: 6.28px;
 `
 const FlipWrapper = styled.div`
+  position: relative;
   display: flex;
-  flex: 1 0 0;
   height: 179px;
   padding: 30px 10px 10px 10px;
   flex-direction: column;
@@ -178,7 +182,13 @@ const FlipWrapper = styled.div`
 `
 const FlipContent = styled.div`
   display: flex;
-  flex: 1 0 0;
+  height: 100px;
+  overflow: hidden;
+  display: -webkit-box;
+  word-wrap: break-word;
+  -webkit-line-clamp: 5;
+  -webkit-box-orient: vertical;
+  text-overflow: ellipsis;
   margin-top: 18px;
   color: ${colors.grey1};
   font-family: Pretendard;
@@ -260,5 +270,5 @@ const SelectedFeedAnswerImg = styled.img`
 const SelectedContentWrapper = styled.div`
   height: 21.7335px;
   overflow: hidden;
+  text-overflow: ellipsis;
 `
-2
