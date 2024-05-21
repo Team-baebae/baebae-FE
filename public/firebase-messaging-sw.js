@@ -1,23 +1,6 @@
 importScripts('https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js')
 importScripts('https://www.gstatic.com/firebasejs/8.10.0/firebase-messaging.js')
 
-// //데이터 요청시 네트워크 또는 캐시에서 찾아 반환
-// self.addEventListener('fetch', (pEvent) => {
-//   pEvent.respondWith(
-//     caches
-//       .match(pEvent.request)
-//       .then((response) => {
-//         if (!response) {
-//           console.log('네트워크에서 데이터 요청!', pEvent.request)
-//           return fetch(pEvent.request)
-//         }
-//         console.log('캐시에서 데이터 요청!', pEvent.request)
-//         return response
-//       })
-//       .catch((err) => console.log(err)),
-//   )
-// })
-
 const firebaseConfig = {
   apiKey: 'AIzaSyAo38j9D2mq1sJ4v6L3cpiCFZNd0Ul4i_0',
   authDomain: 'baebae-acbaf.firebaseapp.com',
