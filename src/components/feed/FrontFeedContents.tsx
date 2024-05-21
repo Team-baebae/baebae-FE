@@ -65,6 +65,7 @@ const Icon = styled.img`
   height: 12.52px;
 `
 const FlipWrapper = styled.div`
+  position: relative;
   display: flex;
   flex-direction: column;
   justify-content: space-between;
@@ -74,7 +75,12 @@ const FlipWrapper = styled.div`
   background: ${colors.white};
   box-shadow: 0px 4.945px 8.655px 0px rgba(0, 0, 0, 0.32);
 `
-const ContentWrapper = styled.div``
+const ContentWrapper = styled.div`
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  background-color: aliceblue;
+`
 const FlipContent = styled.div`
   display: flex;
   margin-top: 18px;
@@ -86,6 +92,8 @@ const FlipContent = styled.div`
   letter-spacing: -0.8px;
 `
 const WriterBlock = styled.div`
+  position: absolute;
+  bottom: 30px;
   display: flex;
   flex-direction: row;
   justify-content: center;
