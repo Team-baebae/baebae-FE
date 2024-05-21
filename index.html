@@ -21,7 +21,7 @@
   <body>
     <div id="root"></div>
     <div id="fallback" style="display: none; justify-content: center; align-items: center">
-      <img src="/Splash.png" alt="flipit" width="375" height="765" />
+      <img src="Splash.png" alt="flipit" width="375" height="765" />
     </div>
     <script type="module" src="/src/main.tsx"></script>
     <script>
@@ -36,10 +36,11 @@
             })
             .catch(function (err) {
               console.log('Service Worker 등록 실패:', err)
-              // 서비스 워커 등록 실패 시, fallback 이미지 등장
-              document.getElementById('fallback').style.display = 'flex'
             })
         })
+      } else {
+        // 서비스 워커 등록 실패 시, fallback 이미지 등장
+        document.getElementById('fallback').style.display = 'flex'
       }
     </script>
   </body>
