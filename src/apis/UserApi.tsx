@@ -93,7 +93,7 @@ export const updateUserNicknameApi = (accessToken: string, memberId: number, nic
 // 로그아웃
 export const logoutApi = (fcmToken: string, accessToken: string) => {
   let API = `/api/auth/logout?${fcmToken}`
-  return flipitAxios.post(API, {
+  return flipitAxios.post(API, '', {
     headers: {
       Authorization: `Bearer ${accessToken}`,
     },

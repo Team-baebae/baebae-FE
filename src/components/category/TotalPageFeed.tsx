@@ -167,7 +167,7 @@ const TotalPageFeed = (props: TotalPageFeedProps) => {
   const [heartCount, setHeartCount] = useState<number>(0)
   const [curiousCount, setCuriousCount] = useState<number>(0)
   const [sadCount, setSadCount] = useState<number>(0)
-  const [, setConnectCount] = useState<number>(0)
+  const [connectCount, setConnectCount] = useState<number>(0)
 
   // 해당 피드에 대한 반응 여부 확인
   const getIsReacted = useCallback(async () => {
@@ -283,7 +283,7 @@ const TotalPageFeed = (props: TotalPageFeedProps) => {
     const file = new File([blob], filename, { type: mime })
     setImageFile(file) // 파일 객체 상태 업데이트
     console.log(file)
-    if (file) sharing(file)
+    if (file) shareKakao(file)
   }
 
   // 리코일 계정 주인의 데이터 정보
@@ -333,25 +333,6 @@ const TotalPageFeed = (props: TotalPageFeedProps) => {
       .catch(function (error: any) {
         console.log(error)
       })
-  }
-  // 모바일뷰인지 웹뷰인지 확인
-  const sharing = async (file: File) => {
-    if (navigator?.share) {
-      try {
-        if (file) {
-          await navigator.share({
-            title: `타인을 알아가고 본인을 표현하는 가장 단순한 방법, 플리빗`,
-            text: `${ownerUserInfo.nickname}님의 플립을 공유했어요!`,
-            files: [file],
-          })
-        }
-      } catch (err) {
-        console.log('에러')
-      }
-    } else {
-      console.log(file)
-      shareKakao(file)
-    }
   }
 
   return (
@@ -441,8 +422,8 @@ const TotalPageFeed = (props: TotalPageFeedProps) => {
             </EmotionButton>
             <TelepathyButton state={giveTelepathy} onClick={clickTelepathy}>
               <EmotionText style={{ fontSize: 20 }}>👉🏻</EmotionText>
-              <EmotionText style={{ fontSize: 20 }}>👈🏻</EmotionText>
-              <EmotionText>통했당!</EmotionText>
+              <EmotionText style={{ fontSize: 20, opacity: giveTelepathy ? 1 : 0.3 }}>👈🏻</EmotionText>
+              <EmotionText>{isMyPage ? connectCount : '통했당!'}</EmotionText>
             </TelepathyButton>
           </BottomContents>
           {open && isMyPage && (
