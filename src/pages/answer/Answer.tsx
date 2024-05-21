@@ -2,6 +2,7 @@ import styled from 'styled-components'
 import { useState } from 'react'
 import { useRecoilValue } from 'recoil'
 import { useLocation, useNavigate } from 'react-router-dom'
+import heic2any from 'heic2any'
 import Question from '@/components/answer/Question'
 import { UnFixedButton } from '@/components/common/Button'
 import Music from '@/components/answer/Music'
@@ -27,10 +28,21 @@ const Answer = () => {
   const [imageFile, setImageFile] = useState<File>()
   const [imageUrl, setImageUrl] = useState<string>('')
   const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const file = e.target.files && e.target.files[0]
+    let file = e.target.files && e.target.files[0]
     if (file) {
-      setImageUrl(URL.createObjectURL(file)) // 미리보기를 위해 파일 URL 생성
-      setImageFile(file)
+      if (file?.name.split('.')[1].toLowerCase() === 'heic') {
+        let blob = file
+        heic2any({ blob: blob, toType: 'image/jpeg' }).then((resultBlob) => {
+          const convertedBlob = Array.isArray(resultBlob) ? resultBlob[0] : resultBlob
+          file = new File([convertedBlob], file?.name.split('.')[0] + '.jpg', {
+            type: 'image/jpeg',
+            lastModified: new Date().getTime(),
+          })
+          console.log(file)
+          setImageUrl(URL.createObjectURL(file))
+          setImageFile(file)
+        })
+      }
     }
   }
 
