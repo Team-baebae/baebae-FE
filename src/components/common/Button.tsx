@@ -81,7 +81,6 @@ const GreenCommonBtn = styled.button<{ $positive: boolean }>`
     font-family: Pretendard;
     font-size: 14px;
     font-weight: 600;
-    z-index: 100;
     cursor: pointer;
   }
   @media screen and (width > 768px) {
@@ -98,7 +97,6 @@ const GreenCommonBtn = styled.button<{ $positive: boolean }>`
     font-family: Pretendard;
     font-size: 14px;
     font-weight: 600;
-    z-index: 100;
 
     cursor: pointer;
   }
@@ -123,7 +121,6 @@ const UnFixedGreenCommonBtn = styled.button<{ margin: string; $positive: boolean
     line-height: 150%;
     letter-spacing: -0.28px;
     color: ${(props) => (props.$positive ? colors.grey1 : colors.grey3)};
-    z-index: 100;
 
     cursor: pointer;
   }
@@ -145,7 +142,6 @@ const UnFixedGreenCommonBtn = styled.button<{ margin: string; $positive: boolean
     line-height: 150%;
     letter-spacing: -0.28px;
     color: ${(props) => (props.$positive ? colors.grey1 : colors.grey3)};
-    z-index: 100;
 
     cursor: pointer;
   }
@@ -163,7 +159,6 @@ const CommonBtn = styled.button<{ $positive: boolean }>`
     font-family: Pretendard;
     font-size: 14px;
     font-weight: 600;
-    z-index: 100;
 
     cursor: pointer;
   }
@@ -179,7 +174,6 @@ const CommonBtn = styled.button<{ $positive: boolean }>`
     font-family: Pretendard;
     font-size: 14px;
     font-weight: 600;
-    z-index: 100;
 
     cursor: pointer;
   }
