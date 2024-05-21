@@ -92,7 +92,9 @@ const MainProfile = ({ nickname, imageUrl }: MainProfileProps) => {
         <Nickname>{nickname}</Nickname>
         <ShareButton onClick={sharing}>{isMine == 'true' ? '내 플리빗 초대' : '이 플리빗 공유'}</ShareButton>
       </ProfileContents>
-      <ProfileImage src={imageUrl} />
+      <ImageWrapper>
+        <ProfileImage src={imageUrl} />
+      </ImageWrapper>
     </Container>
   )
 }
@@ -107,10 +109,22 @@ const Container = styled.div`
   padding: 12px 20px;
   background-color: ${colors.white};
 `
-const ProfileImage = styled.img`
+const ImageWrapper = styled.div`
+  position: relative;
   width: 70px;
   height: 70px;
   border-radius: 100px;
+`
+const ProfileImage = styled.img`
+  position: absolute;
+  top: 0;
+  left: 0;
+  border-radius: 100px;
+  transform: translate(50, 50);
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  margin: auto;
 `
 const ProfileContents = styled.div`
   display: flex;

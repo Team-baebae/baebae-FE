@@ -13,7 +13,9 @@ const Profile = () => {
 
   return (
     <Container>
-      <ProfileImage src={userInfo.profileImage} />
+      <ImageWrapper>
+        <ProfileImage src={userInfo.profileImage} />
+      </ImageWrapper>
       <ProfileContents>
         <Nickname>{userInfo.nickname}</Nickname>
         <EditButton onClick={() => navigate('/settings/account/edit')}>내 프로필 수정하기</EditButton>
@@ -32,11 +34,23 @@ const Container = styled.div`
   gap: 20px;
   background-color: ${colors.white};
 `
-const ProfileImage = styled.img`
+const ImageWrapper = styled.div`
+  position: relative;
   width: 80px;
   height: 80px;
   border-radius: 80px;
   background-color: ${colors.grey4};
+`
+const ProfileImage = styled.img`
+  position: absolute;
+  top: 0;
+  left: 0;
+  border-radius: 80px;
+  transform: translate(50, 50);
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  margin: auto;
 `
 const ProfileContents = styled.div`
   display: flex;

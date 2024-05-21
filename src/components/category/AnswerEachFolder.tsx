@@ -10,7 +10,9 @@ const AnswerEachFolder = ({ selectedCategoryId, category, $positive, func }: Eac
       <FolderWrapper>
         {$positive ? (
           <FolderImgWrapper selected={selectedCategoryId === category?.categoryId} onClick={func}>
-            <FolderImg src={category?.categoryImage} />
+            <ImageWrapper>
+              <FolderImg src={category?.categoryImage} />
+            </ImageWrapper>
           </FolderImgWrapper>
         ) : (
           <NewFolderImgWrapper selected={selectedCategoryId === category?.categoryId} onClick={func}>
@@ -46,19 +48,27 @@ const FolderImgWrapper = styled.div<{ selected: boolean }>`
   background-color: ${colors.white};
   cursor: pointer;
 `
-
 const NewFolderImgWrapper = styled(FolderImgWrapper)`
   padding: 0px;
 `
-
-const FolderImg = styled.img`
+const ImageWrapper = styled.div`
+  position: relative;
   width: 57px;
   height: 57px;
   border-radius: 12px;
   border: 1.2px solid ${colors.grey6};
-  background: url(<path-to-image>) lightgray 50% / cover no-repeat;
 `
-
+const FolderImg = styled.img`
+  position: absolute;
+  top: 0;
+  left: 0;
+  border-radius: 12px;
+  transform: translate(50, 50);
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  margin: auto;
+`
 const PlusImg = styled.img`
   width: 100%;
   height: 100%;
