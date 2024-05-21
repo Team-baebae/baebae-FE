@@ -13,7 +13,7 @@ const Setting = () => {
   return (
     <>
       <Header text="설정" background={colors.white} route={`${userInfo.nickname}`} />
-      <Profile />
+      <Profile imageUrl={userInfo.profileImage} />
       <Settings />
       {/* 향후 추가예정 */}
       {/* <Title>알림 설정</Title> */}

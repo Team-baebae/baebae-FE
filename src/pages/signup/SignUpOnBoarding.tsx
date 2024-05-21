@@ -33,6 +33,7 @@ const Container = styled.div`
   display: flex;
   flex-direction: column;
   align-items: center;
+  justify-content: center;
   position: relative;
   width: 100%;
   height: 100%;
@@ -41,7 +42,6 @@ const Container = styled.div`
 const Icon = styled.img`
   width: 150px;
   height: 146.73px;
-  margin: 214.13px 0px 0px 0px;
 `
 
 const UnderIconText = styled.div`

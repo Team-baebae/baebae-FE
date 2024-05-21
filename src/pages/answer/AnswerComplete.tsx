@@ -56,7 +56,6 @@ const Container = styled.div`
   height: 100%;
   padding: 0px 0px 30px 0px;
 `
-
 const Logo = styled.img`
   width: 150px;
   height: 146.73px;

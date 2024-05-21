@@ -37,6 +37,7 @@ const Main = () => {
       result.isExisting == true &&
         getMemberIdApi(nickname).then((result) => {
           getOwnerProfileApi(result.memberId).then((response) => {
+            // console.log(response)
             setUserData({
               nickname: nickname,
               memberId: result.memberId,
@@ -48,11 +49,13 @@ const Main = () => {
   }
   // url의 닉네임으로 실제 있는 계정인지 확인
   useEffect(() => {
+    console.log(location.pathname)
     if (username) {
       username === myInfo.nickname ? setIsMyPage(true) : setIsMyPage(false)
       userCheck(username)
+      console.log('dd')
     }
-  }, [])
+  }, [username])
 
   // category=0은 질문, 1은 피드
   const [category, setCategory] = useState<number>(defaultCategory)
@@ -71,7 +74,7 @@ const Main = () => {
               피드
             </Category>
           </CategoryBox>
-          {category ? <Feed /> : <Ask isMine={username === myInfo.nickname} />}
+          {category ? <Feed username={username} /> : <Ask isMine={username === myInfo.nickname} username={username} />}
         </Container>
       ) : (
         <NoUser />

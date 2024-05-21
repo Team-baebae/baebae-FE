@@ -97,6 +97,7 @@ const DetailFeed = (props: ModalProps) => {
   const LinkClick = (e: React.MouseEvent<HTMLDivElement>) => {
     e.stopPropagation()
     navigator.clipboard.writeText(selectedFeed?.linkAttachments || 'https://www.flipit.co.kr')
+    toast('링크가 복사되었습니다.')
   }
 
   // 계정 주인일때 ...누를 시 bottom sheet 나오도록
@@ -169,11 +170,7 @@ const DetailFeed = (props: ModalProps) => {
   const clickTelepathy = (e: React.MouseEvent<HTMLDivElement>) => {
     e.stopPropagation()
     if (isLoggedIn) {
-      !giveTelepathy && setPopLottie(true)
-      setGiveTelepathy(!giveTelepathy)
-      setTimeout(() => {
-        setPopLottie(false)
-      }, 2350)
+      postReact('CONNECT')
     } else {
       setShowLoginModal(true)
     }
@@ -220,7 +217,14 @@ const DetailFeed = (props: ModalProps) => {
         if (reaction === 'HEART') setGiveHeart(res.data.clicked)
         else if (reaction === 'CURIOUS') setGiveCurious(res.data.clicked)
         else if (reaction === 'SAD') setGiveSad(res.data.clicked)
-        else if (reaction === 'CONNECT') setGiveTelepathy(res.data.clicked)
+        else if (reaction === 'CONNECT') {
+          !giveTelepathy && setPopLottie(true)
+          setGiveTelepathy(!giveTelepathy)
+          setTimeout(() => {
+            setPopLottie(false)
+          }, 2350)
+          setGiveTelepathy(res.data.clicked)
+        }
       })
     } catch (err) {
       console.log(err)

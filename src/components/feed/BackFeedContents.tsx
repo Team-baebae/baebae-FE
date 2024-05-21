@@ -36,7 +36,9 @@ const BackFeedContents = (props: SelectedFeedProps) => {
   }, [])
   return (
     <FlipWrapper>
-      <Photo src={newImageUrl} />
+      <ImageWrapper>
+        <Photo src={newImageUrl} />
+      </ImageWrapper>
       <ContentWrapper>{selectedFeed.content}</ContentWrapper>
     </FlipWrapper>
   )
@@ -45,6 +47,17 @@ const BackFeedContents = (props: SelectedFeedProps) => {
 export default BackFeedContents
 
 const Photo = styled.img`
+  position: absolute;
+  top: 0;
+  left: 0;
+  transform: translate(50, 50);
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  margin: auto;
+`
+const ImageWrapper = styled.div`
+  position: relative;
   width: 279px;
   height: 250px;
 `

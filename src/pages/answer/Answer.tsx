@@ -2,6 +2,7 @@ import styled from 'styled-components'
 import { useState } from 'react'
 import { useRecoilValue } from 'recoil'
 import { useLocation, useNavigate } from 'react-router-dom'
+import heic2any from 'heic2any'
 import Question from '@/components/answer/Question'
 import { UnFixedButton } from '@/components/common/Button'
 import Music from '@/components/answer/Music'
@@ -27,10 +28,24 @@ const Answer = () => {
   const [imageFile, setImageFile] = useState<File>()
   const [imageUrl, setImageUrl] = useState<string>('')
   const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const file = e.target.files && e.target.files[0]
+    let file = e.target.files && e.target.files[0]
     if (file) {
-      setImageUrl(URL.createObjectURL(file)) // 미리보기를 위해 파일 URL 생성
-      setImageFile(file)
+      if (file?.name.split('.')[1].toLowerCase() === 'heic') {
+        let blob = file
+        heic2any({ blob: blob, toType: 'image/jpeg' }).then((resultBlob) => {
+          const convertedBlob = Array.isArray(resultBlob) ? resultBlob[0] : resultBlob
+          file = new File([convertedBlob], file?.name.split('.')[0] + '.jpg', {
+            type: 'image/jpeg',
+            lastModified: new Date().getTime(),
+          })
+          console.log(file)
+          setImageUrl(URL.createObjectURL(file))
+          setImageFile(file)
+        })
+      } else {
+        setImageUrl(URL.createObjectURL(file))
+        setImageFile(file)
+      }
     }
   }
 
@@ -86,8 +101,7 @@ const Answer = () => {
       <PolaroidContainer>
         <label htmlFor="file">
           <ProfileWrapper>
-            {imageUrl === '' ? <ProfileImg /> : <ProfileImg src={imageUrl} alt="image" />}
-            {imageUrl === '' ? <PlusImgText>사진 추가</PlusImgText> : <PlusImgText></PlusImgText>}
+            {imageUrl === '' ? <PlusImgText>사진 추가</PlusImgText> : <ProfileImg src={imageUrl} alt="image" />}
           </ProfileWrapper>
         </label>
         <input type="file" name="file" id="file" style={{ display: 'none' }} onChange={handleImageChange} />
@@ -173,6 +187,7 @@ const PolaroidContainer = styled.div`
   box-shadow: 0px 4.945px 8.655px 0px rgba(0, 0, 0, 0.1);
 `
 const ProfileWrapper = styled.div`
+  position: relative;
   width: 279px;
   height: 250px;
   flex-shrink: 0;
@@ -184,14 +199,22 @@ const ProfileWrapper = styled.div`
   cursor: pointer;
 `
 const ProfileImg = styled.img`
+  position: absolute;
+  top: 0;
+  left: 0;
+  transform: translate(50, 50);
   width: 100%;
   height: 100%;
   border-radius: 2.473px;
+  object-fit: cover;
+  margin: auto;
 `
 const PlusImgText = styled.div`
-  position: absolute;
-  top: 133px;
-  left: 132px;
+  display: flex;
+  width: 100%;
+  height: 100%;
+  justify-content: center;
+  align-items: center;
   color: ${colors.grey4};
   font-family: Pretendard;
   font-size: 14px;
