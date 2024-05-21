@@ -94,6 +94,7 @@ const TotalPageFeed = (props: TotalPageFeedProps) => {
   const LinkClick = (e: React.MouseEvent<HTMLDivElement>) => {
     e.stopPropagation()
     navigator.clipboard.writeText(selectedFeed?.linkAttachments || 'https://www.flipit.co.kr')
+    toast('링크가 복사되었습니다.')
   }
 
   // 계정 주인일때 ...누를 시 bottom sheet 나오도록

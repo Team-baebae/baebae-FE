@@ -12,6 +12,7 @@ import { getTotalFeedsApi } from '@/apis/AnswerApi'
 import { userInfoState } from '@/context/Atoms'
 import { colors } from '@/styles/colors'
 import DefaultImg from '@/assets/main/DefaultImage.png'
+import heic2any from 'heic2any'
 
 // 새 그룹 생성 페이지
 const GroupPlus = () => {
@@ -30,11 +31,24 @@ const GroupPlus = () => {
   const [selectedAnswerIds, setSelectedAnswerIds] = useState<number[]>([])
   // 이미지 파일 선택 핸들러
   const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const file = e.target.files && e.target.files[0]
-    // 이미지 파일을 보낼 시엔 formData로 file을 추가해야함(추후 추가)
+    let file = e.target.files && e.target.files[0]
     if (file) {
-      setCategoryImgFile(file)
-      setCategoryImgUrl(URL.createObjectURL(file)) // 미리보기를 위해 파일 URL 생성
+      if (file?.name.split('.')[1].toLowerCase() === 'heic') {
+        let blob = file
+        heic2any({ blob: blob, toType: 'image/jpeg' }).then((resultBlob) => {
+          const convertedBlob = Array.isArray(resultBlob) ? resultBlob[0] : resultBlob
+          file = new File([convertedBlob], file?.name.split('.')[0] + '.jpg', {
+            type: 'image/jpeg',
+            lastModified: new Date().getTime(),
+          })
+          console.log(file)
+          setCategoryImgUrl(URL.createObjectURL(file))
+          setCategoryImgFile(file)
+        })
+      } else {
+        setCategoryImgUrl(URL.createObjectURL(file))
+        setCategoryImgFile(file)
+      }
     }
   }
 
@@ -100,7 +114,15 @@ const GroupPlus = () => {
       <GroupHeader text="새 그룹 추가" background={colors.grey7} />
       {/* 카테고리 이미지 */}
       <FolderImgWrapper>
-        {categoryImgUrl === '' ? <FolderImg src={DefaultImg} /> : <FolderImg src={categoryImgUrl} />}
+        {categoryImgUrl === '' ? (
+          <ImageWrapper>
+            <FolderImg src={DefaultImg} />
+          </ImageWrapper>
+        ) : (
+          <ImageWrapper>
+            <FolderImg src={categoryImgUrl} />
+          </ImageWrapper>
+        )}
       </FolderImgWrapper>
       <label htmlFor="file">
         <EditFolderImgText>사진 수정하기</EditFolderImgText>
@@ -181,14 +203,24 @@ const FolderImgWrapper = styled.div`
   background-color: ${colors.white};
   transform: translateX(-50%);
 `
-
-const FolderImg = styled.img`
+const ImageWrapper = styled.div`
+  position: relative;
   width: 76px;
   height: 76px;
-  flex-shrink: 0;
   border-radius: 16px;
   border: 1.76px solid ${colors.grey6};
   background-color: ${colors.white};
+`
+const FolderImg = styled.img`
+  position: absolute;
+  top: 0;
+  left: 0;
+  border-radius: 16px;
+  transform: translate(50, 50);
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  margin: auto;
 `
 
 const EditFolderImgText = styled.div`

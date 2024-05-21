@@ -11,6 +11,7 @@ import { UserInfoStateProps, userInfoState } from '@/context/Atoms'
 import { colors } from '@/styles/colors'
 import { modifyCategoryApi, updateCategoryImgApi } from '@/apis/CategoryApi'
 import { getTotalFeedsApi } from '@/apis/AnswerApi'
+import heic2any from 'heic2any'
 
 // 그룹 수정페이지
 const GroupModify = () => {
@@ -34,12 +35,26 @@ const GroupModify = () => {
   const [groupImgFile, setGroupImgFile] = useState<File>()
   // 이미지 파일 선택 핸들러
   const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const file = e.target.files && e.target.files[0]
-    // 이미지 파일을 보낼 시엔 formData로 file을 추가해야함(추후 추가)
+    let file = e.target.files && e.target.files[0]
     if (file) {
-      setGroupImgUrl(URL.createObjectURL(file)) // 미리보기를 위해 파일 URL 생성
-      setIsEditGroupImg(true)
-      setGroupImgFile(file)
+      if (file?.name.split('.')[1].toLowerCase() === 'heic') {
+        let blob = file
+        heic2any({ blob: blob, toType: 'image/jpeg' }).then((resultBlob) => {
+          const convertedBlob = Array.isArray(resultBlob) ? resultBlob[0] : resultBlob
+          file = new File([convertedBlob], file?.name.split('.')[0] + '.jpg', {
+            type: 'image/jpeg',
+            lastModified: new Date().getTime(),
+          })
+          console.log(file)
+          setGroupImgUrl(URL.createObjectURL(file)) // 미리보기를 위해 파일 URL 생성
+          setIsEditGroupImg(true)
+          setGroupImgFile(file)
+        })
+      } else {
+        setGroupImgUrl(URL.createObjectURL(file)) // 미리보기를 위해 파일 URL 생성
+        setIsEditGroupImg(true)
+        setGroupImgFile(file)
+      }
     }
   }
 
@@ -121,7 +136,9 @@ const GroupModify = () => {
       <GroupHeader text="그룹 수정" background={colors.grey7} />
       {/* 카테고리 이미지 */}
       <FolderImgWrapper>
-        <FolderImg src={groupImgUrl} />
+        <ImageWrapper>
+          <FolderImg src={groupImgUrl} />
+        </ImageWrapper>
       </FolderImgWrapper>
       <label htmlFor="file">
         <EditFolderImgText>사진 수정하기</EditFolderImgText>
@@ -197,14 +214,25 @@ const FolderImgWrapper = styled.div`
   background-color: ${colors.white};
   transform: translateX(-50%);
 `
-
-const FolderImg = styled.img`
+const ImageWrapper = styled.div`
+  position: relative;
   width: 76px;
   height: 76px;
   flex-shrink: 0;
   border-radius: 16px;
   border: 1.76px solid ${colors.grey6};
   background-color: ${colors.white};
+`
+const FolderImg = styled.img`
+  position: absolute;
+  top: 0;
+  left: 0;
+  border-radius: 16px;
+  transform: translate(50, 50);
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  margin: auto;
 `
 
 const EditFolderImgText = styled.div`
