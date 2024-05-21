@@ -20,13 +20,9 @@
   </head>
   <body>
     <div id="root"></div>
-    <img
-      id="fallback"
-      src="https://kr.object.ncloudstorage.com/baebae-bucket/Flip-it.png"
-      alt="flipit"
-      width="300"
-      height="300"
-    />
+    <div id="fallback" style="display: none; justify-content: center; align-items: center">
+      <img src="/Splash.png" alt="flipit" width="375" height="765" />
+    </div>
     <script type="module" src="/src/main.tsx"></script>
     <script>
       if ('serviceWorker' in navigator) {
@@ -35,15 +31,15 @@
             .register('firebase-messaging-sw.js')
             .then(function (registration) {
               console.log('Service Worker가 scope에 등록되었습니다.:', registration.scope)
-              // PWA가 성공적으로 로드된 경우 fallback 이미지를 숨깁니다.
+              // PWA가 성공적으로 로드되면, fallback 이미지를 숨김
               document.getElementById('fallback').style.display = 'none'
             })
             .catch(function (err) {
               console.log('Service Worker 등록 실패:', err)
+              // 서비스 워커 등록 실패 시, fallback 이미지 등장
+              document.getElementById('fallback').style.display = 'flex'
             })
         })
-      } else {
-        document.getElementById('fallback').style.display = 'none'
       }
     </script>
   </body>
