@@ -7,7 +7,7 @@ import {
   LoginProps,
   GetUserInfoProps,
 } from '@/components/signup/types'
-import { getKakaoUserInfoApi, getUserInfoApi, isExistingAccountApi, loginApi } from '@/apis/UserApi'
+import { getKakaoUserInfoApi, getUserInfoApi, isExistingAccountApi, loginApi, loginWithoutFCMApi } from '@/apis/UserApi'
 import { UserInfoStateProps, isLoggedInState, userInfoState } from '@/context/Atoms'
 import Loading from '@/components/common/Loading'
 import { registerServiceWorker, requestPermission } from '@/firebase-messaging-sw'
@@ -19,7 +19,7 @@ const KakaoRedirection = () => {
   //카카오 인가코드
   const code = new URL(document.location.toString()).searchParams.get('code')
   // 리코일 userInfo
-  const [, setUserInfo] = useRecoilState<UserInfoStateProps>(userInfoState)
+  const [userInfo, setUserInfo] = useRecoilState<UserInfoStateProps>(userInfoState)
   // 리코일 로그인 여부
   const setIsLoggedIn = useSetRecoilState(isLoggedInState)
 
@@ -61,24 +61,38 @@ const KakaoRedirection = () => {
   // 이미 존재하는 회원일 경우 바로 로그인 진행
   const login = async (kakaoAccessToken: string, nickname: string) => {
     try {
-      registerServiceWorker()
       let fcmToken = await requestPermission()
       setUserInfo((prevUserInfo) => ({
         ...prevUserInfo,
         fcmToken: fcmToken,
       }))
-      await loginApi(kakaoAccessToken, nickname, fcmToken).then(async (res: LoginProps) => {
-        if (res.status === 200) {
-          console.log(res.data.accessToken)
-          console.log(res.data.id)
-          getUserInfo(res.data)
-          setIsLoggedIn(true)
-          navigate(`/${res.data.nickname}`)
-        } else {
-          alert('로그인 실패')
-          navigate('/login')
-        }
-      })
+      fcmToken.length > 0
+        ? loginApi(kakaoAccessToken, nickname, fcmToken).then(async (res: LoginProps) => {
+            if (res.status === 200) {
+              console.log(res.data.accessToken)
+              console.log(res.data.id)
+              getUserInfo(res.data)
+              setIsLoggedIn(true)
+              console.log(userInfo)
+              navigate(`/${res.data.nickname}`)
+            } else {
+              alert('로그인 실패')
+              navigate('/login')
+            }
+          })
+        : loginWithoutFCMApi(kakaoAccessToken, nickname).then(async (res: LoginProps) => {
+            if (res.status === 200) {
+              console.log(res.data.accessToken)
+              console.log(res.data.id)
+              getUserInfo(res.data)
+              setIsLoggedIn(true)
+              console.log(userInfo)
+              navigate(`/${res.data.nickname}`)
+            } else {
+              alert('로그인 실패')
+              navigate('/login')
+            }
+          })
     } catch (err) {
       console.log(err)
     }
@@ -106,6 +120,7 @@ const KakaoRedirection = () => {
   // url에 code 받으면 getKakaoUserInfo 함수 실행
   useEffect(() => {
     if (code) {
+      registerServiceWorker()
       getKakaoUserInfo(code)
     }
   }, [code])
