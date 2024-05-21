@@ -42,6 +42,9 @@ const Answer = () => {
           setImageUrl(URL.createObjectURL(file))
           setImageFile(file)
         })
+      } else {
+        setImageUrl(URL.createObjectURL(file))
+        setImageFile(file)
       }
     }
   }
@@ -98,8 +101,7 @@ const Answer = () => {
       <PolaroidContainer>
         <label htmlFor="file">
           <ProfileWrapper>
-            {imageUrl === '' ? <ProfileImg /> : <ProfileImg src={imageUrl} alt="image" />}
-            {imageUrl === '' ? <PlusImgText>사진 추가</PlusImgText> : <PlusImgText></PlusImgText>}
+            {imageUrl === '' ? <PlusImgText>사진 추가</PlusImgText> : <ProfileImg src={imageUrl} alt="image" />}
           </ProfileWrapper>
         </label>
         <input type="file" name="file" id="file" style={{ display: 'none' }} onChange={handleImageChange} />
@@ -185,6 +187,7 @@ const PolaroidContainer = styled.div`
   box-shadow: 0px 4.945px 8.655px 0px rgba(0, 0, 0, 0.1);
 `
 const ProfileWrapper = styled.div`
+  position: relative;
   width: 279px;
   height: 250px;
   flex-shrink: 0;
@@ -196,14 +199,22 @@ const ProfileWrapper = styled.div`
   cursor: pointer;
 `
 const ProfileImg = styled.img`
+  position: absolute;
+  top: 0;
+  left: 0;
+  transform: translate(50, 50);
   width: 100%;
   height: 100%;
   border-radius: 2.473px;
+  object-fit: cover;
+  margin: auto;
 `
 const PlusImgText = styled.div`
-  position: absolute;
-  top: 133px;
-  left: 132px;
+  display: flex;
+  width: 100%;
+  height: 100%;
+  justify-content: center;
+  align-items: center;
   color: ${colors.grey4};
   font-family: Pretendard;
   font-size: 14px;

@@ -9,6 +9,7 @@ import { colors } from '@/styles/colors'
 import { UserInfoStateProps, userInfoState } from '@/context/Atoms'
 import { isExistingNicknameApi, updateUserNicknameApi, updateUserProfileApi } from '@/apis/UserApi'
 import DefaultImg from '@/assets/main/DefaultImage.png'
+import heic2any from 'heic2any'
 
 // 계정 정보 수정 페이지
 const EditAccount = () => {
@@ -27,11 +28,26 @@ const EditAccount = () => {
 
   // 이미지 파일 선택 핸들러
   const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const file = e.target.files && e.target.files[0]
+    let file = e.target.files && e.target.files[0]
     if (file) {
-      setProfileImg(URL.createObjectURL(file)) // 미리보기를 위해 파일 URL 저장
-      setProfileFile(file)
-      setIsEditProfileImg(true)
+      if (file?.name.split('.')[1].toLowerCase() === 'heic') {
+        let blob = file
+        heic2any({ blob: blob, toType: 'image/jpeg' }).then((resultBlob) => {
+          const convertedBlob = Array.isArray(resultBlob) ? resultBlob[0] : resultBlob
+          file = new File([convertedBlob], file?.name.split('.')[0] + '.jpg', {
+            type: 'image/jpeg',
+            lastModified: new Date().getTime(),
+          })
+          console.log(file)
+          setProfileImg(URL.createObjectURL(file)) // 미리보기를 위해 파일 URL 저장
+          setProfileFile(file)
+          setIsEditProfileImg(true)
+        })
+      } else {
+        setProfileImg(URL.createObjectURL(file)) // 미리보기를 위해 파일 URL 저장
+        setProfileFile(file)
+        setIsEditProfileImg(true)
+      }
     }
   }
 
@@ -129,7 +145,15 @@ const EditAccount = () => {
 
       {/* 유저 프로필 수정 부분*/}
       <ProfileImageWrapper>
-        {profileImg === null ? <ProfileImage src={DefaultImg} /> : <ProfileImage src={profileImg} />}
+        {profileImg === null ? (
+          <ImageWrapper>
+            <ProfileImage src={DefaultImg} />
+          </ImageWrapper>
+        ) : (
+          <ImageWrapper>
+            <ProfileImage src={profileImg} />
+          </ImageWrapper>
+        )}
         <label htmlFor="file">
           <EditButton>사진 수정하기</EditButton>
         </label>
@@ -187,11 +211,23 @@ const ProfileImageWrapper = styled.div`
   margin: 40px 20px 0px;
   gap: 12px;
 `
-const ProfileImage = styled.img`
+const ImageWrapper = styled.div`
+  position: relative;
   width: 100px;
   height: 100px;
   border-radius: 59px;
   background-color: ${colors.grey2};
+`
+const ProfileImage = styled.img`
+  position: absolute;
+  top: 0;
+  left: 0;
+  border-radius: 59px;
+  transform: translate(50, 50);
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  margin: auto;
 `
 const EditButton = styled.div`
   padding: 4px 12px;
