@@ -33,21 +33,25 @@ const MainHeader = ({ background, isMine }: HeaderProps) => {
   }
 
   const moveMyFeed = (route: string) => {
-    getMemberIdApi(route).then((result) => {
-      getOwnerProfileApi(result.memberId).then((response) => {
-        // console.log(response)
-        setUserData({
-          nickname: route,
-          memberId: result.memberId,
-          imageUrl: response.imageUrl,
-        })
-        navigate(`/${route}`, {
-          state: {
-            defaultCategory: 0,
-          },
+    if (route === 'settings') {
+      navigate('/settings')
+    } else {
+      getMemberIdApi(route).then((result) => {
+        getOwnerProfileApi(result.memberId).then((response) => {
+          // console.log(response)
+          setUserData({
+            nickname: route,
+            memberId: result.memberId,
+            imageUrl: response.imageUrl,
+          })
+          navigate(`/${route}`, {
+            state: {
+              defaultCategory: 0,
+            },
+          })
         })
       })
-    })
+    }
   }
 
   // 모달 버튼 클릭 유무를 저장할 state (로그인 안했을 시 나오는 모달)
