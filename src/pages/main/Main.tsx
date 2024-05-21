@@ -37,6 +37,7 @@ const Main = () => {
       result.isExisting == true &&
         getMemberIdApi(nickname).then((result) => {
           getOwnerProfileApi(result.memberId).then((response) => {
+            // console.log(response)
             setUserData({
               nickname: nickname,
               memberId: result.memberId,
