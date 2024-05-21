@@ -1,5 +1,5 @@
 import styled from 'styled-components'
-import { ChangeEvent, MouseEvent, useEffect, useState } from 'react'
+import { ChangeEvent, MouseEvent, useCallback, useEffect, useState } from 'react'
 import { useRecoilValue } from 'recoil'
 import { useNavigate } from 'react-router-dom'
 import Filter from 'badwords-ko'
@@ -19,10 +19,11 @@ import Info from '@/assets/main/Info.svg'
 
 interface AskProps {
   isMine: boolean
+  username: string | undefined
 }
 
 // 질문하기 컴포넌트
-const Ask = ({ isMine }: AskProps) => {
+const Ask = ({ isMine, username }: AskProps) => {
   const navigate = useNavigate()
   // 로그인한 사람의 데이터 정보
   const loginUserInfo = useRecoilValue(userInfoState)
@@ -44,16 +45,16 @@ const Ask = ({ isMine }: AskProps) => {
   }
 
   // 질문 개수 받기
-  const getQuestionLength = async () => {
+  const getQuestionLength = useCallback(async () => {
     await getQuestionLengthApi(loginUserInfo.accessToken, loginUserInfo.memberId).then((res) => {
       setAskCount(res)
     })
-  }
+  }, [username])
 
   useEffect(() => {
     isMine === true && getQuestionLength()
     console.log(`나의 페이지인가? : ${isMine}`)
-  }, [])
+  }, [getQuestionLength])
 
   // 모달 버튼 클릭 유무를 저장할 state (로그인 안했을 시 나오는 모달)
   const [showModal, setShowModal] = useState<boolean>(false)

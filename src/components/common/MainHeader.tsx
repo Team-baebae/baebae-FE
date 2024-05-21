@@ -41,7 +41,11 @@ const MainHeader = ({ background, isMine }: HeaderProps) => {
           memberId: result.memberId,
           imageUrl: response.imageUrl,
         })
-        navigate(`/${route}`)
+        navigate(`/${route}`, {
+          state: {
+            defaultCategory: 0,
+          },
+        })
       })
     })
   }
