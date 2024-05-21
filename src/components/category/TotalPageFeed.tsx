@@ -173,7 +173,7 @@ const TotalPageFeed = (props: TotalPageFeedProps) => {
   const [heartCount, setHeartCount] = useState<number>(0)
   const [curiousCount, setCuriousCount] = useState<number>(0)
   const [sadCount, setSadCount] = useState<number>(0)
-  const [, setConnectCount] = useState<number>(0)
+  const [connectCount, setConnectCount] = useState<number>(0)
 
   // 해당 피드에 대한 반응 여부 확인
   const getIsReacted = useCallback(async () => {
@@ -427,7 +427,7 @@ const TotalPageFeed = (props: TotalPageFeedProps) => {
             <TelepathyButton state={giveTelepathy} onClick={clickTelepathy}>
               <EmotionText style={{ fontSize: 20 }}>👉🏻</EmotionText>
               <EmotionText style={{ fontSize: 20, opacity: giveTelepathy ? 1 : 0.3 }}>👈🏻</EmotionText>
-              <EmotionText>통했당!</EmotionText>
+              <EmotionText>{isMyPage ? connectCount : '통했당!'}</EmotionText>
             </TelepathyButton>
           </BottomContents>
           {open && isMyPage && (
