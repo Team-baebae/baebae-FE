@@ -45,6 +45,7 @@ const Container = styled.div`
   display: flex;
   flex-direction: column;
   align-items: center;
+  justify-content: center;
   width: 100%;
   height: 100%;
   background-color: ${colors.grey2};
@@ -54,13 +55,12 @@ const Background = styled.img`
   position: absolute;
   z-index: 1;
   width: 100%;
-  height: 722.534px;
+  height: 100%;
 `
 
 const FlipItLogo = styled.img`
   width: 200.001px;
   height: 89.743px;
-  margin: 290.63px 0px 0px 0px;
   z-index: 1;
   cursor: pointer;
 `
