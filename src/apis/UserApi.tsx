@@ -92,16 +92,12 @@ export const updateUserNicknameApi = (accessToken: string, memberId: number, nic
 
 // 로그아웃
 export const logoutApi = (fcmToken: string, accessToken: string) => {
-  let API = `/api/auth/logout`
-  return flipitAxios.post(
-    API,
-    { fcmToken: fcmToken },
-    {
-      headers: {
-        Authorization: `Bearer ${accessToken}`,
-      },
+  let API = `/api/auth/logout?${fcmToken}`
+  return flipitAxios.post(API, {
+    headers: {
+      Authorization: `Bearer ${accessToken}`,
     },
-  )
+  })
 }
 
 // 회원탈퇴
