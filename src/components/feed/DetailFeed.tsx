@@ -2,7 +2,7 @@ import { AnimatePresence, motion } from 'framer-motion'
 import { useCallback, useEffect, useState } from 'react'
 import styled from 'styled-components'
 import { useRecoilState, useRecoilValue } from 'recoil'
-import { useNavigate } from 'react-router-dom'
+import { Link, useNavigate } from 'react-router-dom'
 import html2canvas from 'html2canvas'
 import { BottomSheet } from 'react-spring-bottom-sheet'
 import { toast, Flip } from 'react-toastify'
@@ -92,12 +92,6 @@ const DetailFeed = (props: ModalProps) => {
   const MusicClick = (e: React.MouseEvent<HTMLDivElement>) => {
     e.stopPropagation()
     handlePreview(selectedFeed.musicAudioUrl)
-  }
-  // 링크 클릭 시 링크 복사
-  const LinkClick = (e: React.MouseEvent<HTMLDivElement>) => {
-    e.stopPropagation()
-    navigator.clipboard.writeText(selectedFeed?.linkAttachments || 'https://www.flipit.co.kr')
-    toast('링크가 복사되었습니다.')
   }
 
   // 계정 주인일때 ...누를 시 bottom sheet 나오도록
@@ -397,10 +391,12 @@ const DetailFeed = (props: ModalProps) => {
                   </LinkButton>
                 )}
                 {selectedFeed?.linkAttachments !== '' && (
-                  <LinkButton onClick={LinkClick}>
-                    <Icon src={LinkIcon} />
-                    <OverflowText width="82px">{selectedFeed?.linkAttachments}</OverflowText>
-                  </LinkButton>
+                  <Link to={selectedFeed?.linkAttachments} style={{ textDecoration: 'none' }}>
+                    <LinkButton>
+                      <Icon src={LinkIcon} />
+                      <OverflowText width="82px">{selectedFeed?.linkAttachments}</OverflowText>
+                    </LinkButton>
+                  </Link>
                 )}
               </Links>
               {isMyPage && <Icon src={MoreDots} width={24} height={24} onClick={MoreClick} />}
@@ -476,7 +472,6 @@ const DetailFeed = (props: ModalProps) => {
               </ShareButton>
             </ButtonComponent>
           </div>
-          {/* <img src={capturedImageData} style={{ position: 'absolute', left: '0', width: '300px', height: '400px' }} /> */}
         </SearchModalBox>
       </AnimatePresence>
       {/* ...누를 시 나오는 설정 모달 */}
