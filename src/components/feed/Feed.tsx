@@ -22,8 +22,12 @@ import Plus from '@/assets/main/Plus.svg'
 import Pencil from '@/assets/main/Pencil.svg'
 import Trash from '@/assets/main/Trash.svg'
 
+interface Props {
+  username: string | undefined
+}
+
 // 메인페이지 피드 컴포넌트
-const Feed = () => {
+const Feed = ({ username }: Props) => {
   const navigate = useNavigate()
 
   // 리코일 로그인한 유저 userInfo
@@ -137,11 +141,11 @@ const Feed = () => {
     } catch (err) {
       console.log(err)
     }
-  }, [selectedCategoryId])
+  }, [selectedCategoryId, username])
 
   useEffect(() => {
     getCategories()
-  }, [])
+  }, [username])
 
   useEffect(() => {
     getFeeds()

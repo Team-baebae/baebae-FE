@@ -3,11 +3,12 @@ import styled from 'styled-components'
 import NavLogo from '@/assets/nav/NavLogo.svg'
 import Alram from '@/assets/nav/Alarm.svg'
 import Setting from '@/assets/nav/Setting.svg'
-import { useRecoilValue } from 'recoil'
-import { isLoggedInState, userInfoState, UserInfoStateProps } from '@/context/Atoms'
+import { useRecoilState, useRecoilValue } from 'recoil'
+import { isLoggedInState, ownerUserData, userInfoState, UserInfoStateProps } from '@/context/Atoms'
 import { useState } from 'react'
 import LoginModal from '../question/LoginModal'
 import { colors } from '@/styles/colors'
+import { getMemberIdApi, getOwnerProfileApi } from '@/apis/MainInfoApi'
 
 interface HeaderProps {
   background: string
@@ -24,9 +25,33 @@ const MainHeader = ({ background, isMine }: HeaderProps) => {
   const myInfo = useRecoilValue<UserInfoStateProps>(userInfoState)
   const myNickname = myInfo.nickname
 
+  const [userData, setUserData] = useRecoilState(ownerUserData)
+
   // 아이콘 누르면 실행되는 함수
   const clickIcon = (route: string) => {
-    isLoggedIn ? navigate(`/${route}`) : setShowModal(true)
+    isLoggedIn ? moveMyFeed(route) : setShowModal(true)
+  }
+
+  const moveMyFeed = (route: string) => {
+    if (route === 'settings') {
+      navigate('/settings')
+    } else {
+      getMemberIdApi(route).then((result) => {
+        getOwnerProfileApi(result.memberId).then((response) => {
+          // console.log(response)
+          setUserData({
+            nickname: route,
+            memberId: result.memberId,
+            imageUrl: response.imageUrl,
+          })
+          navigate(`/${route}`, {
+            state: {
+              defaultCategory: 0,
+            },
+          })
+        })
+      })
+    }
   }
 
   // 모달 버튼 클릭 유무를 저장할 state (로그인 안했을 시 나오는 모달)
