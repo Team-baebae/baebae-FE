@@ -444,7 +444,7 @@ const TotalPageFeed = (props: TotalPageFeedProps) => {
             </EmotionButton>
             <TelepathyButton state={giveTelepathy} onClick={clickTelepathy}>
               <EmotionText style={{ fontSize: 20 }}>👉🏻</EmotionText>
-              <EmotionText style={{ fontSize: 20 }}>👈🏻</EmotionText>
+              <EmotionText style={{ fontSize: 20, opacity: giveTelepathy ? 1 : 0.3 }}>👈🏻</EmotionText>
               <EmotionText>통했당!</EmotionText>
             </TelepathyButton>
           </BottomContents>
