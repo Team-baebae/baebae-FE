@@ -67,7 +67,9 @@ const FeedList = ({
         {data.map((feed) =>
           questionIds.includes(feed.questionId) ? (
             <SelectedFlipWrapper key={feed.answerId} onClick={() => clickFlip(feed)}>
-              <SelectedFeedAnswerImg src={feed.imageUrl} />
+              <ImageWrapper>
+                <SelectedFeedAnswerImg src={feed.imageUrl} />
+              </ImageWrapper>
               <SelectedContentWrapper>{feed.content}</SelectedContentWrapper>
             </SelectedFlipWrapper>
           ) : (
@@ -218,10 +220,20 @@ const TotalFeedsBtn = styled.div`
 const SelectedFlipWrapper = styled(FlipWrapper)`
   padding: 9.31436px;
 `
-
-const SelectedFeedAnswerImg = styled.img`
+const ImageWrapper = styled.div`
+  position: relative;
   width: 100%;
   height: 129.366px;
+`
+const SelectedFeedAnswerImg = styled.img`
+  position: absolute;
+  top: 0;
+  left: 0;
+  transform: translate(50, 50);
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  margin: auto;
 `
 
 const SelectedContentWrapper = styled.div`

@@ -176,7 +176,9 @@ const Feed = () => {
                       e.stopPropagation()
                     }}
                   >
-                    <GroupImg src={item.categoryImage} />
+                    <ImageWrapper>
+                      <GroupImg src={item.categoryImage} />
+                    </ImageWrapper>
                   </GroupImgWrapper>
                   <GroupName selected={selectedCategoryId === item.categoryId}>{item.categoryName}</GroupName>
                 </GroupWrapper>
@@ -277,12 +279,22 @@ const GroupImgWrapper = styled.div<{ selected: boolean }>`
   user-select: none;
 `
 const GroupImg = styled.img`
+  position: absolute;
+  top: 0;
+  left: 0;
+  border-radius: 8px;
+  transform: translate(50, 50);
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  margin: auto;
+`
+const ImageWrapper = styled.div`
+  position: relative;
   width: 38px;
   height: 38px;
-  flex-shrink: 0;
   border-radius: 8px;
   border: 0.8px solid ${colors.grey6};
-  background: lightgray 50% / cover no-repeat;
   user-select: none;
   pointer-events: none;
 `
