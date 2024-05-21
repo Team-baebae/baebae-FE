@@ -5,44 +5,18 @@ import Logo from '@/assets/login/Logo.svg'
 import LoginBackground from '@/assets/login/LoginBack.svg'
 import KakaoIcon from '@/assets/login/KakaoIcon.svg'
 import { useEffect } from 'react'
-import axios from 'axios'
 
 // 로그인 페이지
 const Login = () => {
   const navigate = useNavigate()
 
-  // const restApiKey = import.meta.env.VITE_KAKAO_REST_API_KEY
-  // // 카카오 로그인 버튼 누를 시 link로 이동
+  // 카카오 로그인 버튼 누를 시 link로 이동
   const clientId = import.meta.env.VITE_KAKAO_CLIENT_ID
   const redirectUri = import.meta.env.VITE_KAKAO_REDIRECT_URI
-  const link = `http://kauth.kakao.com/oauth/authorize?client_id=${clientId}&redirect_uri=${redirectUri}&response_type=code`
+  const link = `https://kauth.kakao.com/oauth/authorize?client_id=${clientId}&redirect_uri=${redirectUri}&response_type=code`
   const loginHandler = () => {
-    window.open(link, '_self')
+    window.location.href = link
   }
-
-  // const AUTHORIZATION_CODE = new URL(window.location.href).searchParams.get('code')
-  // const getToken = async () => {
-  //   const res = axios.post(
-  //     'https://kauth.kakao.com/oauth/token',
-  //     {
-  //       grant_type: 'authorization_code',
-  //       client_id: clientId,
-  //       redirect_uri: redirectUri,
-  //       code: AUTHORIZATION_CODE,
-  //     },
-  //     {
-  //       headers: {
-  //         'Content-Type': 'application/x-www-form-urlencoded',
-  //       },
-  //     },
-  //   )
-  //   console.log(res)
-  //   return res
-  // }
-
-  // useEffect(() => {
-  //   getToken()
-  // })
 
   return (
     <Container>
