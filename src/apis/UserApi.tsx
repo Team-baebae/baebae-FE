@@ -35,6 +35,17 @@ export const loginApi = (accessToken: string, nickname: string, fcmToken: string
     },
   )
 }
+// 카카오 어세스토큰을 통하여 jwt토큰 받기 - fcmToken 없을 때
+export const loginWithoutFCMApi = (accessToken: string, nickname: string) => {
+  let API = `/api/auth/login`
+  return flipitAxios.post(
+    API,
+    { memberType: 'KAKAO', nickname: nickname },
+    {
+      headers: { Authorization: `Bearer ${accessToken}` },
+    },
+  )
+}
 
 // 유저 정보 받기
 export const getUserInfoApi = (accessToken: string, memberId: number) => {

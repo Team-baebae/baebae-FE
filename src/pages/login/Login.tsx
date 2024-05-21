@@ -4,6 +4,8 @@ import { colors } from '@/styles/colors'
 import Logo from '@/assets/login/Logo.svg'
 import LoginBackground from '@/assets/login/LoginBack.svg'
 import KakaoIcon from '@/assets/login/KakaoIcon.svg'
+import { useEffect } from 'react'
+import { registerServiceWorker } from '@/firebase-messaging-sw'
 
 // 로그인 페이지
 const Login = () => {
@@ -17,6 +19,10 @@ const Login = () => {
   const loginHandler = () => {
     window.location.href = link
   }
+
+  useEffect(() => {
+    registerServiceWorker()
+  }, [])
 
   return (
     <Container>

@@ -13,7 +13,7 @@ import { TotalPageFeedProps } from '@/components/category/types'
 import { StyledToastContainer } from '@/components/toast/toastStyle'
 import { colors } from '@/styles/colors'
 import { deleteFeedApi, getIsReactedApi, getReactCountApi, postReactApi } from '@/apis/AnswerApi'
-import { isMineState, ownerUserData, userInfoState } from '@/context/Atoms'
+import { isLoggedInState, isMineState, ownerUserData, userInfoState } from '@/context/Atoms'
 import MusicIcon from '@/assets/MusicWhite.svg'
 import PlayIcon from '@/assets/PlayGray.svg'
 import PauseIcon from '@/assets/PauseGray.svg'
@@ -23,6 +23,7 @@ import trash from '@/assets/main/Trash.svg'
 import Download from '@/assets/category/Download.svg'
 import Share from '@/assets/category/Share.svg'
 import MoreDot from '@/assets/category/Dot.svg'
+import LoginModal from '../question/LoginModal'
 
 declare global {
   interface Window {
@@ -47,6 +48,13 @@ const TotalPageFeed = (props: TotalPageFeedProps) => {
   const setCurrentAudio = props.setCurrentAudio
   const isPlaying = props.isPlaying
   const setIsPlaying = props.setIsPlaying
+
+  // 로그인 여부
+  const isLoggedIn = useRecoilValue(isLoggedInState)
+  // 모달 버튼 클릭 유무를 저장할 state (로그인 안했을 시 나오는 모달)
+  const [showModal, setShowModal] = useState<boolean>(false)
+  // 버튼 클릭시 모달 버튼 클릭 유무를 설정하는 state 함수
+  const clickModal = () => setShowModal(!showModal)
 
   // 리코일 로그인한 유저의 유저정보
   const userInfo = useRecoilValue(userInfoState)
@@ -107,11 +115,15 @@ const TotalPageFeed = (props: TotalPageFeedProps) => {
   // 통했당 활성화 시 애니메이션
   const clickTelepathy = (e: React.MouseEvent<HTMLDivElement>) => {
     e.stopPropagation()
-    !giveTelepathy && setPopLottie(true)
-    setGiveTelepathy(!giveTelepathy)
-    setTimeout(() => {
-      setPopLottie(false)
-    }, 2350)
+    if (isLoggedIn) {
+      !giveTelepathy && setPopLottie(true)
+      setGiveTelepathy(!giveTelepathy)
+      setTimeout(() => {
+        setPopLottie(false)
+      }, 2350)
+    } else {
+      setShowModal(true)
+    }
   }
   const [popLottie, setPopLottie] = useState<boolean>(false)
 
@@ -404,7 +416,7 @@ const TotalPageFeed = (props: TotalPageFeedProps) => {
               state={giveHeart}
               onClick={(e) => {
                 e.stopPropagation()
-                postReact('HEART')
+                isLoggedIn ? postReact('HEART') : setShowModal(true)
               }}
             >
               <EmotionText>🖤</EmotionText>
@@ -414,7 +426,7 @@ const TotalPageFeed = (props: TotalPageFeedProps) => {
               state={giveCurious}
               onClick={(e) => {
                 e.stopPropagation()
-                postReact('CURIOUS')
+                isLoggedIn ? postReact('CURIOUS') : setShowModal(true)
               }}
             >
               <EmotionText>👀</EmotionText>
@@ -424,7 +436,7 @@ const TotalPageFeed = (props: TotalPageFeedProps) => {
               state={giveSad}
               onClick={(e) => {
                 e.stopPropagation()
-                postReact('SAD')
+                isLoggedIn ? postReact('SAD') : setShowModal(true)
               }}
             >
               <EmotionText>🥺</EmotionText>
@@ -517,7 +529,8 @@ const TotalPageFeed = (props: TotalPageFeedProps) => {
           )}
         </div>
       </AnimatePresence>
-      {/* ...누를 시 나오는 설정 모달 */}
+      {/* 로그인 안하고 질문 시 나오는 모달 */}
+      {showModal && <LoginModal content={`앗!\n로그인을 해야 반응을 남길 수 있어요😥`} clickModal={clickModal} />}
 
       {/* 통했당 누를 시 통했당 로띠 애니메이션 */}
       {popLottie && <TelePathyMotion />}
