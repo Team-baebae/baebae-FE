@@ -33,16 +33,16 @@ export function requestPermission(): Promise<string> {
             const error =
               "AbortError: Failed to execute 'subscribe' on 'PushManager': Subscription failed - no active Service Worker"
             if (err.toString() === error) {
-              return getToken(messaging, {
+              registerServiceWorker()
+              getToken(messaging, {
                 vapidKey: import.meta.env.VITE_APP_FCM_VAPID_KEY,
               })
             } else {
-              throw err
+              reject('')
             }
           })
           .then((currentToken) => {
             if (currentToken) {
-              console.log(currentToken)
               resolve(currentToken)
             } else {
               console.log('No Instance ID token available. Request permission to generate one.')
