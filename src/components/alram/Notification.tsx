@@ -12,7 +12,7 @@ const Notification = ({ title, content, isChecked }: NotificationType) => {
     <AlramWrapper isNew={!isChecked}>
       <TopWrapper>
         <TitleMessage>{title}</TitleMessage>
-        {!isChecked && <Icon src={NewIcon} />}
+        {!isChecked && <Icon src={NewIcon} alt="NEW" />}
       </TopWrapper>
       <SubMessage>{content}</SubMessage>
     </AlramWrapper>
