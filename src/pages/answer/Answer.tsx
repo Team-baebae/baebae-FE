@@ -57,13 +57,13 @@ const Answer = () => {
     try {
       await answerApi(userInfo.accessToken, userInfo.memberId, imageFile, {
         questionId: question.questionId,
-        nickname: question.nickname,
         profileOnOff: question.profileOnOff,
         content: content,
         linkAttachments: linkAttachments,
         musicName: musicName,
         musicSinger: musicSinger,
         musicAudioUrl: musicAudio,
+        updateImage: true,
       }).then((res) => {
         navigate(`/questions/${question.questionId}/group`, {
           state: {
