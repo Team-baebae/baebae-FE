@@ -25,7 +25,7 @@ const MainHeader = ({ background, isMine }: HeaderProps) => {
   const myInfo = useRecoilValue<UserInfoStateProps>(userInfoState)
   const myNickname = myInfo.nickname
 
-  const [userData, setUserData] = useRecoilState(ownerUserData)
+  const [, setUserData] = useRecoilState(ownerUserData)
 
   // 아이콘 누르면 실행되는 함수
   const clickIcon = (route: string) => {
