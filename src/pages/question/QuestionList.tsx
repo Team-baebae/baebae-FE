@@ -114,9 +114,13 @@ const QuestionList = () => {
     deleteQuestionsApi(questionId, accessToken).then(() => {
       const updatedQuestions = questions.filter((question) => question.questionId !== questionId)
       setQuestions(updatedQuestions)
-      setAskCount(updatedQuestions.length)
+      setAskCount(askCount - 1)
       setShowModal(false)
       toast('질문이 삭제되었어요!')
+      setTimeout(() => {
+        setLoading(true)
+        window.location.reload()
+      }, 1000)
     })
   }
   const clickDeletion = (questionId: number) => {
@@ -169,7 +173,6 @@ const QuestionList = () => {
                         e.stopPropagation()
 
                         clickName(value.profileOnOff, value.senderNickname)
-
                       }}
                     >
                       {value.nickname}님
