@@ -45,12 +45,6 @@ const DetailFeed = (props: ModalProps) => {
   const feedList = props.feedList
   const setFeedList = props.setFeedList
 
-  // 선택된 카테고리
-  const selectedCategoryId = props.selectedCategoryId
-  const selectedCategoryImage = props.selectedCategoryImage
-  const selectedCategoryGroupName = props.selectedCategoryGroupName
-  const selectedCategoryAnswerIds = props.selectedCategoryAnswerIds
-
   // 로그인 여부
   const isLoggedIn = useRecoilValue(isLoggedInState)
   // 모달 버튼 클릭 유무를 저장할 state (로그인 안했을 시 나오는 모달)

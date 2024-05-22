@@ -39,24 +39,6 @@ const FolderImgWrapper = styled.div<{ selected: boolean }>`
 const NewFolderImgWrapper = styled(FolderImgWrapper)`
   padding: 0px;
 `
-const ImageWrapper = styled.div`
-  position: relative;
-  width: 57px;
-  height: 57px;
-  border-radius: 12px;
-  border: 1.2px solid ${colors.grey6};
-`
-const FolderImg = styled.img`
-  position: absolute;
-  top: 0;
-  left: 0;
-  border-radius: 12px;
-  transform: translate(50, 50);
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-  margin: auto;
-`
 const PlusImg = styled.img`
   width: 100%;
   height: 100%;
