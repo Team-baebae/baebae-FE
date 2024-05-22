@@ -31,7 +31,7 @@ const Settings = () => {
   const logout = async () => {
     try {
       await logoutApi(userInfo.fcmToken, userInfo.accessToken).then((res) => {
-        if (res.status === 200) {
+        if (res.status === 200 || res.status === 404) {
           setUserInfo({
             accessToken: '',
             refreshToken: '',
@@ -54,7 +54,7 @@ const Settings = () => {
   const signOut = async () => {
     try {
       await signOutApi(userInfo.accessToken, userInfo.memberId).then((res) => {
-        if (res.status === 200) {
+        if (res.status === 200 || res.status === 404) {
           setUserInfo({
             accessToken: '',
             refreshToken: '',
