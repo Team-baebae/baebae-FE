@@ -25,18 +25,7 @@ export const isExistingNicknameApi = (nickname: string) => {
 }
 
 // 카카오 어세스토큰을 통하여 jwt토큰 받기
-export const loginApi = (accessToken: string, nickname: string, fcmToken: string) => {
-  let API = `/api/auth/login`
-  return flipitAxios.post(
-    API,
-    { memberType: 'KAKAO', nickname: nickname, fcmToken: fcmToken },
-    {
-      headers: { Authorization: `Bearer ${accessToken}` },
-    },
-  )
-}
-// 카카오 어세스토큰을 통하여 jwt토큰 받기 - fcmToken 없을 때
-export const loginWithoutFCMApi = (accessToken: string, nickname: string) => {
+export const loginApi = (accessToken: string, nickname: string) => {
   let API = `/api/auth/login`
   return flipitAxios.post(
     API,

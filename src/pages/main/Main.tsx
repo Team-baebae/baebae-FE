@@ -20,6 +20,8 @@ const Main = () => {
   // url의 username 뽑아내기
   const { username } = useParams<{ username: string }>()
 
+  const [isLoading, setIsLoading] = useState<boolean>(true)
+
   // 유저 존재 여부
   const [isExisting, setIsExisting] = useState<boolean>(false)
   // 리코일 계정주인 데이터 정보
@@ -45,6 +47,7 @@ const Main = () => {
             })
           })
         })
+      setIsLoading(false)
     })
   }
   // url의 닉네임으로 실제 있는 계정인지 확인
@@ -60,26 +63,24 @@ const Main = () => {
   // category=0은 질문, 1은 피드
   const [category, setCategory] = useState<number>(defaultCategory)
 
-  return (
-    <>
-      {isExisting ? (
-        <Container>
-          <MainHeader background={colors.white} isMine={username === myInfo.nickname} />
-          {username && <MainProfile nickname={username} imageUrl={userData.imageUrl} />}
-          <CategoryBox>
-            <Category category={category} num={0} onClick={() => setCategory(0)}>
-              질문
-            </Category>
-            <Category category={category} num={1} onClick={() => setCategory(1)}>
-              피드
-            </Category>
-          </CategoryBox>
-          {category ? <Feed username={username} /> : <Ask isMine={username === myInfo.nickname} username={username} />}
-        </Container>
-      ) : (
-        <NoUser />
-      )}
-    </>
+  return isLoading ? (
+    <></>
+  ) : isExisting ? (
+    <Container>
+      <MainHeader background={colors.white} isMine={username === myInfo.nickname} />
+      {username && <MainProfile nickname={username} imageUrl={userData.imageUrl} />}
+      <CategoryBox>
+        <Category category={category} num={0} onClick={() => setCategory(0)}>
+          질문
+        </Category>
+        <Category category={category} num={1} onClick={() => setCategory(1)}>
+          피드
+        </Category>
+      </CategoryBox>
+      {category ? <Feed username={username} /> : <Ask isMine={username === myInfo.nickname} username={username} />}
+    </Container>
+  ) : (
+    <NoUser />
   )
 }
 
