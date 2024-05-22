@@ -1,10 +1,11 @@
 import { colors } from '@/styles/colors'
 import styled from 'styled-components'
 import TutorialTooltip from './TutorialTooltip'
+import { HighLightProps } from './types'
 
-const HighLight2 = () => {
+const HighLight2 = ({ ClickPage }: HighLightProps) => {
   return (
-    <Container>
+    <Container onClick={ClickPage}>
       <AskContainer>
         <WriterBlock>
           FROM <WriterRegion placeholder="자유롭게 입력해주세요" />
