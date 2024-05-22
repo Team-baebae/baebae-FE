@@ -4,10 +4,9 @@ import { useEffect, useState } from 'react'
 import { Flip, toast } from 'react-toastify'
 import { BottomSheet } from 'react-spring-bottom-sheet'
 import 'react-spring-bottom-sheet/dist/style.css'
-import AnswerEachFolder from '@/components/category/AnswerEachFolder'
 import { UnFixedButton } from '@/components/common/Button'
 import { StyledToastContainer } from '@/components/toast/toastStyle'
-import { FolderListProps, categoryProps } from '@/components/category/types'
+import { categoryProps } from '@/components/category/types'
 import { colors } from '@/styles/colors'
 import { UserInfoStateProps, userInfoState } from '@/context/Atoms'
 import { getCategoriesApi, makeCategoryApi } from '@/apis/CategoryApi'
@@ -21,7 +20,6 @@ import EachEditGroupPlus from './EachEditGroupPlus'
 const EditGroupList = ({ selectedCategoryIds, setSelectedCategoryIds }: EditGroupListProps) => {
   // 리코일 로그인한 userInfo
   const userInfo = useRecoilValue<UserInfoStateProps>(userInfoState)
-  const hi = selectedCategoryIds
 
   // 로그인한 유저 디렉토리 리스트 저장
   const [categories, setCategories] = useState<categoryProps[]>([])

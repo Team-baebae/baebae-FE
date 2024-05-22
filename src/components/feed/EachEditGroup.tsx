@@ -54,9 +54,6 @@ const FolderImgWrapper = styled.div<{ selected: boolean }>`
   background-color: ${colors.white};
   cursor: pointer;
 `
-const NewFolderImgWrapper = styled(FolderImgWrapper)`
-  padding: 0px;
-`
 const ImageWrapper = styled.div`
   position: relative;
   width: 57px;
@@ -74,10 +71,6 @@ const FolderImg = styled.img`
   height: 100%;
   object-fit: cover;
   margin: auto;
-`
-const PlusImg = styled.img`
-  width: 100%;
-  height: 100%;
 `
 const FolderName = styled.div<{ selected: boolean }>`
   text-align: center;

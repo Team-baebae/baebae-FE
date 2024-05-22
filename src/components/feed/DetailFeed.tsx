@@ -44,12 +44,14 @@ const DetailFeed = (props: ModalProps) => {
 
   const feedList = props.feedList
   const setFeedList = props.setFeedList
+
   const flipPlane = props.flipPlane
-  // 선택된 카테고리
+
   const selectedCategoryId = props.selectedCategoryId
   const selectedCategoryImage = props.selectedCategoryImage
   const selectedCategoryGroupName = props.selectedCategoryGroupName
   const selectedCategoryAnswerIds = props.selectedCategoryAnswerIds
+
 
   // 로그인 여부
   const isLoggedIn = useRecoilValue(isLoggedInState)
