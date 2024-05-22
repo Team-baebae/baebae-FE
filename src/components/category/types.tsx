@@ -50,3 +50,14 @@ export interface TotalPageFeedProps {
   isPlaying: boolean
   setIsPlaying: any
 }
+
+// 피딍 그룹 수정시 나오는 각자의 그룹의 props
+export interface EachEditGroupProps {
+  selectedCategoryIds: number[]
+  setSelectedCategoryIds: any
+  category: categoryProps
+}
+// 피딍 그룹 수정시 나오는 그룹추가의 props
+export interface EachEditGroupPlusProps {
+  func: any
+}
