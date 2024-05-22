@@ -66,58 +66,15 @@ const SignUpNickname = () => {
   }
 
   const login = async (kakaoAccessToken: string, nickname: string) => {
-    if (isMobile) {
-      loginWithoutFCMApi(kakaoAccessToken, nickname).then(async (res: LoginProps) => {
-        if (res.status === 200) {
-          console.log(res.data.accessToken)
-          console.log(res.data.id)
-          getUserInfo(res.data)
-          setIsLoggedIn(true)
-          console.log(userInfo)
-          navigate(`/signup/complete`)
-        } else {
-          alert('로그인 실패')
-          navigate('/login')
-        }
-      })
-    } else {
-      try {
-        let fcmToken = await requestPermission()
-        setUserInfo((prevUserInfo) => ({
-          ...prevUserInfo,
-          fcmToken: fcmToken,
-        }))
-        fcmToken.length > 0
-          ? loginApi(kakaoAccessToken, nickname, fcmToken).then(async (res: LoginProps) => {
-              if (res.status === 200) {
-                console.log(res.data.accessToken)
-                console.log(res.data.id)
-                getUserInfo(res.data)
-                setIsLoggedIn(true)
-                console.log(userInfo)
-                navigate(`/signup/complete`)
-              } else {
-                alert('로그인 실패')
-                navigate('/login')
-              }
-            })
-          : loginWithoutFCMApi(kakaoAccessToken, nickname).then(async (res: LoginProps) => {
-              if (res.status === 200) {
-                console.log(res.data.accessToken)
-                console.log(res.data.id)
-                getUserInfo(res.data)
-                setIsLoggedIn(true)
-                console.log(userInfo)
-                navigate(`/signup/complete`)
-              } else {
-                alert('로그인 실패')
-                navigate('/login')
-              }
-            })
-      } catch (err) {
-        console.log(err)
+    loginWithoutFCMApi(kakaoAccessToken, nickname).then(async (res: LoginProps) => {
+      if (res.status === 200) {
+        setIsLoggedIn(true)
+        getUserInfo(res.data)
+      } else {
+        alert('로그인 실패')
+        navigate('/login')
       }
-    }
+    })
   }
 
   // 유저 정보 받아오기
@@ -134,15 +91,12 @@ const SignUpNickname = () => {
           refreshToken: data.refreshToken,
           profileImage: res.data.profileImage,
         }))
+        isMobile ? navigate('/signup/complete') : navigate(`/signup/setting`)
       })
     } catch (err) {
       console.log(err)
     }
   }
-
-  useEffect(() => {
-    registerServiceWorker()
-  }, [])
 
   return (
     <Container>

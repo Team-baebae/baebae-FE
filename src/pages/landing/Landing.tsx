@@ -7,8 +7,22 @@ import Landing4 from '@/components/landing/Landing4'
 import Landing5 from '@/components/landing/Landing5'
 import Landing6 from '@/components/landing/Landing6'
 import Landing7 from '@/components/landing/Landing7'
+import { useRecoilState } from 'recoil'
+import { ownerUserData, ownerUserDataProps } from '@/context/Atoms'
+import { useEffect } from 'react'
 
 const Landing = () => {
+  const [, setOwnerInfo] = useRecoilState<ownerUserDataProps>(ownerUserData)
+
+  useEffect(() => {
+    setOwnerInfo({
+      nickname: '',
+      memberId: 0,
+      imageUrl: '',
+    })
+    console.log('hello')
+  }, [])
+
   return (
     <Container>
       <Header>

@@ -10,7 +10,6 @@ import {
 import { getKakaoUserInfoApi, getUserInfoApi, isExistingAccountApi, loginApi, loginWithoutFCMApi } from '@/apis/UserApi'
 import { UserInfoStateProps, isLoggedInState, ownerUserData, userInfoState } from '@/context/Atoms'
 import Loading from '@/components/common/Loading'
-import { registerServiceWorker, requestPermission } from '@/firebase-messaging-sw'
 
 // 카카오 로그인 후 리다이렉션 페이지
 const KakaoRedirection = () => {
@@ -20,7 +19,7 @@ const KakaoRedirection = () => {
   //카카오 인가코드
   const code = new URL(document.location.toString()).searchParams.get('code')
   // 리코일 userInfo
-  const [userInfo, setUserInfo] = useRecoilState<UserInfoStateProps>(userInfoState)
+  const [, setUserInfo] = useRecoilState<UserInfoStateProps>(userInfoState)
   // 리코일 로그인 여부
   const setIsLoggedIn = useSetRecoilState(isLoggedInState)
 
@@ -63,64 +62,15 @@ const KakaoRedirection = () => {
 
   // 이미 존재하는 회원일 경우 바로 로그인 진행
   const login = async (kakaoAccessToken: string, nickname: string) => {
-    if (isMobile) {
-      loginWithoutFCMApi(kakaoAccessToken, nickname).then(async (res: LoginProps) => {
-        if (res.status === 200) {
-          console.log(res.data.accessToken)
-          console.log(res.data.id)
-          getUserInfo(res.data)
-          setIsLoggedIn(true)
-          console.log(userInfo)
-          navigate(`/${res.data.nickname}`)
-        } else {
-          alert('로그인 실패')
-          navigate('/login')
-        }
-      })
-    } else {
-      try {
-        let fcmToken = await requestPermission()
-        setUserInfo((prevUserInfo) => ({
-          ...prevUserInfo,
-          fcmToken: fcmToken,
-        }))
-        fcmToken.length > 0
-          ? loginApi(kakaoAccessToken, nickname, fcmToken).then(async (res: LoginProps) => {
-              if (res.status === 200) {
-                console.log(res.data.accessToken)
-                console.log(res.data.id)
-                getUserInfo(res.data)
-                setIsLoggedIn(true)
-                console.log(userInfo)
-                // 계정주인페이지에서 상세로그인 시는 계정주인 페이지로 유지
-                // 첫 로그인페이지에서 로그인 시 내 페이지로
-                {
-                  ownerUserInfo.nickname === ''
-                    ? navigate(`/${res.data.nickname}`)
-                    : navigate(`/${ownerUserInfo.nickname}`)
-                }
-              } else {
-                alert('로그인 실패')
-                navigate('/login')
-              }
-            })
-          : loginWithoutFCMApi(kakaoAccessToken, nickname).then(async (res: LoginProps) => {
-              if (res.status === 200) {
-                console.log(res.data.accessToken)
-                console.log(res.data.id)
-                getUserInfo(res.data)
-                setIsLoggedIn(true)
-                console.log(userInfo)
-                navigate(`/${res.data.nickname}`)
-              } else {
-                alert('로그인 실패')
-                navigate('/login')
-              }
-            })
-      } catch (err) {
-        console.log(err)
+    loginWithoutFCMApi(kakaoAccessToken, nickname).then(async (res: LoginProps) => {
+      if (res.status === 200) {
+        setIsLoggedIn(true)
+        getUserInfo(res.data)
+      } else {
+        alert('로그인 실패')
+        navigate('/login')
       }
-    }
+    })
   }
 
   // 유저 정보 받아오기
@@ -136,6 +86,11 @@ const KakaoRedirection = () => {
           refreshToken: data.refreshToken,
           profileImage: res.data.profileImage,
         }))
+        isMobile
+          ? ownerUserInfo.nickname === ''
+            ? navigate(`/${data.nickname}`)
+            : navigate(`/${ownerUserInfo.nickname}`)
+          : navigate(`/signup/loading`)
       })
     } catch (err) {
       console.log(err)
@@ -145,7 +100,6 @@ const KakaoRedirection = () => {
   // url에 code 받으면 getKakaoUserInfo 함수 실행
   useEffect(() => {
     if (code) {
-      registerServiceWorker()
       getKakaoUserInfo(code)
     }
   }, [code])
