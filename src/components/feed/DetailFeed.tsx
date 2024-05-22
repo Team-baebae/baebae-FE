@@ -44,7 +44,7 @@ const DetailFeed = (props: ModalProps) => {
 
   const feedList = props.feedList
   const setFeedList = props.setFeedList
-
+  const flipPlane = props.flipPlane
   // 선택된 카테고리
   const selectedCategoryId = props.selectedCategoryId
   const selectedCategoryImage = props.selectedCategoryImage
@@ -389,8 +389,11 @@ const DetailFeed = (props: ModalProps) => {
                 transition={spring}
                 style={{ zIndex: isFlipped ? 0 : 1 }}
               >
-                {/* 앞면 질문 */}
-                <FrontFeedContents selectedFeed={selectedFeed} />
+                {flipPlane ? (
+                  <FrontFeedContents selectedFeed={selectedFeed} />
+                ) : (
+                  <BackFeedContents selectedFeed={selectedFeed} />
+                )}
               </CardWrapper>
               <CardWrapper
                 initial={{ rotateY: 180 }}
@@ -400,8 +403,11 @@ const DetailFeed = (props: ModalProps) => {
                   zIndex: isFlipped ? 1 : 0,
                 }}
               >
-                {/* 뒷면 답변*/}
-                <BackFeedContents selectedFeed={selectedFeed} />
+                {flipPlane ? (
+                  <BackFeedContents selectedFeed={selectedFeed} />
+                ) : (
+                  <FrontFeedContents selectedFeed={selectedFeed} />
+                )}
               </CardWrapper>
             </ModalWrapper>
             {/* 반응 */}
