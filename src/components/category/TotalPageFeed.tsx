@@ -40,10 +40,6 @@ const TotalPageFeed = (props: TotalPageFeedProps) => {
   // 화면캡쳐위한
   const selectedFeedId = `captureTarget${selectedFeed.answerId}`
   // 선택된 카테고리
-  const selectedCategoryId = props.selectedCategoryId
-  const selectedCategoryImage = props.selectedCategoryImage
-  const selectedCategoryGroupName = props.selectedCategoryGroupName
-  const selectedCategoryAnswerIds = props.selectedCategoryAnswerIds
   const currentAudio = props.currentAudio
   const setCurrentAudio = props.setCurrentAudio
   const isPlaying = props.isPlaying
