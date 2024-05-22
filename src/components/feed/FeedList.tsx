@@ -6,8 +6,6 @@ import DetailFeed from '@/components/feed/DetailFeed'
 import { FeedProps, FeedListProps } from '@/components/feed/types'
 import { colors } from '@/styles/colors'
 import QuotationMark from '@/assets/question/QuotationMark.svg'
-import { useRecoilState } from 'recoil'
-import { selectedQuestionState } from '@/context/Atoms'
 import { Flip, toast } from 'react-toastify'
 import { StyledToastContainer } from '../toast/toastStyle'
 
