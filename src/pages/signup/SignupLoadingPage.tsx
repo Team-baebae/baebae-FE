@@ -1,10 +1,10 @@
+import { useEffect } from 'react'
+import { useNavigate } from 'react-router-dom'
+import { useRecoilState } from 'recoil'
 import { postFCM } from '@/apis/NotificationApi'
 import AlramLoading from '@/components/alram/AlramLoading'
 import { userInfoState } from '@/context/Atoms'
 import { requestPermission } from '@/firebase-messaging-sw'
-import { useEffect } from 'react'
-import { useNavigate } from 'react-router-dom'
-import { useRecoilState } from 'recoil'
 
 const SignupLoadingPage = () => {
   const [userInfo, setUserInfo] = useRecoilState(userInfoState)
