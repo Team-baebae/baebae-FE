@@ -79,7 +79,6 @@ const ContentWrapper = styled.div`
   display: flex;
   flex-direction: column;
   justify-content: center;
-  background-color: aliceblue;
 `
 const FlipContent = styled.div`
   display: flex;
