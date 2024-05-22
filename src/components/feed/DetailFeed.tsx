@@ -133,6 +133,15 @@ const DetailFeed = (props: ModalProps) => {
     }
   }
 
+  useEffect(() => {
+    return () => {
+      if (currentAudio) {
+        currentAudio.pause()
+        setIsPlaying(false)
+      }
+    }
+  }, [currentAudio])
+
   // 피드 삭제
   const deleteFeed = async () => {
     try {
