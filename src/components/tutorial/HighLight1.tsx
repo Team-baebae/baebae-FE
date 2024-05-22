@@ -1,10 +1,11 @@
 import { colors } from '@/styles/colors'
 import styled from 'styled-components'
 import TutorialTooltip from './TutorialTooltip'
+import { HighLightProps } from './types'
 
-const HighLight1 = () => {
+const HighLight1 = ({ ClickPage }: HighLightProps) => {
   return (
-    <Container>
+    <Container onClick={ClickPage}>
       <AskContainer>
         <TextRegion placeholder={`이런 질문은 어떤가요?\n너의 패션 스타일이 궁금해!\n무슨 음식 좋아해?`} />
         <WarnText isShow={true}>{`* 사칭으로 인한 신고 접수시\n플리빗 이용에 제한이 있을 수 있어요.`}</WarnText>

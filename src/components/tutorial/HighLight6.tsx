@@ -3,10 +3,11 @@ import styled from 'styled-components'
 import QuotationMark from '@/assets/question/QuotationMark.svg'
 import FeedImage from '@/assets/tutorial/FeedImage.png'
 import TutorialTooltip from './TutorialTooltip'
+import { HighLightProps } from './types'
 
-const HighLight5 = () => {
+const HighLight5 = ({ ClickPage }: HighLightProps) => {
   return (
-    <Container>
+    <Container onClick={ClickPage}>
       <Wrapper>
         <GridContainer>
           <FlipWrapper key={1}>

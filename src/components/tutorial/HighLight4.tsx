@@ -1,10 +1,11 @@
 import { colors } from '@/styles/colors'
 import styled from 'styled-components'
 import TutorialTooltip from './TutorialTooltip'
+import { HighLightProps } from './types'
 
-const HighLight4 = () => {
+const HighLight4 = ({ ClickPage }: HighLightProps) => {
   return (
-    <Container>
+    <Container onClick={ClickPage}>
       <Wrapper>
         <ShareButton>내 플리빗 초대</ShareButton>
       </Wrapper>
