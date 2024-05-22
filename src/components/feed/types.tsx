@@ -51,3 +51,16 @@ export interface ReactionProps {
   sadCount: number
   connectCount: number
 }
+
+// 피드의 그룹 수정시 그룹리스트 props
+export interface EditGroupListProps {
+  selectedCategoryIds: number[]
+  setSelectedCategoryIds: any
+}
+
+// 피드의 그룹 수정시 피드가 속한 그룹리스트 받을 때 그룹의 props
+export interface ContainedGroupProps {
+  categoryId: number
+  categoryImage: string
+  categoryName: string
+}

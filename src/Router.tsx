@@ -26,6 +26,7 @@ import Answer from '@/pages/answer/Answer'
 import Folder from '@/pages/category/SelectCategory'
 import AnswerComplete from '@/pages/answer/AnswerComplete'
 import EditAnswer from '@/pages/answer/EditAnswer'
+import EditGroup from '@/pages/answer/EditGroup'
 //카테고리
 import GroupPlus from '@/pages/category/GroupPlus'
 import GroupModify from '@/pages/category/GroupModify'
@@ -68,6 +69,7 @@ const Router = () => {
               <Route path="group" element={<Folder />} />
               <Route path="complete" element={<AnswerComplete />} />
               <Route path="edit" element={<EditAnswer />} />
+              <Route path="groups/edit" element={<EditGroup />} />
             </Route>
           </Route>
           <Route path="groups">

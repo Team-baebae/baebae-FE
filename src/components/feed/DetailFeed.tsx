@@ -486,12 +486,9 @@ const DetailFeed = (props: ModalProps) => {
 
           <BottomSheetEachWrapper
             onClick={() => {
-              navigate(`/groups/${selectedCategoryId}/edit`, {
+              navigate(`/questions/${selectedFeed.questionId}/groups/edit`, {
                 state: {
-                  categoryId: selectedCategoryId,
-                  categoryImage: selectedCategoryImage,
-                  categoryName: selectedCategoryGroupName,
-                  answerIds: selectedCategoryAnswerIds,
+                  answerId: selectedFeed.answerId,
                 },
               })
               backModal()
