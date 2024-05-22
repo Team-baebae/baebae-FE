@@ -77,3 +77,27 @@ export const updateCategoryImgApi = (accessToken: string, categoryId: number, im
     },
   })
 }
+
+export const getCategoryListOfFeedApi = (accessToken: string, answerId: number) => {
+  let API = `/api/categorizedAnswer/${answerId}`
+  return flipitAxios.get(API, {
+    headers: {
+      Authorization: `Bearer ${accessToken}`,
+    },
+  })
+}
+
+export const modifyCategoryListOfFeedApi = (accessToken: string, answerId: number, categoryIds: number[]) => {
+  let API = `/api/categorizedAnswer/${answerId}`
+  return flipitAxios.put(
+    API,
+    {
+      categoryIds: categoryIds,
+    },
+    {
+      headers: {
+        Authorization: `Bearer ${accessToken}`,
+      },
+    },
+  )
+}
