@@ -1,13 +1,11 @@
 import styled from 'styled-components'
 import { useRecoilValue } from 'recoil'
 import { useEffect, useState } from 'react'
-import { useLocation, useNavigate, useParams } from 'react-router-dom'
+import { useLocation, useNavigate } from 'react-router-dom'
 import Header from '@/components/common/Header'
 import { BottomButton } from '@/components/common/Button'
-import AnswerFolderList from '@/components/category/AnswerFolderList'
 import { colors } from '@/styles/colors'
 import { UserInfoStateProps, userInfoState } from '@/context/Atoms'
-import { connectGroupApi } from '@/apis/AnswerApi'
 import EditGroupList from '@/components/feed/EditGroupList'
 import { getCategoryListOfFeedApi, modifyCategoryListOfFeedApi } from '@/apis/CategoryApi'
 import { ContainedGroupProps } from '@/components/feed/types'
@@ -16,8 +14,8 @@ import { ContainedGroupProps } from '@/components/feed/types'
 const EditGroup = () => {
   const navigate = useNavigate()
 
-  // url에서 questionId 추출
-  const { questionId } = useParams()
+  // // url에서 questionId 추출
+  // const { questionId } = useParams()
 
   // 전달받은 answerId
   const location = useLocation()
