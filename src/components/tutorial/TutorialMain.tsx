@@ -15,7 +15,7 @@ import HighLight5 from './HighLight5'
 import HighLight6 from './HighLight6'
 import HighLight7 from './HighLight7'
 import { useRecoilValue } from 'recoil'
-import { userInfoState } from '@/context/Atoms'
+import { ownerUserData, userInfoState } from '@/context/Atoms'
 
 const TutorialMain = () => {
   const navigate = useNavigate()
@@ -23,14 +23,18 @@ const TutorialMain = () => {
   const [currentPage, setCurrentPage] = useState(0)
   const totalPages = 7
   const userNickname = useRecoilValue(userInfoState).nickname
+  const ownerNickname = useRecoilValue(ownerUserData).nickname
 
   const ClickPage = () => {
     currentPage == 3
       ? (setCategory(1), setCurrentPage((prev) => prev + 1))
       : currentPage == 6
-        ? navigate(`/${userNickname}`)
+        ? ownerNickname == ''
+          ? navigate(`/${userNickname}`)
+          : navigate(`/${ownerNickname}`)
         : setCurrentPage((prev) => prev + 1)
   }
+
   return (
     <>
       <Container>
