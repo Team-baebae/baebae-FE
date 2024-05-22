@@ -6,8 +6,9 @@ import MovieIcon from '@/assets/tutorial/MovieGroup.png'
 import FoodIcon from '@/assets/tutorial/FoodGroup.png'
 import MusicIcon from '@/assets/tutorial/MusicGroup.png'
 import TutorialTooltip from './TutorialTooltip'
+import { HighLightProps } from './types'
 
-const HighLight7 = () => {
+const HighLight7 = ({ ClickPage }: HighLightProps) => {
   const categories = [
     { categoryId: 0, categoryName: '전체', categoryImage: MovieIcon },
     { categoryId: 1, categoryName: '음식', categoryImage: FoodIcon },
@@ -16,7 +17,7 @@ const HighLight7 = () => {
   // 클릭하여 선택된 카테고리의 정보 저장
   const [selectedCategoryId] = useState<number>(0)
   return (
-    <Container>
+    <Container onClick={ClickPage}>
       <Wrapper>
         <TopComponent>
           {categories.map((item) => (

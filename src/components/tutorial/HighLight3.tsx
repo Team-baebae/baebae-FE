@@ -3,10 +3,11 @@ import styled from 'styled-components'
 import NewIcon from '@/assets/main/NewIcon.svg'
 import ForwardArrow from '@/assets/setting/ForwardArrow.svg'
 import TutorialTooltip from './TutorialTooltip'
+import { HighLightProps } from './types'
 
-const HighLight3 = () => {
+const HighLight3 = ({ ClickPage }: HighLightProps) => {
   return (
-    <Container>
+    <Container onClick={ClickPage}>
       <Wrapper>
         <AskNotification>
           <Icon width={34.25} height={16} src={NewIcon} />

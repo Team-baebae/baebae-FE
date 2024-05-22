@@ -1,5 +1,6 @@
 import styled from 'styled-components'
 import { useState } from 'react'
+import { AnimatePresence, motion } from 'framer-motion'
 import { useNavigate } from 'react-router-dom'
 import DetailFeed from '@/components/feed/DetailFeed'
 import { FeedProps, FeedListProps } from '@/components/feed/types'
@@ -41,71 +42,105 @@ const FeedList = ({
 
   // 모달 버튼 클릭 유무를 저장할 state (피드 확대)
   const [showModal, setShowModal] = useState<boolean>(false)
+
+  // 앞면일때 확대인지, 뒷면일 때 확대인지 state(0이 앞면, 1이 뒷면)
+  const [flipPlane, setFlipPlane] = useState(true)
+
   // 버튼 클릭시 모달 버튼 클릭 유무를 설정하는 state 함수
   const clickFlip = (feed: FeedProps) => {
     setSelectedFeed(feed)
     clickModal()
-    handleOnClick(feed.questionId)
   }
   // 모달창 열고 닫는 state 함수
   const clickModal = () => {
     setShowModal(!showModal)
   }
 
-  // 한번 뒤집은 피드는 뒤집힌 채로 유지하기 위한 선택한 questionId 저장
-  const [questionIds, setQuestionIds] = useRecoilState<number[]>(selectedQuestionState)
+  const [flippedState, setFlippedState] = useState<{ [key: number]: boolean }>({})
 
-  // 클릭 이벤트 핸들러
-  const handleOnClick = (questionId: number) => {
-    if (!questionIds.includes(questionId)) {
-      // questionId가 배열에 없으면 추가
-      setQuestionIds([...questionIds, questionId])
-    }
+  const spring = {
+    type: 'spring',
+    stiffness: 300,
+    damping: 40,
+  }
+  const handleClick = (answerId: number) => {
+    setFlippedState((prevState) => ({
+      ...prevState,
+      [answerId]: !prevState[answerId],
+    }))
   }
 
   return (
     <>
       <GridContainer>
-        {data.map((feed) =>
-          questionIds.includes(feed.questionId) ? (
-            <SelectedFlipWrapper key={feed.answerId} onClick={() => clickFlip(feed)}>
-              <ImageWrapper>
-                <SelectedFeedAnswerImg src={feed.imageUrl} />
-              </ImageWrapper>
-              <SelectedContentWrapper>{feed.content}</SelectedContentWrapper>
-            </SelectedFlipWrapper>
-          ) : (
-            <FlipWrapper key={feed.answerId} onClick={() => clickFlip(feed)}>
-              <Icon src={QuotationMark} />
-              <FlipContent>{feed.questionContent}</FlipContent>
-              <WriterBlock>
-                FROM
-                {feed.profileOnOff ? (
-                  <WriterRegion
-                    onClick={(e) => {
-                      e.stopPropagation()
-                      navigate(`/${feed.senderNickname}`)
-                      window.location.reload()
-                    }}
-                    color={colors.grey1}
-                  >
-                    {feed.nickname}
-                  </WriterRegion>
-                ) : (
-                  <WriterRegion
-                    color={colors.grey4}
-                    onClick={(e) => {
-                      e.stopPropagation()
-                      toast('질문자가 피드 공개를 설정하지 않았어요!')
-                    }}
-                  >
-                    {feed.nickname}
-                  </WriterRegion>
-                )}
-              </WriterBlock>
-            </FlipWrapper>
-          ),
-        )}
+        {data.map((feed) => (
+          <AnimatePresence>
+            <ModalWrapper onClick={() => handleClick(feed.answerId)} transition={spring}>
+              <CardWrapper
+                animate={{ rotateY: flippedState[feed.answerId] ? -180 : 0 }}
+                transition={spring}
+                style={{ zIndex: flippedState[feed.answerId] ? 0 : 1 }}
+              >
+                <FlipWrapper
+                  key={feed.answerId}
+                  onClick={() => {
+                    setFlipPlane(true)
+                    clickFlip(feed)
+                  }}
+                >
+                  <Icon src={QuotationMark} />
+                  <FlipContent>{feed.questionContent}</FlipContent>
+                  <WriterBlock>
+                    FROM{' '}
+                    {feed.profileOnOff ? (
+                      <WriterRegion
+                        onClick={(e) => {
+                          e.stopPropagation()
+                          navigate(`/${feed.senderNickname}`)
+                          window.location.reload()
+                        }}
+                        color={colors.grey1}
+                      >
+                        {feed.nickname}
+                      </WriterRegion>
+                    ) : (
+                      <WriterRegion
+                        color={colors.grey4}
+                        onClick={(e) => {
+                          e.stopPropagation()
+                          toast('질문자가 피드 공개를 설정하지 않았어요!')
+                        }}
+                      >
+                        {feed.nickname}
+                      </WriterRegion>
+                    )}
+                  </WriterBlock>
+                </FlipWrapper>
+              </CardWrapper>
+              <CardWrapper
+                initial={{ rotateY: 180 }}
+                animate={{ rotateY: flippedState[feed.answerId] ? 0 : 180 }}
+                transition={spring}
+                style={{
+                  zIndex: flippedState[feed.answerId] ? 1 : 0,
+                }}
+              >
+                <SelectedFlipWrapper
+                  key={feed.answerId}
+                  onClick={() => {
+                    setFlipPlane(false)
+                    clickFlip(feed)
+                  }}
+                >
+                  <ImageWrapper>
+                    <SelectedFeedAnswerImg src={feed.imageUrl} />
+                  </ImageWrapper>
+                  <SelectedContentWrapper>{feed.content}</SelectedContentWrapper>
+                </SelectedFlipWrapper>
+              </CardWrapper>
+            </ModalWrapper>
+          </AnimatePresence>
+        ))}
       </GridContainer>
       {/* 해당 카테고리 피드리스트 전체보기 */}
       <TotalFeedsBtn
@@ -137,6 +172,7 @@ const FeedList = ({
       {showModal && (
         <DetailFeed
           setShowModal={setShowModal}
+          flipPlane={flipPlane}
           showModal={showModal}
           selectedFeed={selectedFeed}
           feedList={data}
@@ -271,4 +307,18 @@ const SelectedContentWrapper = styled.div`
   height: 21.7335px;
   overflow: hidden;
   text-overflow: ellipsis;
+`
+
+const ModalWrapper = styled(motion.div)`
+  height: 179px;
+  perspective: 1200px;
+  transform-style: preserve-3d;
+  background-color: transparent;
+  padding: 0;
+`
+const CardWrapper = styled(motion.div)`
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  backface-visibility: hidden;
 `

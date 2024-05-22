@@ -86,18 +86,33 @@ const Ask = ({ isMine, username }: AskProps) => {
     const filteredText = filter.clean(text)
     const questionData = { content: filteredText, nickname: writer, profileOnOff: isProfileOn }
     console.log(questionData)
-    setText('')
-    setWriter('')
-    setIsProfileOn(false)
-    // 비로그인인 경우 모달창
-    !isLoggedIn && setShowModal(true)
+
     // 로그인인 경우 질문 전송
-    isLoggedIn &&
-      postQuestionApi(loginUserInfo.memberId, receiverId, questionData, writerToken).then((status) => {
-        status == 201
-          ? toast('질문 완료!') && getQuestionLength()
-          : toast('[전송 오류] 잠시 후 다시 시도해 주세요') && getQuestionLength()
-      })
+    if (isLoggedIn) {
+      if (questionData.content === '' && questionData.nickname === '') {
+        toast('질문 및 작성자를 입력해주세요')
+      } else if (questionData.content === '' && questionData.nickname !== '') {
+        toast('질문을 입력해주세요')
+      } else if (questionData.content !== '' && questionData.nickname === '') {
+        toast('작성자명을 입력해주세요')
+      } else {
+        setText('')
+        setWriter('')
+        setIsProfileOn(false)
+        postQuestionApi(loginUserInfo.memberId, receiverId, questionData, writerToken).then((status) => {
+          status == 201
+            ? toast('질문 완료!') && getQuestionLength()
+            : toast('[전송 오류] 잠시 후 다시 시도해 주세요') && getQuestionLength()
+        })
+      }
+    }
+    // 비로그인인 경우 모달창
+    else {
+      setText('')
+      setWriter('')
+      setIsProfileOn(false)
+      setShowModal(true)
+    }
   }
 
   return (
