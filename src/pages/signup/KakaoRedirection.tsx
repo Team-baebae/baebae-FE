@@ -7,7 +7,7 @@ import {
   LoginProps,
   GetUserInfoProps,
 } from '@/components/signup/types'
-import { getKakaoUserInfoApi, getUserInfoApi, isExistingAccountApi, loginApi, loginWithoutFCMApi } from '@/apis/UserApi'
+import { getKakaoUserInfoApi, getUserInfoApi, isExistingAccountApi, loginApi } from '@/apis/UserApi'
 import { UserInfoStateProps, isLoggedInState, ownerUserData, userInfoState } from '@/context/Atoms'
 import Loading from '@/components/common/Loading'
 
@@ -62,7 +62,7 @@ const KakaoRedirection = () => {
 
   // 이미 존재하는 회원일 경우 바로 로그인 진행
   const login = async (kakaoAccessToken: string, nickname: string) => {
-    loginWithoutFCMApi(kakaoAccessToken, nickname).then(async (res: LoginProps) => {
+    loginApi(kakaoAccessToken, nickname).then(async (res: LoginProps) => {
       if (res.status === 200) {
         setIsLoggedIn(true)
         getUserInfo(res.data)

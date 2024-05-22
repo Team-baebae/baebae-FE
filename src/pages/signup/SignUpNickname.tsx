@@ -1,4 +1,4 @@
-import { ChangeEvent, useEffect, useState } from 'react'
+import { ChangeEvent, useState } from 'react'
 import { useRecoilState, useSetRecoilState } from 'recoil'
 import styled from 'styled-components'
 import { useNavigate, useLocation } from 'react-router-dom'
@@ -6,10 +6,9 @@ import Header from '@/components/common/Header'
 import { BottomButton } from '@/components/common/Button'
 import IsValidNicknameText from '@/components/common/IsValidNicknameText'
 import { LoginProps, GetUserInfoProps } from '@/components/signup/types'
-import { getUserInfoApi, isExistingNicknameApi, loginApi, loginWithoutFCMApi } from '@/apis/UserApi'
+import { getUserInfoApi, isExistingNicknameApi, loginApi } from '@/apis/UserApi'
 import { colors } from '@/styles/colors'
 import { UserInfoStateProps, isLoggedInState, userInfoState } from '@/context/Atoms'
-import { registerServiceWorker, requestPermission } from '@/firebase-messaging-sw'
 
 //회원가입 닉네임 입력 페이지
 const SignUpNickname = () => {
@@ -21,7 +20,7 @@ const SignUpNickname = () => {
   const kakaoAccessToken = location.state?.kakaoAccessToken
 
   // 리코일로 받은 유저 정보
-  const [userInfo, setUserInfo] = useRecoilState<UserInfoStateProps>(userInfoState)
+  const [, setUserInfo] = useRecoilState<UserInfoStateProps>(userInfoState)
   // 리코일 로그인 여부
   const setIsLoggedIn = useSetRecoilState(isLoggedInState)
 
@@ -66,7 +65,7 @@ const SignUpNickname = () => {
   }
 
   const login = async (kakaoAccessToken: string, nickname: string) => {
-    loginWithoutFCMApi(kakaoAccessToken, nickname).then(async (res: LoginProps) => {
+    loginApi(kakaoAccessToken, nickname).then(async (res: LoginProps) => {
       if (res.status === 200) {
         setIsLoggedIn(true)
         getUserInfo(res.data)
