@@ -14,6 +14,7 @@ const Alrams = () => {
   const memberId = userInfo.memberId
   const accessToken = userInfo.accessToken
 
+  const [isLoading, setIsLoading] = useState<boolean>(true)
   const [notifications, setNotifications] = useState<NotificationProps[]>([])
 
   useEffect(() => {
@@ -21,20 +22,31 @@ const Alrams = () => {
       if (result) {
         setNotifications(result)
       }
+      setIsLoading(false)
     })
   }, [])
 
   return (
     <Container>
       <Header text="알림" background={colors.white} />
-      {notifications.length == 0 ? (
-        <>
-          <NoAlram />
-        </>
+      {isLoading ? (
+        <></>
       ) : (
-        notifications.map((value) => (
-          <Notification title={value.notificationContent} content={value.questionContent} isChecked={value.checked} />
-        ))
+        <>
+          {notifications.length == 0 ? (
+            <>
+              <NoAlram />
+            </>
+          ) : (
+            notifications.map((value) => (
+              <Notification
+                title={value.notificationContent}
+                content={value.questionContent}
+                isChecked={value.checked}
+              />
+            ))
+          )}
+        </>
       )}
     </Container>
   )
