@@ -373,13 +373,15 @@ const TotalPageFeed = (props: TotalPageFeedProps) => {
           {/* 음악,링크,설정 */}
           <TopContents>
             <Links>
-              {selectedFeed?.musicAudioUrl !== '' && (
+              {selectedFeed?.musicName !== '' && (
                 <LinkButton onClick={MusicClick}>
                   <Icon src={MusicIcon} />
                   <OverflowText width="60px">
                     {selectedFeed?.musicName} - {selectedFeed?.musicSinger}
                   </OverflowText>
-                  {props.currentAudio && props.currentAudio.src === selectedFeed.musicAudioUrl && isPlaying ? (
+                  {selectedFeed.musicAudioUrl === '' ? (
+                    <></>
+                  ) : props.currentAudio && props.currentAudio.src === selectedFeed.musicAudioUrl && isPlaying ? (
                     <Icon src={PauseIcon} alt="pause" />
                   ) : (
                     <Icon src={PlayIcon} alt="play" />
