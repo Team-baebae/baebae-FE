@@ -96,7 +96,7 @@ const Settings = () => {
       {/* 문의 */}
       <ContentsWrapper
         onClick={() => {
-          navigate('/settings/support')
+          window.location.href = 'http://pf.kakao.com/_fSzLG'
         }}
       >
         <Contents>

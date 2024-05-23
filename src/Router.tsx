@@ -19,7 +19,6 @@ import Main from '@/pages/main/Main'
 import Setting from '@/pages/setting/Setting'
 import EditProfile from '@/pages/setting/EditAccount'
 import PrivacyPolicy from '@/pages/setting/PrivacyPolicy'
-import Ask from '@/pages/setting/Support'
 import Tos from '@/pages/setting/Tos'
 //질문
 import QuestionList from '@/pages/question/QuestionList'
@@ -61,7 +60,6 @@ const Router = () => {
               <Route path="serviceTerms" element={<Tos />} />
               <Route path="privacyPolicy" element={<PrivacyPolicy />} />
             </Route>
-            <Route path="support" element={<Ask />} />
           </Route>
           <Route path=":username">
             <Route index element={<Main />} />
