@@ -1,17 +1,19 @@
 import styled from 'styled-components'
 import { useCallback, useEffect, useState } from 'react'
 import { useRecoilValue } from 'recoil'
+import heic2any from 'heic2any'
 import { useLocation, useNavigate } from 'react-router-dom'
 import GroupHeader from '@/components/common/GroupHeader'
 import Feeds from '@/components/category/Feeds'
 import NoFlip from '@/components/main/NoFlip'
 import { UnFixedButton } from '@/components/common/Button'
 import { FeedProps } from '@/components/feed/types'
+import ChangeGroupName from '@/components/category/ChangeGroupName'
+import ChangeGroupImage from '@/components/category/ChangeGroupImage'
 import { UserInfoStateProps, userInfoState } from '@/context/Atoms'
 import { colors } from '@/styles/colors'
 import { modifyCategoryApi, updateCategoryImgApi } from '@/apis/CategoryApi'
 import { getTotalFeedsApi } from '@/apis/AnswerApi'
-import heic2any from 'heic2any'
 
 // 그룹 수정페이지
 const GroupModify = () => {
@@ -135,41 +137,9 @@ const GroupModify = () => {
     <Container>
       <GroupHeader text="그룹 수정" background={colors.grey7} />
       {/* 카테고리 이미지 */}
-      <FolderImgWrapper>
-        <ImageWrapper>
-          <FolderImg src={groupImgUrl} />
-        </ImageWrapper>
-      </FolderImgWrapper>
-      <label htmlFor="file">
-        <EditFolderImgText>사진 수정하기</EditFolderImgText>
-      </label>
-      <input type="file" name="file" id="file" style={{ display: 'none' }} onChange={handleImageChange} />
+      <ChangeGroupImage groupImgUrl={groupImgUrl} handleImageChange={handleImageChange} />
       {/* 카테고리 이름 */}
-      <FolderNameLabel>그룹명</FolderNameLabel>
-      <FolderName value={groupName} onChange={onChangeFolderName} placeholder="그룹명을 입력해주세요" maxLength={4} />
-      <FolderNameConditionWrapper>
-        <FolderNameConditionText color={colors.grey1} fontSize="12px">
-          2-4자로 입력해주세요.
-        </FolderNameConditionText>
-        <FolderNameLengthWrapper>
-          {groupName.length > 0 ? (
-            <FolderNameConditionText color={colors.grey2} fontSize="10px">
-              {groupName.length}
-            </FolderNameConditionText>
-          ) : (
-            <FolderNameConditionText color={colors.grey4} fontSize="10px">
-              {groupName.length}
-            </FolderNameConditionText>
-          )}
-
-          <FolderNameConditionText color={colors.grey4} fontSize="10px">
-            /
-          </FolderNameConditionText>
-          <FolderNameConditionText color={colors.grey4} fontSize="10px">
-            4
-          </FolderNameConditionText>
-        </FolderNameLengthWrapper>
-      </FolderNameConditionWrapper>
+      <ChangeGroupName groupName={groupName} onChangeFolderName={onChangeFolderName} />
       <FolderNameConditionText color={colors.grey3} fontSize="12px" margin="40px 20px 0px 20px">
         추가할 플립 선택
       </FolderNameConditionText>
@@ -201,105 +171,10 @@ const Container = styled.div`
   height: 100%;
 `
 
-const FolderImgWrapper = styled.div`
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  width: 88px;
-  height: 88px;
-  padding: 5.996px 6px 6.004px 6px;
-  margin: 20px 0px 0px 50%;
-  border-radius: 24px;
-  border: 1.76px solid ${colors.grey5};
-  background-color: ${colors.white};
-  transform: translateX(-50%);
-`
-const ImageWrapper = styled.div`
-  position: relative;
-  width: 76px;
-  height: 76px;
-  flex-shrink: 0;
-  border-radius: 16px;
-  border: 1.76px solid ${colors.grey6};
-  background-color: ${colors.white};
-`
-const FolderImg = styled.img`
-  position: absolute;
-  top: 0;
-  left: 0;
-  border-radius: 16px;
-  transform: translate(50, 50);
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-  margin: auto;
-`
-
-const EditFolderImgText = styled.div`
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  width: 87px;
-  height: 26px;
-  gap: 10px;
-  margin: 9.09px 0px 0px 50%;
-  border-radius: 100px;
-  border: 1px solid ${colors.grey1};
-  background-color: ${colors.white};
-  color: ${colors.grey1};
-  font-family: Pretendard;
-  font-size: 12px;
-  font-weight: 500;
-  line-height: 150%;
-  letter-spacing: -0.48px;
-  transform: translateX(-50%);
-  cursor: pointer;
-`
-const FolderNameLabel = styled.div`
-  align-self: stretch;
-  margin: 40px 0px 0px 20px;
-  color: ${colors.grey3};
-  font-family: Pretendard;
-  font-size: 12px;
-  font-weight: 400;
-  line-height: 150%;
-  letter-spacing: -0.48px;
-`
-
-const FolderName = styled.input`
-  display: flex;
-  flex-direction: column;
-  align-items: flex-start;
-  align-self: stretch;
-  width: calc(100% - 40px);
-  margin: 4px 20px 0px 20px;
-  padding: 20px;
-  gap: 12px;
-  border-radius: 12px;
-  background-color: ${colors.white};
-  border: none;
-  &:focus {
-    outline: none;
-  }
-`
-
-const FolderNameConditionWrapper = styled.div`
-  display: flex;
-  justify-content: space-between;
-  margin: 4px 20px 0px 20px;
-  padding: 0px 8px;
-`
-
 const FolderNameConditionText = styled.div<{ color: string; fontSize: string; margin?: string }>`
   margin: ${(props) => props.margin || '0px'};
   color: ${(props) => props.color};
   font-family: Pretendard;
   font-size: ${(props) => props.fontSize};
   font-weight: 400;
-`
-
-const FolderNameLengthWrapper = styled.div`
-  display: flex;
-  align-items: center;
-  gap: 2px;
 `

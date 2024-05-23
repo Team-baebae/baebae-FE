@@ -22,7 +22,7 @@ const KakaoRedirection = () => {
   const [, setUserInfo] = useRecoilState<UserInfoStateProps>(userInfoState)
   // 리코일 로그인 여부
   const setIsLoggedIn = useSetRecoilState(isLoggedInState)
-
+  // 계정 주인 정보
   const ownerUserInfo = useRecoilValue(ownerUserData)
 
   // 카카오에서 유저정보 받아오기

@@ -117,7 +117,6 @@ const Answer = () => {
         musicSinger={musicSinger}
         setMusicSinger={setMusicSinger}
       />
-
       {/* 답변 링크 */}
       <Link linkAttachments={linkAttachments} setLinkAttachments={setLinkAttachments} />
       <UnFixedButton

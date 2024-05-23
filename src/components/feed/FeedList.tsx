@@ -193,6 +193,7 @@ const GridContainer = styled.div`
   gap: 9px;
   justify-content: center;
   align-items: stretch;
+  margin: 0px 20px;
 `
 const Icon = styled.img`
   position: absolute;

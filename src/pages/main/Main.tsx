@@ -19,18 +19,18 @@ const Main = () => {
 
   // url의 username 뽑아내기
   const { username } = useParams<{ username: string }>()
-
+  // 로딩중 여부
   const [isLoading, setIsLoading] = useState<boolean>(true)
-
   // 유저 존재 여부
   const [isExisting, setIsExisting] = useState<boolean>(false)
   // 리코일 계정주인 데이터 정보
   const [userData, setUserData] = useRecoilState(ownerUserData)
   // 내 페이지인지 여부 전역 변수에 저장
   const setIsMyPage = useSetRecoilState(isMineState)
-
   // 리코일에서 받은 로그인한 사용자의 userInfo
   const myInfo = useRecoilValue<UserInfoStateProps>(userInfoState)
+  // category=0은 질문, 1은 피드
+  const [category, setCategory] = useState<number>(defaultCategory)
 
   // 유저의 존재 여부 확인 및 계정주인의 memberId 조회
   const userCheck = (nickname: string) => {
@@ -52,16 +52,12 @@ const Main = () => {
   }
   // url의 닉네임으로 실제 있는 계정인지 확인
   useEffect(() => {
-    console.log(location.pathname)
     if (username) {
       username === myInfo.nickname ? setIsMyPage(true) : setIsMyPage(false)
       userCheck(username)
       console.log('dd')
     }
   }, [username])
-
-  // category=0은 질문, 1은 피드
-  const [category, setCategory] = useState<number>(defaultCategory)
 
   return isLoading ? (
     <></>

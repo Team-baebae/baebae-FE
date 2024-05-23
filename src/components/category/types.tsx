@@ -8,6 +8,18 @@ export interface categoryProps {
   categoryImage: string
 }
 
+// 그룹 이미지 수정 시 Props
+export interface ChangeGroupImageProps {
+  groupImgUrl: string
+  handleImageChange: any
+}
+
+// 그룹명 수정 시 Props
+export interface ChangeGroupNameProps {
+  groupName: string
+  onChangeFolderName: any
+}
+
 // folderList의 props
 export interface FolderListProps {
   selectedCategoryId: number

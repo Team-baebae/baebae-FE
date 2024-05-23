@@ -1,14 +1,13 @@
 import styled from 'styled-components'
 import { useNavigate } from 'react-router-dom'
+import { useEffect } from 'react'
+import { useRecoilState } from 'recoil'
+import { isLoggedInState } from '@/context/Atoms'
+import { registerServiceWorker } from '@/firebase-messaging-sw'
 import { colors } from '@/styles/colors'
 import Logo from '@/assets/login/Logo.svg'
 import LoginBackground from '@/assets/login/LoginBack.svg'
 import KakaoIcon from '@/assets/login/KakaoIcon.svg'
-
-import { useEffect } from 'react'
-import { registerServiceWorker } from '@/firebase-messaging-sw'
-import { useRecoilState } from 'recoil'
-import { isLoggedInState } from '@/context/Atoms'
 
 // 로그인 페이지
 const Login = () => {

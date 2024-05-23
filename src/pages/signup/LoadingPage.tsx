@@ -1,15 +1,16 @@
+import { useEffect } from 'react'
+import { useNavigate } from 'react-router-dom'
+import { useRecoilState, useRecoilValue } from 'recoil'
 import { postFCM } from '@/apis/NotificationApi'
 import AlramLoading from '@/components/alram/AlramLoading'
 import { ownerUserData, userInfoState } from '@/context/Atoms'
 import { requestPermission } from '@/firebase-messaging-sw'
-import { useEffect } from 'react'
-import { useNavigate } from 'react-router-dom'
-import { useRecoilState, useRecoilValue } from 'recoil'
 
 const LoadingPage = () => {
+  const navigate = useNavigate()
+
   const [userInfo, setUserInfo] = useRecoilState(userInfoState)
   const ownerUserInfo = useRecoilValue(ownerUserData)
-  const navigate = useNavigate()
 
   const Login = async () => {
     try {
