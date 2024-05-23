@@ -6,7 +6,7 @@ import { BottomButton } from '@/components/common/Button'
 import Header from '@/components/common/Header'
 import IsValidNicknameText from '@/components/common/IsValidNicknameText'
 import { colors } from '@/styles/colors'
-import { UserInfoStateProps, userInfoState } from '@/context/Atoms'
+import { UserInfoStateProps, isMineState, ownerUserData, ownerUserDataProps, userInfoState } from '@/context/Atoms'
 import { isExistingNicknameApi, updateUserNicknameApi, updateUserProfileApi } from '@/apis/UserApi'
 import DefaultImg from '@/assets/main/DefaultImage.png'
 import heic2any from 'heic2any'
@@ -18,6 +18,8 @@ const EditAccount = () => {
   // 리코일 로그인한 유저정보
   const [userInfo, setUserInfo] = useRecoilState<UserInfoStateProps>(userInfoState)
   const startNickname = userInfo.nickname
+  const [, setOwnerUserInfo] = useRecoilState<ownerUserDataProps>(ownerUserData)
+  const isMine = useRecoilState(isMineState)
 
   // 사진 수정했는지 여부 확인
   const [isEditProfileImg, setIsEditProfileImg] = useState(false)
@@ -69,6 +71,12 @@ const EditAccount = () => {
             setUserInfo,
           ).then(() => {
             if (res.status === 200) {
+              isMine &&
+                setOwnerUserInfo((prevUserInfo) => ({
+                  ...prevUserInfo,
+                  nickname: nickname,
+                  imageUrl: res.data.imageUrl,
+                }))
               setUserInfo({
                 ...userInfo,
                 nickname: nickname,
@@ -132,6 +140,11 @@ const EditAccount = () => {
         setUserInfo,
       ).then((res: any) => {
         if (res.status === 200) {
+          isMine &&
+            setOwnerUserInfo((prevUserInfo) => ({
+              ...prevUserInfo,
+              nickname: nickname,
+            }))
           setUserInfo((prevUserInfo) => ({
             ...prevUserInfo,
             nickname: nickname,
