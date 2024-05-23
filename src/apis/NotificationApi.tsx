@@ -47,6 +47,7 @@ export const postFCM = async (
         },
       },
     )
+    response.status == 200 && console.log('fcm 전달 성공')
   }
   try {
     return await makeRequest(accessToken)
