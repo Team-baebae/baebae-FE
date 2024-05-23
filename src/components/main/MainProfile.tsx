@@ -17,6 +17,8 @@ interface MainProfileProps {
 
 // 메인프로필 컴포넌트
 const MainProfile = ({ nickname, imageUrl }: MainProfileProps) => {
+  const isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent)
+
   // 리코일 계정 주인의 데이터 정보
   const [ownerUserInfo] = useRecoilState(ownerUserData)
   // 내 페이지인지 여부 확인
@@ -70,15 +72,19 @@ const MainProfile = ({ nickname, imageUrl }: MainProfileProps) => {
   }
 
   const sharing = async () => {
-    if (navigator?.share) {
-      try {
-        await navigator.share({
-          title: `${ownerUserInfo.nickname}님의 플리빗 페이지를 공유했어요!`,
-          text: `${ownerUserInfo.nickname}님께 질문하고, 취향이 담긴 답변을 확인하세요!`,
-          url: `${realUrl}/${ownerUserInfo.nickname}`,
-        })
-      } catch (err) {
-        console.log('에러')
+    if (isMobile) {
+      if (navigator?.share) {
+        try {
+          await navigator.share({
+            title: `${ownerUserInfo.nickname}님의 플리빗 페이지를 공유했어요!`,
+            text: `${ownerUserInfo.nickname}님께 질문하고, 취향이 담긴 답변을 확인하세요!`,
+            url: `${realUrl}/${ownerUserInfo.nickname}`,
+          })
+        } catch (err) {
+          console.log('에러')
+        }
+      } else {
+        shareKakao()
       }
     } else {
       shareKakao()

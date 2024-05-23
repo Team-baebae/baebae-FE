@@ -351,6 +351,21 @@ const TotalPageFeed = (props: TotalPageFeedProps) => {
       })
   }
 
+  const [absoluteLink, setAbsoluteLink] = useState<string>('')
+  // selectedFeed 값이 변경될 때마다 절대 경로를 업데이트합니다.
+  useEffect(() => {
+    if (selectedFeed && selectedFeed.linkAttachments) {
+      let absolutePath
+      // 만약 selectedFeed.linkAttachments가 URL 형식이 아니라면 처리
+      if (!selectedFeed.linkAttachments.startsWith('http')) {
+        absolutePath = `https://${selectedFeed.linkAttachments}`
+      } else {
+        absolutePath = selectedFeed.linkAttachments
+      }
+      setAbsoluteLink(absolutePath)
+    }
+  }, [selectedFeed])
+
   return (
     <Container>
       <AnimatePresence>
@@ -372,7 +387,7 @@ const TotalPageFeed = (props: TotalPageFeedProps) => {
                 </LinkButton>
               )}
               {selectedFeed?.linkAttachments !== '' && (
-                <Link to={selectedFeed?.linkAttachments} style={{ textDecoration: 'none' }}>
+                <Link to={absoluteLink} style={{ textDecoration: 'none' }}>
                   <LinkButton>
                     <Icon src={LinkIcon} />
                     <OverflowText width="82px">{selectedFeed?.linkAttachments}</OverflowText>
