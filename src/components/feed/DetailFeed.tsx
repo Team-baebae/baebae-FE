@@ -45,6 +45,8 @@ const DetailFeed = (props: ModalProps) => {
   const feedList = props.feedList
   const setFeedList = props.setFeedList
 
+  const flipPlane = props.flipPlane
+
   // 로그인 여부
   const isLoggedIn = useRecoilValue(isLoggedInState)
   // 모달 버튼 클릭 유무를 저장할 state (로그인 안했을 시 나오는 모달)
@@ -53,7 +55,7 @@ const DetailFeed = (props: ModalProps) => {
   const clickModal = () => setShowLoginModal(!showLoginModal)
 
   // 리코일 로그인한 유저의 유저정보
-  const userInfo = useRecoilValue(userInfoState)
+  const [userInfo, setUserInfo] = useRecoilState(userInfoState)
   // 리코일 내 페이지인지 여부 확인
   const isMyPage = useRecoilValue(isMineState)
 
@@ -126,17 +128,27 @@ const DetailFeed = (props: ModalProps) => {
     }
   }
 
+  useEffect(() => {
+    return () => {
+      if (currentAudio) {
+        currentAudio.pause()
+        setIsPlaying(false)
+      }
+    }
+  }, [currentAudio])
+
   // 피드 삭제
   const deleteFeed = async () => {
     try {
-      await deleteFeedApi(userInfo.accessToken, selectedFeed.answerId).then((res) => {
-        console.log(res)
-        if (res.status === 204) {
-          setFeedList(feedList.filter((item) => item.answerId !== selectedFeed.answerId))
-          toast('플립이 삭제되었어요!')
-          backModal()
-        }
-      })
+      await deleteFeedApi(userInfo.accessToken, selectedFeed.answerId, userInfo.refreshToken, setUserInfo).then(
+        (res: any) => {
+          if (res.status === 204) {
+            setFeedList(feedList.filter((item) => item.answerId !== selectedFeed.answerId))
+            toast('플립이 삭제되었어요!')
+            backModal()
+          }
+        },
+      )
     } catch (err) {
       console.log(err)
     }
@@ -168,12 +180,17 @@ const DetailFeed = (props: ModalProps) => {
   // 해당 피드에 대한 반응 여부 확인
   const getIsReacted = useCallback(async () => {
     try {
-      await getIsReactedApi(userInfo.accessToken, selectedFeed.answerId, userInfo.memberId).then((res) => {
+      await getIsReactedApi(
+        userInfo.accessToken,
+        selectedFeed.answerId,
+        userInfo.memberId,
+        userInfo.refreshToken,
+        setUserInfo,
+      ).then((res: any) => {
         setGiveHeart(res.data.HEART)
         setGiveCurious(res.data.CURIOUS)
         setGiveSad(res.data.SAD)
         setGiveTelepathy(res.data.CONNECT)
-        console.log(res)
       })
     } catch (err) {
       console.log(err)
@@ -184,7 +201,6 @@ const DetailFeed = (props: ModalProps) => {
   const getReactCount = useCallback(async () => {
     try {
       await getReactCountApi(selectedFeed.answerId).then((res) => {
-        console.log(res)
         setHeartCount(res.data.heartCount)
         setCuriousCount(res.data.curiousCount)
         setSadCount(res.data.sadCount)
@@ -197,7 +213,14 @@ const DetailFeed = (props: ModalProps) => {
   // 해당피드에 반응 남기기
   const postReact = async (reaction: string) => {
     try {
-      await postReactApi(userInfo.accessToken, selectedFeed.answerId, userInfo.memberId, reaction).then((res) => {
+      await postReactApi(
+        userInfo.accessToken,
+        selectedFeed.answerId,
+        userInfo.memberId,
+        reaction,
+        userInfo.refreshToken,
+        setUserInfo,
+      ).then((res: any) => {
         setHeartCount(res.data.heartCount)
         setCuriousCount(res.data.curiousCount)
         setSadCount(res.data.sadCount)
@@ -274,7 +297,6 @@ const DetailFeed = (props: ModalProps) => {
     const blob = new Blob([u8arr], { type: mime })
     const file = new File([blob], filename, { type: mime })
     setImageFile(file) // 파일 객체 상태 업데이트
-    console.log(file)
     if (file) shareKakao(file)
   }
 
@@ -291,7 +313,6 @@ const DetailFeed = (props: ModalProps) => {
     Kakao.cleanup()
     Kakao.init(javascriptKey)
     // 잘 적용되면 true
-    console.log(Kakao.isInitialized())
   }, [])
 
   // 카카오로 공유
@@ -329,7 +350,6 @@ const DetailFeed = (props: ModalProps) => {
 
   // 저장하기
   const onSaveAs = (uri: string, filename: string) => {
-    console.log('onSaveAs')
     var link = document.createElement('a')
     document.body.appendChild(link)
     link.href = uri
@@ -383,8 +403,11 @@ const DetailFeed = (props: ModalProps) => {
                 transition={spring}
                 style={{ zIndex: isFlipped ? 0 : 1 }}
               >
-                {/* 앞면 질문 */}
-                <FrontFeedContents selectedFeed={selectedFeed} />
+                {flipPlane ? (
+                  <FrontFeedContents selectedFeed={selectedFeed} />
+                ) : (
+                  <BackFeedContents selectedFeed={selectedFeed} />
+                )}
               </CardWrapper>
               <CardWrapper
                 initial={{ rotateY: 180 }}
@@ -394,8 +417,11 @@ const DetailFeed = (props: ModalProps) => {
                   zIndex: isFlipped ? 1 : 0,
                 }}
               >
-                {/* 뒷면 답변*/}
-                <BackFeedContents selectedFeed={selectedFeed} />
+                {flipPlane ? (
+                  <BackFeedContents selectedFeed={selectedFeed} />
+                ) : (
+                  <FrontFeedContents selectedFeed={selectedFeed} />
+                )}
               </CardWrapper>
             </ModalWrapper>
             {/* 반응 */}

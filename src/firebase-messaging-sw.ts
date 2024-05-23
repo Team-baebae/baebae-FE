@@ -34,7 +34,7 @@ export function requestPermission(): Promise<string> {
               "AbortError: Failed to execute 'subscribe' on 'PushManager': Subscription failed - no active Service Worker"
             if (err.toString() === error) {
               registerServiceWorker()
-              getToken(messaging, {
+              return getToken(messaging, {
                 vapidKey: import.meta.env.VITE_APP_FCM_VAPID_KEY,
               })
             } else {

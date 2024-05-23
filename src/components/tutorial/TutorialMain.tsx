@@ -15,7 +15,7 @@ import HighLight5 from './HighLight5'
 import HighLight6 from './HighLight6'
 import HighLight7 from './HighLight7'
 import { useRecoilValue } from 'recoil'
-import { userInfoState } from '@/context/Atoms'
+import { ownerUserData, userInfoState } from '@/context/Atoms'
 
 const TutorialMain = () => {
   const navigate = useNavigate()
@@ -23,14 +23,18 @@ const TutorialMain = () => {
   const [currentPage, setCurrentPage] = useState(0)
   const totalPages = 7
   const userNickname = useRecoilValue(userInfoState).nickname
+  const ownerNickname = useRecoilValue(ownerUserData).nickname
 
   const ClickPage = () => {
     currentPage == 3
       ? (setCategory(1), setCurrentPage((prev) => prev + 1))
       : currentPage == 6
-        ? navigate(`/${userNickname}`)
+        ? ownerNickname == ''
+          ? navigate(`/${userNickname}`)
+          : navigate(`/${ownerNickname}`)
         : setCurrentPage((prev) => prev + 1)
   }
+
   return (
     <>
       <Container>
@@ -47,13 +51,13 @@ const TutorialMain = () => {
         {category ? <TutorialFeed /> : <TutorialAsk />}
         <ClickWrapper onClick={ClickPage} />
         <Pagination total={totalPages} current={currentPage} setPage={setCurrentPage} setCategory={setCategory} />
-        {currentPage == 0 && <HighLight1 />}
-        {currentPage == 1 && <HighLight2 />}
-        {currentPage == 2 && <HighLight3 />}
-        {currentPage == 3 && <HighLight4 />}
-        {currentPage == 4 && <HighLight5 />}
-        {currentPage == 5 && <HighLight6 />}
-        {currentPage == 6 && <HighLight7 />}
+        {currentPage == 0 && <HighLight1 ClickPage={ClickPage} />}
+        {currentPage == 1 && <HighLight2 ClickPage={ClickPage} />}
+        {currentPage == 2 && <HighLight3 ClickPage={ClickPage} />}
+        {currentPage == 3 && <HighLight4 ClickPage={ClickPage} />}
+        {currentPage == 4 && <HighLight5 ClickPage={ClickPage} />}
+        {currentPage == 5 && <HighLight6 ClickPage={ClickPage} />}
+        {currentPage == 6 && <HighLight7 ClickPage={ClickPage} />}
       </Container>
     </>
   )

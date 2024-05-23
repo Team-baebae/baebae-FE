@@ -1,4 +1,4 @@
-import { ChangeEvent, useEffect, useState } from 'react'
+import { ChangeEvent, useState } from 'react'
 import { useRecoilState, useSetRecoilState } from 'recoil'
 import styled from 'styled-components'
 import { useNavigate, useLocation } from 'react-router-dom'
@@ -6,10 +6,9 @@ import Header from '@/components/common/Header'
 import { BottomButton } from '@/components/common/Button'
 import IsValidNicknameText from '@/components/common/IsValidNicknameText'
 import { LoginProps, GetUserInfoProps } from '@/components/signup/types'
-import { getUserInfoApi, isExistingNicknameApi, loginApi, loginWithoutFCMApi } from '@/apis/UserApi'
+import { getUserInfoApi, isExistingNicknameApi, loginApi } from '@/apis/UserApi'
 import { colors } from '@/styles/colors'
 import { UserInfoStateProps, isLoggedInState, userInfoState } from '@/context/Atoms'
-import { registerServiceWorker, requestPermission } from '@/firebase-messaging-sw'
 
 //회원가입 닉네임 입력 페이지
 const SignUpNickname = () => {
@@ -21,7 +20,7 @@ const SignUpNickname = () => {
   const kakaoAccessToken = location.state?.kakaoAccessToken
 
   // 리코일로 받은 유저 정보
-  const [userInfo, setUserInfo] = useRecoilState<UserInfoStateProps>(userInfoState)
+  const [, setUserInfo] = useRecoilState<UserInfoStateProps>(userInfoState)
   // 리코일 로그인 여부
   const setIsLoggedIn = useSetRecoilState(isLoggedInState)
 
@@ -52,7 +51,6 @@ const SignUpNickname = () => {
       setIsClickDuplicate(true)
       if (isValid) {
         await isExistingNicknameApi(nickname).then((res) => {
-          console.log(res)
           if (res.data.isExisting) {
             setIsDuplicate(true)
           } else {
@@ -66,65 +64,21 @@ const SignUpNickname = () => {
   }
 
   const login = async (kakaoAccessToken: string, nickname: string) => {
-    if (isMobile) {
-      loginWithoutFCMApi(kakaoAccessToken, nickname).then(async (res: LoginProps) => {
-        if (res.status === 200) {
-          console.log(res.data.accessToken)
-          console.log(res.data.id)
-          getUserInfo(res.data)
-          setIsLoggedIn(true)
-          console.log(userInfo)
-          navigate(`/signup/complete`)
-        } else {
-          alert('로그인 실패')
-          navigate('/login')
-        }
-      })
-    } else {
-      try {
-        let fcmToken = await requestPermission()
-        setUserInfo((prevUserInfo) => ({
-          ...prevUserInfo,
-          fcmToken: fcmToken,
-        }))
-        fcmToken.length > 0
-          ? loginApi(kakaoAccessToken, nickname, fcmToken).then(async (res: LoginProps) => {
-              if (res.status === 200) {
-                console.log(res.data.accessToken)
-                console.log(res.data.id)
-                getUserInfo(res.data)
-                setIsLoggedIn(true)
-                console.log(userInfo)
-                navigate(`/signup/complete`)
-              } else {
-                alert('로그인 실패')
-                navigate('/login')
-              }
-            })
-          : loginWithoutFCMApi(kakaoAccessToken, nickname).then(async (res: LoginProps) => {
-              if (res.status === 200) {
-                console.log(res.data.accessToken)
-                console.log(res.data.id)
-                getUserInfo(res.data)
-                setIsLoggedIn(true)
-                console.log(userInfo)
-                navigate(`/signup/complete`)
-              } else {
-                alert('로그인 실패')
-                navigate('/login')
-              }
-            })
-      } catch (err) {
-        console.log(err)
+    loginApi(kakaoAccessToken, nickname).then(async (res: LoginProps) => {
+      if (res.status === 200) {
+        setIsLoggedIn(true)
+        getUserInfo(res.data)
+      } else {
+        alert('로그인 실패')
+        navigate('/login')
       }
-    }
+    })
   }
 
   // 유저 정보 받아오기
   const getUserInfo = async (data: GetUserInfoProps) => {
     try {
       await getUserInfoApi(data.accessToken, data.id).then((res) => {
-        console.log(res)
         setUserInfo((prevUserInfo) => ({
           ...prevUserInfo,
           memberId: data.id,
@@ -134,15 +88,12 @@ const SignUpNickname = () => {
           refreshToken: data.refreshToken,
           profileImage: res.data.profileImage,
         }))
+        isMobile ? navigate('/signup/complete') : navigate(`/signup/setting`)
       })
     } catch (err) {
       console.log(err)
     }
   }
-
-  useEffect(() => {
-    registerServiceWorker()
-  }, [])
 
   return (
     <Container>

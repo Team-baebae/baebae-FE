@@ -1,18 +1,19 @@
 import { useCallback, useEffect, useState } from 'react'
 import styled from 'styled-components'
-import { useRecoilValue } from 'recoil'
+import { useRecoilState } from 'recoil'
+import heic2any from 'heic2any'
 import { useLocation, useNavigate } from 'react-router-dom'
 import GroupHeader from '@/components/common/GroupHeader'
 import { UnFixedButton } from '@/components/common/Button'
 import Feeds from '@/components/category/Feeds'
 import NoFlip from '@/components/main/NoFlip'
 import { FeedProps } from '@/components/feed/types'
+import ChangeGroupName from '@/components/category/ChangeGroupName'
 import { makeCategoryApi } from '@/apis/CategoryApi'
 import { getTotalFeedsApi } from '@/apis/AnswerApi'
 import { userInfoState } from '@/context/Atoms'
 import { colors } from '@/styles/colors'
 import DefaultImg from '@/assets/main/DefaultImage.png'
-import heic2any from 'heic2any'
 
 // 새 그룹 생성 페이지
 const GroupPlus = () => {
@@ -23,7 +24,7 @@ const GroupPlus = () => {
   const redirectRoute = location.state?.redirectRoute
 
   // 리코일 로그인한 userInfo
-  const userInfo = useRecoilValue(userInfoState)
+  const [userInfo, setUserInfo] = useRecoilState(userInfoState)
 
   // 카테고리 정보 저장
   const [categoryImgUrl, setCategoryImgUrl] = useState<string>('')
@@ -41,7 +42,6 @@ const GroupPlus = () => {
             type: 'image/jpeg',
             lastModified: new Date().getTime(),
           })
-          console.log(file)
           setCategoryImgUrl(URL.createObjectURL(file))
           setCategoryImgFile(file)
         })
@@ -53,10 +53,10 @@ const GroupPlus = () => {
   }
 
   // 카테고리 이름
-  const [categoryName, setCategoryName] = useState<string>('')
+  const [groupName, setGroupName] = useState<string>('')
   const onChangeFolderName = (e: React.ChangeEvent<HTMLInputElement>) => {
     const value = e.target.value
-    setCategoryName(value)
+    setGroupName(value)
   }
 
   //전체 피드리스트 조회
@@ -64,7 +64,6 @@ const GroupPlus = () => {
   const getFeeds = useCallback(async () => {
     try {
       await getTotalFeedsApi(userInfo.memberId).then((res) => {
-        console.log(res)
         setFeedList(res.data.content)
       })
     } catch (err) {
@@ -79,15 +78,16 @@ const GroupPlus = () => {
         userInfo.accessToken,
         userInfo.memberId,
         categoryImgFile,
-        categoryName,
+        groupName,
         selectedAnswerIds,
-      ).then((res) => {
-        console.log(res)
+        userInfo.refreshToken,
+        setUserInfo,
+      ).then((res: any) => {
         if (redirectRoute === 'feedTotal') {
           navigate('/groups', {
             state: {
               selectedCategoryId: res.data.categoryId,
-              selectedCategoryGroupName: res.data.categoryName,
+              selectedCategoryGroupName: res.data.groupName,
               selectedCategoryImage: res.data.categoryImage,
               selectedCategoryAnswerIds: res.data.answerIds,
             },
@@ -129,36 +129,7 @@ const GroupPlus = () => {
       </label>
       <input type="file" name="file" id="file" style={{ display: 'none' }} onChange={handleImageChange} />
       {/* 카테고리 이름 */}
-      <FolderNameLabel>그룹명</FolderNameLabel>
-      <FolderName
-        value={categoryName}
-        onChange={onChangeFolderName}
-        placeholder="그룹명을 입력해주세요"
-        maxLength={4}
-      />
-      <FolderNameConditionWrapper>
-        <FolderNameConditionText color={colors.grey1} fontSize="12px">
-          2-4자로 입력해주세요.
-        </FolderNameConditionText>
-        <FolderNameLengthWrapper>
-          {categoryName.length > 0 ? (
-            <FolderNameConditionText color={colors.grey2} fontSize="10px">
-              {categoryName.length}
-            </FolderNameConditionText>
-          ) : (
-            <FolderNameConditionText color={colors.grey4} fontSize="10px">
-              {categoryName.length}
-            </FolderNameConditionText>
-          )}
-
-          <FolderNameConditionText color={colors.grey4} fontSize="10px">
-            /
-          </FolderNameConditionText>
-          <FolderNameConditionText color={colors.grey4} fontSize="10px">
-            4
-          </FolderNameConditionText>
-        </FolderNameLengthWrapper>
-      </FolderNameConditionWrapper>
+      <ChangeGroupName groupName={groupName} onChangeFolderName={onChangeFolderName} />
       <FolderNameConditionText color={colors.grey3} fontSize="12px" margin="40px 20px 0px 20px">
         추가할 플립 선택
       </FolderNameConditionText>
@@ -170,7 +141,7 @@ const GroupPlus = () => {
       )}
       {/* 카테고리 생성 버튼 */}
       <UnFixedButton
-        $positive={categoryName.length >= 2 && categoryName.length <= 4 ? true : false}
+        $positive={groupName.length >= 2 && groupName.length <= 4 ? true : false}
         func={makeCategory}
         func2={() => console.log('그룹 생성 실패')}
         text="그룹 추가하기"
