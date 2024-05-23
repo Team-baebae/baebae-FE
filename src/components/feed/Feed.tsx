@@ -21,6 +21,7 @@ import { UserInfoStateProps, isMineState, ownerUserData, userInfoState } from '@
 import Plus from '@/assets/main/Plus.svg'
 import Pencil from '@/assets/main/Pencil.svg'
 import Trash from '@/assets/main/Trash.svg'
+import GroupList from '../category/GroupList'
 
 interface Props {
   username: string | undefined
@@ -130,11 +131,12 @@ const Feed = ({ username }: Props) => {
       },
     })
   }
+  const [currentPage, setCurrentPage] = useState(0)
+
   // 해당카테고리에 해당하는 피드리스트 받기
   const getFeeds = useCallback(async () => {
-    const page = 0
     try {
-      await getFeedsApi(ownerUserInfo.memberId, selectedCategoryId, page).then((res) => {
+      await getFeedsApi(ownerUserInfo.memberId, selectedCategoryId, currentPage).then((res) => {
         console.log(res)
         setFeedList(res.data.content)
       })
@@ -154,57 +156,17 @@ const Feed = ({ username }: Props) => {
   return (
     <Container>
       {/* 카테고리 부분 */}
-      <TopComponent>
-        <Swiper
-          style={{ width: '100%' }}
-          slidesPerView={6.1}
-          onSwiper={(swiper) => console.log(swiper)}
-          onSlideChange={() => console.log('slide change')}
-        >
-          {categories.map((item) => {
-            return (
-              <SwiperSlide key={item.categoryId}>
-                {/* 각자의 카테고리 */}
-                <GroupWrapper>
-                  <GroupImgWrapper
-                    onClick={() => {
-                      setSelectedCategoryId(item.categoryId)
-                      setSelectedCategoryImage(item.categoryImage)
-                      setSelectedCategoryGroupName(item.categoryName)
-                      setSelectedCategoryAnswerIds(item.answerIds)
-                    }}
-                    selected={selectedCategoryId === item.categoryId}
-                    {...bind(item.categoryId, item.categoryImage, item.categoryName, item.answerIds)}
-                    onContextMenu={(e) => {
-                      e.preventDefault()
-                      e.stopPropagation()
-                    }}
-                  >
-                    <ImageWrapper>
-                      <GroupImg src={item.categoryImage} />
-                    </ImageWrapper>
-                  </GroupImgWrapper>
-                  <GroupName selected={selectedCategoryId === item.categoryId}>{item.categoryName}</GroupName>
-                </GroupWrapper>
-              </SwiperSlide>
-            )
-          })}
-          {/* 계정주인 일경우 카테고리 추가버튼 */}
-          {isMyPage && (
-            <SwiperSlide>
-              <GroupWrapper>
-                <GroupPlusImg
-                  onClick={() => {
-                    navigate('/groups/new')
-                  }}
-                  src={Plus}
-                />
-                <GroupName>추가</GroupName>
-              </GroupWrapper>
-            </SwiperSlide>
-          )}
-        </Swiper>
-      </TopComponent>
+      <GroupList
+        categories={categories}
+        setCurrentPage={setCurrentPage}
+        selectedCategoryId={selectedCategoryId}
+        setSelectedCategoryId={setSelectedCategoryId}
+        setSelectedCategoryImage={setSelectedCategoryImage}
+        setSelectedCategoryGroupName={setSelectedCategoryGroupName}
+        setSelectedCategoryAnswerIds={setSelectedCategoryAnswerIds}
+        bind={bind}
+        isMyPage={isMyPage}
+      />
       {/* 해당 카테고리 피드 리스트 부분 */}
       {feedList.length > 0 ? (
         <FeedList
@@ -251,7 +213,7 @@ export default Feed
 const Container = styled.div`
   display: flex;
   flex-direction: column;
-  margin: 20px;
+  /* margin: 20px; */
   gap: 14px;
 `
 
