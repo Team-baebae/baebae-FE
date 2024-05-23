@@ -1,6 +1,6 @@
 import styled from 'styled-components'
 import { ChangeEvent, MouseEvent, useCallback, useEffect, useState } from 'react'
-import { useRecoilValue } from 'recoil'
+import { useRecoilState, useRecoilValue } from 'recoil'
 import { useNavigate } from 'react-router-dom'
 import Filter from 'badwords-ko'
 import { toast, Flip } from 'react-toastify'
@@ -26,7 +26,7 @@ interface AskProps {
 const Ask = ({ isMine, username }: AskProps) => {
   const navigate = useNavigate()
   // 로그인한 사람의 데이터 정보
-  const loginUserInfo = useRecoilValue(userInfoState)
+  const [loginUserInfo, setLoginUserInfo] = useRecoilState(userInfoState)
   // 리코일 계정주인 데이터 정보
   const userInfo = useRecoilValue(ownerUserData)
   //계정 주인의 memberId
@@ -35,8 +35,6 @@ const Ask = ({ isMine, username }: AskProps) => {
 
   // 로그인 된 상태인지 확인
   const isLoggedIn = useRecoilValue(isLoggedInState)
-  // 로그인 되었다면 로그인 된 사람의 어세스토큰
-  const writerToken = useRecoilValue(userInfoState).accessToken
 
   // 답변을 기다리는 질문 개수와 클릭 시
   const [askCount, setAskCount] = useState<number>(0)
@@ -46,14 +44,18 @@ const Ask = ({ isMine, username }: AskProps) => {
 
   // 질문 개수 받기
   const getQuestionLength = useCallback(async () => {
-    await getQuestionLengthApi(loginUserInfo.accessToken, loginUserInfo.memberId).then((res) => {
+    await getQuestionLengthApi(
+      loginUserInfo.accessToken,
+      loginUserInfo.memberId,
+      loginUserInfo.refreshToken,
+      setLoginUserInfo,
+    ).then((res) => {
       setAskCount(res)
     })
   }, [username])
 
   useEffect(() => {
     isMine === true && getQuestionLength()
-    console.log(`나의 페이지인가? : ${isMine}`)
   }, [getQuestionLength])
 
   // 모달 버튼 클릭 유무를 저장할 state (로그인 안했을 시 나오는 모달)
@@ -85,19 +87,40 @@ const Ask = ({ isMine, username }: AskProps) => {
     e.preventDefault()
     const filteredText = filter.clean(text)
     const questionData = { content: filteredText, nickname: writer, profileOnOff: isProfileOn }
-    console.log(questionData)
-    setText('')
-    setWriter('')
-    setIsProfileOn(false)
-    // 비로그인인 경우 모달창
-    !isLoggedIn && setShowModal(true)
+
     // 로그인인 경우 질문 전송
-    isLoggedIn &&
-      postQuestionApi(loginUserInfo.memberId, receiverId, questionData, writerToken).then((status) => {
-        status == 201
-          ? toast('질문 완료!') && getQuestionLength()
-          : toast('[전송 오류] 잠시 후 다시 시도해 주세요') && getQuestionLength()
-      })
+    if (isLoggedIn) {
+      if (questionData.content === '' && questionData.nickname === '') {
+        toast('질문 및 작성자를 입력해주세요')
+      } else if (questionData.content === '' && questionData.nickname !== '') {
+        toast('질문을 입력해주세요')
+      } else if (questionData.content !== '' && questionData.nickname === '') {
+        toast('작성자명을 입력해주세요')
+      } else {
+        setText('')
+        setWriter('')
+        setIsProfileOn(false)
+        postQuestionApi(
+          loginUserInfo.memberId,
+          receiverId,
+          questionData,
+          loginUserInfo.accessToken,
+          loginUserInfo.refreshToken,
+          setLoginUserInfo,
+        ).then((status) => {
+          status == 201
+            ? toast('질문 완료!') && getQuestionLength()
+            : toast('[전송 오류] 잠시 후 다시 시도해 주세요') && getQuestionLength()
+        })
+      }
+    }
+    // 비로그인인 경우 모달창
+    else {
+      setText('')
+      setWriter('')
+      setIsProfileOn(false)
+      setShowModal(true)
+    }
   }
 
   return (

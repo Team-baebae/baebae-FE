@@ -1,6 +1,6 @@
 import styled from 'styled-components'
 import { useEffect, useState } from 'react'
-import { useRecoilValue } from 'recoil'
+import { useRecoilState } from 'recoil'
 import { useNavigate } from 'react-router-dom'
 import Header from '@/components/common/Header'
 import NoFlip from '@/components/main/NoFlip'
@@ -20,7 +20,7 @@ const QuestionList = () => {
   const navigate = useNavigate()
 
   // 리코일 로그인 한 유저정보
-  const userData = useRecoilValue(userInfoState)
+  const [userData, setUserData] = useRecoilState(userInfoState)
   const myMemberId = userData.memberId
   const accessToken = userData.accessToken
 
@@ -35,8 +35,7 @@ const QuestionList = () => {
   const [questions, setQuestions] = useState<QuestionProps[]>([])
   // 질문리스트 받기
   const getQuestionList = async (page: number) => {
-    await getQuestionsApi(myMemberId, page, accessToken).then((result) => {
-      console.log(result)
+    await getQuestionsApi(myMemberId, page, accessToken, userData.refreshToken, setUserData).then((result) => {
       if (result.length > 0) {
         // 새로운 데이터가 있을 경우
         if (currentPage === 0) {
@@ -47,7 +46,6 @@ const QuestionList = () => {
           setQuestions((prevData) => [...prevData, ...result])
         }
         setCurrentPage(page + 1)
-        console.log(result)
         if (result.length < 8) {
           // 더 이상 데이터가 없을 경우
           setHasMore(false) // 무한 스크롤 중단
@@ -61,8 +59,7 @@ const QuestionList = () => {
   }
   // 질문 총 개수 받기 (무한 스크롤 때문에 따로 받음)
   const getQuestionNumber = () => {
-    getQuestionLengthApi(accessToken, myMemberId).then((result) => {
-      console.log(result)
+    getQuestionLengthApi(accessToken, myMemberId, userData.refreshToken, setUserData).then((result) => {
       setAskCount(result)
     })
   }
@@ -85,7 +82,7 @@ const QuestionList = () => {
       html.offsetHeight,
     )
     const windowBottom = windowHeight + window.pageYOffset
-    if (windowBottom >= docHeight && !loading && hasMore && !scrollLoading) {
+    if (windowBottom >= docHeight - 20 && !loading && hasMore && !scrollLoading) {
       setScrollLoading(true)
       getQuestionList(currentPage)
     }
@@ -111,7 +108,7 @@ const QuestionList = () => {
   // 질문 삭제
   const [deleteId, setDeleteId] = useState<number>(-1)
   const deleteQuestion = (questionId: number) => {
-    deleteQuestionsApi(questionId, accessToken).then(() => {
+    deleteQuestionsApi(questionId, accessToken, userData.refreshToken, setUserData).then(() => {
       const updatedQuestions = questions.filter((question) => question.questionId !== questionId)
       setQuestions(updatedQuestions)
       setAskCount(askCount - 1)
@@ -124,7 +121,6 @@ const QuestionList = () => {
     })
   }
   const clickDeletion = (questionId: number) => {
-    console.log(questionId)
     setDeleteId(questionId)
     setShowModal(true)
   }

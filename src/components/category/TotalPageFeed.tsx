@@ -8,7 +8,6 @@ import { BottomSheet } from 'react-spring-bottom-sheet'
 import html2canvas from 'html2canvas'
 import BackFeedContents from '@/components/feed/BackFeedContents'
 import FrontFeedContents from '@/components/feed/FrontFeedContents'
-import TelePathyMotion from '@/components/feed/TelepathyMotion'
 import { TotalPageFeedProps } from '@/components/category/types'
 import { StyledToastContainer } from '@/components/toast/toastStyle'
 import { colors } from '@/styles/colors'
@@ -53,7 +52,7 @@ const TotalPageFeed = (props: TotalPageFeedProps) => {
   const clickModal = () => setShowModal(!showModal)
 
   // 리코일 로그인한 유저의 유저정보
-  const userInfo = useRecoilValue(userInfoState)
+  const [userInfo, setUserInfo] = useRecoilState(userInfoState)
   // 리코일 내 페이지인지 여부 확인
   const isMyPage = useRecoilValue(isMineState)
   // 어느면을 바라볼지 state
@@ -107,16 +106,11 @@ const TotalPageFeed = (props: TotalPageFeedProps) => {
   const clickTelepathy = (e: React.MouseEvent<HTMLDivElement>) => {
     e.stopPropagation()
     if (isLoggedIn) {
-      !giveTelepathy && setPopLottie(true)
-      setGiveTelepathy(!giveTelepathy)
-      setTimeout(() => {
-        setPopLottie(false)
-      }, 2350)
+      postReact('CONNECT')
     } else {
       setShowModal(true)
     }
   }
-  const [popLottie, setPopLottie] = useState<boolean>(false)
 
   //트랙 미리듣기 (한번에 여러개의 오디오가 드리지 않게 설정)
   const handlePreview = (previewUrl: string) => {
@@ -140,20 +134,30 @@ const TotalPageFeed = (props: TotalPageFeedProps) => {
     }
   }
 
+  useEffect(() => {
+    return () => {
+      if (currentAudio) {
+        currentAudio.pause()
+        setIsPlaying(false)
+      }
+    }
+  }, [currentAudio])
+
   // 피드 삭제
   const deleteFeed = async () => {
     try {
-      await deleteFeedApi(userInfo.accessToken, selectedFeed.answerId).then((res) => {
-        console.log(res)
-        if (res.status === 204) {
-          // var categoryIdValue = 'yourCategoryId' // 여기에 categoryId 값을 할당합니다.
-          // var currentPageUrl = window.location.href
-          // var stateObject = { page: '/groups', categoryId: categoryIdValue }
-          // window.history.replaceState(stateObject, '', currentPageUrl)
-          window.location.reload()
-          toast('플립이 삭제되었습니다!')
-        }
-      })
+      await deleteFeedApi(userInfo.accessToken, selectedFeed.answerId, userInfo.refreshToken, setUserInfo).then(
+        (res: any) => {
+          if (res.status === 204) {
+            // var categoryIdValue = 'yourCategoryId' // 여기에 categoryId 값을 할당합니다.
+            // var currentPageUrl = window.location.href
+            // var stateObject = { page: '/groups', categoryId: categoryIdValue }
+            // window.history.replaceState(stateObject, '', currentPageUrl)
+            window.location.reload()
+            toast('플립이 삭제되었습니다!')
+          }
+        },
+      )
     } catch (err) {
       console.log(err)
     }
@@ -168,12 +172,17 @@ const TotalPageFeed = (props: TotalPageFeedProps) => {
   // 해당 피드에 대한 반응 여부 확인
   const getIsReacted = useCallback(async () => {
     try {
-      await getIsReactedApi(userInfo.accessToken, selectedFeed.answerId, userInfo.memberId).then((res) => {
+      await getIsReactedApi(
+        userInfo.accessToken,
+        selectedFeed.answerId,
+        userInfo.memberId,
+        userInfo.refreshToken,
+        setUserInfo,
+      ).then((res: any) => {
         setGiveHeart(res.data.HEART)
         setGiveCurious(res.data.CURIOUS)
         setGiveSad(res.data.SAD)
         setGiveTelepathy(res.data.CONNECT)
-        console.log(res)
       })
     } catch (err) {
       console.log(err)
@@ -184,7 +193,6 @@ const TotalPageFeed = (props: TotalPageFeedProps) => {
   const getReactCount = useCallback(async () => {
     try {
       await getReactCountApi(selectedFeed.answerId).then((res) => {
-        console.log(res)
         setHeartCount(res.data.heartCount)
         setCuriousCount(res.data.curiousCount)
         setSadCount(res.data.sadCount)
@@ -198,7 +206,14 @@ const TotalPageFeed = (props: TotalPageFeedProps) => {
   // 해당피드에 반응 남기기
   const postReact = async (reaction: string) => {
     try {
-      await postReactApi(userInfo.accessToken, selectedFeed.answerId, userInfo.memberId, reaction).then((res) => {
+      await postReactApi(
+        userInfo.accessToken,
+        selectedFeed.answerId,
+        userInfo.memberId,
+        reaction,
+        userInfo.refreshToken,
+        setUserInfo,
+      ).then((res: any) => {
         setHeartCount(res.data.heartCount)
         setCuriousCount(res.data.curiousCount)
         setSadCount(res.data.sadCount)
@@ -206,7 +221,14 @@ const TotalPageFeed = (props: TotalPageFeedProps) => {
         if (reaction === 'HEART') setGiveHeart(res.data.clicked)
         else if (reaction === 'CURIOUS') setGiveCurious(res.data.clicked)
         else if (reaction === 'SAD') setGiveSad(res.data.clicked)
-        else if (reaction === 'CONNECT') setGiveTelepathy(res.data.clicked)
+        else if (reaction === 'CONNECT') {
+          !giveTelepathy && props.setPopLottie(true)
+          setGiveTelepathy(!giveTelepathy)
+          setTimeout(() => {
+            props.setPopLottie(false)
+          }, 2350)
+          setGiveTelepathy(res.data.clicked)
+        }
       })
     } catch (err) {
       console.log(err)
@@ -278,7 +300,6 @@ const TotalPageFeed = (props: TotalPageFeedProps) => {
     const blob = new Blob([u8arr], { type: mime })
     const file = new File([blob], filename, { type: mime })
     setImageFile(file) // 파일 객체 상태 업데이트
-    console.log(file)
     if (file) shareKakao(file)
   }
 
@@ -295,7 +316,6 @@ const TotalPageFeed = (props: TotalPageFeedProps) => {
     Kakao.cleanup()
     Kakao.init(javascriptKey)
     // 잘 적용되면 true
-    console.log(Kakao.isInitialized())
   }, [])
 
   // 카카오로 공유
@@ -501,9 +521,6 @@ const TotalPageFeed = (props: TotalPageFeedProps) => {
       </AnimatePresence>
       {/* 로그인 안하고 질문 시 나오는 모달 */}
       {showModal && <LoginModal content={`앗!\n로그인을 해야 반응을 남길 수 있어요😥`} clickModal={clickModal} />}
-
-      {/* 통했당 누를 시 통했당 로띠 애니메이션 */}
-      {popLottie && <TelePathyMotion />}
 
       <StyledToastContainer
         position="bottom-center"

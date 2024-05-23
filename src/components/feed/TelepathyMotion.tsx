@@ -18,7 +18,7 @@ const TelePathyMotion = () => {
       <AnimatePresence>
         <SearchModalBox initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} style={{ zIndex: 0 }}>
           <Lottie
-            style={{ position: 'absolute', height: 630, width: 630, zIndex: 10 }}
+            style={{ position: 'absolute', height: 630, width: 630, zIndex: 999 }}
             animationData={TelepathyMotion}
           />
           <ModalWrapper>

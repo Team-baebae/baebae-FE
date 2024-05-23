@@ -1,6 +1,6 @@
 import styled from 'styled-components'
 import { useState } from 'react'
-import { useRecoilValue } from 'recoil'
+import { useRecoilState } from 'recoil'
 import { useLocation, useNavigate } from 'react-router-dom'
 import Question from '@/components/answer/Question'
 import { UnFixedButton } from '@/components/common/Button'
@@ -23,7 +23,7 @@ const EditAnswer = () => {
   const selectedFeed = location.state?.selectedFeed
 
   // 리코일 로그인한 유저정보
-  const userInfo = useRecoilValue(userInfoState)
+  const [userInfo, setUserInfo] = useRecoilState(userInfoState)
 
   // 이미지 파일 선택 핸들러
   const [imageFile, setImageFile] = useState<File | undefined>(undefined)
@@ -39,7 +39,6 @@ const EditAnswer = () => {
             type: 'image/jpeg',
             lastModified: new Date().getTime(),
           })
-          console.log(file)
           setImageUrl(URL.createObjectURL(file))
           setImageFile(file)
         })
@@ -71,24 +70,30 @@ const EditAnswer = () => {
   // 답변하기 버튼 누를 시
   const onClickModifyBtn = async () => {
     try {
-      await modifyFeedApi(userInfo.accessToken, selectedFeed.answerId, imageFile, {
-        questionId: selectedFeed.questionId,
-        nickname: selectedFeed.nickname,
-        profileOnOff: selectedFeed.profileOnOff,
-        content: content,
-        linkAttachments: linkAttachments,
-        musicName: musicName,
-        musicSinger: musicSinger,
-        musicAudioUrl: musicAudio,
-        imageUrl: imageUrl,
-        updateImage: false,
-      }).then((res) => {
+      await modifyFeedApi(
+        userInfo.accessToken,
+        selectedFeed.answerId,
+        imageFile,
+        {
+          questionId: selectedFeed.questionId,
+          nickname: selectedFeed.nickname,
+          profileOnOff: selectedFeed.profileOnOff,
+          content: content,
+          linkAttachments: linkAttachments,
+          musicName: musicName,
+          musicSinger: musicSinger,
+          musicAudioUrl: musicAudio,
+          imageUrl: imageUrl,
+          updateImage: false,
+        },
+        userInfo.refreshToken,
+        setUserInfo,
+      ).then((res) => {
         navigate(`/${userInfo.nickname}`, {
           state: {
             defaultCategory: 1,
           },
         })
-        console.log(res)
       })
     } catch (err) {
       console.log(err)

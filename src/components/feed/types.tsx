@@ -30,6 +30,7 @@ export interface FeedListProps {
 export interface ModalProps {
   setShowModal: any
   showModal: boolean
+  flipPlane: boolean
   selectedFeed: FeedProps
   feedList: FeedProps[]
   setFeedList: any

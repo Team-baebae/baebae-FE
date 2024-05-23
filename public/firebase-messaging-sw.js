@@ -15,14 +15,6 @@ firebase.initializeApp(firebaseConfig)
 
 const messaging = firebase.messaging()
 
-messaging.onBackgroundMessage((payload) => {
-  const notificationTitle = payload.title
-  const notificationOptions = {
-    body: payload.body,
-  }
-  self.registration.showNotification(notificationTitle, notificationOptions)
-})
-
 const offlineFallbackPage = 'offline.html'
 const sCacheName = 'practice-pwa' //캐시 이름 선언
 const aFilesToCache = ['./', './index.html', './manifest.json', './icon-main.png'] //캐시할 파일 선언

@@ -33,7 +33,6 @@ const MainProfile = ({ nickname, imageUrl }: MainProfileProps) => {
     Kakao.cleanup()
     Kakao.init(javascriptKey)
     // 잘 적용되면 true
-    console.log(Kakao.isInitialized())
   }, [])
 
   const shareKakao = () => {

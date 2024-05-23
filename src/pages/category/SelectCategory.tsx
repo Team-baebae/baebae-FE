@@ -1,5 +1,5 @@
 import styled from 'styled-components'
-import { useRecoilValue } from 'recoil'
+import { useRecoilState } from 'recoil'
 import { useState } from 'react'
 import { useLocation, useNavigate, useParams } from 'react-router-dom'
 import Header from '@/components/common/Header'
@@ -24,13 +24,18 @@ const SelectCategory = () => {
   const [selectedCategoryId, setSelectedCategoryId] = useState<number>(0)
 
   // 리코일 로그인하 유저정보
-  const userInfo = useRecoilValue<UserInfoStateProps>(userInfoState)
+  const [userInfo, setUserInfo] = useRecoilState<UserInfoStateProps>(userInfoState)
 
   // 작성한 답변 카테고리와 연결
   const connetGroup = async () => {
     try {
-      await connectGroupApi(userInfo.accessToken, selectedCategoryId, answerId).then((res) => {
-        console.log(res)
+      await connectGroupApi(
+        userInfo.accessToken,
+        selectedCategoryId,
+        answerId,
+        userInfo.refreshToken,
+        setUserInfo,
+      ).then((res) => {
         navigate(`/questions/${questionId}/complete`)
       })
     } catch (err) {

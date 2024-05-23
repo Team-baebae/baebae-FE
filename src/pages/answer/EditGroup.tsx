@@ -1,5 +1,5 @@
 import styled from 'styled-components'
-import { useRecoilValue } from 'recoil'
+import { useRecoilState } from 'recoil'
 import { useEffect, useState } from 'react'
 import { useLocation, useNavigate } from 'react-router-dom'
 import Header from '@/components/common/Header'
@@ -22,7 +22,7 @@ const EditGroup = () => {
   const answerId = location.state?.answerId
 
   // 리코일 로그인하 유저정보
-  const userInfo = useRecoilValue<UserInfoStateProps>(userInfoState)
+  const [userInfo, setUserInfo] = useRecoilState<UserInfoStateProps>(userInfoState)
 
   // 해당 피드가 속한 카테고리 리스트
   const [selectedCategoryIds, setSelectedCategoryIds] = useState<number[]>([])
@@ -30,12 +30,16 @@ const EditGroup = () => {
   // 해당 피드가 속한 카테고리 리스트 받기
   const getCategoryListOfFeed = async () => {
     try {
-      const res = await getCategoryListOfFeedApi(userInfo.accessToken, answerId)
+      const res: any = await getCategoryListOfFeedApi(
+        userInfo.accessToken,
+        answerId,
+        userInfo.refreshToken,
+        setUserInfo,
+      )
       const categoryList = res.data
       const newSelectedCategoryIds = categoryList.map((category: ContainedGroupProps) => category.categoryId)
       // 선택된 카테고리 Id 배열 업데이트
       setSelectedCategoryIds(newSelectedCategoryIds)
-      console.log(newSelectedCategoryIds)
     } catch (err) {
       console.log(err)
     }
@@ -43,8 +47,13 @@ const EditGroup = () => {
 
   const modifyCategoryListOfFeed = async () => {
     try {
-      await modifyCategoryListOfFeedApi(userInfo.accessToken, answerId, selectedCategoryIds).then((res) => {
-        console.log(res)
+      await modifyCategoryListOfFeedApi(
+        userInfo.accessToken,
+        answerId,
+        selectedCategoryIds,
+        userInfo.refreshToken,
+        setUserInfo,
+      ).then((res) => {
         navigate(`/${userInfo.nickname}`, {
           state: {
             defaultCategory: 1,
@@ -59,10 +68,6 @@ const EditGroup = () => {
   useEffect(() => {
     getCategoryListOfFeed()
   }, [])
-
-  useEffect(() => {
-    console.log(selectedCategoryIds)
-  }, [selectedCategoryIds])
 
   return (
     <Container>

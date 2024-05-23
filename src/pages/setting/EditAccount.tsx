@@ -38,7 +38,6 @@ const EditAccount = () => {
             type: 'image/jpeg',
             lastModified: new Date().getTime(),
           })
-          console.log(file)
           setProfileImg(URL.createObjectURL(file)) // 미리보기를 위해 파일 URL 저장
           setProfileFile(file)
           setIsEditProfileImg(true)
@@ -54,9 +53,21 @@ const EditAccount = () => {
   // 유저 프로필 사진 업데이트
   const updateUserProfile = async (file: File) => {
     try {
-      await updateUserProfileApi(userInfo.accessToken, userInfo.memberId, file).then((res) => {
+      await updateUserProfileApi(
+        userInfo.accessToken,
+        userInfo.memberId,
+        file,
+        userInfo.refreshToken,
+        setUserInfo,
+      ).then((res: any) => {
         if (res.status === 200) {
-          updateUserNicknameApi(userInfo.accessToken, userInfo.memberId, nickname).then(() => {
+          updateUserNicknameApi(
+            userInfo.accessToken,
+            userInfo.memberId,
+            nickname,
+            userInfo.refreshToken,
+            setUserInfo,
+          ).then(() => {
             if (res.status === 200) {
               setUserInfo({
                 ...userInfo,
@@ -98,7 +109,6 @@ const EditAccount = () => {
       setIsClickDuplicate(true)
       if (isValid) {
         await isExistingNicknameApi(nickname).then((res) => {
-          console.log(res)
           if (res.data.isExisting) {
             setIsDuplicate(true)
           } else {
@@ -114,7 +124,13 @@ const EditAccount = () => {
   // 유저 닉네임 수정
   const updateUserNickname = async () => {
     try {
-      await updateUserNicknameApi(userInfo.accessToken, userInfo.memberId, nickname).then((res) => {
+      await updateUserNicknameApi(
+        userInfo.accessToken,
+        userInfo.memberId,
+        nickname,
+        userInfo.refreshToken,
+        setUserInfo,
+      ).then((res: any) => {
         if (res.status === 200) {
           setUserInfo((prevUserInfo) => ({
             ...prevUserInfo,
