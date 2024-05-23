@@ -121,7 +121,9 @@ const GroupImgWrapper = styled.div<{ selected: boolean }>`
   border-radius: 12px;
   border: ${(props) => (props.selected ? `1px solid ${colors.grey1}` : `1px solid ${colors.grey5}`)};
   background-color: ${colors.white};
+
   user-select: none;
+  z-index: -3;
 `
 const ImageWrapper = styled.div`
   position: relative;
@@ -131,6 +133,7 @@ const ImageWrapper = styled.div`
   border: 0.8px solid ${colors.grey6};
   user-select: none;
   pointer-events: none;
+  z-index: -3;
 `
 const GroupImg = styled.img`
   position: absolute;
