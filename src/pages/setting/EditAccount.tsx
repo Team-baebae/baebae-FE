@@ -2,14 +2,14 @@ import styled from 'styled-components'
 import { useNavigate } from 'react-router-dom'
 import { useRecoilState } from 'recoil'
 import { ChangeEvent, useState } from 'react'
-import heic2any from 'heic2any'
 import { BottomButton } from '@/components/common/Button'
 import Header from '@/components/common/Header'
 import IsValidNicknameText from '@/components/common/IsValidNicknameText'
 import { colors } from '@/styles/colors'
 import { UserInfoStateProps, userInfoState } from '@/context/Atoms'
 import { isExistingNicknameApi, updateUserNicknameApi, updateUserProfileApi } from '@/apis/UserApi'
-import EditProfile from '@/components/setting/EditProfile'
+import DefaultImg from '@/assets/main/DefaultImage.png'
+import heic2any from 'heic2any'
 
 // 계정 정보 수정 페이지
 const EditAccount = () => {
@@ -143,7 +143,21 @@ const EditAccount = () => {
       <Header text="내 프로필 수정" background={colors.grey7} />
 
       {/* 유저 프로필 수정 부분*/}
-      <EditProfile profileImg={profileImg} handleImageChange={handleImageChange} />
+      <ProfileImageWrapper>
+        {profileImg === null ? (
+          <ImageWrapper>
+            <ProfileImage src={DefaultImg} />
+          </ImageWrapper>
+        ) : (
+          <ImageWrapper>
+            <ProfileImage src={profileImg} />
+          </ImageWrapper>
+        )}
+        <label htmlFor="file">
+          <EditButton>사진 수정하기</EditButton>
+        </label>
+        <input type="file" name="file" id="file" style={{ display: 'none' }} onChange={handleImageChange} />
+      </ProfileImageWrapper>
 
       {/* 닉네임 수정 부분 */}
       <SignUpNicknameLabel>아이디</SignUpNicknameLabel>
@@ -187,6 +201,45 @@ const Container = styled.div`
   align-items: center;
   width: 100%;
   height: 100%;
+`
+
+const ProfileImageWrapper = styled.div`
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin: 40px 20px 0px;
+  gap: 12px;
+`
+const ImageWrapper = styled.div`
+  position: relative;
+  width: 100px;
+  height: 100px;
+  border-radius: 59px;
+  background-color: ${colors.grey2};
+`
+const ProfileImage = styled.img`
+  position: absolute;
+  top: 0;
+  left: 0;
+  border-radius: 59px;
+  transform: translate(50, 50);
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  margin: auto;
+`
+const EditButton = styled.div`
+  padding: 4px 12px;
+  border-radius: 100px;
+  border: 1px solid ${colors.grey1};
+  background-color: #fff;
+  color: ${colors.grey1};
+  font-family: Pretendard;
+  font-size: 12px;
+  font-weight: 500;
+  line-height: 18px;
+  letter-spacing: -0.48px;
+  cursor: pointer;
 `
 
 // 닉네임 수정 부분
