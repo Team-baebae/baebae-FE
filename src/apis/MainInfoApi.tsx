@@ -1,4 +1,4 @@
-import { flipitAxios } from './apis'
+import { flipitAxios, postRefreshToken } from './apis'
 
 interface QuestionProps {
   content: string
@@ -65,18 +65,31 @@ export const postQuestionApi = async (
   }
 }
 
-export const getQuestionLengthApi = async (accessToken: string, memberId: number) => {
-  try {
+export const getQuestionLengthApi = async (
+  accessToken: string,
+  memberId: number,
+  refreshToken: string,
+  setUserInfo: any,
+) => {
+  const makeRequest = async (token: string) => {
     let API = `/api/questions/unanswered/count/${memberId}`
     const response = await flipitAxios.get(API, {
-      params: memberId,
       headers: {
-        Authorization: `Bearer ${accessToken}`,
+        Authorization: `Bearer ${token}`,
       },
     })
     return response.data
-  } catch (error) {
+  }
+
+  try {
+    return await makeRequest(accessToken)
+  } catch (error: any) {
     console.error(error)
+    if (error.response.data.errorCode === 'T-001') {
+      const newAccessToken = await postRefreshToken(refreshToken, setUserInfo)
+      console.log('new' + newAccessToken)
+      return await makeRequest(newAccessToken)
+    }
   }
 }
 
