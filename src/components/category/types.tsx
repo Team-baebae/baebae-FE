@@ -36,6 +36,8 @@ export interface TotalPageFeedsProps {
   selectedCategoryImage: string
   selectedCategoryGroupName: string
   selectedCategoryAnswerIds: number[]
+  popLottie: boolean
+  setPopLottie: any
 }
 
 // TotalPageFeeds에 있는
@@ -49,6 +51,8 @@ export interface TotalPageFeedProps {
   setCurrentAudio: any
   isPlaying: boolean
   setIsPlaying: any
+  popLottie: boolean
+  setPopLottie: any
 }
 
 // 피딍 그룹 수정시 나오는 각자의 그룹의 props

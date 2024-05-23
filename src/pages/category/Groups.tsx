@@ -22,6 +22,7 @@ import plus from '@/assets/main/Plus.svg'
 import pencil from '@/assets/main/Pencil.svg'
 import trash from '@/assets/main/Trash.svg'
 import Loading from '@/components/common/Loading'
+import TelePathyMotion from '@/components/feed/TelepathyMotion'
 
 // 해당 카테고리 피드 전체보기 페이지
 const Groups = () => {
@@ -125,6 +126,8 @@ const Groups = () => {
       console.log(err)
     }
   }
+
+  const [popLottie, setPopLottie] = useState<boolean>(false)
 
   useEffect(() => {
     getCategories()
@@ -269,8 +272,12 @@ const Groups = () => {
         selectedCategoryImage={selectedCategoryImage}
         selectedCategoryGroupName={selectedCategoryGroupName}
         selectedCategoryAnswerIds={selectedCategoryAnswerIds}
+        popLottie={popLottie}
+        setPopLottie={setPopLottie}
       />
 
+      {/* 통했당 누를 시 통했당 로띠 애니메이션 */}
+      {popLottie && <TelePathyMotion />}
       {scrollLoading && <div>loading...</div>}
       <StyledToastContainer
         position="bottom-center"

@@ -112,7 +112,6 @@ const TotalPageFeed = (props: TotalPageFeedProps) => {
       setShowModal(true)
     }
   }
-  const [popLottie, setPopLottie] = useState<boolean>(false)
 
   //트랙 미리듣기 (한번에 여러개의 오디오가 드리지 않게 설정)
   const handlePreview = (previewUrl: string) => {
@@ -212,10 +211,10 @@ const TotalPageFeed = (props: TotalPageFeedProps) => {
         else if (reaction === 'CURIOUS') setGiveCurious(res.data.clicked)
         else if (reaction === 'SAD') setGiveSad(res.data.clicked)
         else if (reaction === 'CONNECT') {
-          !giveTelepathy && setPopLottie(true)
+          !giveTelepathy && props.setPopLottie(true)
           setGiveTelepathy(!giveTelepathy)
           setTimeout(() => {
-            setPopLottie(false)
+            props.setPopLottie(false)
           }, 2350)
           setGiveTelepathy(res.data.clicked)
         }
@@ -513,9 +512,6 @@ const TotalPageFeed = (props: TotalPageFeedProps) => {
       </AnimatePresence>
       {/* 로그인 안하고 질문 시 나오는 모달 */}
       {showModal && <LoginModal content={`앗!\n로그인을 해야 반응을 남길 수 있어요😥`} clickModal={clickModal} />}
-
-      {/* 통했당 누를 시 통했당 로띠 애니메이션 */}
-      {popLottie && <TelePathyMotion />}
 
       <StyledToastContainer
         position="bottom-center"
