@@ -47,7 +47,7 @@ const QuestionList = () => {
           setQuestions((prevData) => [...prevData, ...result])
         }
         setCurrentPage(page + 1)
-        console.log(result)
+        console.log(result.length)
         if (result.length < 8) {
           // 더 이상 데이터가 없을 경우
           setHasMore(false) // 무한 스크롤 중단
@@ -85,7 +85,7 @@ const QuestionList = () => {
       html.offsetHeight,
     )
     const windowBottom = windowHeight + window.pageYOffset
-    if (windowBottom >= docHeight && !loading && hasMore && !scrollLoading) {
+    if (windowBottom >= docHeight - 20 && !loading && hasMore && !scrollLoading) {
       setScrollLoading(true)
       getQuestionList(currentPage)
     }
