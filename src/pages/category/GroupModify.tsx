@@ -1,6 +1,6 @@
 import styled from 'styled-components'
 import { useCallback, useEffect, useState } from 'react'
-import { useRecoilValue } from 'recoil'
+import { useRecoilState } from 'recoil'
 import heic2any from 'heic2any'
 import { useLocation, useNavigate } from 'react-router-dom'
 import GroupHeader from '@/components/common/GroupHeader'
@@ -20,7 +20,7 @@ const GroupModify = () => {
   const navigate = useNavigate()
 
   // 로그인 한 userInfo
-  const userInfo = useRecoilValue<UserInfoStateProps>(userInfoState)
+  const [userInfo, setUserInfo] = useRecoilState<UserInfoStateProps>(userInfoState)
 
   // 넘겨받은 category 정보 저장
   const location = useLocation()
@@ -83,7 +83,14 @@ const GroupModify = () => {
   // 카테고리 수정
   const modifyCategory = async () => {
     try {
-      await modifyCategoryApi(userInfo.accessToken, categoryId, groupName, selectedAnswerIds).then((res) => {
+      await modifyCategoryApi(
+        userInfo.accessToken,
+        categoryId,
+        groupName,
+        selectedAnswerIds,
+        userInfo.refreshToken,
+        setUserInfo,
+      ).then((res: any) => {
         console.log(res)
         console.log(redirectRoute)
         if (redirectRoute === 'feedTotal') {
@@ -111,7 +118,13 @@ const GroupModify = () => {
   // 카테고리 이미지 수정
   const updateDirectoryImg = async () => {
     try {
-      await updateCategoryImgApi(userInfo.accessToken, categoryId, groupImgFile).then((res) => {
+      await updateCategoryImgApi(
+        userInfo.accessToken,
+        categoryId,
+        groupImgFile,
+        userInfo.refreshToken,
+        setUserInfo,
+      ).then((res) => {
         console.log(res)
       })
     } catch (err) {

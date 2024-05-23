@@ -35,8 +35,6 @@ const Ask = ({ isMine, username }: AskProps) => {
 
   // 로그인 된 상태인지 확인
   const isLoggedIn = useRecoilValue(isLoggedInState)
-  // 로그인 되었다면 로그인 된 사람의 어세스토큰
-  const writerToken = useRecoilValue(userInfoState).accessToken
 
   // 답변을 기다리는 질문 개수와 클릭 시
   const [askCount, setAskCount] = useState<number>(0)
@@ -104,7 +102,14 @@ const Ask = ({ isMine, username }: AskProps) => {
         setText('')
         setWriter('')
         setIsProfileOn(false)
-        postQuestionApi(loginUserInfo.memberId, receiverId, questionData, writerToken).then((status) => {
+        postQuestionApi(
+          loginUserInfo.memberId,
+          receiverId,
+          questionData,
+          loginUserInfo.accessToken,
+          loginUserInfo.refreshToken,
+          setLoginUserInfo,
+        ).then((status) => {
           status == 201
             ? toast('질문 완료!') && getQuestionLength()
             : toast('[전송 오류] 잠시 후 다시 시도해 주세요') && getQuestionLength()

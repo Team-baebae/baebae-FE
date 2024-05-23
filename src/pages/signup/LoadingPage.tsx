@@ -15,7 +15,7 @@ const LoadingPage = () => {
   const Login = async () => {
     try {
       let fcmToken = await requestPermission()
-      postFCM(userInfo.memberId, userInfo.accessToken, fcmToken).then(() => {
+      postFCM(userInfo.memberId, userInfo.accessToken, fcmToken, userInfo.refreshToken, setUserInfo).then(() => {
         setUserInfo((prevUserInfo) => ({
           ...prevUserInfo,
           fcmToken: fcmToken,

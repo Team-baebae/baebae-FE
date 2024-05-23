@@ -1,6 +1,6 @@
 import styled from 'styled-components'
 import { useState } from 'react'
-import { useRecoilValue } from 'recoil'
+import { useRecoilState } from 'recoil'
 import { useLocation, useNavigate } from 'react-router-dom'
 import heic2any from 'heic2any'
 import Question from '@/components/answer/Question'
@@ -22,7 +22,7 @@ const Answer = () => {
 
   const question = location.state?.question
   // 리코일 로그인한 유저정보
-  const userInfo = useRecoilValue(userInfoState)
+  const [userInfo, setUserInfo] = useRecoilState(userInfoState)
 
   // 이미지 파일 선택 핸들러
   const [imageFile, setImageFile] = useState<File>()
@@ -70,16 +70,23 @@ const Answer = () => {
   // 답변하기 버튼 누를 시
   const onClickAnswerBtn = async () => {
     try {
-      await answerApi(userInfo.accessToken, userInfo.memberId, imageFile, {
-        questionId: question.questionId,
-        profileOnOff: question.profileOnOff,
-        content: content,
-        linkAttachments: linkAttachments,
-        musicName: musicName,
-        musicSinger: musicSinger,
-        musicAudioUrl: musicAudio,
-        updateImage: true,
-      }).then((res) => {
+      await answerApi(
+        userInfo.accessToken,
+        userInfo.memberId,
+        imageFile,
+        {
+          questionId: question.questionId,
+          profileOnOff: question.profileOnOff,
+          content: content,
+          linkAttachments: linkAttachments,
+          musicName: musicName,
+          musicSinger: musicSinger,
+          musicAudioUrl: musicAudio,
+          updateImage: true,
+        },
+        userInfo.refreshToken,
+        setUserInfo,
+      ).then((res: any) => {
         navigate(`/questions/${question.questionId}/group`, {
           state: {
             answerId: res.data.answerId,

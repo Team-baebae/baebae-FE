@@ -50,18 +50,28 @@ export const postQuestionApi = async (
   receiverId: number,
   question: QuestionProps,
   accessToken: string,
+  refreshToken: string,
+  setUserInfo: any,
 ) => {
-  try {
+  const makeRequest = async (token: string) => {
     let API = `/api/questions/sender/${senderId}/receiver/${receiverId}`
     const response = await flipitAxios.post(API, question, {
       params: { senderId: senderId, receiverId: receiverId },
       headers: {
-        Authorization: `Bearer ${accessToken}`,
+        Authorization: `Bearer ${token}`,
       },
     })
     return response.status
-  } catch (error) {
+  }
+  try {
+    return await makeRequest(accessToken)
+  } catch (error: any) {
     console.error(error)
+    if (error.response.data.errorCode === 'T-001') {
+      const newAccessToken = await postRefreshToken(refreshToken, setUserInfo)
+      console.log('new' + newAccessToken)
+      return await makeRequest(newAccessToken)
+    }
   }
 }
 
@@ -94,32 +104,59 @@ export const getQuestionLengthApi = async (
 }
 
 // 답변하지 않은 질문 조회 api -> pageable param 추가 필요
-export const getQuestionsApi = async (memberId: number, page: number, accessToken: string) => {
-  try {
+export const getQuestionsApi = async (
+  memberId: number,
+  page: number,
+  accessToken: string,
+  refreshToken: string,
+  setUserInfo: any,
+) => {
+  const makeRequest = async (token: string) => {
     let API = `/api/questions/unanswered/${memberId}?page=${page}&size=8`
     const response = await flipitAxios.get(API, {
       params: memberId,
       headers: {
-        Authorization: `Bearer ${accessToken}`,
+        Authorization: `Bearer ${token}`,
       },
     })
     return response.data
-  } catch (error) {
+  }
+  try {
+    return await makeRequest(accessToken)
+  } catch (error: any) {
     console.error(error)
+    if (error.response.data.errorCode === 'T-001') {
+      const newAccessToken = await postRefreshToken(refreshToken, setUserInfo)
+      console.log('new' + newAccessToken)
+      return await makeRequest(newAccessToken)
+    }
   }
 }
 
 // 질문 삭제 api
-export const deleteQuestionsApi = async (questionId: number, accessToken: string) => {
-  try {
+export const deleteQuestionsApi = async (
+  questionId: number,
+  accessToken: string,
+  refreshToken: string,
+  setUserInfo: any,
+) => {
+  const makeRequest = async (token: string) => {
     let API = `/api/questions/${questionId}`
     await flipitAxios.delete(API, {
       params: questionId,
       headers: {
-        Authorization: `Bearer ${accessToken}`,
+        Authorization: `Bearer ${token}`,
       },
     })
-  } catch (error) {
+  }
+  try {
+    return await makeRequest(accessToken)
+  } catch (error: any) {
     console.error(error)
+    if (error.response.data.errorCode === 'T-001') {
+      const newAccessToken = await postRefreshToken(refreshToken, setUserInfo)
+      console.log('new' + newAccessToken)
+      return await makeRequest(newAccessToken)
+    }
   }
 }

@@ -1,6 +1,6 @@
 import styled from 'styled-components'
 import { useEffect, useState } from 'react'
-import { useRecoilState, useRecoilValue } from 'recoil'
+import { useRecoilState } from 'recoil'
 import { useNavigate } from 'react-router-dom'
 import Header from '@/components/common/Header'
 import NoFlip from '@/components/main/NoFlip'
@@ -35,7 +35,7 @@ const QuestionList = () => {
   const [questions, setQuestions] = useState<QuestionProps[]>([])
   // 질문리스트 받기
   const getQuestionList = async (page: number) => {
-    await getQuestionsApi(myMemberId, page, accessToken).then((result) => {
+    await getQuestionsApi(myMemberId, page, accessToken, userData.refreshToken, setUserData).then((result) => {
       console.log(result)
       if (result.length > 0) {
         // 새로운 데이터가 있을 경우
@@ -111,7 +111,7 @@ const QuestionList = () => {
   // 질문 삭제
   const [deleteId, setDeleteId] = useState<number>(-1)
   const deleteQuestion = (questionId: number) => {
-    deleteQuestionsApi(questionId, accessToken).then(() => {
+    deleteQuestionsApi(questionId, accessToken, userData.refreshToken, setUserData).then(() => {
       const updatedQuestions = questions.filter((question) => question.questionId !== questionId)
       setQuestions(updatedQuestions)
       setAskCount(askCount - 1)

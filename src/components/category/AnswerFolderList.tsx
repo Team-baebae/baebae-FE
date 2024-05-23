@@ -1,5 +1,5 @@
 import styled from 'styled-components'
-import { useRecoilValue } from 'recoil'
+import { useRecoilState } from 'recoil'
 import { useEffect, useState } from 'react'
 import { Flip, toast } from 'react-toastify'
 import { BottomSheet } from 'react-spring-bottom-sheet'
@@ -17,7 +17,7 @@ import heic2any from 'heic2any'
 // 답변 입력 후 카테고리 선택페이지의 카테고리리스트 컴포넌트
 const AnswerFolderList = ({ selectedCategoryId, setSelectedCategoryId }: FolderListProps) => {
   // 리코일 로그인한 userInfo
-  const userInfo = useRecoilValue<UserInfoStateProps>(userInfoState)
+  const [userInfo, setUserInfo] = useRecoilState<UserInfoStateProps>(userInfoState)
 
   // 로그인한 유저 디렉토리 리스트 저장
   const [categories, setCategories] = useState<categoryProps[]>([])
@@ -86,7 +86,9 @@ const AnswerFolderList = ({ selectedCategoryId, setSelectedCategoryId }: FolderL
         categoryImgFile,
         categoryName,
         selectedAnswerIds,
-      ).then((res) => {
+        userInfo.refreshToken,
+        setUserInfo,
+      ).then((res: any) => {
         setCategories([...categories, res.data])
         setOpen(false)
         setCategoryImgUrl('')

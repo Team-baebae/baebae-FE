@@ -5,7 +5,7 @@ import { useGesture } from '@use-gesture/react'
 import { BottomSheet } from 'react-spring-bottom-sheet'
 import 'react-spring-bottom-sheet/dist/style.css'
 import { useLocation, useNavigate } from 'react-router-dom'
-import { useRecoilValue } from 'recoil'
+import { useRecoilState, useRecoilValue } from 'recoil'
 import { StyledToastContainer } from '@/components/toast/toastStyle'
 import { categoryProps } from '@/components/category/types'
 import Header from '@/components/common/Header'
@@ -18,7 +18,6 @@ import { deleteCategoryApi, getCategoriesApi } from '@/apis/CategoryApi'
 import { isMineState, ownerUserData, userInfoState } from '@/context/Atoms'
 import pencil from '@/assets/main/Pencil.svg'
 import trash from '@/assets/main/Trash.svg'
-import Loading from '@/components/common/Loading'
 import TelePathyMotion from '@/components/feed/TelepathyMotion'
 import GroupList from '@/components/category/GroupList'
 
@@ -34,7 +33,7 @@ const Groups = () => {
   // 내 페이지인지 여부 확인
   const isMyPage = useRecoilValue(isMineState)
   // 로그인 한 유저의 userInfo
-  const userInfo = useRecoilValue(userInfoState)
+  const [userInfo, setUserInfo] = useRecoilState(userInfoState)
 
   // 보여줄 선택된 디렉토리
   const [selectedCategoryId, setSelectedCategoryId] = useState<number>(location.state?.selectedCategoryId)
@@ -85,13 +84,15 @@ const Groups = () => {
   // 카테고리 삭제
   const deleteCategory = async () => {
     try {
-      await deleteCategoryApi(userInfo.accessToken, selectedCategoryId).then((res) => {
-        setOpen(false)
-        getCategories()
-        if (res.status === 204) {
-          toast('그룹이 삭제되었습니다')
-        }
-      })
+      await deleteCategoryApi(userInfo.accessToken, selectedCategoryId, userInfo.refreshToken, setUserInfo).then(
+        (res: any) => {
+          setOpen(false)
+          getCategories()
+          if (res.status === 204) {
+            toast('그룹이 삭제되었습니다')
+          }
+        },
+      )
     } catch (err) {
       console.log(err)
       setOpen(false)
