@@ -379,7 +379,9 @@ const TotalPageFeed = (props: TotalPageFeedProps) => {
                   <OverflowText width="60px">
                     {selectedFeed?.musicName} - {selectedFeed?.musicSinger}
                   </OverflowText>
-                  {props.currentAudio && props.currentAudio.src === selectedFeed.musicAudioUrl && isPlaying ? (
+                  {selectedFeed.musicAudioUrl === '' ? (
+                    <></>
+                  ) : props.currentAudio && props.currentAudio.src === selectedFeed.musicAudioUrl && isPlaying ? (
                     <Icon src={PauseIcon} alt="pause" />
                   ) : (
                     <Icon src={PlayIcon} alt="play" />
