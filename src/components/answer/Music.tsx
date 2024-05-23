@@ -2,10 +2,8 @@ import React, { useState } from 'react'
 import { BottomSheet } from 'react-spring-bottom-sheet'
 import 'react-spring-bottom-sheet/dist/style.css'
 import styled from 'styled-components'
-import { toast, Flip } from 'react-toastify'
 import 'react-toastify/dist/ReactToastify.css'
 import { colors } from '@/styles/colors'
-import { StyledToastContainer } from '@/components/toast/toastStyle'
 import { UnFixedButton } from '@/components/common/Button'
 import { MusicProps, TrackProps } from '@/components/answer/types'
 import { searchTermSpotifyApi } from '@/apis/SpotifyApi'
@@ -200,17 +198,6 @@ const Music = ({ musicName, setMusicName, musicAudio, setMusicAudio, musicSinger
               )
             })}
           </TotalTrackListWrapper>
-          <StyledToastContainer
-            position="top-center"
-            autoClose={1000}
-            hideProgressBar
-            pauseOnHover={false}
-            closeOnClick={false}
-            closeButton={false}
-            rtl={false}
-            theme="dark"
-            transition={Flip}
-          />
         </BottomSheet>
       )}
     </>
