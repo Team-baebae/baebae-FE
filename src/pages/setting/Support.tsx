@@ -22,7 +22,11 @@ const Support = () => {
         value={content}
         placeholder="문의 혹은 신고하실 내용을 입력해주세요. "
       />
-      <BottomButton $positive={content === '' ? false : true} text="문의하기" func={() => console.log('문의하기')} />
+      <BottomButton
+        $positive={content === '' ? false : true}
+        text="문의하기"
+        func={() => (window.location.href = 'http://pf.kakao.com/_fSzLG')}
+      />
     </Container>
   )
 }
