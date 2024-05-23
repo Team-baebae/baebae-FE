@@ -2,7 +2,10 @@ import React, { useState } from 'react'
 import { BottomSheet } from 'react-spring-bottom-sheet'
 import 'react-spring-bottom-sheet/dist/style.css'
 import styled from 'styled-components'
+import { toast, Flip } from 'react-toastify'
+import 'react-toastify/dist/ReactToastify.css'
 import { colors } from '@/styles/colors'
+import { StyledToastContainer } from '@/components/toast/toastStyle'
 import { UnFixedButton } from '@/components/common/Button'
 import { MusicProps, TrackProps } from '@/components/answer/types'
 import { searchTermSpotifyApi } from '@/apis/SpotifyApi'
@@ -40,7 +43,11 @@ const Music = ({ musicName, setMusicName, musicAudio, setMusicAudio, musicSinger
   //트랙 선택 시
   const selectTrack = (result: TrackProps) => {
     setMusicName(result.name)
-    setMusicAudio(result.preview_url)
+    if (result.preview_url) {
+      setMusicAudio(result.preview_url)
+    } else {
+      setMusicAudio('')
+    }
     setMusicSinger(result.album.artists[0].name)
     setStep(1) // 선택 후 기본 BottomSheet로 돌아갑니다.
   }
@@ -132,7 +139,7 @@ const Music = ({ musicName, setMusicName, musicAudio, setMusicAudio, musicSinger
             )}
 
             {/* 음악 선택 이후엔 미리듣기 가능하도록 아래와 같이 구현 */}
-            {musicAudio !== '' && (
+            {musicAudio && (
               <MusicPlayIconWrapper onClick={() => handlePreview(musicAudio)}>
                 {currentAudio && currentAudio.src === musicAudio && isPlaying ? (
                   <MusicPlayIcon onClick={() => handlePreview} src={Pause} alt="pause" />
@@ -193,6 +200,17 @@ const Music = ({ musicName, setMusicName, musicAudio, setMusicAudio, musicSinger
               )
             })}
           </TotalTrackListWrapper>
+          <StyledToastContainer
+            position="top-center"
+            autoClose={1000}
+            hideProgressBar
+            pauseOnHover={false}
+            closeOnClick={false}
+            closeButton={false}
+            rtl={false}
+            theme="dark"
+            transition={Flip}
+          />
         </BottomSheet>
       )}
     </>
