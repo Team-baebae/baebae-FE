@@ -8,7 +8,6 @@ import { BottomSheet } from 'react-spring-bottom-sheet'
 import html2canvas from 'html2canvas'
 import BackFeedContents from '@/components/feed/BackFeedContents'
 import FrontFeedContents from '@/components/feed/FrontFeedContents'
-import TelePathyMotion from '@/components/feed/TelepathyMotion'
 import { TotalPageFeedProps } from '@/components/category/types'
 import { StyledToastContainer } from '@/components/toast/toastStyle'
 import { colors } from '@/styles/colors'
@@ -53,7 +52,7 @@ const TotalPageFeed = (props: TotalPageFeedProps) => {
   const clickModal = () => setShowModal(!showModal)
 
   // 리코일 로그인한 유저의 유저정보
-  const userInfo = useRecoilValue(userInfoState)
+  const [userInfo, setUserInfo] = useRecoilState(userInfoState)
   // 리코일 내 페이지인지 여부 확인
   const isMyPage = useRecoilValue(isMineState)
   // 어느면을 바라볼지 state
@@ -112,7 +111,6 @@ const TotalPageFeed = (props: TotalPageFeedProps) => {
       setShowModal(true)
     }
   }
-  const [popLottie, setPopLottie] = useState<boolean>(false)
 
   //트랙 미리듣기 (한번에 여러개의 오디오가 드리지 않게 설정)
   const handlePreview = (previewUrl: string) => {
@@ -203,7 +201,14 @@ const TotalPageFeed = (props: TotalPageFeedProps) => {
   // 해당피드에 반응 남기기
   const postReact = async (reaction: string) => {
     try {
-      await postReactApi(userInfo.accessToken, selectedFeed.answerId, userInfo.memberId, reaction).then((res) => {
+      await postReactApi(
+        userInfo.accessToken,
+        selectedFeed.answerId,
+        userInfo.memberId,
+        reaction,
+        userInfo.refreshToken,
+        setUserInfo,
+      ).then((res: any) => {
         setHeartCount(res.data.heartCount)
         setCuriousCount(res.data.curiousCount)
         setSadCount(res.data.sadCount)
@@ -212,10 +217,10 @@ const TotalPageFeed = (props: TotalPageFeedProps) => {
         else if (reaction === 'CURIOUS') setGiveCurious(res.data.clicked)
         else if (reaction === 'SAD') setGiveSad(res.data.clicked)
         else if (reaction === 'CONNECT') {
-          !giveTelepathy && setPopLottie(true)
+          !giveTelepathy && props.setPopLottie(true)
           setGiveTelepathy(!giveTelepathy)
           setTimeout(() => {
-            setPopLottie(false)
+            props.setPopLottie(false)
           }, 2350)
           setGiveTelepathy(res.data.clicked)
         }
@@ -513,9 +518,6 @@ const TotalPageFeed = (props: TotalPageFeedProps) => {
       </AnimatePresence>
       {/* 로그인 안하고 질문 시 나오는 모달 */}
       {showModal && <LoginModal content={`앗!\n로그인을 해야 반응을 남길 수 있어요😥`} clickModal={clickModal} />}
-
-      {/* 통했당 누를 시 통했당 로띠 애니메이션 */}
-      {popLottie && <TelePathyMotion />}
 
       <StyledToastContainer
         position="bottom-center"

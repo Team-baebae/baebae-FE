@@ -47,11 +47,6 @@ const DetailFeed = (props: ModalProps) => {
 
   const flipPlane = props.flipPlane
 
-  const selectedCategoryId = props.selectedCategoryId
-  const selectedCategoryImage = props.selectedCategoryImage
-  const selectedCategoryGroupName = props.selectedCategoryGroupName
-  const selectedCategoryAnswerIds = props.selectedCategoryAnswerIds
-
   // 로그인 여부
   const isLoggedIn = useRecoilValue(isLoggedInState)
   // 모달 버튼 클릭 유무를 저장할 state (로그인 안했을 시 나오는 모달)
@@ -60,7 +55,7 @@ const DetailFeed = (props: ModalProps) => {
   const clickModal = () => setShowLoginModal(!showLoginModal)
 
   // 리코일 로그인한 유저의 유저정보
-  const userInfo = useRecoilValue(userInfoState)
+  const [userInfo, setUserInfo] = useRecoilState(userInfoState)
   // 리코일 내 페이지인지 여부 확인
   const isMyPage = useRecoilValue(isMineState)
 
@@ -213,7 +208,14 @@ const DetailFeed = (props: ModalProps) => {
   // 해당피드에 반응 남기기
   const postReact = async (reaction: string) => {
     try {
-      await postReactApi(userInfo.accessToken, selectedFeed.answerId, userInfo.memberId, reaction).then((res) => {
+      await postReactApi(
+        userInfo.accessToken,
+        selectedFeed.answerId,
+        userInfo.memberId,
+        reaction,
+        userInfo.refreshToken,
+        setUserInfo,
+      ).then((res: any) => {
         setHeartCount(res.data.heartCount)
         setCuriousCount(res.data.curiousCount)
         setSadCount(res.data.sadCount)

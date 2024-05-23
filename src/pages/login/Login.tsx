@@ -1,6 +1,8 @@
 import styled from 'styled-components'
 import { useNavigate } from 'react-router-dom'
 import { useEffect } from 'react'
+import { useRecoilState } from 'recoil'
+import { isLoggedInState } from '@/context/Atoms'
 import { registerServiceWorker } from '@/firebase-messaging-sw'
 import { colors } from '@/styles/colors'
 import Logo from '@/assets/login/Logo.svg'
@@ -10,6 +12,7 @@ import KakaoIcon from '@/assets/login/KakaoIcon.svg'
 // 로그인 페이지
 const Login = () => {
   const navigate = useNavigate()
+  const [, setIsLoggedIn] = useRecoilState(isLoggedInState)
 
   // // 카카오 로그인 버튼 누를 시 link로 이동
   const clientId = import.meta.env.VITE_KAKAO_CLIENT_ID
@@ -22,6 +25,7 @@ const Login = () => {
 
   useEffect(() => {
     registerServiceWorker()
+    setIsLoggedIn(false)
   }, [])
 
   return (

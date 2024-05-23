@@ -33,6 +33,8 @@ const TotalPageFeeds = (props: TotalPageFeedsProps) => {
                 setCurrentAudio={setCurrentAudio}
                 isPlaying={isPlaying}
                 setIsPlaying={setIsPlaying}
+                popLottie={props.popLottie}
+                setPopLottie={props.setPopLottie}
               />
             </div>
           )

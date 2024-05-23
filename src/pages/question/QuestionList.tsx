@@ -1,6 +1,6 @@
 import styled from 'styled-components'
 import { useEffect, useState } from 'react'
-import { useRecoilValue } from 'recoil'
+import { useRecoilState, useRecoilValue } from 'recoil'
 import { useNavigate } from 'react-router-dom'
 import Header from '@/components/common/Header'
 import NoFlip from '@/components/main/NoFlip'
@@ -20,7 +20,7 @@ const QuestionList = () => {
   const navigate = useNavigate()
 
   // 리코일 로그인 한 유저정보
-  const userData = useRecoilValue(userInfoState)
+  const [userData, setUserData] = useRecoilState(userInfoState)
   const myMemberId = userData.memberId
   const accessToken = userData.accessToken
 
@@ -47,7 +47,7 @@ const QuestionList = () => {
           setQuestions((prevData) => [...prevData, ...result])
         }
         setCurrentPage(page + 1)
-        console.log(result)
+        console.log(result.length)
         if (result.length < 8) {
           // 더 이상 데이터가 없을 경우
           setHasMore(false) // 무한 스크롤 중단
@@ -61,7 +61,7 @@ const QuestionList = () => {
   }
   // 질문 총 개수 받기 (무한 스크롤 때문에 따로 받음)
   const getQuestionNumber = () => {
-    getQuestionLengthApi(accessToken, myMemberId).then((result) => {
+    getQuestionLengthApi(accessToken, myMemberId, userData.refreshToken, setUserData).then((result) => {
       console.log(result)
       setAskCount(result)
     })
@@ -85,7 +85,7 @@ const QuestionList = () => {
       html.offsetHeight,
     )
     const windowBottom = windowHeight + window.pageYOffset
-    if (windowBottom >= docHeight && !loading && hasMore && !scrollLoading) {
+    if (windowBottom >= docHeight - 20 && !loading && hasMore && !scrollLoading) {
       setScrollLoading(true)
       getQuestionList(currentPage)
     }

@@ -1,6 +1,6 @@
 import styled from 'styled-components'
 import { ChangeEvent, MouseEvent, useCallback, useEffect, useState } from 'react'
-import { useRecoilValue } from 'recoil'
+import { useRecoilState, useRecoilValue } from 'recoil'
 import { useNavigate } from 'react-router-dom'
 import Filter from 'badwords-ko'
 import { toast, Flip } from 'react-toastify'
@@ -26,7 +26,7 @@ interface AskProps {
 const Ask = ({ isMine, username }: AskProps) => {
   const navigate = useNavigate()
   // 로그인한 사람의 데이터 정보
-  const loginUserInfo = useRecoilValue(userInfoState)
+  const [loginUserInfo, setLoginUserInfo] = useRecoilState(userInfoState)
   // 리코일 계정주인 데이터 정보
   const userInfo = useRecoilValue(ownerUserData)
   //계정 주인의 memberId
@@ -46,7 +46,12 @@ const Ask = ({ isMine, username }: AskProps) => {
 
   // 질문 개수 받기
   const getQuestionLength = useCallback(async () => {
-    await getQuestionLengthApi(loginUserInfo.accessToken, loginUserInfo.memberId).then((res) => {
+    await getQuestionLengthApi(
+      loginUserInfo.accessToken,
+      loginUserInfo.memberId,
+      loginUserInfo.refreshToken,
+      setLoginUserInfo,
+    ).then((res) => {
       setAskCount(res)
     })
   }, [username])
