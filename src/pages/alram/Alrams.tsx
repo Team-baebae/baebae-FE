@@ -1,6 +1,6 @@
 import styled from 'styled-components'
 import { useEffect, useState } from 'react'
-import { useRecoilValue } from 'recoil'
+import { useRecoilState } from 'recoil'
 import { userInfoState } from '@/context/Atoms'
 import { getNotificationList } from '@/apis/NotificationApi'
 import NoAlram from '@/components/alram/NoAlram'
@@ -10,7 +10,7 @@ import Header from '@/components/common/Header'
 import { colors } from '@/styles/colors'
 
 const Alrams = () => {
-  const userInfo = useRecoilValue(userInfoState)
+  const [userInfo, setUserInfo] = useRecoilState(userInfoState)
   const memberId = userInfo.memberId
   const accessToken = userInfo.accessToken
 
@@ -18,7 +18,7 @@ const Alrams = () => {
   const [notifications, setNotifications] = useState<NotificationProps[]>([])
 
   useEffect(() => {
-    getNotificationList(memberId, accessToken).then((result) => {
+    getNotificationList(memberId, accessToken, userInfo.refreshToken, setUserInfo).then((result) => {
       if (result) {
         setNotifications(result)
       }

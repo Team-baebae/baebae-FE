@@ -31,7 +31,7 @@ const Settings = () => {
   const logout = async () => {
     try {
       await logoutApi(userInfo.fcmToken, userInfo.accessToken).then((res) => {
-        if (res.status === 200 || res.status === 404) {
+        if (res.status === 200 || res.status === 401 || res.status === 404) {
           setUserInfo({
             accessToken: '',
             refreshToken: '',
@@ -53,7 +53,7 @@ const Settings = () => {
   // 회원탈퇴
   const signOut = async () => {
     try {
-      await signOutApi(userInfo.accessToken, userInfo.memberId).then((res) => {
+      await signOutApi(userInfo.accessToken, userInfo.memberId, userInfo.refreshToken, setUserInfo).then((res: any) => {
         if (res.status === 200 || res.status === 404) {
           setUserInfo({
             accessToken: '',

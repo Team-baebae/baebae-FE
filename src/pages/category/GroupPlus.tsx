@@ -1,6 +1,6 @@
 import { useCallback, useEffect, useState } from 'react'
 import styled from 'styled-components'
-import { useRecoilValue } from 'recoil'
+import { useRecoilState } from 'recoil'
 import heic2any from 'heic2any'
 import { useLocation, useNavigate } from 'react-router-dom'
 import GroupHeader from '@/components/common/GroupHeader'
@@ -24,7 +24,7 @@ const GroupPlus = () => {
   const redirectRoute = location.state?.redirectRoute
 
   // 리코일 로그인한 userInfo
-  const userInfo = useRecoilValue(userInfoState)
+  const [userInfo, setUserInfo] = useRecoilState(userInfoState)
 
   // 카테고리 정보 저장
   const [categoryImgUrl, setCategoryImgUrl] = useState<string>('')
@@ -82,7 +82,9 @@ const GroupPlus = () => {
         categoryImgFile,
         groupName,
         selectedAnswerIds,
-      ).then((res) => {
+        userInfo.refreshToken,
+        setUserInfo,
+      ).then((res: any) => {
         console.log(res)
         if (redirectRoute === 'feedTotal') {
           navigate('/groups', {

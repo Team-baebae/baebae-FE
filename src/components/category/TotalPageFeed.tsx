@@ -146,17 +146,19 @@ const TotalPageFeed = (props: TotalPageFeedProps) => {
   // 피드 삭제
   const deleteFeed = async () => {
     try {
-      await deleteFeedApi(userInfo.accessToken, selectedFeed.answerId).then((res) => {
-        console.log(res)
-        if (res.status === 204) {
-          // var categoryIdValue = 'yourCategoryId' // 여기에 categoryId 값을 할당합니다.
-          // var currentPageUrl = window.location.href
-          // var stateObject = { page: '/groups', categoryId: categoryIdValue }
-          // window.history.replaceState(stateObject, '', currentPageUrl)
-          window.location.reload()
-          toast('플립이 삭제되었습니다!')
-        }
-      })
+      await deleteFeedApi(userInfo.accessToken, selectedFeed.answerId, userInfo.refreshToken, setUserInfo).then(
+        (res: any) => {
+          console.log(res)
+          if (res.status === 204) {
+            // var categoryIdValue = 'yourCategoryId' // 여기에 categoryId 값을 할당합니다.
+            // var currentPageUrl = window.location.href
+            // var stateObject = { page: '/groups', categoryId: categoryIdValue }
+            // window.history.replaceState(stateObject, '', currentPageUrl)
+            window.location.reload()
+            toast('플립이 삭제되었습니다!')
+          }
+        },
+      )
     } catch (err) {
       console.log(err)
     }
@@ -171,7 +173,13 @@ const TotalPageFeed = (props: TotalPageFeedProps) => {
   // 해당 피드에 대한 반응 여부 확인
   const getIsReacted = useCallback(async () => {
     try {
-      await getIsReactedApi(userInfo.accessToken, selectedFeed.answerId, userInfo.memberId).then((res) => {
+      await getIsReactedApi(
+        userInfo.accessToken,
+        selectedFeed.answerId,
+        userInfo.memberId,
+        userInfo.refreshToken,
+        setUserInfo,
+      ).then((res: any) => {
         setGiveHeart(res.data.HEART)
         setGiveCurious(res.data.CURIOUS)
         setGiveSad(res.data.SAD)

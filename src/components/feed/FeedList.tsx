@@ -264,9 +264,9 @@ const WriterRegion = styled.button<{ color: string }>`
 
 const TotalFeedsBtn = styled.div`
   display: flex;
-
   height: 40px;
   padding: 10px 12px;
+  margin: 14px 20px 20px 20px;
   justify-content: center;
   align-items: center;
   gap: 10px;
@@ -279,7 +279,6 @@ const TotalFeedsBtn = styled.div`
   font-weight: 500;
   line-height: normal;
   letter-spacing: -0.28px;
-  margin: 14px 0px 20px 0px;
   cursor: pointer;
 `
 

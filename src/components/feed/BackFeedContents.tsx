@@ -2,19 +2,16 @@ import styled from 'styled-components'
 import { SelectedFeedProps } from '@/components/feed/types'
 import { colors } from '@/styles/colors'
 import { extractImageApi } from '@/apis/AnswerApi'
-import { useRecoilValue } from 'recoil'
-import { userInfoState } from '@/context/Atoms'
 import { useEffect, useState } from 'react'
 
 // 피드의 답변 컴포넌트
 const BackFeedContents = (props: SelectedFeedProps) => {
   const selectedFeed = props.selectedFeed
-  const userInfo = useRecoilValue(userInfoState)
 
   const [newImageUrl, setNewImageUrl] = useState<string>('')
   const imageUrlToBytes = async () => {
     try {
-      await extractImageApi(userInfo.accessToken, selectedFeed.imageUrl).then((res) => {
+      await extractImageApi(selectedFeed.imageUrl).then((res: any) => {
         const binaryImageData = atob(res.data.image)
         const length = binaryImageData.length
         const bytes = new Uint8Array(length)
