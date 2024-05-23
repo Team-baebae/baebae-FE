@@ -8,7 +8,6 @@ import { BottomSheet } from 'react-spring-bottom-sheet'
 import html2canvas from 'html2canvas'
 import BackFeedContents from '@/components/feed/BackFeedContents'
 import FrontFeedContents from '@/components/feed/FrontFeedContents'
-import TelePathyMotion from '@/components/feed/TelepathyMotion'
 import { TotalPageFeedProps } from '@/components/category/types'
 import { StyledToastContainer } from '@/components/toast/toastStyle'
 import { colors } from '@/styles/colors'
@@ -53,7 +52,7 @@ const TotalPageFeed = (props: TotalPageFeedProps) => {
   const clickModal = () => setShowModal(!showModal)
 
   // 리코일 로그인한 유저의 유저정보
-  const userInfo = useRecoilValue(userInfoState)
+  const [userInfo, setUserInfo] = useRecoilState(userInfoState)
   // 리코일 내 페이지인지 여부 확인
   const isMyPage = useRecoilValue(isMineState)
   // 어느면을 바라볼지 state
@@ -202,7 +201,14 @@ const TotalPageFeed = (props: TotalPageFeedProps) => {
   // 해당피드에 반응 남기기
   const postReact = async (reaction: string) => {
     try {
-      await postReactApi(userInfo.accessToken, selectedFeed.answerId, userInfo.memberId, reaction).then((res) => {
+      await postReactApi(
+        userInfo.accessToken,
+        selectedFeed.answerId,
+        userInfo.memberId,
+        reaction,
+        userInfo.refreshToken,
+        setUserInfo,
+      ).then((res: any) => {
         setHeartCount(res.data.heartCount)
         setCuriousCount(res.data.curiousCount)
         setSadCount(res.data.sadCount)

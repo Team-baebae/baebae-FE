@@ -1,4 +1,4 @@
-import { flipitAxios } from './apis'
+import { flipitAxios, postRefreshToken } from './apis'
 
 export const answerApi = (accessToken: string, memberId: number, imageFile: File | undefined, request: any) => {
   let API = `/api/answers/${memberId}`
@@ -92,19 +92,38 @@ export const getIsReactedApi = (accessToken: string, answerId: number, memberId:
   })
 }
 
-export const postReactApi = (accessToken: string, answerId: number, memberId: number, reaction: string) => {
-  let API = `/api/reactions/${memberId}/${answerId}`
-  return flipitAxios.post(
-    API,
-    {
-      reaction: reaction,
-    },
-    {
-      headers: {
-        Authorization: `Bearer ${accessToken}`,
+export const postReactApi = async (
+  accessToken: string,
+  answerId: number,
+  memberId: number,
+  reaction: string,
+  refreshToken: string,
+  setUserInfo: any,
+) => {
+  const makeRequest = async (token: string) => {
+    let API = `/api/reactions/${memberId}/${answerId}`
+    return flipitAxios.post(
+      API,
+      {
+        reaction: reaction,
       },
-    },
-  )
+      {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      },
+    )
+  }
+  try {
+    return await makeRequest(accessToken)
+  } catch (error: any) {
+    console.error(error)
+    if (error.response.data.errorCode === 'T-001') {
+      const newAccessToken = await postRefreshToken(refreshToken, setUserInfo)
+      console.log('new' + newAccessToken)
+      return await makeRequest(newAccessToken)
+    }
+  }
 }
 
 export const extractImageApi = (accessToken: string, url: string) => {
