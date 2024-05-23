@@ -393,7 +393,9 @@ const DetailFeed = (props: ModalProps) => {
                     <OverflowText width="60px">
                       {selectedFeed?.musicName} - {selectedFeed?.musicSinger}
                     </OverflowText>
-                    {currentAudio && currentAudio.src === selectedFeed.musicAudioUrl && isPlaying ? (
+                    {selectedFeed.musicAudioUrl === '' ? (
+                      <></>
+                    ) : currentAudio && currentAudio.src === selectedFeed.musicAudioUrl && isPlaying ? (
                       <Icon src={PauseIcon} alt="pause" />
                     ) : (
                       <Icon src={PlayIcon} alt="play" />
