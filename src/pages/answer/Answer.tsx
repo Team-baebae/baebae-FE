@@ -38,7 +38,6 @@ const Answer = () => {
             type: 'image/jpeg',
             lastModified: new Date().getTime(),
           })
-          console.log(file)
           setImageUrl(URL.createObjectURL(file))
           setImageFile(file)
         })
@@ -92,7 +91,6 @@ const Answer = () => {
             answerId: res.data.answerId,
           },
         })
-        console.log(res)
       })
     } catch (err) {
       console.log(err)

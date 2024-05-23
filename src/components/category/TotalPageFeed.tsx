@@ -148,7 +148,6 @@ const TotalPageFeed = (props: TotalPageFeedProps) => {
     try {
       await deleteFeedApi(userInfo.accessToken, selectedFeed.answerId, userInfo.refreshToken, setUserInfo).then(
         (res: any) => {
-          console.log(res)
           if (res.status === 204) {
             // var categoryIdValue = 'yourCategoryId' // 여기에 categoryId 값을 할당합니다.
             // var currentPageUrl = window.location.href
@@ -184,7 +183,6 @@ const TotalPageFeed = (props: TotalPageFeedProps) => {
         setGiveCurious(res.data.CURIOUS)
         setGiveSad(res.data.SAD)
         setGiveTelepathy(res.data.CONNECT)
-        console.log(res)
       })
     } catch (err) {
       console.log(err)
@@ -195,7 +193,6 @@ const TotalPageFeed = (props: TotalPageFeedProps) => {
   const getReactCount = useCallback(async () => {
     try {
       await getReactCountApi(selectedFeed.answerId).then((res) => {
-        console.log(res)
         setHeartCount(res.data.heartCount)
         setCuriousCount(res.data.curiousCount)
         setSadCount(res.data.sadCount)
@@ -303,7 +300,6 @@ const TotalPageFeed = (props: TotalPageFeedProps) => {
     const blob = new Blob([u8arr], { type: mime })
     const file = new File([blob], filename, { type: mime })
     setImageFile(file) // 파일 객체 상태 업데이트
-    console.log(file)
     if (file) shareKakao(file)
   }
 
@@ -320,7 +316,6 @@ const TotalPageFeed = (props: TotalPageFeedProps) => {
     Kakao.cleanup()
     Kakao.init(javascriptKey)
     // 잘 적용되면 true
-    console.log(Kakao.isInitialized())
   }, [])
 
   // 카카오로 공유

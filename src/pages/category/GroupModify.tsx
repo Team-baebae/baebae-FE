@@ -47,7 +47,6 @@ const GroupModify = () => {
             type: 'image/jpeg',
             lastModified: new Date().getTime(),
           })
-          console.log(file)
           setGroupImgUrl(URL.createObjectURL(file)) // 미리보기를 위해 파일 URL 생성
           setIsEditGroupImg(true)
           setGroupImgFile(file)
@@ -72,7 +71,6 @@ const GroupModify = () => {
   const getFeeds = useCallback(async () => {
     try {
       await getTotalFeedsApi(userInfo.memberId).then((res) => {
-        console.log(res)
         setFeedList(res.data.content)
       })
     } catch (err) {
@@ -91,8 +89,6 @@ const GroupModify = () => {
         userInfo.refreshToken,
         setUserInfo,
       ).then((res: any) => {
-        console.log(res)
-        console.log(redirectRoute)
         if (redirectRoute === 'feedTotal') {
           navigate('/groups', {
             state: {
@@ -124,9 +120,7 @@ const GroupModify = () => {
         groupImgFile,
         userInfo.refreshToken,
         setUserInfo,
-      ).then((res) => {
-        console.log(res)
-      })
+      ).then(() => {})
     } catch (err) {
       console.log(err)
     }

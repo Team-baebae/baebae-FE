@@ -75,7 +75,6 @@ export const updateUserProfileApi = async (
     console.error(error)
     if (error.response.data.errorCode === 'T-001') {
       const newAccessToken = await postRefreshToken(refreshToken, setUserInfo)
-      console.log('new' + newAccessToken)
       return await makeRequest(newAccessToken)
     }
   }
@@ -109,7 +108,6 @@ export const updateUserNicknameApi = async (
     console.error(error)
     if (error.response.data.errorCode === 'T-001') {
       const newAccessToken = await postRefreshToken(refreshToken, setUserInfo)
-      console.log('new' + newAccessToken)
       return await makeRequest(newAccessToken)
     }
   }
@@ -131,7 +129,6 @@ export const logoutApi = async (fcmToken: string, accessToken: string, refreshTo
     console.error(error)
     if (error.response.data.errorCode === 'T-001') {
       const newAccessToken = await postRefreshToken(refreshToken, setUserInfo)
-      console.log('new' + newAccessToken)
       return await makeRequest(newAccessToken)
     }
   }
@@ -153,7 +150,6 @@ export const signOutApi = async (accessToken: string, memberId: number, refreshT
     console.error(error)
     if (error.response.data.errorCode === 'T-001') {
       const newAccessToken = await postRefreshToken(refreshToken, setUserInfo)
-      console.log('new' + newAccessToken)
       return await makeRequest(newAccessToken)
     }
   }

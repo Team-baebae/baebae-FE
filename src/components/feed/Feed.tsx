@@ -42,7 +42,6 @@ const Feed = ({ username }: Props) => {
   const getCategories = async () => {
     try {
       await getCategoriesApi(ownerUserInfo.memberId).then((res) => {
-        console.log(res)
         setCategories(res.data.categories)
         // 카테고리가 있을 시 첫 카테고리를 Default로 설정
         if (res.data.categories.length !== 0) {
@@ -137,7 +136,6 @@ const Feed = ({ username }: Props) => {
   const getFeeds = useCallback(async () => {
     try {
       await getFeedsApi(ownerUserInfo.memberId, selectedCategoryId, currentPage).then((res) => {
-        console.log(res)
         setFeedList(res.data.content)
       })
     } catch (err) {

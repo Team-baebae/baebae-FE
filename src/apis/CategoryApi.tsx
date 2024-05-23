@@ -43,7 +43,6 @@ export const makeCategoryApi = async (
     console.error(error)
     if (error.response.data.errorCode === 'T-001') {
       const newAccessToken = await postRefreshToken(refreshToken, setUserInfo)
-      console.log('new' + newAccessToken)
       return await makeRequest(newAccessToken)
     }
   }
@@ -69,7 +68,6 @@ export const deleteCategoryApi = async (
     console.error(error)
     if (error.response.data.errorCode === 'T-001') {
       const newAccessToken = await postRefreshToken(refreshToken, setUserInfo)
-      console.log('new' + newAccessToken)
       return await makeRequest(newAccessToken)
     }
   }
@@ -105,7 +103,6 @@ export const modifyCategoryApi = async (
     console.error(error)
     if (error.response.data.errorCode === 'T-001') {
       const newAccessToken = await postRefreshToken(refreshToken, setUserInfo)
-      console.log('new' + newAccessToken)
       return await makeRequest(newAccessToken)
     }
   }
@@ -135,7 +132,6 @@ export const updateCategoryImgApi = async (
     console.error(error)
     if (error.response.data.errorCode === 'T-001') {
       const newAccessToken = await postRefreshToken(refreshToken, setUserInfo)
-      console.log('new' + newAccessToken)
       return await makeRequest(newAccessToken)
     }
   }
@@ -161,7 +157,6 @@ export const getCategoryListOfFeedApi = async (
     console.error(error)
     if (error.response.data.errorCode === 'T-001') {
       const newAccessToken = await postRefreshToken(refreshToken, setUserInfo)
-      console.log('new' + newAccessToken)
       return await makeRequest(newAccessToken)
     }
   }
@@ -194,7 +189,6 @@ export const modifyCategoryListOfFeedApi = async (
     console.error(error)
     if (error.response.data.errorCode === 'T-001') {
       const newAccessToken = await postRefreshToken(refreshToken, setUserInfo)
-      console.log('new' + newAccessToken)
       return await makeRequest(newAccessToken)
     }
   }
