@@ -29,7 +29,6 @@ export const answerApi = async (
     console.error(error)
     if (error.response.data.errorCode === 'T-001') {
       const newAccessToken = await postRefreshToken(refreshToken, setUserInfo)
-      console.log('new' + newAccessToken)
       return await makeRequest(newAccessToken)
     }
   }
@@ -73,7 +72,6 @@ export const connectGroupApi = async (
     console.error(error)
     if (error.response.data.errorCode === 'T-001') {
       const newAccessToken = await postRefreshToken(refreshToken, setUserInfo)
-      console.log('new' + newAccessToken)
       return await makeRequest(newAccessToken)
     }
   }
@@ -94,7 +92,6 @@ export const deleteFeedApi = async (accessToken: string, answerId: number, refre
     console.error(error)
     if (error.response.data.errorCode === 'T-001') {
       const newAccessToken = await postRefreshToken(refreshToken, setUserInfo)
-      console.log('new' + newAccessToken)
       return await makeRequest(newAccessToken)
     }
   }
@@ -136,7 +133,6 @@ export const modifyFeedApi = async (
     console.error(error)
     if (error.response.data.errorCode === 'T-001') {
       const newAccessToken = await postRefreshToken(refreshToken, setUserInfo)
-      console.log('new' + newAccessToken)
       return await makeRequest(newAccessToken)
     }
   }
@@ -168,7 +164,6 @@ export const getIsReactedApi = async (
     console.error(error)
     if (error.response.data.errorCode === 'T-001') {
       const newAccessToken = await postRefreshToken(refreshToken, setUserInfo)
-      console.log('new' + newAccessToken)
       return await makeRequest(newAccessToken)
     }
   }
@@ -202,7 +197,6 @@ export const postReactApi = async (
     console.error(error)
     if (error.response.data.errorCode === 'T-001') {
       const newAccessToken = await postRefreshToken(refreshToken, setUserInfo)
-      console.log('new' + newAccessToken)
       return await makeRequest(newAccessToken)
     }
   }

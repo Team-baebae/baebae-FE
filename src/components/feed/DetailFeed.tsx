@@ -142,7 +142,6 @@ const DetailFeed = (props: ModalProps) => {
     try {
       await deleteFeedApi(userInfo.accessToken, selectedFeed.answerId, userInfo.refreshToken, setUserInfo).then(
         (res: any) => {
-          console.log(res)
           if (res.status === 204) {
             setFeedList(feedList.filter((item) => item.answerId !== selectedFeed.answerId))
             toast('플립이 삭제되었어요!')
@@ -192,7 +191,6 @@ const DetailFeed = (props: ModalProps) => {
         setGiveCurious(res.data.CURIOUS)
         setGiveSad(res.data.SAD)
         setGiveTelepathy(res.data.CONNECT)
-        console.log(res)
       })
     } catch (err) {
       console.log(err)
@@ -203,7 +201,6 @@ const DetailFeed = (props: ModalProps) => {
   const getReactCount = useCallback(async () => {
     try {
       await getReactCountApi(selectedFeed.answerId).then((res) => {
-        console.log(res)
         setHeartCount(res.data.heartCount)
         setCuriousCount(res.data.curiousCount)
         setSadCount(res.data.sadCount)
@@ -300,7 +297,6 @@ const DetailFeed = (props: ModalProps) => {
     const blob = new Blob([u8arr], { type: mime })
     const file = new File([blob], filename, { type: mime })
     setImageFile(file) // 파일 객체 상태 업데이트
-    console.log(file)
     if (file) shareKakao(file)
   }
 
@@ -317,7 +313,6 @@ const DetailFeed = (props: ModalProps) => {
     Kakao.cleanup()
     Kakao.init(javascriptKey)
     // 잘 적용되면 true
-    console.log(Kakao.isInitialized())
   }, [])
 
   // 카카오로 공유
@@ -355,7 +350,6 @@ const DetailFeed = (props: ModalProps) => {
 
   // 저장하기
   const onSaveAs = (uri: string, filename: string) => {
-    console.log('onSaveAs')
     var link = document.createElement('a')
     document.body.appendChild(link)
     link.href = uri

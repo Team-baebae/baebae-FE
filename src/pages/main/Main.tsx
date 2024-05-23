@@ -39,7 +39,6 @@ const Main = () => {
       result.isExisting == true &&
         getMemberIdApi(nickname).then((result) => {
           getOwnerProfileApi(result.memberId).then((response) => {
-            // console.log(response)
             setUserData({
               nickname: nickname,
               memberId: result.memberId,
@@ -55,7 +54,6 @@ const Main = () => {
     if (username) {
       username === myInfo.nickname ? setIsMyPage(true) : setIsMyPage(false)
       userCheck(username)
-      console.log('dd')
     }
   }, [username])
 

@@ -22,7 +22,6 @@ export const getNotificationList = async (
     console.error(error)
     if (error.response.data.errorCode === 'T-001') {
       const newAccessToken = await postRefreshToken(refreshToken, setUserInfo)
-      console.log('new' + newAccessToken)
       return await makeRequest(newAccessToken)
     }
   }
@@ -48,7 +47,6 @@ export const postFCM = async (
         },
       },
     )
-    console.log(response)
   }
   try {
     return await makeRequest(accessToken)
@@ -56,7 +54,6 @@ export const postFCM = async (
     console.error(error)
     if (error.response.data.errorCode === 'T-001') {
       const newAccessToken = await postRefreshToken(refreshToken, setUserInfo)
-      console.log('new' + newAccessToken)
       return await makeRequest(newAccessToken)
     }
   }

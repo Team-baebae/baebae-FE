@@ -38,7 +38,6 @@ const EditAccount = () => {
             type: 'image/jpeg',
             lastModified: new Date().getTime(),
           })
-          console.log(file)
           setProfileImg(URL.createObjectURL(file)) // 미리보기를 위해 파일 URL 저장
           setProfileFile(file)
           setIsEditProfileImg(true)
@@ -110,7 +109,6 @@ const EditAccount = () => {
       setIsClickDuplicate(true)
       if (isValid) {
         await isExistingNicknameApi(nickname).then((res) => {
-          console.log(res)
           if (res.data.isExisting) {
             setIsDuplicate(true)
           } else {
@@ -132,7 +130,7 @@ const EditAccount = () => {
         nickname,
         userInfo.refreshToken,
         setUserInfo,
-      ).then((res) => {
+      ).then((res: any) => {
         if (res.status === 200) {
           setUserInfo((prevUserInfo) => ({
             ...prevUserInfo,

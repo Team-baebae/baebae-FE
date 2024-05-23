@@ -40,7 +40,6 @@ const EditGroup = () => {
       const newSelectedCategoryIds = categoryList.map((category: ContainedGroupProps) => category.categoryId)
       // 선택된 카테고리 Id 배열 업데이트
       setSelectedCategoryIds(newSelectedCategoryIds)
-      console.log(newSelectedCategoryIds)
     } catch (err) {
       console.log(err)
     }
@@ -55,7 +54,6 @@ const EditGroup = () => {
         userInfo.refreshToken,
         setUserInfo,
       ).then((res) => {
-        console.log(res)
         navigate(`/${userInfo.nickname}`, {
           state: {
             defaultCategory: 1,
@@ -70,10 +68,6 @@ const EditGroup = () => {
   useEffect(() => {
     getCategoryListOfFeed()
   }, [])
-
-  useEffect(() => {
-    console.log(selectedCategoryIds)
-  }, [selectedCategoryIds])
 
   return (
     <Container>

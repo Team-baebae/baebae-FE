@@ -36,7 +36,6 @@ const QuestionList = () => {
   // 질문리스트 받기
   const getQuestionList = async (page: number) => {
     await getQuestionsApi(myMemberId, page, accessToken, userData.refreshToken, setUserData).then((result) => {
-      console.log(result)
       if (result.length > 0) {
         // 새로운 데이터가 있을 경우
         if (currentPage === 0) {
@@ -47,7 +46,6 @@ const QuestionList = () => {
           setQuestions((prevData) => [...prevData, ...result])
         }
         setCurrentPage(page + 1)
-        console.log(result.length)
         if (result.length < 8) {
           // 더 이상 데이터가 없을 경우
           setHasMore(false) // 무한 스크롤 중단
@@ -62,7 +60,6 @@ const QuestionList = () => {
   // 질문 총 개수 받기 (무한 스크롤 때문에 따로 받음)
   const getQuestionNumber = () => {
     getQuestionLengthApi(accessToken, myMemberId, userData.refreshToken, setUserData).then((result) => {
-      console.log(result)
       setAskCount(result)
     })
   }
@@ -124,7 +121,6 @@ const QuestionList = () => {
     })
   }
   const clickDeletion = (questionId: number) => {
-    console.log(questionId)
     setDeleteId(questionId)
     setShowModal(true)
   }

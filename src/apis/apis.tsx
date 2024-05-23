@@ -10,7 +10,6 @@ export const flipitAxios = axios.create({
 })
 
 export const postRefreshToken = async (refreshToken: string, setUserInfo: any) => {
-  console.log(refreshToken)
   try {
     let API = '/api/auth/token/refresh'
     const response = await flipitAxios.post(
@@ -24,10 +23,8 @@ export const postRefreshToken = async (refreshToken: string, setUserInfo: any) =
     )
     const newAccessToken = response.data.accessToken
     setUserInfo((prevData: any) => ({ ...prevData, accessToken: newAccessToken }))
-    console.log(newAccessToken)
     return newAccessToken
   } catch (error: any) {
-    console.log(error)
     if (error.response.data.errorCode === 'T-001') {
       window.location.href = '/login'
       setUserInfo({

@@ -118,7 +118,6 @@ const Groups = () => {
   const getCategories = async () => {
     try {
       await getCategoriesApi(ownerUserInfo.memberId).then((res) => {
-        console.log(res)
         setCategories(res.data.categories)
       })
     } catch (err) {
@@ -144,7 +143,6 @@ const Groups = () => {
     async (page: number) => {
       try {
         await getFeedsApi(ownerUserInfo.memberId, selectedCategoryId, page).then((res) => {
-          console.log(res)
           const result = res.data.content
           if (result.length > 0) {
             if (page === 0) {
@@ -153,7 +151,6 @@ const Groups = () => {
               setFeedList((prevData) => [...prevData, ...result])
             }
             setCurrentPage(page)
-            console.log(result)
             if (result.length < 6) {
               // 더 이상 데이터가 없을 경우
               setHasMore(false) // 무한 스크롤 중단

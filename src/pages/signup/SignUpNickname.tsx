@@ -51,7 +51,6 @@ const SignUpNickname = () => {
       setIsClickDuplicate(true)
       if (isValid) {
         await isExistingNicknameApi(nickname).then((res) => {
-          console.log(res)
           if (res.data.isExisting) {
             setIsDuplicate(true)
           } else {
@@ -80,7 +79,6 @@ const SignUpNickname = () => {
   const getUserInfo = async (data: GetUserInfoProps) => {
     try {
       await getUserInfoApi(data.accessToken, data.id).then((res) => {
-        console.log(res)
         setUserInfo((prevUserInfo) => ({
           ...prevUserInfo,
           memberId: data.id,

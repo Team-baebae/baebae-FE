@@ -30,7 +30,7 @@ const Settings = () => {
   // 로그아웃
   const logout = async () => {
     try {
-      await logoutApi(userInfo.fcmToken, userInfo.accessToken).then((res) => {
+      await logoutApi(userInfo.fcmToken, userInfo.accessToken, userInfo.refreshToken, setUserInfo).then((res: any) => {
         if (res.status === 200 || res.status === 401 || res.status === 404) {
           setUserInfo({
             accessToken: '',

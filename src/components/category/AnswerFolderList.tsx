@@ -25,7 +25,6 @@ const AnswerFolderList = ({ selectedCategoryId, setSelectedCategoryId }: FolderL
   const getCategories = async () => {
     try {
       await getCategoriesApi(userInfo.memberId).then((res) => {
-        console.log(res)
         setCategories(res.data.categories)
       })
     } catch (err) {
@@ -60,7 +59,6 @@ const AnswerFolderList = ({ selectedCategoryId, setSelectedCategoryId }: FolderL
             type: 'image/jpeg',
             lastModified: new Date().getTime(),
           })
-          console.log(file)
           setCategoryImgUrl(URL.createObjectURL(file))
           setCategoryImgFile(file)
         })

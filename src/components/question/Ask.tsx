@@ -56,7 +56,6 @@ const Ask = ({ isMine, username }: AskProps) => {
 
   useEffect(() => {
     isMine === true && getQuestionLength()
-    console.log(`나의 페이지인가? : ${isMine}`)
   }, [getQuestionLength])
 
   // 모달 버튼 클릭 유무를 저장할 state (로그인 안했을 시 나오는 모달)
@@ -88,7 +87,6 @@ const Ask = ({ isMine, username }: AskProps) => {
     e.preventDefault()
     const filteredText = filter.clean(text)
     const questionData = { content: filteredText, nickname: writer, profileOnOff: isProfileOn }
-    console.log(questionData)
 
     // 로그인인 경우 질문 전송
     if (isLoggedIn) {

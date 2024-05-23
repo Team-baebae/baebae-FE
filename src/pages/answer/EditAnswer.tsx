@@ -39,7 +39,6 @@ const EditAnswer = () => {
             type: 'image/jpeg',
             lastModified: new Date().getTime(),
           })
-          console.log(file)
           setImageUrl(URL.createObjectURL(file))
           setImageFile(file)
         })
@@ -95,7 +94,6 @@ const EditAnswer = () => {
             defaultCategory: 1,
           },
         })
-        console.log(res)
       })
     } catch (err) {
       console.log(err)

@@ -20,7 +20,6 @@ const Landing = () => {
       memberId: 0,
       imageUrl: '',
     })
-    console.log('hello')
   }, [])
 
   return (

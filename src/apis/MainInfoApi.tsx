@@ -69,7 +69,6 @@ export const postQuestionApi = async (
     console.error(error)
     if (error.response.data.errorCode === 'T-001') {
       const newAccessToken = await postRefreshToken(refreshToken, setUserInfo)
-      console.log('new' + newAccessToken)
       return await makeRequest(newAccessToken)
     }
   }
@@ -97,7 +96,6 @@ export const getQuestionLengthApi = async (
     console.error(error)
     if (error.response.data.errorCode === 'T-001') {
       const newAccessToken = await postRefreshToken(refreshToken, setUserInfo)
-      console.log('new' + newAccessToken)
       return await makeRequest(newAccessToken)
     }
   }
@@ -127,7 +125,6 @@ export const getQuestionsApi = async (
     console.error(error)
     if (error.response.data.errorCode === 'T-001') {
       const newAccessToken = await postRefreshToken(refreshToken, setUserInfo)
-      console.log('new' + newAccessToken)
       return await makeRequest(newAccessToken)
     }
   }
@@ -155,7 +152,6 @@ export const deleteQuestionsApi = async (
     console.error(error)
     if (error.response.data.errorCode === 'T-001') {
       const newAccessToken = await postRefreshToken(refreshToken, setUserInfo)
-      console.log('new' + newAccessToken)
       return await makeRequest(newAccessToken)
     }
   }

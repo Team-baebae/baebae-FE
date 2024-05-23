@@ -20,7 +20,6 @@ const MainHeader = ({ background, isMine }: HeaderProps) => {
   const navigate = useNavigate()
   // 로그인 된 상태인지 확인
   const isLoggedIn = useRecoilValue(isLoggedInState)
-  console.log(isMine)
   // 리코일에서 받은 로그인한 사용자의 userInfo
   const myInfo = useRecoilValue<UserInfoStateProps>(userInfoState)
   const myNickname = myInfo.nickname
@@ -36,7 +35,6 @@ const MainHeader = ({ background, isMine }: HeaderProps) => {
     if (route === myNickname) {
       getMemberIdApi(route).then((result) => {
         getOwnerProfileApi(result.memberId).then((response) => {
-          // console.log(response)
           setUserData({
             nickname: route,
             memberId: result.memberId,

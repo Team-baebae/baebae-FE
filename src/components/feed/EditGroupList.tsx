@@ -27,7 +27,6 @@ const EditGroupList = ({ selectedCategoryIds, setSelectedCategoryIds }: EditGrou
   const getCategories = async () => {
     try {
       await getCategoriesApi(userInfo.memberId).then((res) => {
-        console.log(res)
         setCategories(res.data.categories)
       })
     } catch (err) {
@@ -62,7 +61,6 @@ const EditGroupList = ({ selectedCategoryIds, setSelectedCategoryIds }: EditGrou
             type: 'image/jpeg',
             lastModified: new Date().getTime(),
           })
-          console.log(file)
           setCategoryImgUrl(URL.createObjectURL(file))
           setCategoryImgFile(file)
         })

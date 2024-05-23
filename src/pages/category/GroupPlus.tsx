@@ -42,7 +42,6 @@ const GroupPlus = () => {
             type: 'image/jpeg',
             lastModified: new Date().getTime(),
           })
-          console.log(file)
           setCategoryImgUrl(URL.createObjectURL(file))
           setCategoryImgFile(file)
         })
@@ -65,7 +64,6 @@ const GroupPlus = () => {
   const getFeeds = useCallback(async () => {
     try {
       await getTotalFeedsApi(userInfo.memberId).then((res) => {
-        console.log(res)
         setFeedList(res.data.content)
       })
     } catch (err) {
@@ -85,7 +83,6 @@ const GroupPlus = () => {
         userInfo.refreshToken,
         setUserInfo,
       ).then((res: any) => {
-        console.log(res)
         if (redirectRoute === 'feedTotal') {
           navigate('/groups', {
             state: {
