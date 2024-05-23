@@ -100,6 +100,7 @@ const TopComponent = styled.div`
   flex-direction: column;
   align-items: flex-start;
   gap: 14px;
+  z-index: 0;
 `
 
 const GroupWrapper = styled.div`
@@ -123,7 +124,6 @@ const GroupImgWrapper = styled.div<{ selected: boolean }>`
   background-color: ${colors.white};
 
   user-select: none;
-  z-index: -3;
 `
 const ImageWrapper = styled.div`
   position: relative;
@@ -133,7 +133,7 @@ const ImageWrapper = styled.div`
   border: 0.8px solid ${colors.grey6};
   user-select: none;
   pointer-events: none;
-  z-index: -3;
+  /* z-index: -3; */
 `
 const GroupImg = styled.img`
   position: absolute;
