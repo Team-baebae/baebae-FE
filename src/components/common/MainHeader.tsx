@@ -1,7 +1,6 @@
 import { useNavigate } from 'react-router-dom'
 import styled from 'styled-components'
 import NavLogo from '@/assets/nav/NavLogo.svg'
-import Alram from '@/assets/nav/Alarm.svg'
 import Setting from '@/assets/nav/Setting.svg'
 import { useRecoilState, useRecoilValue } from 'recoil'
 import { isLoggedInState, ownerUserData, userInfoState, UserInfoStateProps } from '@/context/Atoms'
@@ -68,7 +67,6 @@ const MainHeader = ({ background, isMine }: HeaderProps) => {
       />
       <HeaderRight>
         {!isMine && <HeaderRightText onClick={() => clickIcon(myNickname)}>내 플리빗으로 이동</HeaderRightText>}
-        <HeaderRightIcon src={Alram} alt="alram" onClick={() => clickIcon('/alrams')} />
         <HeaderRightIcon
           src={Setting}
           alt="setting"

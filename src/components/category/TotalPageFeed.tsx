@@ -6,6 +6,7 @@ import { Flip, toast } from 'react-toastify'
 import { Link, useNavigate } from 'react-router-dom'
 import { BottomSheet } from 'react-spring-bottom-sheet'
 import html2canvas from 'html2canvas'
+import debounce from 'lodash/debounce'
 import BackFeedContents from '@/components/feed/BackFeedContents'
 import FrontFeedContents from '@/components/feed/FrontFeedContents'
 import { TotalPageFeedProps } from '@/components/category/types'
@@ -39,10 +40,7 @@ const TotalPageFeed = (props: TotalPageFeedProps) => {
   // 화면캡쳐위한
   const selectedFeedId = `captureTarget${selectedFeed.answerId}`
   // 선택된 카테고리
-  const currentAudio = props.currentAudio
-  const setCurrentAudio = props.setCurrentAudio
-  const isPlaying = props.isPlaying
-  const setIsPlaying = props.setIsPlaying
+  const { currentAudio, setCurrentAudio, isPlaying, setIsPlaying } = props
 
   // 로그인 여부
   const isLoggedIn = useRecoilValue(isLoggedInState)
@@ -102,16 +100,6 @@ const TotalPageFeed = (props: TotalPageFeedProps) => {
   const [giveSad, setGiveSad] = useState<boolean>(false)
   const [giveTelepathy, setGiveTelepathy] = useState<boolean>(false)
 
-  // 통했당 활성화 시 애니메이션
-  const clickTelepathy = (e: React.MouseEvent<HTMLDivElement>) => {
-    e.stopPropagation()
-    if (isLoggedIn) {
-      postReact('CONNECT')
-    } else {
-      setShowModal(true)
-    }
-  }
-
   //트랙 미리듣기 (한번에 여러개의 오디오가 드리지 않게 설정)
   const handlePreview = (previewUrl: string) => {
     if (currentAudio && currentAudio.src === previewUrl) {
@@ -169,76 +157,69 @@ const TotalPageFeed = (props: TotalPageFeedProps) => {
   const [sadCount, setSadCount] = useState<number>(0)
   const [connectCount, setConnectCount] = useState<number>(0)
 
-  // 해당 피드에 대한 반응 여부 확인
-  const getIsReacted = useCallback(async () => {
+  // 해당 피드에 대한 반응 여부 / 개수 확인
+  const fetchReactionData = useCallback(async () => {
     try {
-      await getIsReactedApi(
+      const reactedRes = await getIsReactedApi(
         userInfo.accessToken,
         selectedFeed.answerId,
         userInfo.memberId,
         userInfo.refreshToken,
         setUserInfo,
-      ).then((res: any) => {
-        setGiveHeart(res.data.HEART)
-        setGiveCurious(res.data.CURIOUS)
-        setGiveSad(res.data.SAD)
-        setGiveTelepathy(res.data.CONNECT)
-      })
-    } catch (err) {
-      console.log(err)
-    }
-  }, [])
+      )
+      setGiveHeart(reactedRes?.data?.HEART ?? false)
+      setGiveCurious(reactedRes?.data?.CURIOUS ?? false)
+      setGiveSad(reactedRes?.data?.SAD ?? false)
+      setGiveTelepathy(reactedRes?.data?.CONNECT ?? false)
 
-  // 해당 피드의 반응 개수 받기
-  const getReactCount = useCallback(async () => {
-    try {
-      await getReactCountApi(selectedFeed.answerId).then((res) => {
-        setHeartCount(res.data.heartCount)
-        setCuriousCount(res.data.curiousCount)
-        setSadCount(res.data.sadCount)
-        setConnectCount(res.data.connectCount)
-      })
+      const countRes = await getReactCountApi(selectedFeed.answerId)
+      setHeartCount(countRes.data.heartCount)
+      setCuriousCount(countRes.data.curiousCount)
+      setSadCount(countRes.data.sadCount)
+      setConnectCount(countRes.data.connectCount)
     } catch (err) {
       console.log(err)
     }
-  }, [])
+  }, [selectedFeed])
 
   // 해당피드에 반응 남기기
-  const postReact = async (reaction: string) => {
+  const postReact = debounce(async (reaction: string) => {
     try {
-      await postReactApi(
+      const res = (await postReactApi(
         userInfo.accessToken,
         selectedFeed.answerId,
         userInfo.memberId,
         reaction,
         userInfo.refreshToken,
         setUserInfo,
-      ).then((res: any) => {
-        setHeartCount(res.data.heartCount)
-        setCuriousCount(res.data.curiousCount)
-        setSadCount(res.data.sadCount)
-        setConnectCount(res.data.connectCount)
-        if (reaction === 'HEART') setGiveHeart(res.data.clicked)
-        else if (reaction === 'CURIOUS') setGiveCurious(res.data.clicked)
-        else if (reaction === 'SAD') setGiveSad(res.data.clicked)
-        else if (reaction === 'CONNECT') {
-          !giveTelepathy && props.setPopLottie(true)
-          setGiveTelepathy(!giveTelepathy)
-          setTimeout(() => {
-            props.setPopLottie(false)
-          }, 2350)
-          setGiveTelepathy(res.data.clicked)
-        }
-      })
+      )) ?? { data: {} }
+      setHeartCount(res.data.heartCount ?? 0)
+      setCuriousCount(res.data.curiousCount ?? 0)
+      setSadCount(res.data.sadCount ?? 0)
+      setConnectCount(res.data.connectCount ?? 0)
+
+      if (reaction === 'HEART') setGiveHeart(res.data.clicked ?? false)
+      else if (reaction === 'CURIOUS') setGiveCurious(res.data.clicked ?? false)
+      else if (reaction === 'SAD') setGiveSad(res.data.clicked ?? false)
+      else if (reaction === 'CONNECT') {
+        if (!giveTelepathy) props.setPopLottie(true)
+        setTimeout(() => props.setPopLottie(false), 2350)
+        setGiveTelepathy(res.data.clicked ?? false)
+      }
     } catch (err) {
-      console.log(err)
+      console.error(err)
     }
-  }
+  }, 300)
 
   useEffect(() => {
-    getIsReacted()
-    getReactCount()
-  }, [getIsReacted, getReactCount])
+    fetchReactionData()
+    return () => postReact.cancel()
+  }, [fetchReactionData])
+
+  const handleReact = (e: React.MouseEvent, reaction: string) => {
+    e.stopPropagation()
+    isLoggedIn ? postReact(reaction) : setShowModal(true)
+  }
 
   // 캡쳐된 이미지 저장
   const [, setCapturedImageData] = useState<string>('')
@@ -423,37 +404,19 @@ const TotalPageFeed = (props: TotalPageFeedProps) => {
           </ModalWrapper>
           {/* 반응 */}
           <BottomContents>
-            <EmotionButton
-              state={giveHeart}
-              onClick={(e) => {
-                e.stopPropagation()
-                isLoggedIn ? postReact('HEART') : setShowModal(true)
-              }}
-            >
+            <EmotionButton state={giveHeart} onClick={(e) => handleReact(e, 'HEART')}>
               <EmotionText>🖤</EmotionText>
               <EmotionText>{heartCount}</EmotionText>
             </EmotionButton>
-            <EmotionButton
-              state={giveCurious}
-              onClick={(e) => {
-                e.stopPropagation()
-                isLoggedIn ? postReact('CURIOUS') : setShowModal(true)
-              }}
-            >
+            <EmotionButton state={giveCurious} onClick={(e) => handleReact(e, 'CURIOUS')}>
               <EmotionText>👀</EmotionText>
               <EmotionText>{curiousCount}</EmotionText>
             </EmotionButton>
-            <EmotionButton
-              state={giveSad}
-              onClick={(e) => {
-                e.stopPropagation()
-                isLoggedIn ? postReact('SAD') : setShowModal(true)
-              }}
-            >
+            <EmotionButton state={giveSad} onClick={(e) => handleReact(e, 'SAD')}>
               <EmotionText>🥺</EmotionText>
               <EmotionText>{sadCount}</EmotionText>
             </EmotionButton>
-            <TelepathyButton state={giveTelepathy} onClick={clickTelepathy}>
+            <TelepathyButton state={giveTelepathy} onClick={(e) => handleReact(e, 'CONNECT')}>
               <EmotionText style={{ fontSize: 20 }}>👉🏻</EmotionText>
               <EmotionText style={{ fontSize: 20, opacity: giveTelepathy ? 1 : 0.3 }}>👈🏻</EmotionText>
               <EmotionText>{isMyPage ? connectCount : '통했당!'}</EmotionText>

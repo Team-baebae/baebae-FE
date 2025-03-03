@@ -2,7 +2,7 @@ import React, { useState } from 'react'
 import { BottomSheet } from 'react-spring-bottom-sheet'
 import 'react-spring-bottom-sheet/dist/style.css'
 import styled from 'styled-components'
-import { toast, Flip } from 'react-toastify'
+import { Flip } from 'react-toastify'
 import 'react-toastify/dist/ReactToastify.css'
 import { colors } from '@/styles/colors'
 import { StyledToastContainer } from '@/components/toast/toastStyle'
@@ -43,12 +43,11 @@ const Music = ({ musicName, setMusicName, musicAudio, setMusicAudio, musicSinger
   //트랙 선택 시
   const selectTrack = (result: TrackProps) => {
     setMusicName(result.name)
-    if (result.preview_url) {
-      setMusicAudio(result.preview_url)
-    } else {
-      setMusicAudio('')
-    }
-    setMusicSinger(result.album.artists[0].name)
+    setMusicAudio(result.preview_url || '')
+
+    const artistName = result.album.artists?.[0]?.name || '알 수 없음'
+    setMusicSinger(artistName)
+
     setStep(1) // 선택 후 기본 BottomSheet로 돌아갑니다.
   }
 
@@ -71,9 +70,11 @@ const Music = ({ musicName, setMusicName, musicAudio, setMusicAudio, musicSinger
   const handleSearch = async (searchTerm: string) => {
     try {
       const res = await searchTermSpotifyApi(searchTerm)
-      setSearchResults(res.data.tracks.items)
+      const tracks = res.data.tracks?.items ?? []
+      setSearchResults(tracks)
     } catch (err) {
       console.error('API 호출 오류:', err)
+      setSearchResults([])
     }
   }
 
@@ -194,7 +195,9 @@ const Music = ({ musicName, setMusicName, musicAudio, setMusicAudio, musicSinger
                     )}
                     <EachTrackText color={colors.grey3}>-</EachTrackText>
                     {/* 트랙 가수 이름 */}
-                    <EachTrackText color={colors.grey3}>{result.album.artists[0].name}</EachTrackText>
+                    <EachTrackText color={colors.grey3}>
+                      {result.album?.artists?.[0]?.name ?? '아티스트 정보 없음'}
+                    </EachTrackText>
                   </EachTrackWrapper>
                 </div>
               )

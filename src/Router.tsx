@@ -9,8 +9,6 @@ import KakaoRedirection from '@/pages/signup/KakaoRedirection'
 import SignUpTerms from '@/pages/signup/SignUpTerms'
 import SignUpNickname from '@/pages/signup/SignUpNickname'
 import SignUpOnBoarding from '@/pages/signup/SignUpOnBoarding'
-import LoadingPage from '@/pages/signup/LoadingPage'
-import SignupLoadingPage from '@/pages/signup/SignupLoadingPage'
 //튜토리얼
 import Tutorial from '@/pages/tutorial/Tutorial'
 //메인
@@ -32,8 +30,6 @@ import EditGroup from '@/pages/answer/EditGroup'
 import GroupPlus from '@/pages/category/GroupPlus'
 import GroupModify from '@/pages/category/GroupModify'
 import Groups from '@/pages/category/Groups'
-//알림
-import Alrams from '@/pages/alram/Alrams'
 
 const Router = () => {
   return (
@@ -47,8 +43,6 @@ const Router = () => {
             <Route path="terms" element={<SignUpTerms />} />
             <Route path="nickname" element={<SignUpNickname />} />
             <Route path="complete" element={<SignUpOnBoarding />} />
-            <Route path="loading" element={<LoadingPage />} />
-            <Route path="setting" element={<SignupLoadingPage />} />
           </Route>
           <Route path="tutorial">
             <Route index element={<Tutorial />} />
@@ -80,9 +74,6 @@ const Router = () => {
             <Route path=":groupId">
               <Route path="edit" element={<GroupModify />} />
             </Route>
-          </Route>
-          <Route path="alrams">
-            <Route index element={<Alrams />} />
           </Route>
         </Route>
       </Routes>
