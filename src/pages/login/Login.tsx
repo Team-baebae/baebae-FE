@@ -3,7 +3,6 @@ import { useNavigate } from 'react-router-dom'
 import { useEffect } from 'react'
 import { useRecoilState } from 'recoil'
 import { isLoggedInState } from '@/context/Atoms'
-import { registerServiceWorker } from '@/firebase-messaging-sw'
 import { colors } from '@/styles/colors'
 import Logo from '@/assets/login/Logo.svg'
 import LoginBackground from '@/assets/login/LoginBack.svg'
@@ -24,7 +23,6 @@ const Login = () => {
   }
 
   useEffect(() => {
-    registerServiceWorker()
     setIsLoggedIn(false)
   }, [])
 
@@ -109,7 +107,6 @@ const KakaoLoginBtnText = styled.div`
   font-feature-settings:
     'clig' off,
     'liga' off;
-  font-family: Pretendard;
   font-size: 16px;
   font-weight: 600;
   line-height: 150%;

@@ -35,7 +35,7 @@ const SelectCategory = () => {
         answerId,
         userInfo.refreshToken,
         setUserInfo,
-      ).then((res) => {
+      ).then(() => {
         navigate(`/questions/${questionId}/complete`)
       })
     } catch (err) {

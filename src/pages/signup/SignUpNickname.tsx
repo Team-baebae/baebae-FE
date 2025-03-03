@@ -12,7 +12,6 @@ import { UserInfoStateProps, isLoggedInState, userInfoState } from '@/context/At
 
 //회원가입 닉네임 입력 페이지
 const SignUpNickname = () => {
-  const isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent)
   const navigate = useNavigate()
 
   // 넘겨 받은 카카오 어세스토큰 저장
@@ -88,7 +87,7 @@ const SignUpNickname = () => {
           refreshToken: data.refreshToken,
           profileImage: res.data.profileImage,
         }))
-        isMobile ? navigate('/signup/complete') : navigate(`/signup/setting`)
+        navigate('/signup/complete')
       })
     } catch (err) {
       console.log(err)
