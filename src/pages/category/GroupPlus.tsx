@@ -214,40 +214,6 @@ const EditFolderImgText = styled.div`
   transform: translateX(-50%);
   cursor: pointer;
 `
-const FolderNameLabel = styled.div`
-  align-self: stretch;
-  margin: 40px 0px 0px 20px;
-  color: ${colors.grey3};
-  font-family: Pretendard;
-  font-size: 12px;
-  font-weight: 400;
-  line-height: 150%;
-  letter-spacing: -0.48px;
-`
-
-const FolderName = styled.input`
-  display: flex;
-  flex-direction: column;
-  align-items: flex-start;
-  align-self: stretch;
-  margin: 4px 20px 0px 20px;
-  padding: 20px;
-  gap: 12px;
-  width: calc(100% - 40px);
-  border-radius: 12px;
-  background-color: ${colors.white};
-  border: none;
-  &:focus {
-    outline: none;
-  }
-`
-
-const FolderNameConditionWrapper = styled.div`
-  display: flex;
-  justify-content: space-between;
-  margin: 4px 20px 0px 20px;
-  padding: 0px 8px;
-`
 
 const FolderNameConditionText = styled.div<{ color: string; fontSize: string; margin?: string }>`
   margin: ${(props) => props.margin || '0px'};
@@ -255,10 +221,4 @@ const FolderNameConditionText = styled.div<{ color: string; fontSize: string; ma
   font-family: Pretendard;
   font-size: ${(props) => props.fontSize};
   font-weight: 400;
-`
-
-const FolderNameLengthWrapper = styled.div`
-  display: flex;
-  align-items: center;
-  gap: 2px;
 `
