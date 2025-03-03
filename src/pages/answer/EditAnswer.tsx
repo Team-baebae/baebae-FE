@@ -88,7 +88,7 @@ const EditAnswer = () => {
         },
         userInfo.refreshToken,
         setUserInfo,
-      ).then((res) => {
+      ).then(() => {
         navigate(`/${userInfo.nickname}`, {
           state: {
             defaultCategory: 1,
