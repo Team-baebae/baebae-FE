@@ -13,7 +13,6 @@ import Loading from '@/components/common/Loading'
 
 // 카카오 로그인 후 리다이렉션 페이지
 const KakaoRedirection = () => {
-  const isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent)
   const navigate = useNavigate()
 
   //카카오 인가코드
@@ -86,11 +85,7 @@ const KakaoRedirection = () => {
           refreshToken: data.refreshToken,
           profileImage: res.data.profileImage,
         }))
-        isMobile
-          ? ownerUserInfo.nickname === ''
-            ? navigate(`/${data.nickname}`)
-            : navigate(`/${ownerUserInfo.nickname}`)
-          : navigate(`/signup/loading`)
+        ownerUserInfo.nickname === '' ? navigate(`/${data.nickname}`) : navigate(`/${ownerUserInfo.nickname}`)
       })
     } catch (err) {
       console.log(err)
