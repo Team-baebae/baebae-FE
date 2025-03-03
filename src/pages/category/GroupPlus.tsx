@@ -214,6 +214,7 @@ const EditFolderImgText = styled.div`
   transform: translateX(-50%);
   cursor: pointer;
 `
+
 const FolderNameConditionText = styled.div<{ color: string; fontSize: string; margin?: string }>`
   margin: ${(props) => props.margin || '0px'};
   color: ${(props) => props.color};
