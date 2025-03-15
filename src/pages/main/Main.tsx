@@ -61,7 +61,7 @@ const Main = () => {
     <></>
   ) : isExisting ? (
     <Container>
-      <MainHeader background={colors.white} isMine={username === myInfo.nickname} />
+      <MainHeader background={colors.white} />
       {username && <MainProfile nickname={username} imageUrl={userData.imageUrl} />}
       <CategoryBox>
         <Category category={category} num={0} onClick={() => setCategory(0)}>
