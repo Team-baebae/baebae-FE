@@ -30,6 +30,8 @@ import EditGroup from '@/pages/answer/EditGroup'
 import GroupPlus from '@/pages/category/GroupPlus'
 import GroupModify from '@/pages/category/GroupModify'
 import Groups from '@/pages/category/Groups'
+//검색
+import UserSearch from '@/pages/search/UserSearch'
 
 const Router = () => {
   return (
@@ -46,6 +48,9 @@ const Router = () => {
           </Route>
           <Route path="tutorial">
             <Route index element={<Tutorial />} />
+          </Route>
+          <Route path="search">
+            <Route index element={<UserSearch />} />
           </Route>
           <Route path="settings">
             <Route index element={<Setting />} />
