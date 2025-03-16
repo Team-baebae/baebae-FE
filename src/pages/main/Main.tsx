@@ -101,7 +101,6 @@ const Category = styled.div<{ category: number; num: number }>`
   border-bottom: 2px solid ${(props) => (props.category == props.num ? colors.grey1 : colors.white)};
   color: ${(props) => (props.category == props.num ? colors.grey1 : colors.grey3)};
   text-align: center;
-  font-family: Pretendard;
   font-size: 16px;
   font-weight: 600;
   line-height: 22px;
