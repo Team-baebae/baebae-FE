@@ -129,9 +129,9 @@ const Ask = ({ isMine, username }: AskProps) => {
       {isMine && (
         <AskNotification onClick={questionClick}>
           {askCount > 0 && <Icon width={34.25} height={16} src={NewIcon} />}
-          <TextWrapper ml={askCount ? '6px' : '0px'} color={colors.white}>
+          <TextWrapper $ml={askCount ? '6px' : '0px'} $color={colors.white}>
             답변을 기다리는 질문
-            <TextWrapper ml="4px" color={askCount ? colors.primary : colors.grey4}>
+            <TextWrapper $ml="4px" $color={askCount ? colors.primary : colors.grey4}>
               {askCount}개
             </TextWrapper>
           </TextWrapper>
@@ -146,7 +146,7 @@ const Ask = ({ isMine, username }: AskProps) => {
           onChange={onChangeText}
         />
         <WarnText
-          isShow={text == '' ? true : false}
+          $show={text == '' ? 'visible' : 'hidden'}
         >{`* 사칭으로 인한 신고 접수시\n플리빗 이용에 제한이 있을 수 있어요.`}</WarnText>
         <WriterBlock>
           FROM{' '}
@@ -160,7 +160,7 @@ const Ask = ({ isMine, username }: AskProps) => {
         </WriterBlock>
       </AskContainer>
       {/* 프로필 공개여부 */}
-      <OpenProfileWrapper margin={isMine ? '30px' : '82px'}>
+      <OpenProfileWrapper $margin={isMine ? '30px' : '82px'}>
         <OpenProfile>
           <MiniToggle isActive={isProfileOn} setIsActive={setIsProfileOn} />
           <OpenProfileText>
@@ -206,12 +206,11 @@ const AskNotification = styled.div`
   background-color: ${colors.grey2};
   cursor: pointer;
 `
-const TextWrapper = styled.div<{ ml: string; color: string }>`
+const TextWrapper = styled.div<{ $ml: string; $color: string }>`
   display: flex;
   flex: 1 0 0;
-  margin-left: ${(props) => props.ml};
-  color: ${(props) => props.color};
-  font-family: Pretendard;
+  margin-left: ${(props) => props.$ml};
+  color: ${(props) => props.$color};
   font-size: 12px;
   font-weight: 600;
   letter-spacing: -0.6px;
@@ -240,7 +239,6 @@ const TextRegion = styled.textarea`
   resize: none;
   outline: none;
   color: ${colors.grey1};
-  font-family: Pretendard;
   font-size: 20px;
   font-weight: 500;
   line-height: 30px;
@@ -249,13 +247,12 @@ const TextRegion = styled.textarea`
     color: ${colors.grey5};
   }
 `
-const WarnText = styled.span<{ isShow: boolean }>`
-  visibility: ${(props) => (props.isShow ? 'visible' : 'hidden')};
+const WarnText = styled.span.attrs<{ $show: string }>(() => ({}))`
+  visibility: ${({ $show }) => $show};
   position: absolute;
   top: 127px;
   white-space: pre-wrap;
   color: #e1e1e1;
-  font-family: Pretendard;
   font-size: 12px;
   font-weight: 500;
   line-height: 18px;
@@ -265,7 +262,6 @@ const WriterBlock = styled.div`
   display: flex;
   width: 100%;
   color: ${colors.primary};
-  font-family: Pretendard;
   font-size: 14px;
   font-weight: 500;
   line-height: 21px;
@@ -277,7 +273,6 @@ const WriterRegion = styled.input`
   border: none;
   outline: none;
   color: ${colors.grey1};
-  font-family: Pretendard;
   font-size: 14px;
   font-weight: 500;
   line-height: 21px;
@@ -287,11 +282,11 @@ const WriterRegion = styled.input`
   }
 `
 
-const OpenProfileWrapper = styled.div<{ margin: string }>`
+const OpenProfileWrapper = styled.div<{ $margin: string }>`
   display: flex;
   flex-direction: column;
   position: relative;
-  margin-bottom: ${(props) => props.margin};
+  margin-bottom: ${(props) => props.$margin};
 `
 const OpenProfile = styled.div`
   display: flex;
@@ -305,7 +300,6 @@ const OpenProfileText = styled.div`
   align-items: center;
   gap: 4px;
   color: ${colors.grey4};
-  font-family: Pretendard;
   font-size: 12px;
   font-weight: 500;
   line-height: 18px;

@@ -21,7 +21,6 @@ const LoginModal = (props: ModalProps) => {
 
   return (
     <AnimatePresence>
-      {/* 뒷배경을 클릭하면 모달을 나갈 수 있게 해야하므로 뒷 배경 onClick에 state함수를 넣는다. */}
       <SearchModalBox initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} onClick={clickModal}>
         <SearchModalContent
           width="320px"

@@ -7,57 +7,52 @@ import SearchIcon from '@/assets/nav/Search.svg'
 import { useRecoilState, useRecoilValue } from 'recoil'
 import { isLoggedInState, ownerUserData, userInfoState, UserInfoStateProps } from '@/context/Atoms'
 import LoginModal from '../question/LoginModal'
-import { colors } from '@/styles/colors'
 import { getMemberIdApi, getOwnerProfileApi } from '@/apis/MainInfoApi'
 
 interface HeaderProps {
   background: string
-  isMine: boolean
 }
 
-const Header = ({ background, isMine }: HeaderProps) => {
+const Header = ({ background }: HeaderProps) => {
   const navigate = useNavigate()
   const isLoggedIn = useRecoilValue(isLoggedInState)
   const myInfo = useRecoilValue<UserInfoStateProps>(userInfoState)
-  const myNickname = myInfo.nickname
+  const myNickname = myInfo?.nickname
   const [, setUserData] = useRecoilState(ownerUserData)
 
-  // 모달 버튼 클릭 유무를 저장할 state
+  // 모달 상태
   const [showModal, setShowModal] = useState<boolean>(false)
 
-  // 아이콘 클릭 이벤트 핸들러
+  // 로고 클릭 핸들러
+  const handleLogoClick = useCallback(() => {
+    if (isLoggedIn && myNickname) {
+      getMemberIdApi(myNickname).then((result) => {
+        getOwnerProfileApi(result.memberId).then((response) => {
+          setUserData({
+            nickname: myNickname,
+            memberId: result.memberId,
+            imageUrl: response.imageUrl,
+          })
+          navigate(`/${myNickname}`, {
+            state: { defaultCategory: 0 },
+          })
+        })
+      })
+    } else {
+      navigate('/')
+    }
+  }, [isLoggedIn, myNickname, navigate, setUserData])
+
+  // 아이콘 클릭 이벤트
   const handleIconClick = useCallback(
     (route: string) => {
       if (isLoggedIn) {
-        handleNavigation(route)
+        navigate(route)
       } else {
         setShowModal(true)
       }
     },
-    [isLoggedIn],
-  )
-
-  // 페이지 이동 함수
-  const handleNavigation = useCallback(
-    (route: string) => {
-      if (route === myNickname) {
-        getMemberIdApi(route).then((result) => {
-          getOwnerProfileApi(result.memberId).then((response) => {
-            setUserData({
-              nickname: route,
-              memberId: result.memberId,
-              imageUrl: response.imageUrl,
-            })
-            navigate(`/${route}`, {
-              state: { defaultCategory: 0 },
-            })
-          })
-        })
-      } else {
-        navigate(route)
-      }
-    },
-    [myNickname, navigate, setUserData],
+    [isLoggedIn, navigate],
   )
 
   // 모달 토글 함수
@@ -67,10 +62,9 @@ const Header = ({ background, isMine }: HeaderProps) => {
 
   return (
     <Container background={background}>
-      <LeftIcon src={NavLogo} alt="Flipit Logo" onClick={() => navigate('/')} />
+      <LeftIcon src={NavLogo} alt="Logo" onClick={handleLogoClick} />
       <RightSection>
-        {!isMine && <NavButton onClick={() => handleIconClick(myNickname)}>내 플리빗으로 이동</NavButton>}
-        <Icon src={SearchIcon} alt="Search" onClick={() => handleIconClick('/search')} />
+        <Icon src={SearchIcon} alt="SearchUser" onClick={() => handleIconClick('/search')} />
         <Icon src={SettingIcon} alt="Settings" onClick={() => handleIconClick('/settings')} />
       </RightSection>
       {showModal && <LoginModal content={`앗!\n로그인을 해야 접근할 수 있어요😥`} clickModal={toggleModal} />}
@@ -109,20 +103,5 @@ const RightSection = styled.div`
 const Icon = styled.img`
   width: 24px;
   height: 24px;
-  cursor: pointer;
-`
-
-const NavButton = styled.button`
-  display: flex;
-  align-items: center;
-  outline: none;
-  border: none;
-  background-color: transparent;
-  color: ${colors.grey4};
-  font-family: Pretendard;
-  font-size: 14px;
-  font-weight: 500;
-  line-height: 21px;
-  letter-spacing: -0.28px;
   cursor: pointer;
 `
