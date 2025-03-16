@@ -32,6 +32,8 @@ import GroupModify from '@/pages/category/GroupModify'
 import Groups from '@/pages/category/Groups'
 //검색
 import UserSearch from '@/pages/search/UserSearch'
+//팔로우리스트
+import FollowList from '@/pages/follow/FollowList'
 
 const Router = () => {
   return (
@@ -79,6 +81,9 @@ const Router = () => {
             <Route path=":groupId">
               <Route path="edit" element={<GroupModify />} />
             </Route>
+          </Route>
+          <Route path="follows">
+            <Route index element={<FollowList />} />
           </Route>
         </Route>
       </Routes>
