@@ -38,7 +38,7 @@ const TutorialMain = () => {
   return (
     <>
       <Container>
-        <MainHeader background={colors.white} isMine={true} />
+        <MainHeader background={colors.white} />
         <TutorialProfile />
         <CategoryBox>
           <Category category={category} num={0}>
