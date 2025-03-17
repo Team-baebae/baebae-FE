@@ -24,7 +24,7 @@ const useFollow = (ownerUserInfo: any) => {
           setIsFollowing(res.follow)
         } else {
           const res = await getNewFollowApi(userInfo.memberId, userInfo.accessToken, userInfo.refreshToken, setUserInfo)
-          setHasNewFollowers(res.hasNew)
+          setHasNewFollowers(res.hasNewFollow)
         }
       } catch {
         setIsFollowing(false)
