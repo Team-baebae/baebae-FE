@@ -3,6 +3,7 @@ import styled from 'styled-components'
 import { deleteFollowApi, postFollowApi } from '@/apis/FollowApi'
 import { colors } from '@/styles/colors'
 import DeleteIcon from '@/assets/follow/Delete.svg'
+import { useNavigate } from 'react-router-dom'
 
 interface UserCardProps {
   user: {
@@ -21,6 +22,8 @@ interface UserCardProps {
 
 const UserCard = ({ user, type, myId, accessToken, refreshToken, setUserInfo, onActionComplete }: UserCardProps) => {
   const [requestCompleted, setRequestCompleted] = useState(false)
+
+  const navigate = useNavigate()
 
   const handleDelete = useCallback(async () => {
     try {
@@ -50,12 +53,11 @@ const UserCard = ({ user, type, myId, accessToken, refreshToken, setUserInfo, on
   }, [requestCompleted, user, accessToken, refreshToken, setUserInfo])
 
   return (
-    <CardContainer>
+    <CardContainer onClick={() => navigate(`/${user.nickname}`)}>
       <UserInfo>
         <ProfileImage src={user.profileImage} alt={`${user.nickname}의 프로필 이미지`} />
         <Nickname>{user.nickname}</Nickname>
       </UserInfo>
-
       <Actions>
         {type === 'follower' && (
           <FollowButton onClick={handleFollow} $requestCompleted={requestCompleted}>
@@ -87,6 +89,7 @@ const ProfileImage = styled.img`
   width: 40px;
   height: 40px;
   border-radius: 50%;
+  object-fit: cover;
 `
 const Nickname = styled.div`
   font-size: 14px;
