@@ -12,7 +12,7 @@ export const getSearchResultApi = async (
   const fetchSearchResult = async (token: string) => {
     const API = `/api/member/search/${keyword}`
     const response = await flipitAxios.get(API, {
-      params: { page, size: 15 },
+      params: { page, size: 15, sort: 'nickname' },
       headers: {
         Authorization: `Bearer ${token}`,
       },

@@ -24,9 +24,9 @@ const IsValidNicknameText = ({ isValid, isClickDuplicate, isDuplicate, nickname 
           가능한 문자: 영어,숫자,특수기호(_)
         </UnderInputTextRed>
       ) : isClickDuplicate && isDuplicate ? (
-        <UnderInputTextRed>이미 존재하는 아이디에요.</UnderInputTextRed>
+        <UnderInputTextRed>이미 존재하는 아이디예요.</UnderInputTextRed>
       ) : (
-        <UnderInputText>사용가능한 아이디에요.</UnderInputText>
+        <UnderInputText>사용가능한 아이디예요.</UnderInputText>
       )}
       {/* 닉네임의 텍스트 길이 */}
       <UnderInputNicknameLengthWrapper>

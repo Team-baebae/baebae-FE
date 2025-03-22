@@ -7,7 +7,7 @@ interface FollowerResultProps {
     memberId: number
     nickname: string
     profileImage: string
-    isFollowing?: boolean
+    following?: boolean
   }[]
   isSearching: boolean
   myId: number
