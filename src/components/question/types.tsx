@@ -10,6 +10,14 @@ export interface ModalProps {
   clickModal: () => void
 }
 
+// delete모달창 Props
+export interface DeleteModalProps {
+  content: string
+  imageUrl: string
+  clickModal: () => void
+  handleDelete: () => void
+}
+
 // 질문 props
 export interface QuestionProps {
   content: string

@@ -4,13 +4,14 @@ import { deleteFollowApi, postFollowApi } from '@/apis/FollowApi'
 import { colors } from '@/styles/colors'
 import DeleteIcon from '@/assets/follow/Delete.svg'
 import { useNavigate } from 'react-router-dom'
+import DeleteModal from './DeleteModal'
 
 interface UserCardProps {
   user: {
     memberId: number
     nickname: string
     profileImage: string
-    isFollowing?: boolean
+    following?: boolean
   }
   type: 'following' | 'follower'
   myId: number
@@ -22,6 +23,10 @@ interface UserCardProps {
 
 const UserCard = ({ user, type, myId, accessToken, refreshToken, setUserInfo, onActionComplete }: UserCardProps) => {
   const [requestCompleted, setRequestCompleted] = useState(false)
+  const [showModal, setShowModal] = useState<boolean>(false)
+  const clickModal = () => {
+    setShowModal((prev) => !prev)
+  }
 
   const navigate = useNavigate()
 
@@ -36,6 +41,7 @@ const UserCard = ({ user, type, myId, accessToken, refreshToken, setUserInfo, on
       }
 
       if (onActionComplete) onActionComplete(user.memberId)
+      setShowModal((prev) => !prev)
     } catch (error) {
       console.error('삭제 실패:', error)
     }
@@ -53,21 +59,29 @@ const UserCard = ({ user, type, myId, accessToken, refreshToken, setUserInfo, on
   }, [requestCompleted, user, accessToken, refreshToken, setUserInfo])
 
   return (
-    <CardContainer onClick={() => navigate(`/${user.nickname}`)}>
-      <UserInfo>
+    <CardContainer>
+      <UserInfo onClick={() => navigate(`/${user.nickname}`)}>
         <ProfileImage src={user.profileImage} alt={`${user.nickname}의 프로필 이미지`} />
         <Nickname>{user.nickname}</Nickname>
       </UserInfo>
       <Actions>
-        {type === 'follower' && (
+        {type === 'follower' && !user.following && (
           <FollowButton onClick={handleFollow} $requestCompleted={requestCompleted}>
-            {requestCompleted ? '요청 완료!' : '팔로우하기'}
+            {requestCompleted ? '팔로잉' : '팔로우'}
           </FollowButton>
         )}
-        <DeleteButton onClick={handleDelete}>
+        <DeleteButton onClick={clickModal}>
           <img src={DeleteIcon} width={20} height={20} />
         </DeleteButton>
       </Actions>
+      {showModal && (
+        <DeleteModal
+          content={user.nickname}
+          imageUrl={user.profileImage}
+          clickModal={clickModal}
+          handleDelete={handleDelete}
+        />
+      )}
     </CardContainer>
   )
 }
@@ -79,6 +93,7 @@ const CardContainer = styled.div`
   align-items: center;
   justify-content: space-between;
   padding: 12px 24px;
+  cursor: pointer;
 `
 const UserInfo = styled.div`
   display: flex;
@@ -117,4 +132,5 @@ const DeleteButton = styled.button`
   border: none;
   cursor: pointer;
   height: 20px;
+  z-index: 2;
 `
