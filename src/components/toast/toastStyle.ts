@@ -6,7 +6,7 @@ import { colors } from '@/styles/colors'
 export const StyledToastContainer = styled(ToastContainer)`
   .Toastify__toast {
     border-radius: 12px;
-    margin: 0px 5px 30px 5px;
+    margin: 0px 20px 30px 20px;
     text-align: center;
     background: rgba(29, 29, 29, 0.8);
     color: ${colors.white};

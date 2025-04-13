@@ -2,10 +2,12 @@ import { useState, useCallback } from 'react'
 import { useNavigate } from 'react-router-dom'
 import styled from 'styled-components'
 import NavLogo from '@/assets/nav/NavLogo.svg'
+import HouseIcon from '@/assets/nav/House.svg'
+import AlarmIcon from '@/assets/nav/Alarm.svg'
 import SettingIcon from '@/assets/nav/Setting.svg'
 import SearchIcon from '@/assets/nav/Search.svg'
 import { useRecoilState, useRecoilValue } from 'recoil'
-import { isLoggedInState, ownerUserData, userInfoState, UserInfoStateProps } from '@/context/Atoms'
+import { isLoggedInState, isMineState, ownerUserData, userInfoState, UserInfoStateProps } from '@/context/Atoms'
 import LoginModal from '../question/LoginModal'
 import { getMemberIdApi, getOwnerProfileApi } from '@/apis/MainInfoApi'
 
@@ -15,6 +17,7 @@ interface HeaderProps {
 
 const Header = ({ background }: HeaderProps) => {
   const navigate = useNavigate()
+  const isMyPage = useRecoilValue(isMineState)
   const isLoggedIn = useRecoilValue(isLoggedInState)
   const myInfo = useRecoilValue<UserInfoStateProps>(userInfoState)
   const myNickname = myInfo?.nickname
@@ -23,8 +26,8 @@ const Header = ({ background }: HeaderProps) => {
   // 모달 상태
   const [showModal, setShowModal] = useState<boolean>(false)
 
-  // 로고 클릭 핸들러
-  const handleLogoClick = useCallback(() => {
+  // 홈 클릭 핸들러
+  const handleHomeClick = useCallback(() => {
     if (isLoggedIn && myNickname) {
       getMemberIdApi(myNickname).then((result) => {
         getOwnerProfileApi(result.memberId).then((response) => {
@@ -62,8 +65,13 @@ const Header = ({ background }: HeaderProps) => {
 
   return (
     <Container background={background}>
-      <LeftIcon src={NavLogo} alt="Logo" onClick={handleLogoClick} />
+      <LeftIcon src={NavLogo} alt="Logo" />
       <RightSection>
+        {isMyPage ? (
+          <Icon src={AlarmIcon} alt="alarm" onClick={() => handleIconClick('/alarms')} />
+        ) : (
+          <Icon src={HouseIcon} alt="home" onClick={handleHomeClick} />
+        )}
         <Icon src={SearchIcon} alt="SearchUser" onClick={() => handleIconClick('/search')} />
         <Icon src={SettingIcon} alt="Settings" onClick={() => handleIconClick('/settings')} />
       </RightSection>

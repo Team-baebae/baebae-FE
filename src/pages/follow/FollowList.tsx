@@ -1,24 +1,46 @@
 import Header from '@/components/common/Header'
 import Followers from '@/components/follow/Followers'
 import Followings from '@/components/follow/Followings'
+import { StyledToastContainer } from '@/components/toast/toastStyle'
+import { followerCountState, followingCountState, ownerUserData } from '@/context/Atoms'
+import useFollowCount from '@/hooks/useFollowCount'
 import { colors } from '@/styles/colors'
 import { useState } from 'react'
+import { Flip } from 'react-toastify'
+import { useRecoilState, useRecoilValue } from 'recoil'
 import styled from 'styled-components'
 
 const FollowList = () => {
   const [category, setCategory] = useState<number>(0)
+  const [ownerUserInfo] = useRecoilState(ownerUserData)
+  useFollowCount(ownerUserInfo)
+
+  const followerCount = useRecoilValue(followerCountState)
+  const followingCount = useRecoilValue(followingCountState)
+
   return (
     <Container>
       <Header text="친구 목록" background={colors.white} />
       <CategoryBox>
         <Category category={category} num={0} onClick={() => setCategory(0)}>
-          팔로잉
+          팔로잉 {followingCount}
         </Category>
         <Category category={category} num={1} onClick={() => setCategory(1)}>
-          팔로워
+          팔로워 {followerCount}
         </Category>
       </CategoryBox>
       {category ? <Followers /> : <Followings />}
+      <StyledToastContainer
+        position="bottom-center"
+        autoClose={1000}
+        hideProgressBar
+        pauseOnHover={false}
+        closeOnClick={false}
+        closeButton={false}
+        rtl={false}
+        theme="dark"
+        transition={Flip}
+      />
     </Container>
   )
 }

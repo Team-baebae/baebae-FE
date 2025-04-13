@@ -64,6 +64,14 @@ export const Button = ({ $positive, func, text }: Buttonprops) => {
   )
 }
 
+export const FixedButton = ({ $positive, func, text }: Buttonprops) => {
+  return (
+    <FixedBtn onClick={func} $positive={$positive}>
+      {text}
+    </FixedBtn>
+  )
+}
+
 // 시연에서는 bottom 30px, 휴대폰 사용시에는 100px정도로 수정
 const GreenCommonBtn = styled.button<{ $positive: boolean }>`
   @media screen and (width <= 768px) {
@@ -176,5 +184,38 @@ const CommonBtn = styled.button<{ $positive: boolean }>`
     font-weight: 600;
 
     cursor: pointer;
+  }
+`
+
+const FixedBtn = styled.button<{ $positive: boolean }>`
+  position: fixed;
+  left: 20px;
+  right: 20px;
+  bottom: 30px;
+  z-index: 100;
+
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  height: 56px;
+  border: none;
+  border-radius: 12px;
+  padding: 16px 20px;
+
+  background: ${(props) => (props.$positive ? colors.primary : colors.primary40)};
+  color: ${(props) => (props.$positive ? colors.grey1 : colors.grey3)};
+  font-size: 14px;
+  font-weight: 600;
+
+  cursor: pointer;
+
+  @media screen and (width > 768px) {
+    display: flex;
+    justify-content: center;
+    width: 335px;
+    left: 50%;
+    right: auto;
+    transform: translateX(-50%);
   }
 `

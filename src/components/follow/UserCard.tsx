@@ -1,10 +1,9 @@
-import { useState, useCallback } from 'react'
 import styled from 'styled-components'
-import { deleteFollowApi, postFollowApi } from '@/apis/FollowApi'
 import { colors } from '@/styles/colors'
 import DeleteIcon from '@/assets/follow/Delete.svg'
 import { useNavigate } from 'react-router-dom'
 import DeleteModal from './DeleteModal'
+import useFollowAction from '@/hooks/useFollowAction'
 
 interface UserCardProps {
   user: {
@@ -22,42 +21,14 @@ interface UserCardProps {
 }
 
 const UserCard = ({ user, type, myId, accessToken, refreshToken, setUserInfo, onActionComplete }: UserCardProps) => {
-  const [requestCompleted, setRequestCompleted] = useState(false)
-  const [showModal, setShowModal] = useState<boolean>(false)
-  const clickModal = () => {
-    setShowModal((prev) => !prev)
-  }
-
   const navigate = useNavigate()
-
-  const handleDelete = useCallback(async () => {
-    try {
-      if (type === 'follower') {
-        // 팔로워 삭제
-        await deleteFollowApi(user.memberId, myId, accessToken, refreshToken, setUserInfo)
-      } else {
-        // 팔로잉 삭제
-        await deleteFollowApi(myId, user.memberId, accessToken, refreshToken, setUserInfo)
-      }
-
-      if (onActionComplete) onActionComplete(user.memberId)
-      setShowModal((prev) => !prev)
-    } catch (error) {
-      console.error('삭제 실패:', error)
-    }
-  }, [user, type, myId, accessToken, refreshToken, setUserInfo, onActionComplete])
-
-  const handleFollow = useCallback(async () => {
-    if (requestCompleted) return
-
-    try {
-      await postFollowApi(myId, user.memberId, accessToken, refreshToken, setUserInfo)
-      setRequestCompleted(true)
-    } catch (error) {
-      console.error('팔로우 요청 실패:', error)
-    }
-  }, [requestCompleted, user, accessToken, refreshToken, setUserInfo])
-
+  const { requestCompleted, showModal, clickModal, handleFollow, handleDelete } = useFollowAction(user, type, {
+    myId,
+    accessToken,
+    refreshToken,
+    setUserInfo,
+    onActionComplete,
+  })
   return (
     <CardContainer>
       <UserInfo onClick={() => navigate(`/${user.nickname}`)}>
@@ -65,9 +36,12 @@ const UserCard = ({ user, type, myId, accessToken, refreshToken, setUserInfo, on
         <Nickname>{user.nickname}</Nickname>
       </UserInfo>
       <Actions>
-        {type === 'follower' && !user.following && (
-          <FollowButton onClick={handleFollow} $requestCompleted={requestCompleted}>
-            {requestCompleted ? '팔로잉' : '팔로우'}
+        {type === 'follower' && (
+          <FollowButton
+            onClick={!user.following ? handleFollow : undefined}
+            $requestCompleted={!!user.following || requestCompleted}
+          >
+            {user.following || requestCompleted ? '팔로잉' : '팔로우'}
           </FollowButton>
         )}
         <DeleteButton onClick={clickModal}>
@@ -123,9 +97,10 @@ const FollowButton = styled.button<{ $requestCompleted: boolean }>`
   font-size: 12px;
   font-weight: 600;
   line-height: 18px;
-  background-color: ${(props) => (props.$requestCompleted ? colors.grey1 : colors.white)};
-  color: ${(props) => (props.$requestCompleted ? colors.white : colors.grey3)};
-  border: 1px solid ${(props) => (props.$requestCompleted ? colors.grey1 : colors.grey3)};
+  background-color: ${(props) => (props.$requestCompleted ? colors.grey7 : colors.grey1)};
+  color: ${(props) => (props.$requestCompleted ? colors.grey4 : colors.white)};
+  border: none;
+  outline: none;
 `
 const DeleteButton = styled.button`
   background: none;
