@@ -197,3 +197,30 @@ export const getFollowersApi = async (
     }
   }
 }
+
+export const getFollowCountApi = async (
+  memberId: number,
+  accessToken: string,
+  refreshToken: string,
+  setUserInfo: any,
+) => {
+  const makeRequest = async (token: string) => {
+    let API = `/api/follow/count/${memberId}`
+    const response = await flipitAxios.get(API, {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    })
+    return response.data
+  }
+
+  try {
+    return await makeRequest(accessToken)
+  } catch (error: any) {
+    console.error(error)
+    if (error.response.data.errorCode === 'T-001') {
+      const newAccessToken = await postRefreshToken(refreshToken, setUserInfo)
+      return await makeRequest(newAccessToken)
+    }
+  }
+}

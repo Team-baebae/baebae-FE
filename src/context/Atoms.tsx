@@ -62,3 +62,13 @@ export const selectedQuestionState = atom<number[]>({
   key: 'selectedQuestionState',
   default: [],
 })
+
+export const followerCountState = atom<number>({
+  key: 'followerCountState',
+  default: 0,
+})
+
+export const followingCountState = atom<number>({
+  key: 'followingCountState',
+  default: 0,
+})
