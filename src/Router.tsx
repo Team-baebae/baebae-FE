@@ -34,6 +34,8 @@ import Groups from '@/pages/category/Groups'
 import UserSearch from '@/pages/search/UserSearch'
 //팔로우리스트
 import FollowList from '@/pages/follow/FollowList'
+//알림
+import Alarms from '@/pages/alarm/Alarms'
 
 const Router = () => {
   return (
@@ -84,6 +86,9 @@ const Router = () => {
           </Route>
           <Route path="follows">
             <Route index element={<FollowList />} />
+          </Route>
+          <Route path="alarms">
+            <Route index element={<Alarms />} />
           </Route>
         </Route>
       </Routes>

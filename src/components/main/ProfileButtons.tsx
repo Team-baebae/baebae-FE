@@ -1,26 +1,16 @@
-import { useNavigate } from 'react-router-dom'
 import { useState } from 'react'
 import { useRecoilValue } from 'recoil'
-import { isLoggedInState } from '@/context/Atoms'
-import PersonIcon from '@/assets/follow/Person.svg'
-import AddIcon from '@/assets/follow/Add.svg'
-import CheckIcon from '@/assets/follow/Check.svg'
-import useFollow from '@/hooks/useFollow'
-import useKakaoShare from '@/hooks/useKakaoShare'
+import { isLoggedInState, isMineState, ownerUserData } from '@/context/Atoms'
 import LoginModal from '@/components/question/LoginModal'
 import styled from 'styled-components'
 import { colors } from '@/styles/colors'
+import useFollowStatus from '@/hooks/useFollowStatus'
 
-interface Props {
-  ownerUserInfo: any
-  isMine: boolean
-}
-
-const ProfileButtons = ({ ownerUserInfo, isMine }: Props) => {
-  const navigate = useNavigate()
+const ProfileButtons = () => {
   const isLoggedIn = useRecoilValue(isLoggedInState)
-  const { isFollowing, handleFollow, hasNewFollowers, checkNewFollowers } = useFollow(ownerUserInfo)
-  const shareProfile = useKakaoShare(ownerUserInfo)
+  const isMyPage = useRecoilValue(isMineState)
+  const ownerUserInfo = useRecoilValue(ownerUserData)
+  const { isFollowing, handleFollow } = useFollowStatus(ownerUserInfo)
 
   const [showModal, setShowModal] = useState<boolean>(false)
 
@@ -29,13 +19,7 @@ const ProfileButtons = ({ ownerUserInfo, isMine }: Props) => {
       setShowModal(true) // 로그인되지 않은 경우 모달 띄우기
       return
     }
-
-    if (isMine) {
-      await checkNewFollowers()
-      navigate('/follows')
-    } else {
-      await handleFollow()
-    }
+    await handleFollow()
   }
 
   const toggleModal = () => {
@@ -45,15 +29,13 @@ const ProfileButtons = ({ ownerUserInfo, isMine }: Props) => {
   return (
     <>
       <ButtonWrap>
-        <ShareButton onClick={shareProfile}>{isMine ? '내 플리빗 초대' : '이 플리빗 공유'}</ShareButton>
-        {isMine ? (
-          <FollowButton onClick={handleFollowButtonClick}>
-            <Icon src={PersonIcon} />
-            {hasNewFollowers && <NotificationDot />}
-          </FollowButton>
-        ) : (
-          <FollowButton onClick={handleFollowButtonClick} disabled={isLoggedIn && isFollowing === null}>
-            <Icon src={isFollowing ? CheckIcon : AddIcon} />
+        {!isMyPage && (
+          <FollowButton
+            onClick={handleFollowButtonClick}
+            disabled={isLoggedIn && isFollowing === null}
+            $isFollow={!!isFollowing}
+          >
+            {isFollowing ? '팔로잉' : '팔로우'}
           </FollowButton>
         )}
       </ButtonWrap>
@@ -68,38 +50,18 @@ const ButtonWrap = styled.div`
   display: flex;
   gap: 12px;
 `
-const ShareButton = styled.button`
+const FollowButton = styled.button<{ $isFollow: boolean }>`
   display: flex;
+  flex-grow: 1;
   justify-content: center;
   align-items: center;
-  padding: 11px 24px;
-  border-radius: 8px;
+  padding: 8px 12px;
+  border-radius: 6px;
   border: 0;
-  background-color: ${colors.grey7};
-  color: ${colors.grey3};
-  font-size: 12px;
-  font-weight: 600;
+  background-color: ${(props) => (props.$isFollow ? colors.grey2 : colors.grey7)};
+  color: ${(props) => (props.$isFollow ? colors.grey7 : colors.grey4)};
+  font-size: 14px;
+  font-weight: 500;
+  letter-spacing: -0.6px;
   cursor: pointer;
 `
-const FollowButton = styled.button`
-  position: relative;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  width: 40px;
-  height: 40px;
-  border-radius: 8px;
-  border: 0;
-  background-color: ${colors.grey7};
-  cursor: pointer;
-`
-const NotificationDot = styled.div`
-  position: absolute;
-  top: 10px;
-  right: 10px;
-  width: 4px;
-  height: 4px;
-  background-color: ${colors.primary60};
-  border-radius: 50%;
-`
-const Icon = styled.img``

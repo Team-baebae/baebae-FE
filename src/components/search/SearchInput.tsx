@@ -1,6 +1,6 @@
 import styled from 'styled-components'
 import { colors } from '@/styles/colors'
-import SearchIcon from '@/assets/search/SearchThin.svg'
+import SearchIcon from '@/assets/search/Search.svg'
 import DeleteIcon from '@/assets/search/Delete.svg'
 
 interface SearchInputProps {
@@ -12,7 +12,7 @@ interface SearchInputProps {
 const SearchInput = ({ searchTerm, onChange, onClear }: SearchInputProps) => {
   return (
     <SearchBarWrap>
-      <Icon src={SearchIcon} size="24px" />
+      <Icon src={SearchIcon} size="20px" />
       <SearchBar type="text" placeholder="친구 아이디를 검색해보세요!" value={searchTerm} onChange={onChange} />
       {searchTerm && <Icon src={DeleteIcon} onClick={onClear} size="16px" />} {/* 검색어 있을 때만 X 아이콘 표시 */}
     </SearchBarWrap>

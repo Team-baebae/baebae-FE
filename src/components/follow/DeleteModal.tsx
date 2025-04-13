@@ -1,6 +1,6 @@
 import styled from 'styled-components'
 import { AnimatePresence } from 'framer-motion'
-import { SearchModalBox, SearchModalContent } from '@/components/common/ModalStyle'
+import { BottomModalBox, SearchModalContent } from '@/components/common/ModalStyle'
 import { DeleteModalProps } from '@/components/question/types'
 import { colors } from '@/styles/colors'
 
@@ -9,14 +9,16 @@ const DeleteModal = (props: DeleteModalProps) => {
 
   return (
     <AnimatePresence>
-      <SearchModalBox initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} onClick={clickModal}>
+      <BottomModalBox initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} onClick={clickModal}>
         <SearchModalContent
-          width="320px"
+          width="335px"
           height="360px"
+          $isFixed={true}
           onClick={(e) => e.stopPropagation()}
-          initial={{ scale: 0.8, opacity: 0 }}
-          animate={{ scale: 1, opacity: 1 }}
-          exit={{ scale: 0.8, opacity: 0 }}
+          initial={{ translateY: 30, opacity: 0 }}
+          animate={{ translateY: 0, opacity: 1 }}
+          exit={{ translateY: 30, opacity: 0 }}
+          transition={{ duration: 0.35, ease: 'easeOut' }}
         >
           <ModalContent>
             <Content>
@@ -39,7 +41,7 @@ const DeleteModal = (props: DeleteModalProps) => {
             </Buttons>
           </ModalContent>
         </SearchModalContent>
-      </SearchModalBox>
+      </BottomModalBox>
     </AnimatePresence>
   )
 }
