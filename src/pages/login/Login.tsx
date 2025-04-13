@@ -7,6 +7,7 @@ import { colors } from '@/styles/colors'
 import Logo from '@/assets/login/Logo.svg'
 import LoginBackground from '@/assets/login/LoginBack.svg'
 import KakaoIcon from '@/assets/login/KakaoIcon.svg'
+import { safeLocalStorage } from '@/utils/safeLocalStorage'
 
 // 로그인 페이지
 const Login = () => {
@@ -24,6 +25,7 @@ const Login = () => {
 
   useEffect(() => {
     setIsLoggedIn(false)
+    safeLocalStorage.remove('profile_tooltip_shown')
   }, [])
 
   return (
