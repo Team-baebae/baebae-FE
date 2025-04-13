@@ -6,7 +6,7 @@ import Filter from 'badwords-ko'
 import { toast, Flip } from 'react-toastify'
 import 'react-toastify/dist/ReactToastify.css'
 import MiniToggle from '@/components/common/MiniToggle'
-import { Button } from '@/components/common/Button'
+import { FixedButton } from '@/components/common/Button'
 import { StyledToastContainer } from '@/components/toast/toastStyle'
 import LoginModal from '@/components/question/LoginModal'
 import Tooltip from '@/components/question/Tooltip'
@@ -171,7 +171,7 @@ const Ask = ({ isMine, username }: AskProps) => {
         <Tooltip show={showTooltip} clickIcon={clickIcon} />
       </OpenProfileWrapper>
       {/* 최하단 버튼 */}
-      <Button $positive={text == '' || writer == '' ? false : true} func={submitHandler} text="질문하기" />
+      <FixedButton $positive={text == '' || writer == '' ? false : true} func={submitHandler} text="질문하기" />
       <StyledToastContainer
         position="bottom-center"
         autoClose={1000}
