@@ -34,14 +34,16 @@ const ProfileImage = ({ imageUrl }: ProfileImageProps) => {
 
       setTimeout(() => {
         setShowTooltip(false)
-      }, 5000)
+      }, 4000)
     }
   }, [])
 
   return (
-    <Flipper $flipped={isFlipped} onClick={handleShareClick}>
-      <FrontSide src={imageUrl} alt="profile" />
-      <BackSide src={LinkShareImage} alt="copied" />
+    <>
+      <Flipper $flipped={isFlipped} onClick={handleShareClick}>
+        <FrontSide src={imageUrl} alt="profile" />
+        <BackSide src={LinkShareImage} alt="copied" />
+      </Flipper>
       {showTooltip && (
         <TooltipBox>
           내 프로필 사진을 클릭하면
@@ -49,7 +51,7 @@ const ProfileImage = ({ imageUrl }: ProfileImageProps) => {
           링크가 복사돼요!
         </TooltipBox>
       )}
-    </Flipper>
+    </>
   )
 }
 
