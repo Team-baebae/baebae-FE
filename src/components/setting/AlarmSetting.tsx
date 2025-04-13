@@ -3,7 +3,7 @@ import Toggle from '@/components/common/Toggle'
 import { colors } from '@/styles/colors'
 
 // 알림 설정 컴포넌트
-const AlramSetting = () => {
+const AlarmSetting = () => {
   return (
     <Container>
       <ContentsWrapper>
@@ -17,7 +17,7 @@ const AlramSetting = () => {
   )
 }
 
-export default AlramSetting
+export default AlarmSetting
 
 const Container = styled.div`
   display: flex;
